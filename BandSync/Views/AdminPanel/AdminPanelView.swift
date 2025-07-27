@@ -16,13 +16,13 @@ struct AdminPanelView: View {
     var body: some View {
         List {
             // Group Management Section
-            Section {
+            Section(header: Text(NSLocalizedString("Band Management", comment: ""))) {
                 NavigationLink {
                     GroupSettingsView()
                 } label: {
                     adminRow(
-                        title: "Group Settings".localized,
-                        subtitle: "Configure band information".localized,
+                        title: NSLocalizedString("Group Settings", comment: ""),
+                        subtitle: NSLocalizedString("Configure band information", comment: ""),
                         icon: "gearshape.fill",
                         color: .blue
                     )
@@ -32,8 +32,8 @@ struct AdminPanelView: View {
                     UsersListView()
                 } label: {
                     adminRow(
-                        title: "Group Members".localized,
-                        subtitle: "Manage band members".localized,
+                        title: NSLocalizedString("Group Members", comment: ""),
+                        subtitle: NSLocalizedString("Manage band members", comment: ""),
                         icon: "person.3.fill",
                         color: .green
                     )
@@ -43,8 +43,8 @@ struct AdminPanelView: View {
                     PermissionsView()
                 } label: {
                     adminRow(
-                        title: "Permissions".localized,
-                        subtitle: "Control access rights".localized,
+                        title: NSLocalizedString("Permissions", comment: ""),
+                        subtitle: NSLocalizedString("Control access rights", comment: ""),
                         icon: "lock.shield.fill",
                         color: .orange
                     )
@@ -54,57 +54,63 @@ struct AdminPanelView: View {
                     ModuleManagementView()
                 } label: {
                     adminRow(
-                        title: "App Modules".localized,
-                        subtitle: "Enable/disable features".localized,
+                        title: NSLocalizedString("Module Management", comment: ""),
+                        subtitle: NSLocalizedString("Configure available features", comment: ""),
                         icon: "square.grid.2x2.fill",
                         color: .purple
                     )
                 }
-            } header: {
-                Text("Group Management".localized)
             }
             
-            // Group Info Section
-            Section {
-                if let group = groupService.group {
-                    HStack {
-                        adminIcon(icon: "music.mic", color: .pink)
+            // Fan Club Management Section
+            Section(header: Text("Fan Club")) {
+                NavigationLink {
+                    FanManagementView()
+                } label: {
+                    adminRow(
+                        title: "Fan Management",
+                        subtitle: "Manage your fan club and invite codes",
+                        icon: "heart.fill",
+                        color: .purple
+                    )
+                }
+                
+                NavigationLink {
+                    FanStatisticsView()
+                } label: {
+                    adminRow(
+                        title: "Fan Analytics",
+                        subtitle: "View fan engagement and statistics",
+                        icon: "chart.bar.fill",
+                        color: .pink
+                    )
+                }
+            }
+            
+            // Group Information Section
+            if let group = groupService.group {
+                Section(header: Text(NSLocalizedString("Group Information", comment: ""))) {
+                    HStack(spacing: 12) {
+                        adminIcon(icon: "info.circle.fill", color: .blue)
                         
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Group Name".localized)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                            
+                        VStack(alignment: .leading, spacing: 4) {
                             Text(group.name)
                                 .font(.body)
                                 .fontWeight(.medium)
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.vertical, 4)
-                    
-                    HStack {
-                        adminIcon(icon: "qrcode", color: .cyan)
-                        
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Invitation Code".localized)
+                            
+                            Text("Group Code: \(group.code)")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
-                            
-                            Text(group.code)
-                                .font(.body)
-                                .fontWeight(.medium)
                         }
                         
                         Spacer()
                         
                         Button {
                             UIPasteboard.general.string = group.code
-                            alertMessage = "Code copied to clipboard".localized
+                            alertMessage = NSLocalizedString("Code copied to clipboard", comment: "")
                             showAlert = true
                         } label: {
-                            Text("Copy".localized)
+                            Text(NSLocalizedString("Copy", comment: ""))
                                 .font(.subheadline)
                                 .fontWeight(.medium)
                                 .foregroundColor(.blue)
@@ -112,29 +118,25 @@ struct AdminPanelView: View {
                     }
                     .padding(.vertical, 4)
                 }
-            } header: {
-                Text("Group Information".localized)
             }
             
             // Additional Tools Section
-            Section {
+            Section(header: Text(NSLocalizedString("Additional Tools", comment: ""))) {
                 Button {
-                    alertMessage = "Data export will be implemented in the next update".localized
+                    alertMessage = NSLocalizedString("Data export will be implemented in the next update", comment: "")
                     showAlert = true
                 } label: {
                     adminRow(
-                        title: "Export Group Data".localized,
-                        subtitle: "Download band information".localized,
+                        title: NSLocalizedString("Export Group Data", comment: ""),
+                        subtitle: NSLocalizedString("Download band information", comment: ""),
                         icon: "square.and.arrow.up.fill",
                         color: .indigo
                     )
                 }
                 .buttonStyle(PlainButtonStyle())
-            } header: {
-                Text("Additional Tools".localized)
             }
         }
-        .navigationTitle("Admin Panel".localized)
+        .navigationTitle(NSLocalizedString("Admin Panel", comment: ""))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             if let groupId = AppState.shared.user?.groupId {
@@ -143,9 +145,9 @@ struct AdminPanelView: View {
         }
         .alert(isPresented: $showAlert) {
             Alert(
-                title: Text("Information".localized),
+                title: Text(NSLocalizedString("Information", comment: "")),
                 message: Text(alertMessage),
-                dismissButton: .default(Text("OK".localized))
+                dismissButton: .default(Text(NSLocalizedString("OK", comment: "")))
             )
         }
         .refreshable {
@@ -187,5 +189,34 @@ struct AdminPanelView: View {
                 .font(.system(size: 14, weight: .medium))
                 .foregroundColor(.white)
         }
+    }
+}
+
+// MARK: - FanStatisticsView (заглушка)
+struct FanStatisticsView: View {
+    var body: some View {
+        List {
+            Section {
+                VStack(spacing: 20) {
+                    Image(systemName: "chart.bar.xaxis")
+                        .font(.system(size: 60))
+                        .foregroundColor(.purple)
+                    
+                    Text("Fan Analytics Coming Soon!")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    
+                    Text("Here you'll see detailed analytics about your fan club engagement, growth trends, and fan activity.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 40)
+            }
+        }
+        .navigationTitle("Fan Analytics")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
