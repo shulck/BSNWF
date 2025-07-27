@@ -1,4 +1,5 @@
 import Foundation
+import FirebaseFirestore
 
 // Import DocumentPermissions from DocumentModels
 // Note: DocumentPermissions is defined in DocumentModels.swift
@@ -18,6 +19,11 @@ struct UserModel: Identifiable, Codable, Equatable {
     var documentPermissions: DocumentPermissions?
     var googleDriveEmail: String?
     var hasGoogleDriveAccess: Bool?
+    
+    // MARK: - Fan System Properties (NEW)
+    let userType: UserType
+    let fanGroupId: String?        // For fans - ID of the group they follow
+    let fanProfile: FanProfile?    // Fan-specific data
 
     enum UserRole: String, Codable, CaseIterable, Identifiable {
         case admin = "Admin"
@@ -75,6 +81,41 @@ struct UserModel: Identifiable, Codable, Equatable {
             return self.hierarchyLevel > otherRole.hierarchyLevel
         }
     }
+    
+    // MARK: - Initializer (Updated)
+    init(
+        id: String,
+        email: String,
+        name: String,
+        phone: String,
+        groupId: String? = nil,
+        role: UserRole = .member,
+        isOnline: Bool? = nil,
+        lastSeen: Date? = nil,
+        avatarURL: String? = nil,
+        documentPermissions: DocumentPermissions? = nil,
+        googleDriveEmail: String? = nil,
+        hasGoogleDriveAccess: Bool? = nil,
+        userType: UserType = .bandMember,
+        fanGroupId: String? = nil,
+        fanProfile: FanProfile? = nil
+    ) {
+        self.id = id
+        self.email = email
+        self.name = name
+        self.phone = phone
+        self.groupId = groupId
+        self.role = role
+        self.isOnline = isOnline
+        self.lastSeen = lastSeen
+        self.avatarURL = avatarURL
+        self.documentPermissions = documentPermissions
+        self.googleDriveEmail = googleDriveEmail
+        self.hasGoogleDriveAccess = hasGoogleDriveAccess
+        self.userType = userType
+        self.fanGroupId = fanGroupId
+        self.fanProfile = fanProfile
+    }
 
     static func == (lhs: UserModel, rhs: UserModel) -> Bool {
         return lhs.id == rhs.id &&
@@ -87,7 +128,9 @@ struct UserModel: Identifiable, Codable, Equatable {
                lhs.lastSeen == rhs.lastSeen &&
                lhs.avatarURL == rhs.avatarURL &&
                lhs.googleDriveEmail == rhs.googleDriveEmail &&
-               lhs.hasGoogleDriveAccess == rhs.hasGoogleDriveAccess
+               lhs.hasGoogleDriveAccess == rhs.hasGoogleDriveAccess &&
+               lhs.userType == rhs.userType &&
+               lhs.fanGroupId == rhs.fanGroupId
     }
 }
 
@@ -161,6 +204,37 @@ extension UserModel {
     
     var hasGroupAccess: Bool {
         return groupId != nil
+    }
+    
+    // MARK: - Fan System Helper Methods (NEW)
+    
+    // Fan-specific computed properties
+    var isFan: Bool {
+        return userType == .fan
+    }
+    
+    var isBandMember: Bool {
+        return userType == .bandMember
+    }
+    
+    var displayName: String {
+        if isFan, let fanProfile = fanProfile {
+            return fanProfile.nickname
+        }
+        return name
+    }
+    
+    var fanLevel: FanLevel? {
+        return fanProfile?.level
+    }
+    
+    var canModerate: Bool {
+        if isBandMember {
+            return role == .admin || role == .manager
+        } else if isFan {
+            return fanProfile?.isModerator ?? false
+        }
+        return false
     }
     
     // User initials for UI
@@ -288,5 +362,159 @@ extension UserModel {
         
         summary["moduleAccess"] = moduleAccess
         return summary
+    }
+    
+    // MARK: - Firebase Conversion Helpers (NEW)
+    func toDictionary() -> [String: Any] {
+        var dict: [String: Any] = [
+            "id": id,
+            "email": email,
+            "name": name,
+            "phone": phone,
+            "role": role.rawValue,
+            "userType": userType.rawValue
+        ]
+        
+        // Handle optional fields
+        dict["groupId"] = groupId ?? NSNull()
+        dict["isOnline"] = isOnline ?? NSNull()
+        dict["lastSeen"] = lastSeen != nil ? Timestamp(date: lastSeen!) : NSNull()
+        dict["avatarURL"] = avatarURL ?? NSNull()
+        dict["documentPermissions"] = documentPermissions ?? NSNull()
+        dict["googleDriveEmail"] = googleDriveEmail ?? NSNull()
+        dict["hasGoogleDriveAccess"] = hasGoogleDriveAccess ?? NSNull()
+        dict["fanGroupId"] = fanGroupId ?? NSNull()
+        
+        // Handle fan profile
+        if let fanProfile = fanProfile {
+            dict["fanProfile"] = [
+                "nickname": fanProfile.nickname,
+                "joinDate": Timestamp(date: fanProfile.joinDate),
+                "location": fanProfile.location,
+                "favoriteSong": fanProfile.favoriteSong,
+                "level": fanProfile.level.rawValue,
+                "achievements": fanProfile.achievements,
+                "isModerator": fanProfile.isModerator,
+                "stats": [
+                    "totalMessages": fanProfile.stats.totalMessages,
+                    "joinDate": Timestamp(date: fanProfile.stats.joinDate),
+                    "lastActive": Timestamp(date: fanProfile.stats.lastActive),
+                    "merchandisePurchased": fanProfile.stats.merchandisePurchased,
+                    "concertsAttended": fanProfile.stats.concertsAttended,
+                    "achievementsUnlocked": fanProfile.stats.achievementsUnlocked
+                ],
+                "notificationSettings": [
+                    "newConcerts": fanProfile.notificationSettings.newConcerts,
+                    "officialNews": fanProfile.notificationSettings.officialNews,
+                    "chatMessages": fanProfile.notificationSettings.chatMessages,
+                    "newMerch": fanProfile.notificationSettings.newMerch,
+                    "achievements": fanProfile.notificationSettings.achievements,
+                    "moderatorActions": fanProfile.notificationSettings.moderatorActions
+                ]
+            ]
+        } else {
+            dict["fanProfile"] = NSNull()
+        }
+        
+        return dict
+    }
+    
+    static func fromDictionary(_ dict: [String: Any], id: String) -> UserModel? {
+        guard let email = dict["email"] as? String,
+              let name = dict["name"] as? String,
+              let phone = dict["phone"] as? String,
+              let roleString = dict["role"] as? String,
+              let role = UserRole(rawValue: roleString) else {
+            return nil
+        }
+        
+        let userTypeString = dict["userType"] as? String ?? "BandMember"
+        let userType = UserType(rawValue: userTypeString) ?? .bandMember
+        
+        let groupId = dict["groupId"] as? String
+        let isOnline = dict["isOnline"] as? Bool
+        let lastSeen = (dict["lastSeen"] as? Timestamp)?.dateValue()
+        let avatarURL = dict["avatarURL"] as? String
+        let documentPermissions = dict["documentPermissions"] as? DocumentPermissions
+        let googleDriveEmail = dict["googleDriveEmail"] as? String
+        let hasGoogleDriveAccess = dict["hasGoogleDriveAccess"] as? Bool
+        let fanGroupId = dict["fanGroupId"] as? String
+        
+        var fanProfile: FanProfile?
+        if let fanProfileDict = dict["fanProfile"] as? [String: Any] {
+            fanProfile = FanProfile.fromDictionary(fanProfileDict)
+        }
+        
+        return UserModel(
+            id: id,
+            email: email,
+            name: name,
+            phone: phone,
+            groupId: groupId,
+            role: role,
+            isOnline: isOnline,
+            lastSeen: lastSeen,
+            avatarURL: avatarURL,
+            documentPermissions: documentPermissions,
+            googleDriveEmail: googleDriveEmail,
+            hasGoogleDriveAccess: hasGoogleDriveAccess,
+            userType: userType,
+            fanGroupId: fanGroupId,
+            fanProfile: fanProfile
+        )
+    }
+}
+
+// MARK: - FanProfile Firebase Conversion (NEW)
+extension FanProfile {
+    static func fromDictionary(_ dict: [String: Any]) -> FanProfile? {
+        guard let nickname = dict["nickname"] as? String,
+              let joinDateTimestamp = dict["joinDate"] as? Timestamp,
+              let location = dict["location"] as? String,
+              let favoriteSong = dict["favoriteSong"] as? String,
+              let levelString = dict["level"] as? String,
+              let level = FanLevel(rawValue: levelString),
+              let achievements = dict["achievements"] as? [String],
+              let isModerator = dict["isModerator"] as? Bool else {
+            return nil
+        }
+        
+        let joinDate = joinDateTimestamp.dateValue()
+        
+        var stats = FanStats()
+        if let statsDict = dict["stats"] as? [String: Any] {
+            stats = FanStats(
+                totalMessages: statsDict["totalMessages"] as? Int ?? 0,
+                joinDate: (statsDict["joinDate"] as? Timestamp)?.dateValue() ?? joinDate,
+                lastActive: (statsDict["lastActive"] as? Timestamp)?.dateValue() ?? Date(),
+                merchandisePurchased: statsDict["merchandisePurchased"] as? Int ?? 0,
+                concertsAttended: statsDict["concertsAttended"] as? Int ?? 0,
+                achievementsUnlocked: statsDict["achievementsUnlocked"] as? Int ?? 0
+            )
+        }
+        
+        var notificationSettings = FanNotificationSettings()
+        if let settingsDict = dict["notificationSettings"] as? [String: Any] {
+            notificationSettings = FanNotificationSettings(
+                newConcerts: settingsDict["newConcerts"] as? Bool ?? true,
+                officialNews: settingsDict["officialNews"] as? Bool ?? true,
+                chatMessages: settingsDict["chatMessages"] as? Bool ?? true,
+                newMerch: settingsDict["newMerch"] as? Bool ?? false,
+                achievements: settingsDict["achievements"] as? Bool ?? true,
+                moderatorActions: settingsDict["moderatorActions"] as? Bool ?? true
+            )
+        }
+        
+        return FanProfile(
+            nickname: nickname,
+            joinDate: joinDate,
+            location: location,
+            favoriteSong: favoriteSong,
+            level: level,
+            achievements: achievements,
+            isModerator: isModerator,
+            stats: stats,
+            notificationSettings: notificationSettings
+        )
     }
 }
