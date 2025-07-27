@@ -55,9 +55,9 @@ final class GroupViewModel: ObservableObject {
                         }
                         
                         if let groupId = snapshot?.documents.first?.documentID {
-                            UserService.shared.updateUserGroup(groupId: groupId) { result in
-                                switch result {
-                                case .success:
+                            // ИСПРАВЛЕНО: Используем метод с userId параметром, который возвращает Bool
+                            UserService.shared.updateUserGroup(userId: userId, groupId: groupId) { success in
+                                if success {
                                     self.db.collection("users").document(userId).updateData([
                                         "role": "Admin"
                                     ]) { error in
@@ -68,9 +68,9 @@ final class GroupViewModel: ObservableObject {
                                             completion(.success(groupId))
                                         }
                                     }
-                                case .failure(let error):
-                                    self.errorMessage = "Error updating user: \(error.localizedDescription)"
-                                    completion(.failure(error))
+                                } else {
+                                    self.errorMessage = "Error updating user group"
+                                    completion(.failure(NSError(domain: "UpdateUserError", code: -1, userInfo: nil)))
                                 }
                             }
                         } else {
@@ -124,7 +124,7 @@ final class GroupViewModel: ObservableObject {
                         completion(.failure(error))
                     } else {
                         self.successMessage = "Join request sent. Waiting for confirmation."
-                        completion(.success(()))
+                        completion(.success(())) // ИСПРАВЛЕНО: правильный тип для success
                     }
                 }
             }

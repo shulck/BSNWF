@@ -43,11 +43,11 @@ struct FanRegistrationView: View {
                             .foregroundColor(.purple)
                         
                         VStack(spacing: 8) {
-                            Text("Join Fan Club".localized)
+                            Text(NSLocalizedString("Join Fan Club", comment: ""))
                                 .font(.title2)
                                 .fontWeight(.bold)
                             
-                            Text("Connect with your favorite band and get exclusive access to events, merchandise, and updates!".localized)
+                            Text(NSLocalizedString("Connect with your favorite band and get exclusive access to events, merchandise, and updates!", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.center)
@@ -61,16 +61,16 @@ struct FanRegistrationView: View {
                 // Invite code section
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Invitation Code".localized)
+                        Text(NSLocalizedString("Invitation Code", comment: ""))
                             .font(.headline)
                             .foregroundColor(.primary)
                         
-                        Text("Enter the invite code you received from the band".localized)
+                        Text(NSLocalizedString("Enter the invite code you received from the band", comment: ""))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
                         HStack {
-                            TextField("Enter invite code".localized, text: $inviteCode)
+                            TextField(NSLocalizedString("Enter invite code", comment: ""), text: $inviteCode)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .textInputAutocapitalization(.characters)
                                 .disableAutocorrection(true)
@@ -112,59 +112,59 @@ struct FanRegistrationView: View {
                         
                         // Validation message
                         if validationStatus == .invalid {
-                            Text("Invalid invite code. Please check and try again.".localized)
+                            Text(NSLocalizedString("Invalid invite code. Please check and try again.", comment: ""))
                                 .font(.caption)
                                 .foregroundColor(.red)
                         } else if validationStatus == .valid {
                             HStack {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundColor(.green)
-                                Text("Valid invite code! You can join this fan club.".localized)
+                                Text(NSLocalizedString("Valid invite code! You can join this fan club.", comment: ""))
                                     .font(.caption)
                                     .foregroundColor(.green)
                             }
                         }
                     }
                 } header: {
-                    Text("Step 1".localized)
+                    Text(NSLocalizedString("Step 1", comment: ""))
                 }
                 
                 // Fan profile section
                 Section {
                     VStack(alignment: .leading, spacing: 16) {
-                        Text("Fan Profile".localized)
+                        Text(NSLocalizedString("Fan Profile", comment: ""))
                             .font(.headline)
                             .foregroundColor(.primary)
                         
                         // Nickname field
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Nickname".localized)
+                            Text(NSLocalizedString("Nickname", comment: ""))
                                 .font(.subheadline)
                                 .fontWeight(.medium)
-                            TextField("Enter your fan nickname".localized, text: $nickname)
+                            TextField(NSLocalizedString("Enter your fan nickname", comment: ""), text: $nickname)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                         
                         // Location field (optional)
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Location (Optional)".localized)
+                            Text(NSLocalizedString("Location (Optional)", comment: ""))
                                 .font(.subheadline)
                                 .fontWeight(.medium)
-                            TextField("City, Country".localized, text: $location)
+                            TextField(NSLocalizedString("City, Country", comment: ""), text: $location)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                         
                         // Favorite song field (optional)
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Favorite Song (Optional)".localized)
+                            Text(NSLocalizedString("Favorite Song (Optional)", comment: ""))
                                 .font(.subheadline)
                                 .fontWeight(.medium)
-                            TextField("What's your favorite song?".localized, text: $favoriteSong)
+                            TextField(NSLocalizedString("What's your favorite song?", comment: ""), text: $favoriteSong)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                     }
                 } header: {
-                    Text("Step 2".localized)
+                    Text(NSLocalizedString("Step 2", comment: ""))
                 }
                 
                 // Join button
@@ -177,7 +177,7 @@ struct FanRegistrationView: View {
                                     .scaleEffect(0.9)
                             } else {
                                 Image(systemName: "heart.fill")
-                                Text("Join Fan Club".localized)
+                                Text(NSLocalizedString("Join Fan Club", comment: ""))
                             }
                         }
                         .font(.headline)
@@ -199,19 +199,19 @@ struct FanRegistrationView: View {
                 }
                 .listRowBackground(Color.clear)
             }
-            .navigationTitle("Fan Registration".localized)
+            .navigationTitle(NSLocalizedString("Fan Registration", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "")) {
                         dismiss()
                     }
                     .foregroundColor(.primary)
                 }
             }
         }
-        .alert("Registration Error".localized, isPresented: $showErrorAlert) {
-            Button("OK".localized, role: .cancel) {}
+        .alert(NSLocalizedString("Registration Error", comment: ""), isPresented: $showErrorAlert) {
+            Button(NSLocalizedString("OK", comment: ""), role: .cancel) {}
         } message: {
             Text(errorMessage)
         }
@@ -245,45 +245,51 @@ struct FanRegistrationView: View {
         
         isRegistering = true
         
-        let fanProfile = FanProfile(
-            nickname: nickname.trimmingCharacters(in: .whitespacesAndNewlines),
-            joinDate: Date(),
-            location: location.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "" : location.trimmingCharacters(in: .whitespacesAndNewlines),
-            favoriteSong: favoriteSong.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "" : favoriteSong.trimmingCharacters(in: .whitespacesAndNewlines)
-        )
-        
-        fanService.joinFanClub(
-            inviteCode: inviteCode.trimmingCharacters(in: .whitespacesAndNewlines),
-            fanProfile: fanProfile
-        ) { result in
-            DispatchQueue.main.async {
-                isRegistering = false
+        // First validate code to get FanInviteCode object
+        fanService.validateFanInviteCode(inviteCode.trimmingCharacters(in: .whitespacesAndNewlines)) { result in
+            switch result {
+            case .success(let inviteCodeObject):
+                let fanProfile = FanProfile(
+                    nickname: nickname.trimmingCharacters(in: .whitespacesAndNewlines),
+                    joinDate: Date(),
+                    location: location.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "" : location.trimmingCharacters(in: .whitespacesAndNewlines),
+                    favoriteSong: favoriteSong.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "" : favoriteSong.trimmingCharacters(in: .whitespacesAndNewlines)
+                )
                 
-                switch result {
-                case .success:
-                    // Registration successful - update app state
-                    appState.refreshAuthState()
-                    dismiss()
-                    
-                case .failure(let error):
-                    // Show error to user
-                    if let fanError = error as? FanInviteService.FanInviteError {
-                        errorMessage = fanError.localizedDescription
-                    } else {
-                        errorMessage = error.localizedDescription
+                self.fanService.joinFanClub(inviteCode: inviteCodeObject, fanProfile: fanProfile) { joinResult in
+                    DispatchQueue.main.async {
+                        self.isRegistering = false
+                        
+                        switch joinResult {
+                        case .success:
+                            // Registration successful - update app state
+                            self.appState.refreshAuthState()
+                            self.dismiss()
+                            
+                        case .failure(let error):
+                            // Show error to user
+                            if let fanError = error as? FanInviteError {
+                                self.errorMessage = fanError.localizedDescription
+                            } else {
+                                self.errorMessage = error.localizedDescription
+                            }
+                            self.showErrorAlert = true
+                        }
                     }
-                    showErrorAlert = true
+                }
+                
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.isRegistering = false
+                    if let fanError = error as? FanInviteError {
+                        self.errorMessage = fanError.localizedDescription
+                    } else {
+                        self.errorMessage = error.localizedDescription
+                    }
+                    self.showErrorAlert = true
                 }
             }
         }
-    }
-}
-
-// MARK: - Localization Extensions
-
-extension String {
-    var localized: String {
-        return NSLocalizedString(self, comment: "")
     }
 }
 

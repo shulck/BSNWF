@@ -6,82 +6,29 @@ struct SplashView: View {
     @State private var progress: Double = 0.0
     @State private var logoScale: CGFloat = 1.0
     @State private var showProgressBar = false
-    @State private var loadingText = "Initializing...".localized
+    @State private var loadingText = "Initializing..."
     
     private let loadingSteps = [
-        "Initializing...".localized,
-        "Loading user data...".localized,
-        "Connecting to server...".localized,
-        "Preparing interface...".localized,
-        "Almost ready...".localized
+        "Initializing...",
+        "Loading user data...",
+        "Connecting to server...",
+        "Preparing interface...",
+        "Almost ready..."
     ]
     
     var body: some View {
-        Group {
+        ZStack {
             if !shouldCheckAuth {
-                ZStack {
-                    Image("bg")
-                        .resizable()
-                        .scaledToFill()
-                        .ignoresSafeArea()
-                    
-                    VStack(spacing: 0) {
-                        Spacer()
-                        
-                        VStack(spacing: 40) {
-                            Image("bandlogo")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 120, height: 120)
-                            
-                            Text("BandSync".localized)
-                                .font(.system(size: 40, weight: .bold))
-                                .foregroundColor(.white)
-                        }
-                        
-                        Spacer()
-                        
-                        VStack(spacing: 20) {
-                            Text(loadingText)
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundColor(.white.opacity(0.8))
-                                .opacity(showProgressBar ? 1.0 : 0.0)
-                                .animation(.easeInOut(duration: 0.5), value: loadingText)
-                            
-                            VStack(spacing: 12) {
-                                if showProgressBar {
-                                    ZStack(alignment: .leading) {
-                                        RoundedRectangle(cornerRadius: 4)
-                                            .fill(Color.white.opacity(0.3))
-                                            .frame(height: 4)
-                                        
-                                        RoundedRectangle(cornerRadius: 4)
-                                            .fill(Color.white)
-                                            .frame(width: max(20, CGFloat(progress) * (UIScreen.main.bounds.width - 80)), height: 4)
-                                            .animation(.easeInOut(duration: 0.3), value: progress)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.horizontal, 40)
-                                    .transition(.scale.combined(with: .opacity))
-                                }
-                                
-                                if showProgressBar {
-                                    Text("\(Int(progress * 100))%")
-                                        .font(.system(size: 14, weight: .semibold))
-                                        .foregroundColor(.white.opacity(0.9))
-                                        .transition(.opacity)
-                                }
-                            }
-                        }
-                        .padding(.bottom, 80)
-                    }
-                }
+                SplashScreenView(
+                    progress: progress,
+                    showProgressBar: showProgressBar,
+                    loadingText: loadingText
+                )
                 .onAppear {
                     startLoadingSequence()
                 }
             } else {
-                // ОБНОВЛЕНО: Используем новую логику навигации
-                NavigationDestinationView()
+                ContentNavigationView()
                     .transition(.opacity)
             }
         }
@@ -138,8 +85,104 @@ struct SplashView: View {
     }
 }
 
-// MARK: - Navigation Destination Logic (идентично ContentView)
-private struct NavigationDestinationView: View {
+// MARK: - Splash Screen UI Component
+private struct SplashScreenView: View {
+    let progress: Double
+    let showProgressBar: Bool
+    let loadingText: String
+    
+    var body: some View {
+        ZStack {
+            Image("bg")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+                Spacer()
+                
+                LogoSection()
+                
+                Spacer()
+                
+                LoadingSection(
+                    progress: progress,
+                    showProgressBar: showProgressBar,
+                    loadingText: loadingText
+                )
+                .padding(.bottom, 80)
+            }
+        }
+    }
+}
+
+// MARK: - Logo Section Component
+private struct LogoSection: View {
+    var body: some View {
+        VStack(spacing: 40) {
+            Image("bandlogo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 120, height: 120)
+            
+            Text("BandSync")
+                .font(.system(size: 40, weight: .bold))
+                .foregroundColor(.white)
+        }
+    }
+}
+
+// MARK: - Loading Section Component
+private struct LoadingSection: View {
+    let progress: Double
+    let showProgressBar: Bool
+    let loadingText: String
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            Text(loadingText)
+                .font(.system(size: 16, weight: .medium))
+                .foregroundColor(.white.opacity(0.8))
+                .opacity(showProgressBar ? 1.0 : 0.0)
+                .animation(.easeInOut(duration: 0.5), value: loadingText)
+            
+            if showProgressBar {
+                ProgressBarSection(progress: progress)
+            }
+        }
+    }
+}
+
+// MARK: - Progress Bar Component
+private struct ProgressBarSection: View {
+    let progress: Double
+    
+    var body: some View {
+        VStack(spacing: 12) {
+            ZStack(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(Color.white.opacity(0.3))
+                    .frame(height: 4)
+                
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(Color.white)
+                    .frame(width: max(20, CGFloat(progress) * (UIScreen.main.bounds.width - 80)), height: 4)
+                    .animation(.easeInOut(duration: 0.3), value: progress)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 40)
+            .transition(.scale.combined(with: .opacity))
+            
+            Text("\(Int(progress * 100))%")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.white.opacity(0.9))
+                .transition(.opacity)
+        }
+    }
+}
+
+// MARK: - Content Navigation View
+private struct ContentNavigationView: View {
     @EnvironmentObject private var appState: AppState
     
     var body: some View {
@@ -147,35 +190,51 @@ private struct NavigationDestinationView: View {
             if !appState.isLoggedIn {
                 LoginView()
             } else {
-                if let user = appState.user {
-                    // Пользователь загружен - определяем куда направить
-                    switch user.userType {
-                    case .bandMember:
-                        // Участники группы
-                        if user.groupId != nil {
-                            MainTabView()  // Основной интерфейс группы
-                        } else {
-                            GroupSelectionView()  // Нужно создать/присоединиться к группе
-                        }
-                        
-                    case .fan:
-                        // Фанаты
-                        if user.fanGroupId != nil {
-                            FanTabView()  // Интерфейс фан-клуба
-                        } else {
-                            GroupSelectionView()  // Нужно присоединиться к фан-клубу
-                        }
-                    }
-                } else {
-                    // Пользователь еще загружается
-                    LoadingUserView()
-                }
+                UserNavigationView()
             }
         }
     }
 }
 
-// MARK: - Loading User View (идентично ContentView)
+// MARK: - User Navigation View
+private struct UserNavigationView: View {
+    @EnvironmentObject private var appState: AppState
+    
+    var body: some View {
+        Group {
+            if let user = appState.user {
+                switch user.userType {
+                case .bandMember:
+                    bandMemberView(user: user)
+                case .fan:
+                    fanView(user: user)
+                }
+            } else {
+                LoadingUserView()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func bandMemberView(user: UserModel) -> some View {
+        if user.groupId != nil {
+            MainTabView()
+        } else {
+            GroupSelectionView()
+        }
+    }
+    
+    @ViewBuilder
+    private func fanView(user: UserModel) -> some View {
+        if user.fanGroupId != nil {
+            FanTabView()
+        } else {
+            GroupSelectionView()
+        }
+    }
+}
+
+// MARK: - Loading User View
 private struct LoadingUserView: View {
     @EnvironmentObject private var appState: AppState
     @State private var hasAttemptedLoad = false
@@ -185,7 +244,7 @@ private struct LoadingUserView: View {
             ProgressView()
                 .scaleEffect(1.2)
             
-            Text("Loading user data...".localized)
+            Text("Loading user data...")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }

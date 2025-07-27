@@ -5,24 +5,16 @@ struct ContentView: View {
     @State private var shouldCheckAuth = false
 
     var body: some View {
-        Group {
+        ZStack {
             if !shouldCheckAuth {
-                VStack {
-                    Text("Loading...".localized)
-                    ProgressView()
-                }
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                        shouldCheckAuth = true
+                LoadingScreen()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            shouldCheckAuth = true
+                        }
                     }
-                }
             } else {
-                if !appState.isLoggedIn {
-                    LoginView()
-                } else {
-                    // ОБНОВЛЕННАЯ ЛОГИКА: Проверяем тип пользователя
-                    NavigationDestinationView()
-                }
+                MainNavigationView()
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -30,34 +22,87 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Navigation Destination Logic
-private struct NavigationDestinationView: View {
+// MARK: - Loading Screen Component
+private struct LoadingScreen: View {
+    var body: some View {
+        VStack {
+            Text(NSLocalizedString("Loading...", comment: ""))
+            ProgressView()
+        }
+    }
+}
+
+// MARK: - Main Navigation Logic
+private struct MainNavigationView: View {
+    @EnvironmentObject private var appState: AppState
+    
+    var body: some View {
+        Group {
+            if !appState.isLoggedIn {
+                LoginView()
+            } else {
+                UserBasedNavigationView()
+            }
+        }
+    }
+}
+
+// MARK: - User-Based Navigation
+private struct UserBasedNavigationView: View {
     @EnvironmentObject private var appState: AppState
     
     var body: some View {
         Group {
             if let user = appState.user {
-                // Пользователь загружен - определяем куда направить
-                switch user.userType {
-                case .bandMember:
-                    // Участники группы
-                    if user.groupId != nil {
-                        MainTabView()  // Основной интерфейс группы
-                    } else {
-                        GroupSelectionView()  // Нужно создать/присоединиться к группе
-                    }
-                    
-                case .fan:
-                    // Фанаты
-                    if user.fanGroupId != nil {
-                        FanTabView()  // Интерфейс фан-клуба
-                    } else {
-                        GroupSelectionView()  // Нужно присоединиться к фан-клубу
-                    }
-                }
+                AuthenticatedUserView(user: user)
             } else {
-                // Пользователь еще загружается
                 LoadingUserView()
+            }
+        }
+    }
+}
+
+// MARK: - Authenticated User View
+private struct AuthenticatedUserView: View {
+    let user: UserModel
+    
+    var body: some View {
+        Group {
+            switch user.userType {
+            case .bandMember:
+                BandMemberNavigationView(user: user)
+            case .fan:
+                FanNavigationView(user: user)
+            }
+        }
+    }
+}
+
+// MARK: - Band Member Navigation
+private struct BandMemberNavigationView: View {
+    let user: UserModel
+    
+    var body: some View {
+        Group {
+            if user.groupId != nil {
+                MainTabView()
+            } else {
+                GroupSelectionView()
+            }
+        }
+    }
+}
+
+// MARK: - Fan Navigation
+private struct FanNavigationView: View {
+    let user: UserModel
+    
+    var body: some View {
+        Group {
+            if user.fanGroupId != nil {
+                FanTabView()
+            } else {
+                GroupSelectionView()
             }
         }
     }
@@ -73,7 +118,7 @@ private struct LoadingUserView: View {
             ProgressView()
                 .scaleEffect(1.2)
             
-            Text("Loading user data...".localized)
+            Text(NSLocalizedString("Loading user data...", comment: ""))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }
