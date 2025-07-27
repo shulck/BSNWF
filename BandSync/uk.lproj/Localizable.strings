@@ -1,0 +1,2776 @@
+/*
+  Localizable.strings
+  BandSync
+  
+  Created by Developer on 31.03.2025.
+  Ukrainian Localization
+*/
+
+// Common strings
+"Cancel" = "Скасувати";
+"Save" = "Зберегти";
+"Edit" = "Редагувати";
+"Delete" = "Видалити";
+"Close" = "Закрити";
+"Done" = "Готово";
+"Add" = "Додати";
+"OK" = "OK";
+"Error" = "Помилка";
+"Success" = "Успішно";
+"Loading" = "Завантаження";
+"Search" = "Пошук";
+"Yes" = "Так";
+"Actions" = "Дії";
+"Read" = "Читати";
+"Get Started" = "Почати";
+
+// Privacy Policy
+"Our Commitment" = "Наші зобов'язання";
+"Your privacy is important to us. This policy explains how BandSync collects, uses, and protects your information to provide the best possible service." = "Ваша приватність важлива для нас. Ця політика пояснює, як BandSync збирає, використовує та захищає вашу інформацію для надання найкращого сервісу.";
+"Information We Collect" = "Інформація, яку ми збираємо";
+"Account Information" = "Інформація про обліковий запис";
+"Name, email, and profile details for authentication and personalization" = "Ім'я, електронна пошта та деталі профілю для автентифікації та персоналізації";
+"Band Data" = "Дані гурту";
+"Group information, member details, and organizational structure" = "Інформація про групу, деталі учасників та організаційна структура";
+"Events & Scheduling" = "Події та планування";
+"Calendar data, event details, and attendance information" = "Дані календаря, деталі подій та інформація про відвідуваність";
+"Communication Data" = "Дані комунікації";
+"Messages and coordination information within your band" = "Повідомлення та координаційна інформація в межах вашого гурту";
+"Financial Information" = "Фінансова інформація";
+"Expense tracking and transaction records (no payment details stored)" = "Відстеження витрат та записи транзакцій (деталі платежів не зберігаються)";
+"Document Storage" = "Зберігання документів";
+"Files and documents shared through Google Drive integration" = "Файли та документи, які діляться через інтеграцію Google Drive";
+"Usage Analytics" = "Аналітика використання";
+"App performance data and feature usage statistics for improvement" = "Дані про продуктивність програми та статистика використання функцій для покращення";
+"How We Use Your Information" = "Як ми використовуємо вашу інформацію";
+"Service Delivery" = "Надання послуг";
+"Provide band management tools and collaboration features" = "Надання інструментів управління гуртом та функцій співпраці";
+"Synchronization" = "Синхронізація";
+"Keep your data updated across all your devices" = "Підтримка актуальності ваших даних на всіх пристроях";
+"Notifications" = "Сповіщення";
+"Send relevant updates about events and band activities" = "Надсилання відповідних оновлень про події та активності гурту";
+"Security" = "Безпека";
+"Protect your account and prevent unauthorized access" = "Захист вашого облікового запису та запобігання несанкціонованому доступу";
+"Improvement" = "Покращення";
+"Enhance app performance and develop new features" = "Покращення продуктивності програми та розробка нових функцій";
+"Customer Support" = "Підтримка клієнтів";
+"Provide assistance and resolve technical issues" = "Надання допомоги та вирішення технічних проблем";
+"Information Sharing" = "Поділ інформації";
+"No Data Sales" = "Немає продажу даних";
+"We never sell your personal information to third parties" = "Ми ніколи не продаємо вашу особисту інформацію третім особам";
+"Service Providers" = "Постачальники послуг";
+"Trusted partners like Firebase and Google Drive under strict agreements" = "Надійні партнери, такі як Firebase та Google Drive, під строгими угодами";
+"Legal Requirements" = "Правові вимоги";
+"Only when required by law or to protect user safety" = "Лише коли це вимагається законом або для захисту безпеки користувача";
+"Your Consent" = "Ваша згода";
+"With your explicit permission for specific purposes" = "З вашим явним дозволом для конкретних цілей";
+"Business Transfers" = "Передача бізнесу";
+"In the event of a merger or acquisition, with user notification" = "У випадку злиття або поглинання, з повідомленням користувача";
+"Security Measures" = "Заходи безпеки";
+"Data Encryption" = "Шифрування даних";
+"All data is encrypted during transmission and storage" = "Всі дані шифруються під час передачі та зберігання";
+"Secure Authentication" = "Безпечна автентифікація";
+"Strong password requirements and optional biometric security" = "Строгі вимоги до пароля та необов'язкова біометрична безпека";
+"Access Controls" = "Контроль доступу";
+"Role-based permissions and data access limitations" = "Дозволи на основі ролей та обмеження доступу до даних";
+"Regular Security Reviews" = "Регулярні огляди безпеки";
+"Ongoing security assessments and updates" = "Поточні оцінки безпеки та оновлення";
+"Incident Response" = "Реагування на інциденти";
+"Prompt notification and response to any security issues" = "Швидке сповіщення та реагування на будь-які проблеми безпеки";
+"Your Privacy Rights" = "Ваші права на приватність";
+"Access Your Data" = "Доступ до ваших даних";
+"View and download your personal information anytime" = "Переглядайте та завантажуйте вашу особисту інформацію будь-коли";
+"Correct Information" = "Виправлення інформації";
+"Update or correct any inaccurate data through the app" = "Оновіть або виправте будь-які неточні дані через програму";
+"Delete Your Data" = "Видалення ваших даних";
+"Remove your account and associated data permanently" = "Видаліть ваш обліковий запис та пов'язані дані назавжди";
+"Data Portability" = "Портабельність даних";
+"Export your data in standard, portable formats" = "Експортуйте ваші дані у стандартних, портабельних форматах";
+"Control Communications" = "Контроль комунікацій";
+"Manage notification preferences and marketing communications" = "Управління налаштуваннями сповіщень та маркетинговими комунікаціями";
+"Withdraw Consent" = "Відкликання згоди";
+"Revoke previously given permissions at any time" = "Відкликайте раніше надані дозволи будь-коли";
+"Payment Information" = "Платіжна інформація";
+"No Payment Storage" = "Немає зберігання платежів";
+"We do not store credit card or banking information" = "Ми не зберігаємо інформацію про кредитні картки або банківські дані";
+"App Store Processing" = "Обробка App Store";
+"All payments are securely processed by Apple" = "Всі платежі безпечно обробляються Apple";
+"Purchase Verification" = "Перевірка покупки";
+"We may verify purchases through Apple's secure servers" = "Ми можемо перевіряти покупки через безпечні сервери Apple";
+"Subscription Management" = "Управління підписками";
+"Billing history is maintained by Apple, not BandSync" = "Історія рахунків ведеться Apple, а не BandSync";
+"Children's Privacy" = "Приватність дітей";
+"Age Requirements" = "Вікові вимоги";
+"BandSync is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13." = "BandSync не призначений для дітей віком до 13 років. Ми свідомо не збираємо особисту інформацію від дітей віком до 13 років.";
+"Parental Responsibility" = "Відповідальність батьків";
+"If you believe a child under 13 has provided us with personal information, please contact us immediately so we can delete it." = "Якщо ви вважаєте, що дитина віком до 13 років надала нам особисту інформацію, будь ласка, зверніться до нас негайно, щоб ми могли її видалити.";
+"Policy Changes" = "Зміни політики";
+"Policy Updates" = "Оновлення політики";
+"We may update this privacy policy periodically to reflect changes in our practices or legal requirements. We will notify users of significant changes through the app." = "Ми можемо періодично оновлювати цю політику приватності, щоб відобразити зміни в наших практиках або правових вимогах. Ми повідомимо користувачів про значні зміни через програму.";
+"Continued Use" = "Продовження використання";
+"Your continued use of BandSync after policy updates constitutes acceptance of the revised terms." = "Ваше продовження використання BandSync після оновлень політики становить прийняття переглянутих умов.";
+"Important Notices" = "Важливі повідомлення";
+"Best Efforts Commitment" = "Зобов'язання докладати найкращих зусиль";
+"We are committed to protecting your privacy and implement industry-standard security measures. However, no system is completely secure, and we cannot guarantee absolute security." = "Ми зобов'язані захищати вашу приватність та впроваджувати стандартні для галузі заходи безпеки. Однак жодна система не є повністю безпечною, і ми не можемо гарантувати абсолютну безпеку.";
+"Data Backup Recommendation" = "Рекомендація щодо резервного копіювання даних";
+"We recommend maintaining your own backups of important data. While we strive to protect and preserve your information, technical issues can occasionally occur." = "Ми рекомендуємо підтримувати власні резервні копії важливих даних. Хоча ми прагнемо захистити та зберегти вашу інформацію, технічні проблеми можуть іноді виникати.";
+"Third-Party Services" = "Сторонні сервіси";
+"While we carefully select trusted partners, we cannot control the privacy practices of third-party services. Please review their privacy policies as well." = "Хоча ми ретельно обираємо надійних партнерів, ми не можемо контролювати практики приватності сторонніх сервісів. Будь ласка, також ознайомтеся з їхніми політиками приватності.";
+"Last updated: January 2025" = "Останнє оновлення: січень 2025";
+"For privacy-related questions, please contact our support team through the app." = "З питань, пов'язаних з приватністю, будь ласка, зверніться до нашої команди підтримки через програму.";
+"We are committed to transparency and protecting your personal information." = "Ми зобов'язані бути прозорими та захищати вашу особисту інформацію.";
+"Privacy Policy" = "Політика приватності";
+
+// ConsentDetails
+"Consent Information" = "Інформація про згоду";
+"Agreement Date" = "Дата угоди";
+"Terms Version" = "Версія умов";
+"App Version" = "Версія програми";
+"Device Information" = "Інформація про пристрій";
+"Device Model" = "Модель пристрою";
+"Operating System" = "Операційна система";
+"Device Identifier" = "Ідентифікатор пристрою";
+"Agreement Details" = "Деталі угоди";
+"Agreement Record" = "Запис угоди";
+"This record confirms that you voluntarily agreed to our Terms of Service and Privacy Policy on the date shown above." = "Цей запис підтверджує, що ви добровільно погодились з нашими Умовами обслуговування та Політикою приватності на дату, показану вище.";
+"What This Means" = "Що це означає";
+"• You have read and accepted our terms and privacy policy" = "• Ви прочитали та прийняли наші умови та політику приватності";
+"• Your consent was given freely and voluntarily" = "• Ваша згода була дана вільно та добровільно";
+"• You understand how we collect and use your data" = "• Ви розумієте, як ми збираємо та використовуємо ваші дані";
+"• You can withdraw consent at any time" = "• Ви можете відкликати згоду будь-коли";
+"• This record helps us maintain compliance with privacy laws" = "• Цей запис допомагає нам підтримувати відповідність законам про приватність";
+"Your Rights" = "Ваші права";
+"• Access and review your personal data" = "• Доступ та перегляд ваших особистих даних";
+"• Request corrections to inaccurate information" = "• Запит виправлень неточної інформації";
+"• Delete your account and data" = "• Видалення вашого облікового запису та даних";
+"• Export your data in portable formats" = "• Експорт ваших даних у портабельних форматах";
+"• Contact support with questions or concerns" = "• Зв'язок з підтримкою з питаннями чи занепокоєннями";
+"Export Consent Record" = "Експорт запису згоди";
+"Reset Consent (Testing Only)" = "Скинути згоду (лише для тестування)";
+"Resetting consent is intended for testing purposes and will require you to review and accept our terms again when you next open the app." = "Скидання згоди призначене для тестування і вимагатиме від вас перегляду та прийняття наших умов знову, коли ви наступного разу відкриєте програму.";
+"No Consent Record Found" = "Запис згоди не знайдено";
+"You have not yet reviewed and accepted our Terms of Service and Privacy Policy. You will be prompted to review these documents when you next launch the app." = "Ви ще не переглянули та не прийняли наші Умови обслуговування та Політику приватності. Вам буде запропоновано переглянути ці документи при наступному запуску програми.";
+"Your privacy and understanding of our terms are important to us." = "Ваша приватність та розуміння наших умов важливі для нас.";
+"Consent Status" = "Статус згоди";
+"Consent Details" = "Деталі згоди";
+"BANDSYNC CONSENT RECORD" = "ЗАПИС ЗГОДИ BANDSYNC";
+"Model" = "Модель";
+"System" = "Система";
+"Device ID" = "ID пристрою";
+"Summary" = "Резюме";
+"You voluntarily agreed to BandSync's Terms of Service and Privacy Policy on the date shown above. This record is maintained for compliance with privacy regulations and to document your informed consent." = "Ви добровільно погодились з Умовами обслуговування та Політикою приватності BandSync на дату, показану вище. Цей запис ведеться для відповідності правилам приватності та документування вашої інформованої згоди.";
+"Access your personal data" = "Доступ до ваших особистих даних";
+"Request data corrections" = "Запит виправлень даних";
+"Delete your account and data" = "Видалити ваш обліковий запис та дані";
+"Export your data" = "Експорт ваших даних";
+"Contact support for assistance" = "Зв'язок з підтримкою для допомоги";
+"Record Generated" = "Запис створено";
+
+// Terms Agreement
+"Terms of Service" = "Умови обслуговування";
+"I agree to the Terms of Service" = "Я погоджуюся з Умовами обслуговування";
+"I agree to the Privacy Policy" = "Я погоджуюся з Політикою приватності";
+"Welcome to BandSync" = "Ласкаво просимо до BandSync";
+"Before you start, please review and accept our terms and privacy policy." = "Перед початком, будь ласка, перегляньте та прийміть наші умови та політику приватності.";
+"Important Information" = "Важлива інформація";
+"Your data is protected with industry-standard security" = "Ваші дані захищені стандартною для галузі безпекою";
+"You maintain full control over your information" = "Ви зберігаєте повний контроль над вашою інформацією";
+"You can export your data anytime" = "Ви можете експортувати ваші дані будь-коли";
+"Delete your account and data whenever you choose" = "Видалити ваш обліковий запис та дані коли завгодно";
+"Contact support for any questions or concerns" = "Зверніться до підтримки з будь-якими питаннями чи занепокоєннями";
+"Service Features" = "Функції сервісу";
+"• Secure band collaboration and coordination" = "• Безпечна співпраця та координація гурту";
+"• Event scheduling and attendance tracking" = "• Планування подій та відстеження відвідуваності";
+"• Financial expense management" = "• Управління фінансовими витратами";
+"• Document sharing via Google Drive" = "• Поділ документами через Google Drive";
+"• Cross-device synchronization" = "• Синхронізація між пристроями";
+"• Regular feature updates and improvements" = "• Регулярні оновлення функцій та покращення";
+"• Access and download your personal data" = "• Доступ та завантаження ваших особистих даних";
+"• Correct any inaccurate information" = "• Виправлення будь-якої неточної інформації";
+"• Request deletion of your account" = "• Запит видалення вашого облікового запису";
+"• Control notification preferences" = "• Контроль налаштувань сповіщень";
+"By continuing, you acknowledge that you have read and understood our terms and privacy policy. You can review these documents anytime in the app settings." = "Продовжуючи, ви підтверджуєте, що прочитали та зрозуміли наші умови та політику приватності. Ви можете переглянути ці документи будь-коли в налаштуваннях програми.";
+
+// Terms of Service
+"Welcome" = "Ласкаво просимо";
+"Welcome to BandSync! These terms outline how you can use our app and the services we provide. By using BandSync, you agree to these terms." = "Ласкаво просимо до BandSync! Ці умови окреслюють, як ви можете використовувати нашу програму та послуги, які ми надаємо. Використовуючи BandSync, ви погоджуєтесь з цими умовами.";
+"Your Responsibilities" = "Ваші обов'язки";
+"Our Services" = "Наші послуги";
+"Content & Data" = "Контент та дані";
+"Community Standards" = "Стандарти спільноти";
+"Account Management" = "Управління обліковим записом";
+"Billing & Subscriptions" = "Розрахунки та підписки";
+"Service Expectations" = "Очікування від сервісу";
+"Service Limitations" = "Обмеження сервісу";
+"BandSync is provided on an \"as is\" basis. While we strive to provide reliable and secure service, we cannot guarantee that the app will always be available or free from technical issues." = "BandSync надається на основі \"як є\". Хоча ми прагнемо надавати надійний та безпечний сервіс, ми не можемо гарантувати, що програма завжди буде доступною або вільною від технічних проблем.";
+"User Responsibility" = "Відповідальність користувача";
+"You are responsible for maintaining backups of important data and ensuring your account remains secure. We recommend using multiple backup methods for critical information." = "Ви відповідальні за підтримку резервних копій важливих даних та забезпечення безпеки вашого облікового запису. Ми рекомендуємо використовувати кілька методів резервного копіювання для критичної інформації.";
+"Technical Support" = "Технічна підтримка";
+"We provide technical support through our in-app contact system and strive to resolve issues promptly. Response times may vary based on the complexity of the issue." = "Ми надаємо технічну підтримку через нашу систему зв'язку в програмі та прагнемо швидко вирішувати проблеми. Час відповіді може варіюватися залежно від складності проблеми.";
+"Legal Framework" = "Правова база";
+"Dispute Resolution" = "Вирішення спорів";
+"If you have any concerns or disputes, please contact our support team first. We are committed to resolving issues fairly and promptly." = "Якщо у вас є будь-які занепокоєння чи спори, будь ласка, спочатку зверніться до нашої команди підтримки. Ми зобов'язані вирішувати проблеми справедливо та швидко.";
+"Governing Law" = "Застосовне право";
+"These terms are governed by applicable law in your jurisdiction. Any legal disputes will be handled according to local laws and regulations." = "Ці умови регулюються застосовним правом у вашій юрисдикції. Будь-які правові спори будуть вирішуватися відповідно до місцевих законів та правил.";
+"Updates and Changes" = "Оновлення та зміни";
+"We may update these terms occasionally. Significant changes will be communicated through the app with advance notice. Your continued use constitutes acceptance of updated terms." = "Ми можемо час від часу оновлювати ці умови. Значні зміни будуть повідомлені через програму з попереднім сповіщенням. Ваше продовження використання становить прийняття оновлених умов.";
+"Legal Information" = "Правова інформація";
+"Complete Agreement" = "Повна угода";
+"These terms constitute the complete agreement between you and BandSync regarding your use of our services. We are committed to providing a positive experience for all users." = "Ці умови становлять повну угоду між вами та BandSync щодо вашого використання наших послуг. Ми зобов'язані надавати позитивний досвід для всіх користувачів.";
+"For questions about these terms, please contact our support team through the app." = "З питань щодо цих умов, будь ласка, зверніться до нашої команди підтримки через програму.";
+"We appreciate your trust in BandSync and are committed to providing excellent service." = "Ми цінуємо вашу довіру до BandSync і зобов'язані надавати відмінний сервіс.";
+"Terms of Service" = "Умови обслуговування";
+
+// Authentication
+"Login" = "Увійти";
+"Register" = "Зареєструватися";
+"Email" = "Електронна пошта";
+"Password" = "Пароль";
+"Forgot Password?" = "Забули пароль?";
+"Sign In" = "Увійти";
+"Sign Up" = "Зареєструватися";
+"Sign In with Face ID" = "Увійти через Face ID";
+"Sign Out" = "Вийти";
+"Name" = "Ім'я";
+"Phone" = "Телефон";
+"Reset Password" = "Скинути пароль";
+"Password Reset" = "Скидання пароля";
+"Password Reset Email Sent" = "Лист для скидання пароля відправлено";
+"Back" = "Назад";
+
+// Groups
+"Create Group" = "Створити групу";
+"Join Group" = "Приєднатися до групи";
+"Group Name" = "Назва групи";
+"Invitation Code" = "Код запрошення";
+"Create a Group" = "Створити групу";
+"Join a Group" = "Приєднатися до групи";
+"Welcome to BandSync!" = "Ласкаво просимо до BandSync!";
+"To get started, create a new group or join an existing one" = "Щоб почати, створіть нову групу або приєднайтеся до існуючої";
+"Group created successfully!" = "Група успішно створена!";
+"Request to join sent. Waiting for approval." = "Запит на приєднання відправлено. Очікуємо схвалення.";
+"Create New Group" = "Створити нову групу";
+"Enter invitation code" = "Введіть код запрошення";
+
+// Main Tabs
+"Calendar" = "Календар";
+"Setlists" = "Сет-листи";
+"Finances" = "Фінанси";
+"Merch" = "Мерч";
+"Tasks" = "Завдання";
+"Chats" = "Чати";
+"Contacts" = "Контакти";
+"Settings" = "Налаштування";
+"Admin Panel" = "Панель адміністратора";
+
+// Calendar
+"New Event" = "Нова подія";
+"Event" = "Подія";
+"Edit Event" = "Редагувати подію";
+"Delete Event" = "Видалити подію";
+"Delete Event?" = "Видалити подію?";
+"Are you sure you want to delete this event? This action cannot be undone." = "Ви впевнені, що хочете видалити цю подію? Цю дію не можна скасувати.";
+"Basic Information" = "Основна інформація";
+"Title" = "Назва";
+"Date" = "Дата";
+"Type" = "Тип";
+"Status" = "Статус";
+"Location" = "Розташування";
+"Venue" = "Майданчик";
+"Select on map" = "Вибрати на карті";
+"Clear location" = "Очистити розташування";
+"Event Location" = "Місце події";
+"Unknown Address" = "Невідома адреса";
+
+// MARK: - Event Privacy
+"Privacy" = "Приватність";
+"Personal Event" = "Особиста подія";
+"Event visible only to you" = "Подія видима лише вам";
+
+// MARK: - Event Details
+"Fee" = "Гонорар";
+"Amount" = "Сума";
+"Currency" = "Валюта";
+"Fee: \(Int(fee)) \(currency)" = "Гонорар: %d %@";
+"Organizer" = "Організатор";
+"Organizers" = "Організатори";
+"Coordinator" = "Координатор";
+"Coordinators" = "Координатори";
+"Additional Contacts" = "Додаткові контакти";
+"No additional contacts added" = "Додаткові контакти не додано";
+"Other Contacts" = "Інші контакти";
+
+// MARK: - Accommodation
+"Accommodation" = "Проживання";
+"Hotel" = "Готель";
+"Hotel name" = "Назва готелю";
+"Hotel address" = "Адреса готелю";
+"Check-in" = "Заселення";
+"Check-out" = "Виселення";
+"Notes" = "Примітки";
+"Breakfast included" = "Сніданок включено";
+"Breakfast not included" = "Сніданок не включено";
+
+// Map and navigation
+"Get directions" = "Прокласти маршрут";
+"Open in Maps" = "Відкрити в Картах";
+"Select application" = "Вибрати додаток";
+"Which application to use for navigation?" = "Який додаток використовувати для навігації?";
+"Apple Maps" = "Apple Карти";
+"Google Maps" = "Google Карти";
+
+// Enum rawValues for EventStatus
+"Reserved" = "Заброньовано";
+"Confirmed" = "Підтверджено";
+"Cancelled" = "Скасовано";
+"Postponed" = "Відкладено";
+"Pending" = "Очікує";
+
+// Setlists
+"New Setlist" = "Новий сет-лист";
+"Setlist" = "Сет-лист";
+"No Setlist Selected" = "Сет-лист не обрано";
+"Not Selected" = "Не обрано";
+"Songs" = "Пісні";
+"Song" = "Пісня";
+"BPM" = "BPM";
+"Duration" = "Тривалість";
+"Total Duration" = "Загальна тривалість";
+"Add Song" = "Додати пісню";
+"Export to PDF" = "Експорт в PDF";
+"No songs in this setlist" = "У цьому сет-листі немає пісень";
+"Setlist is empty" = "Сет-лист порожній";
+"Generating PDF..." = "Генерується PDF...";
+"Share" = "Поділитися";
+
+// Finances
+"0.00" = "0.00";
+"Add description" = "Додати опис";
+"Add income or expense transactions to track your finances" = "Додайте доходи або витрати для відстеження фінансів";
+"Add income or expenses to track your finances" = "Додайте доходи або витрати для відстеження фінансів";
+"Add New Financial Transaction" = "Додати нову фінансову транзакцію";
+"All Time" = "Весь час";
+"All Transactions" = "Всі транзакції";
+"Analyzing receipt" = "Аналіз чека";
+"Capture receipt details automatically" = "Автоматично захопити деталі чека";
+"Categories" = "Категорії";
+"Category Overview" = "Огляд категорій";
+"category: \\(category)" = "категорія: %@";
+"Choose from Gallery" = "Вибрати з галереї";
+"Choose Transaction Type" = "Виберіть тип транзакції";
+"Could not load receipt from cloud storage" = "Не вдалося завантажити чек з хмарного сховища";
+"Deleting transaction" = "Видалення транзакції";
+"Edit Financial Transaction" = "Редагувати фінансову транзакцію";
+"Edit Transaction" = "Редагувати транзакцію";
+"Enter amount and details" = "Введіть суму та деталі";
+"Expense Category" = "Категорія витрат";
+"Expense Transactions" = "Транзакції витрат";
+"Expenses" = "Витрати";
+"Extracted Results" = "Вилучені результати";
+"Failed to save transaction" = "Не вдалося зберегти транзакцію";
+"Filter Transactions" = "Фільтрувати транзакції";
+"Income Category" = "Категорія доходів";
+"Income Transactions" = "Транзакції доходів";
+"Invalid amount format" = "Неправильний формат суми";
+"Invalid amount or user group" = "Неправильна сума або група користувачів";
+"Last 3 Months" = "Останні 3 місяці";
+"Loading from cloud" = "Завантаження з хмари";
+"Loading receipt from cloud" = "Завантаження чека з хмари";
+"Manual Save" = "Ручне збереження";
+"merchant: \\(merchant)" = "продавець: %@";
+"Monthly" = "Щомісячно";
+"Monthly Breakdown" = "Помісячний розподіл";
+"No data for category" = "Немає даних для категорії";
+"No description" = "Без опису";
+"No financial data" = "Немає фінансових даних";
+"No monthly data" = "Немає помісячних даних";
+"Or use manual save" = "Або використайте ручне збереження";
+"Period" = "Період";
+"Please enter a valid amount" = "Будь ласка, введіть дійсну суму";
+"Please wait" = "Будь ласка, зачекайте";
+"Receipt" = "Чек";
+"Receipt added" = "Чек додано";
+"Receipt in cloud storage" = "Чек у хмарному сховищі";
+"Receipt unavailable" = "Чек недоступний";
+"Recent Transactions" = "Останні транзакції";
+"Save Transaction" = "Зберегти транзакцію";
+"Saving changes" = "Збереження змін";
+"Saving transaction" = "Збереження транзакції";
+"Scan or attach receipt" = "Сканувати або прикріпити чек";
+"Scan Receipt" = "Сканувати чек";
+"Scan with Camera" = "Сканувати камерою";
+"Scanner will close automatically" = "Сканер закриється автоматично";
+"Stored securely in Firebase" = "Безпечно зберігається в Firebase";
+"Sync Status" = "Статус синхронізації";
+"Tap to change" = "Натисніть для зміни";
+"This Month" = "Цього місяця";
+"This Year" = "Цього року";
+"Transaction Details" = "Деталі транзакції";
+"Transaction Type" = "Тип транзакції";
+"Uploading receipt to cloud storage" = "Завантаження чека в хмарне сховище";
+"Uploading to cloud storage" = "Завантаження в хмарне сховище";
+"Value" = "Значення";
+"View" = "Переглянути";
+"View All" = "Переглянути все";
+"View Charts" = "Переглянути графіки";
+"vs Previous" = "проти попереднього";
+"Waiting for synchronization" = "Очікування синхронізації";
+"%d transactions" = "%d транзакцій";
+"Financial Statistics" = "Фінансова статистика";
+
+// Merch
+"Merchandise" = "Мерчандайз";
+"New Item" = "Новий товар";
+"Item" = "Товар";
+"Price" = "Ціна";
+"Stock" = "Запас";
+"Size" = "Розмір";
+"Clothing" = "Одяг";
+"Music" = "Музика";
+"Accessory" = "Аксесуари";
+"Description" = "Опис";
+"Sell Item" = "Продати товар";
+"Sale" = "Продаж";
+"Quantity" = "Кількість";
+"Sales Channel" = "Канал продажів";
+"Concert" = "Концерт";
+"Online" = "Онлайн";
+"Partner" = "Партнер";
+
+// Tasks
+"New Task" = "Нове завдання";
+"Task" = "Завдання";
+"Due Date" = "Термін виконання";
+"Assigned To" = "Призначено";
+"Completed" = "Виконано";
+"Pending Tasks" = "Очікуючі завдання";
+"Completed Tasks" = "Виконані завдання";
+
+// Task form
+"Task Information" = "Інформація про завдання";
+"Task Title" = "Назва завдання";
+"Priority" = "Пріоритет";
+"Category" = "Категорія";
+"Select Users" = "Обрати користувачів";
+"User" = "Користувач";
+"Users" = "Користувачі";
+"Selected" = "Обрано";
+"Add Reminder" = "Додати нагадування";
+"Include Time" = "Включити час";
+"Multi-day Task" = "Багатоденне завдання";
+"Start Date & Time" = "Дата та час початку";
+"Start Date" = "Дата початку";
+"End Date & Time" = "Дата та час завершення";
+"End Date" = "Дата завершення";
+"Duration" = "Тривалість";
+"day" = "день";
+"days" = "дні";
+"hour" = "година";
+"hours" = "години";
+"minute" = "хвилина";
+"minutes" = "хвилини";
+"0 minutes" = "0 хвилин";
+
+// Error messages
+"No group ID found" = "ID групи не знайдено";
+"Failed to load group members. Please try again." = "Не вдалося завантажити учасників групи. Спробуйте ще раз.";
+"Missing user or group information" = "Відсутня інформація про користувача або групу";
+"Please enter a task title" = "Будь ласка, введіть назву завдання";
+"End date must be after start date" = "Дата завершення має бути після дати початку";
+"No description" = "Без опису";
+"Failed to save task. Please try again." = "Не вдалося зберегти завдання. Спробуйте ще раз.";
+
+// User picker
+"Loading users..." = "Завантаження користувачів...";
+"Retry" = "Спробувати знову";
+"No users found" = "Користувачів не знайдено";
+"Load Group Members" = "Завантажити учасників групи";
+"Failed to load group members" = "Не вдалося завантажити учасників групи";
+
+// Task status and dates
+"Create Task" = "Створити завдання";
+"Today" = "Сьогодні";
+"Tomorrow" = "Завтра";
+"Yesterday" = "Вчора";
+"Overdue" = "Прострочено";
+"day ago" = "день тому";
+"days ago" = "днів тому";
+"Unassigned" = "Не призначено";
+"Unknown" = "Невідомо";
+
+// Ukrainian pluralization forms for time units
+"день тому" = "день тому";
+"дні тому" = "дні тому";
+"днів тому" = "днів тому";
+"день" = "день";
+"дні" = "дні";
+"днів" = "днів";
+"година" = "година";
+"години" = "години";
+"годин" = "годин";
+"хвилина" = "хвилина";
+"хвилини" = "хвилини";
+"хвилин" = "хвилин";
+
+// Task Details
+"Task Name" = "Назва завдання";
+"Task Description" = "Опис завдання";
+"Add Task" = "Додати завдання";
+"Select Date" = "Вибрати дату";
+"Assign To" = "Призначити";
+"Search members" = "Пошук учасників";
+"Select users to assign this task" = "Виберіть користувачів для призначення цього завдання";
+"Mark as Complete" = "Позначити як виконане";
+"Mark as Incomplete" = "Позначити як невиконане";
+"Created by" = "Створено";
+"Created on" = "Створено";
+"Schedule" = "Розклад";
+"Members" = "Учасники";
+"Edit Task" = "Редагувати завдання";
+"Task Details" = "Деталі завдання";
+"Delete Task" = "Видалити завдання";
+"Are you sure you want to delete this task?" = "Ви впевнені, що хочете видалити це завдання?";
+"This action cannot be undone." = "Цю дію не можна скасувати.";
+"Task deleted successfully" = "Завдання успішно видалено";
+"Failed to delete task" = "Не вдалося видалити завдання";
+"Task updated successfully" = "Завдання успішно оновлено";
+"Failed to update task" = "Не вдалося оновити завдання";
+"Task created successfully" = "Завдання успішно створено";
+"Failed to create task" = "Не вдалося створити завдання";
+"Please enter a task name" = "Будь ласка, введіть назву завдання";
+"Please select a due date" = "Будь ласка, виберіть дату виконання";
+"Please select a priority" = "Будь ласка, виберіть пріоритет";
+"Please select at least one member" = "Будь ласка, виберіть принаймні одного учасника";
+"No tasks available" = "Немає доступних завдань";
+"Create your first task to get started" = "Створіть своє перше завдання, щоб почати";
+"Assigned to" = "Призначено";
+"Upcoming" = "Майбутні";
+"Status" = "Статус";
+
+// Task Priorities
+"Low" = "Низький";
+"Medium" = "Середній";
+"High" = "Високий";
+
+// Task Categories
+"Rehearsal" = "Репетиція";
+"Performance" = "Виступ";
+"Recording" = "Запис";
+"Photoshoot" = "Фотозйомка";
+"Video Shoot" = "Відеозйомка";
+"Interview" = "Інтерв'ю";
+"Promotion" = "Промоція";
+"Business" = "Бізнес";
+"Equipment" = "Обладнання";
+"Other" = "Інше";
+
+// MARK: - Chats
+"New Chat" = "Новий чат";
+"Chat" = "Чат";
+"Message" = "Повідомлення";
+"Group Chat" = "Груповий чат";
+"Direct Chat" = "Приватний чат";
+"No messages yet" = "Повідомлень поки немає";
+"Send" = "Відправити";
+"Reply" = "Відповісти";
+
+// Chat Messages and Actions
+"You" = "Ви";
+"Unknown" = "Невідомо";
+"Loading..." = "Завантаження...";
+"Load older messages" = "Завантажити старіші повідомлення";
+"Sending image..." = "Відправлення зображення...";
+"Delete Message?" = "Видалити повідомлення?";
+"Are you sure you want to delete this message? This action cannot be undone." = "Ви впевнені, що хочете видалити це повідомлення? Цю дію не можна скасувати.";
+"Edit Message" = "Редагувати повідомлення";
+"Message Actions" = "Дії з повідомленням";
+"Copy" = "Копіювати";
+
+// Chat Search
+"Search in chat" = "Пошук у чаті";
+"Searching..." = "Пошук...";
+"Nothing found" = "Нічого не знайдено";
+"Try changing your search query" = "Спробуйте змінити пошуковий запит";
+"Search messages" = "Пошук повідомлень";
+"Enter text to search in this chat" = "Введіть текст для пошуку в цьому чаті";
+"Search messages..." = "Пошук повідомлень...";
+"Yesterday" = "Вчора";
+
+// Chat Share
+"No available chats" = "Немає доступних чатів";
+"Create other chats to share messages" = "Створіть інші чати для обміну повідомленнями";
+"Message to send:" = "Повідомлення для відправки:";
+"From chat:" = "З чату:";
+"Additional message (optional):" = "Додаткове повідомлення (необов'язково):";
+"Add comment..." = "Додати коментар...";
+"Select chats:" = "Вибрати чати:";
+
+// Chat Integration
+"Create from message" = "Створити з повідомлення";
+"Task details" = "Деталі завдання";
+"Task title" = "Назва завдання";
+"Event details" = "Деталі події";
+"Reminder" = "Нагадування";
+"Assignees" = "Виконавці";
+
+// Chat Types and Status
+"Private chat" = "Приватний чат";
+"Band Announcement" = "Оголошення гурту";
+"User" = "Користувач";
+"participants" = "учасники";
+"Chat not found" = "Чат не знайдено";
+
+// Error Messages
+"Invalid chat" = "Неправильний чат";
+"Error editing message:" = "Помилка редагування повідомлення:";
+"Error sending message:" = "Помилка відправки повідомлення:";
+"Failed to send image:" = "Не вдалося відправити зображення:";
+"Error deleting message:" = "Помилка видалення повідомлення:";
+
+// Accessibility
+"said" = "сказав";
+"sent an image at" = "відправив зображення о";
+"replied" = "відповів";
+"sent a message at" = "відправив повідомлення о";
+"at" = "о";
+"Double tap to delete, long press for options" = "Подвійне натискання для видалення, довге натискання для опцій";
+"Long press for options" = "Довге натискання для опцій";
+"unread messages" = "непрочитані повідомлення";
+"Double tap to open chat" = "Подвійне натискання для відкриття чату";
+
+// Typing Indicator
+"is typing..." = "друкує...";
+"and" = "та";
+"are typing..." = "друкують...";
+"people are typing..." = "людей друкують...";
+
+// MARK: - Contacts
+"New Contact" = "Новий контакт";
+"Contact" = "Контакт";
+"Role" = "Роль";
+"Musician" = "Музикант";
+"Venue" = "Майданчик";
+"Manager" = "Менеджер";
+"Producer" = "Продюсер";
+"Sound Engineer" = "Звукорежисер";
+"Import from Contacts" = "Імпортувати з контактів";
+"Call" = "Зателефонувати";
+"Send SMS" = "Відправити SMS";
+"No contacts yet" = "Контактів поки немає";
+
+// MARK: - Settings
+"Interface Language" = "Мова інтерфейсу";
+"English" = "English";
+"Ukrainian" = "Українська";
+"German" = "Deutsch";
+"Sign Out" = "Вийти";
+"Theme" = "Тема";
+"Light" = "Світла";
+"Dark" = "Темна";
+"System" = "Системна";
+"Notifications" = "Сповіщення";
+"About" = "Про додаток";
+"Version" = "Версія";
+"Account" = "Акаунт";
+
+// Admin Panel
+"Group Settings" = "Налаштування групи";
+"Group Members" = "Учасники групи";
+"Configure band information" = "Налаштувати інформацію про гурт";
+"Manage band members" = "Керувати учасниками гурту";
+"Permissions" = "Дозволи";
+"Control access rights" = "Контролювати права доступу";
+"App Modules" = "Модулі додатка";
+"Enable/disable features" = "Увімкнути/вимкнути функції";
+"Group Management" = "Керування групою";
+"Group Information" = "Інформація про групу";
+"Code copied to clipboard" = "Код скопійовано в буфер обміну";
+"Export Group Data" = "Експорт даних групи";
+"Download band information" = "Завантажити інформацію про гурт";
+"Additional Tools" = "Додаткові інструменти";
+"Information" = "Інформація";
+"Data export will be implemented in the next update" = "Експорт даних буде реалізовано в наступному оновленні";
+
+// Group Settings
+"Enter group name" = "Введіть назву групи";
+"Update Name" = "Оновити назву";
+"Save the new group name" = "Зберегти нову назву групи";
+"Generate New Code" = "Згенерувати новий код";
+"Create a new invitation code" = "Створити новий код запрошення";
+"Invitation" = "Запрошення";
+"Manage Members" = "Керувати учасниками";
+"View and manage group members" = "Переглядати та керувати учасниками групи";
+"Members" = "Учасники";
+"Module Management" = "Керування модулями";
+"Module management will be available in the next update." = "Керування модулями буде доступне в наступному оновленні.";
+"Available Modules" = "Доступні модулі";
+"Generate new code?" = "Згенерувати новий код?";
+"Generate" = "Згенерувати";
+"The old code will no longer be valid. All members who haven't joined yet will need to use the new code." = "Старий код більше не буде дійсним. Всі учасники, які ще не приєдналися, повинні будуть використовувати новий код.";
+"Changes saved successfully." = "Зміни успішно збережено.";
+
+// Module Management
+"Enable or disable modules that will be available to group members." = "Увімкнути або вимкнути модулі, які будуть доступні учасникам групи.";
+"Always enabled for admins" = "Завжди увімкнено для адміністраторів";
+"Toggle module availability" = "Перемкнути доступність модуля";
+"Required" = "Обов'язково";
+"Save Changes" = "Зберегти зміни";
+"Apply module settings" = "Застосувати налаштування модулів";
+"Updating module settings..." = "Оновлення налаштувань модулів...";
+"Could not determine group" = "Не вдалося визначити групу";
+"Could not find permission settings" = "Не вдалося знайти налаштування дозволів";
+"Module settings successfully updated" = "Налаштування модулів успішно оновлено";
+
+// Permissions
+"Loading permissions..." = "Завантаження дозволів...";
+"Retry Loading" = "Повторити завантаження";
+"Try to load permissions again" = "Спробувати завантажити дозволи знову";
+"Here you can configure which roles have access to different application modules." = "Тут ви можете налаштувати, які ролі мають доступ до різних модулів додатка.";
+"Access Management" = "Керування доступом";
+"Module Permissions" = "Дозволи модулів";
+"Reset to Default" = "Скинути до стандартних";
+"Restore default permission settings" = "Відновити стандартні налаштування дозволів";
+"Updating permissions..." = "Оновлення дозволів...";
+"This action will reset all permission settings to default values. Are you sure?" = "Ця дія скине всі налаштування дозволів до стандартних значень. Ви впевнені?";
+"No access configured" = "Доступ не налаштовано";
+
+// Users List
+"Loading members..." = "Завантаження учасників...";
+"Accept" = "Прийняти";
+"Decline" = "Відхилити";
+"Awaiting Approval" = "Очікує схвалення";
+"Role:" = "Роль:";
+"Personal access" = "Особистий доступ";
+"modules" = "модулі";
+
+// Personal Permissions
+"Personal Permissions" = "Особисті дозволи";
+"Additional access for" = "Додатковий доступ для";
+"User Access" = "Доступ користувача";
+"Personal permissions grant additional access beyond the user's role. Select modules that" = "Особисті дозволи надають додатковий доступ понад роль користувача. Виберіть модулі, до яких";
+"should have access to." = "повинен мати доступ.";
+"Grant personal access" = "Надати особистий доступ";
+"selected" = "обрано";
+"Saving permissions..." = "Збереження дозволів...";
+"Personal Access" = "Особистий доступ";
+"Personal permissions updated successfully for" = "Особисті дозволи успішно оновлено для";
+
+// Role Management
+"Change Role" = "Змінити роль";
+"Current role:" = "Поточна роль:";
+"Will change to:" = "Зміниться на:";
+"Role Assignment" = "Призначення ролі";
+"Select Role" = "Вибрати роль";
+"Choose the appropriate role for this user" = "Виберіть відповідну роль для цього користувача";
+"Available Roles" = "Доступні ролі";
+"Updating role..." = "Оновлення ролі...";
+"Role Update" = "Оновлення ролі";
+"Error updating role: \(error.localizedDescription)" = "Помилка оновлення ролі:";
+"Role updated successfully to \(getLocalizedRoleName(for: selectedRole))" = "Роль успішно оновлено на";
+
+// Role Names
+"Admin" = "Адміністратор";
+"Member" = "Учасник";
+
+// Module Permission Editor
+"Configure access permissions" = "Налаштувати дозволи доступу";
+"Module Access" = "Доступ до модуля";
+"Select roles that will have access to the" = "Виберіть ролі, які матимуть доступ до модуля";
+"module" = "модуль";
+"User Roles" = "Ролі користувачів";
+
+// Role descriptions
+"Full access to all features" = "Повний доступ до всіх функцій";
+"Management and coordination" = "Керування та координація";
+"Band member with musical role" = "Учасник гурту з музичною роллю";
+"Basic band member" = "Базовий учасник гурту";
+"Full access to all features and settings" = "Повний доступ до всіх функцій та налаштувань";
+"Management and coordination responsibilities" = "Обов'язки з керування та координації";
+"Band member with musical performance role" = "Учасник гурту з роллю музичного виконавця";
+"Basic band member with limited access" = "Базовий учасник гурту з обмеженим доступом";
+"Invalid user ID" = "Неправильний ID користувача";
+
+// Setlist module - additional keys
+"Search setlists..." = "Шукати сетлісти...";
+"songs" = "пісні";
+"song" = "пісня";
+"songs_plural" = "пісень";
+"h" = "г";
+"min" = "хв";
+"Auto-create songs for concert" = "Автоматично створити пісні для концерту";
+"Deselect All" = "Скасувати все";
+"Select All" = "Вибрати все";
+"Selected for import" = "Вибрано для імпорту";
+"5 min between songs" = "5 хв між піснями";
+"10 min between songs" = "10 хв між піснями";
+"15 min between songs" = "15 хв між піснями";
+"Add Breaks Between Songs" = "Додати перерви між піснями";
+"Select The Duration Of Breaks Between Songs" = "Виберіть тривалість перерв між піснями";
+"Add Breaks" = "Додати перерви";
+"Average Song Length" = "Середня довжина пісні";
+"Shortest Song" = "Найкоротша пісня";
+"Longest Song" = "Найдовша пісня";
+"Are you sure you want to delete this setlist? This action cannot be undone." = "Ви впевнені, що хочете видалити цей сетліст? Цю дію неможливо скасувати.";
+"Your stage awaits" = "Ваша сцена чекає";
+"Create first setlist" = "Створіть свій перший сетліст і почніть організовувати свою музичну подорож";
+"Create Setlist" = "Створити сетліст";
+"Plus more" = "і ще %d";
+"Song Timeline" = "Часовий план пісень";
+"Edit Song" = "Редагувати пісню";
+"Add Song" = "Додати пісню";
+"Clear and recreate" = "Очистити і пересворити";
+"Delete setlist?" = "Видалити сетліст?";
+
+// Additional strings
+"Image saved" = "Зображення збережено";
+"Are you sure you want to delete this setlist? This action cannot be undone." = "Ви впевнені, що хочете видалити цей сет-лист? Цю дію не можна скасувати.";
+"Your changes will be lost if you go back without saving." = "Ваші зміни будуть втрачені, якщо ви повернетеся без збереження.";
+"songs" = "пісні";
+"Timed" = "З часом";
+"No Songs Yet" = "Пісень поки немає";
+"Add some songs to get started" = "Додайте кілька пісень для початку";
+"View Timing" = "Переглянути тайминг";
+"Saving changes..." = "Збереження змін...";
+"Add First Song" = "Додати першу пісню";
+"Import from Other Setlists" = "Імпортувати з інших сет-листів";
+"Are you sure you want to delete" = "Ви впевнені, що хочете видалити";
+"Concert Timeline" = "Хронологія концерту";
+"Track your setlist timing" = "Відстежуйте тайминг свого сет-листа";
+"Concert Information" = "Інформація про концерт";
+"Start Date & Time" = "Дата та час початку";
+"Estimated End Time" = "Очікуваний час закінчення";
+"Song Timeline" = "Хронологія пісень";
+"Timeline Summary" = "Підсумок хронології";
+"Starts at" = "Починається о";
+"Google Drive Not Connected" = "Google Диск не підключено";
+"Connect to upload and manage documents" = "Підключіться для завантаження та керування документами";
+"Create New Setlist" = "Створити новий сет-лист";
+"Setlist Information" = "Інформація про сет-лист";
+"Setlist Name" = "Назва сет-листа";
+"Concert Timing" = "Тайминг концерту";
+"Plan your setlist with specific timing" = "Плануйте свій сет-лист з конкретним таймінгом";
+"Concert Settings" = "Налаштування концерту";
+"Concert Start" = "Початок концерту";
+"Concert Duration" = "Тривалість концерту";
+"Hours" = "Годин";
+"Minutes" = "Хвилин";
+"Auto-created Songs" = "Автоматично створені пісні";
+"Total songs:" = "Всього пісень:";
+"Total Songs" = "Всього пісень";
+"Total Duration:" = "Загальна тривалість:";
+"Add Songs" = "Додати пісні";
+"Song Name" = "Назва пісні";
+"Duration" = "Тривалість";
+"Min" = "Хв";
+"Sec" = "Сек";
+"Auto-create songs for concert" = "Автоматично створити пісні для концерту";
+"Clear and recreate" = "Очистити та перестворити";
+"Import Songs" = "Імпортувати пісні";
+"Import" = "Імпортувати";
+"Manual Save" = "Ручне збереження";
+"5 min between songs" = "5 хв між піснями";
+"10 min between songs" = "10 хв між піснями";
+"15 min between songs" = "15 хв між піснями";
+"Add Breaks Between Songs" = "Додати перерви між піснями";
+"Add Breaks" = "Додати перерви";
+"Change" = "Змінити";
+"Maybe Later" = "Можливо пізніше";
+"Connect" = "Підключити";
+"Disconnect" = "Відключити";
+"No Template" = "Без шаблону";
+"Create" = "Створити";
+"Authentication Error" = "Помилка автентифікації";
+"Create group" = "Створити групу";
+"Join" = "Приєднатися";
+
+// Alerts and confirmations
+"Delete Setlist" = "Видалити сет-лист";
+"Delete setlist?" = "Видалити сет-лист?";
+"Discard changes?" = "Відхилити зміни?";
+"Delete Song" = "Видалити пісню";
+"Delete Document" = "Видалити документ";
+"Delete Contact?" = "Видалити контакт?";
+"Add Phone Number" = "Додати номер телефону";
+"Delete Task" = "Видалити завдання";
+"Low stock items" = "Товари з низьким запасом";
+"Load Draft?" = "Завантажити чернетку?";
+"Delete event?" = "Видалити подію?";
+"Delete sale?" = "Видалити продаж?";
+"Delete item?" = "Видалити товар?";
+"Delete Chat?" = "Видалити чат?";
+"Delete Chat" = "Видалити чат";
+"Are you sure you want to delete this transaction?" = "Ви впевнені, що хочете видалити цю транзакцію?";
+
+// Cache settings
+"Cache & Storage" = "Кеш та сховище";
+"Cache Status" = "Статус кешу";
+"Clear Now" = "Очистити зараз";
+"Maximum Cache Size" = "Максимальний розмір кешу";
+"Storage Limit" = "Ліміт сховища";
+"When cache exceeds this limit, oldest data will be automatically removed." = "Коли кеш перевищить цей ліміт, найстаріші дані будуть автоматично видалені.";
+"Auto Cleanup Period" = "Період автоочищення";
+"Weekly" = "Щотижня";
+"Every 2 weeks" = "Кожні 2 тижні";
+"Monthly" = "Щомісяця";
+"Automatic Cleanup" = "Автоматичне очищення";
+"Old cached data will be automatically removed every" = "Старі кешовані дані будуть автоматично видалятися кожні";
+"week" = "тиждень";
+"2 weeks" = "2 тижні";
+"month" = "місяць";
+"What is cached?" = "Що кешується?";
+"• Merchandise items and sales data\n• Event and setlist information\n• Contact details\n• Financial records\n• Task assignments" = "• Товари мерчандайзу та дані продажів\n• Інформація про події та сет-листи\n• Контактні дані\n• Фінансові записи\n• Призначення завдань";
+"About Cache" = "Про кеш";
+
+// Clothing sizes
+"S:" = "S:";
+"M:" = "M:";
+"L:" = "L:";
+"XL:" = "XL:";
+"XXL:" = "XXL:";
+"Quantity:" = "Кількість:";
+
+// Currencies
+"US Dollar" = "Долар США";
+"Euro" = "Євро";
+"Ukrainian Hryvnia" = "Українська гривня";
+"British Pound" = "Британський фунт";
+"Canadian Dollar" = "Канадський долар";
+"Australian Dollar" = "Австралійський долар";
+"Swiss Franc" = "Швейцарський франк";
+"Japanese Yen" = "Японська ієна";
+"Polish Złoty" = "Польський злотий";
+"Czech Koruna" = "Чеська крона";
+"Swedish Krona" = "Шведська крона";
+"Norwegian Krone" = "Норвезька крона";
+"Danish Krone" = "Данська крона";
+
+// Documents and files
+"Generating document..." = "Генерація документа...";
+
+// Legal texts
+"Service Limitations" = "Обмеження сервісу";
+"BandSync is provided on an \"as is\" basis. While we strive to provide reliable and secure service, we cannot guarantee that the app will always be available or free from technical issues." = "BandSync надається \"як є\". Хоча ми прагнемо надавати надійний та безпечний сервіс, ми не можемо гарантувати, що додаток завжди буде доступний або вільний від технічних проблем.";
+"User Responsibility" = "Відповідальність користувача";
+"You are responsible for maintaining backups of important data and ensuring your account remains secure. We recommend using multiple backup methods for critical information." = "Ви відповідаєте за створення резервних копій важливих даних та забезпечення безпеки свого облікового запису. Ми рекомендуємо використовувати кілька методів резервного копіювання для критично важливої інформації.";
+"Technical Support" = "Технічна підтримка";
+"We provide technical support through our in-app contact system and strive to resolve issues promptly. Response times may vary based on the complexity of the issue." = "Ми надаємо технічну підтримку через нашу систему зв'язку в додатку та прагнемо швидко вирішувати проблеми. Час відповіді може варіюватися залежно від складності проблеми.";
+"Service Expectations" = "Очікування від сервісу";
+"Content Standards" = "Стандарти контенту";
+"Keep all content appropriate and respectful" = "Тримайте весь контент відповідним та поважним";
+"Content & Data" = "Контент та дані";
+"Professional Communication" = "Професійне спілкування";
+"Maintain respectful interactions with team members" = "Підтримуйте поважні відносини з членами команди";
+"No Harassment" = "Без домагань";
+"Harassment or inappropriate behavior is not permitted" = "Домагання або неналежна поведінка не дозволяються";
+"Constructive Collaboration" = "Конструктивна співпраця";
+"Use BandSync to enhance your band's productivity" = "Використовуйте BandSync для підвищення продуктивності вашого гурту";
+"Privacy Respect" = "Повага до приватності";
+"Respect other users' privacy and personal information" = "Поважайте приватність та особисту інформацію інших користувачів";
+"Team Guidelines" = "Керівні принципи команди";
+"Follow your band leader's guidelines and group rules" = "Дотримуйтеся керівних принципів лідера гурту та правил групи";
+"Community Standards" = "Стандарти спільноти";
+"Account Deletion" = "Видалення облікового запису";
+"You may delete your account at any time through app settings" = "Ви можете видалити свій обліковий запис у будь-який час через налаштування додатка";
+"Service Termination" = "Припинення сервісу";
+"We may terminate accounts that violate these terms" = "Ми можемо припинити облікові записи, які порушують ці умови";
+"Data Handling" = "Обробка даних";
+"Upon termination, your data will be handled according to our Privacy Policy" = "При припиненні ваші дані будуть оброблені відповідно до нашої Політики конфіденційності";
+"Continuing Obligations" = "Триваючі зобов'язання";
+"Some provisions of these terms continue after termination" = "Деякі положення цих умов продовжують діяти після припинення";
+"Account Management" = "Керування обліковим записом";
+"App Store Billing" = "Виставлення рахунків App Store";
+"All subscriptions and purchases are processed through the App Store" = "Всі підписки та покупки обробляються через App Store";
+"Subscription Management" = "Керування підписками";
+"Manage subscriptions through your Apple ID account settings" = "Керуйте підписками через налаштування облікового запису Apple ID";
+"Automatic Renewal" = "Автоматичне поновлення";
+"Subscriptions automatically renew unless cancelled in App Store" = "Підписки автоматично поновлюються, якщо не скасовані в App Store";
+"Refund Policy" = "Політика відшкодування";
+"Refunds are subject to Apple's App Store refund policy" = "Відшкодування підлягають політиці відшкодування Apple App Store";
+"Price Changes" = "Зміни цін";
+"We may update prices with advance notice for new purchases" = "Ми можемо оновлювати ціни з попереднім повідомленням для нових покупок";
+"Free Features" = "Безкоштовні функції";
+"Basic features remain available to all users" = "Основні функції залишаються доступними для всіх користувачів";
+"Billing & Subscriptions" = "Виставлення рахунків та підписки";
+
+// Notification settings
+"Event Notifications" = "Сповіщення про події";
+"Get notified about upcoming events" = "Отримувати сповіщення про майбутні події";
+"Event Reminder" = "Нагадування про подію";
+"hours before event" = "годин до події";
+"Task Notifications" = "Сповіщення про завдання";
+"Get notified about tasks and deadlines" = "Отримувати сповіщення про завдання та терміни";
+"Task Reminder" = "Нагадування про завдання";
+"hours before due date" = "годин до терміну виконання";
+"Chat Notifications" = "Сповіщення чату";
+"Get notified about new messages" = "Отримувати сповіщення про нові повідомлення";
+"System Notifications" = "Системні сповіщення";
+"Get notified about app updates and important announcements" = "Отримувати сповіщення про оновлення додатка та важливі оголошення";
+"Message Types" = "Типи повідомлень";
+"Mentions" = "Згадки";
+"When someone mentions you in a message" = "Коли хтось згадує вас у повідомленні";
+"Direct Messages" = "Приватні повідомлення";
+"Private messages sent directly to you" = "Приватні повідомлення, надіслані безпосередньо вам";
+"Group Messages" = "Групові повідомлення";
+"Messages in group chats" = "Повідомлення в групових чатах";
+"Quiet Hours" = "Тихі години";
+"Temporarily disable notifications during specified hours" = "Тимчасово вимкнути сповіщення протягом вказаних годин";
+"From" = "З";
+"To" = "До";
+"Sound & Vibration" = "Звук та вібрація";
+"Enable notification sounds" = "Увімкнути звуки сповіщень";
+"Show badge count on app icon" = "Показувати кількість на іконці додатка";
+"Notification Permission Required" = "Необхідний дозвіл на сповіщення";
+"To receive notifications, please enable them in your device settings." = "Щоб отримувати сповіщення, будь ласка, увімкніть їх у налаштуваннях пристрою.";
+"Open Settings" = "Відкрити налаштування";
+
+// Privacy and legal
+"Privacy Policy" = "Політика конфіденційності";
+"Terms of Service" = "Умови використання";
+"Cookie Policy" = "Політика файлів cookie";
+"GDPR Compliance" = "Відповідність GDPR";
+"Legal Information" = "Правова інформація";
+"These terms are governed by applicable law in your jurisdiction. Any legal disputes will be handled according to local laws and regulations." = "Ці умови регулюються чинним законодавством у вашій юрисдикції. Будь-які правові спори будуть розглядатися відповідно до місцевих законів та нормативних актів.";
+"Changes to Terms" = "Зміни в умовах";
+"We may update these terms periodically to reflect changes in our services or legal requirements. We will notify users of significant changes through the app." = "Ми можемо періодично оновлювати ці умови, щоб відобразити зміни в наших послугах або правових вимогах. Ми повідомлятимемо користувачів про значні зміни через додаток.";
+"Complete Agreement" = "Повна угода";
+"These terms constitute the complete agreement between you and BandSync regarding your use of our services. We are committed to providing a positive experience for all users." = "Ці умови становлять повну угоду між вами та BandSync щодо використання наших послуг. Ми прагнемо забезпечити позитивний досвід для всіх користувачів.";
+"Last updated: January 2025" = "Останнє оновлення: січень 2025";
+"For privacy-related questions, please contact our support team through the app." = "З питань, пов'язаних з конфіденційністю, будь ласка, зверніться до нашої команди підтримки через додаток.";
+"We are committed to transparency and protecting your personal information." = "Ми прагнемо до прозорості та захисту вашої особистої інформації.";
+"International Data Transfers" = "Міжнародні передачі даних";
+"Contact Information" = "Контактна інформація";
+"For GDPR-related requests or questions, please contact our support team through the in-app contact feature. We aim to respond to all requests within 30 days." = "З запитами або питаннями, пов'язаними з GDPR, будь ласка, зверніться до нашої команди підтримки через функцію зв'язку в додатку. Ми прагнемо відповідати на всі запити протягом 30 днів.";
+"Supervisory Authority Rights" = "Права наглядового органу";
+"You have the right to lodge a complaint with your local data protection authority if you believe we have not handled your data appropriately." = "Ви маєте право подати скаргу до місцевого органу захисту даних, якщо вважаєте, що ми неналежно обробили ваші дані.";
+
+// Terms agreement
+"By continuing, you acknowledge that you have read and understood our terms and privacy policy. You can review these documents anytime in the app settings." = "Продовжуючи, ви підтверджуєте, що прочитали та зрозуміли наші умови та політику конфіденційності. Ви можете переглянути ці документи в будь-який час у налаштуваннях додатка.";
+"• Event scheduling and attendance tracking" = "• Планування подій та відстеження відвідуваності";
+"• Financial expense management" = "• Управління фінансовими витратами";
+"• Document sharing via Google Drive" = "• Обмін документами через Google Диск";
+"• Cross-device synchronization" = "• Синхронізація між пристроями";
+"• Regular feature updates and improvements" = "• Регулярні оновлення функцій та покращення";
+"Your Rights" = "Ваші права";
+"• Access and download your personal data" = "• Доступ та завантаження ваших особистих даних";
+"• Correct any inaccurate information" = "• Виправлення будь-якої неточної інформації";
+"• Request deletion of your account" = "• Запит на видалення вашого облікового запису";
+"• Control notification preferences" = "• Контроль налаштувань сповіщень";
+"• Contact support for assistance" = "• Зв'язок з підтримкою для допомоги";
+
+// Launch screen
+"Welcome" = "Ласкаво просимо";
+
+// Financial statistics
+"Financial Statistics" = "Фінансова статистика";
+"%d transactions" = "%d транзакцій";
+"Balance" = "Баланс";
+"No Financial Data" = "Немає фінансових даних";
+"Add income and expense transactions to see detailed statistics and visualizations." = "Додайте доходи та витрати, щоб побачити детальну статистику та візуалізації.";
+"Add Transactions" = "Додати транзакції";
+"Period" = "Період";
+"No monthly data available" = "Помісячні дані недоступні";
+"In" = "Дох";
+"Exp" = "Вит";
+"Bal" = "Бал";
+"Monthly Breakdown" = "Помісячний розподіл";
+"Categories:" = "Категорії:";
+"All" = "Все";
+
+// Settings - Account
+"Edit Profile" = "Редагувати профіль";
+"Tap the camera icon to change your avatar" = "Натисніть на іконку камери, щоб змінити аватар";
+"Delete Avatar" = "Видалити аватар";
+"Are you sure you want to delete your avatar?" = "Ви впевнені, що хочете видалити свій аватар?";
+"Enter your name" = "Введіть своє ім'я";
+"Enter your phone number" = "Введіть свій номер телефону";
+"Name cannot be empty" = "Ім'я не може бути порожнім";
+"Profile updated successfully" = "Профіль успішно оновлено";
+"Failed to update profile" = "Не вдалося оновити профіль";
+"Upload Progress" = "Прогрес завантаження";
+
+// Groups
+"Edit Group" = "Редагувати групу";
+"Group Name" = "Назва групи";
+"Enter group name" = "Введіть назву групи";
+"Group Code" = "Код групи";
+"Tap the camera icon to change the group logo" = "Натисніть на іконку камери, щоб змінити логотип групи";
+"Delete Logo" = "Видалити логотип";
+"Are you sure you want to delete the group logo?" = "Ви впевнені, що хочете видалити логотип групи?";
+"Group name cannot be empty" = "Назва групи не може бути порожньою";
+"Group ID not found" = "ID групи не знайдено";
+"Group updated successfully" = "Група успішно оновлена";
+"Failed to update group" = "Не вдалося оновити групу";
+
+// Error messages
+"Failed to process image" = "Не вдалося обробити зображення";
+"Failed to generate download URL" = "Не вдалося згенерувати URL для завантаження";
+"Failed to upload avatar" = "Не вдалося завантажити аватар";
+"Failed to download avatar" = "Не вдалося завантажити аватар";
+"Unknown error" = "Невідома помилка";
+"Error loading events:" = "Помилка завантаження подій:";
+"Error adding event:" = "Помилка додавання події:";
+"Error updating event:" = "Помилка оновлення події:";
+"Error deleting:" = "Помилка видалення:";
+"Error loading permissions:" = "Помилка завантаження дозволів:";
+"Error creating permissions:" = "Помилка створення дозволів:";
+"Error updating permissions:" = "Помилка оновлення дозволів:";
+"Error loading group:" = "Помилка завантаження групи:";
+"Error approving user:" = "Помилка схвалення користувача:";
+"Error rejecting user:" = "Помилка відхилення користувача:";
+"Error removing user:" = "Помилка видалення користувача:";
+"Error updating name:" = "Помилка оновлення імені:";
+"Error updating code:" = "Помилка оновлення коду:";
+"Error changing role:" = "Помилка зміни ролі:";
+"Error loading tasks:" = "Помилка завантаження завдань:";
+"Error adding task:" = "Помилка додавання завдання:";
+"Error updating task:" = "Помилка оновлення завдання:";
+"Error deleting task:" = "Помилка видалення завдання:";
+"Authentication required to save changes" = "Для збереження змін потрібна автентифікація";
+"Failed to save changes" = "Не вдалося зберегти зміни";
+"Failed to save organizer contact" = "Не вдалося зберегти контакт організатора";
+"Failed to save coordinator contact" = "Не вдалося зберегти контакт координатора";
+
+// Navigation Titles
+"Select Currency" = "Вибрати валюту";
+"Filter" = "Фільтр";
+"Setlist Timing" = "Тайминг сет-листа";
+"Create Setlist" = "Створити сет-лист";
+"Edit Timing" = "Редагувати тайминг";
+"Google Drive" = "Google Диск";
+"Select Template" = "Вибрати шаблон";
+"New Document" = "Новий документ";
+"Export Setlist" = "Експорт сет-листа";
+"Select Category" = "Вибрати категорію";
+"Edit Document" = "Редагувати документ";
+"Contact Details" = "Деталі контакту";
+"Join group" = "Приєднатися до групи";
+"Event Contacts" = "Контакти події";
+
+// General UI strings
+"Your Stage Awaits" = "Ваша сцена чекає";
+"Create your first setlist and start organizing your musical journey" = "Створіть свій перший сет-лист та почніть організовувати свою музичну подорож";
+"images" = "зображення";
+"Item information" = "Інформація про товар";
+"description" = "Опис";
+"category" = "Категорія";
+"Not selected" = "Не обрано";
+"inventory" = "Інвентар";
+"generate" = "Згенерувати";
+"Quick add:" = "Швидке додавання:";
+"save" = "Зберегти";
+"error" = "Помилка";
+"ok" = "OK";
+"CSV Data" = "CSV дані";
+"Paste CSV data here..." = "Вставте CSV дані тут...";
+"Sample Format" = "Зразок формату";
+"Profit margin:" = "Маржа прибутку:";
+"Delete Item" = "Видалити товар";
+"Are you sure you want to delete this item? This action cannot be undone." = "Ви впевнені, що хочете видалити цей товар? Цю дію не можна скасувати.";
+
+// Event detail strings
+"basic" = "Основне";
+"setlist" = "Сет-лист";
+"privacy" = "Приватність";
+"This event will be visible only to you" = "Ця подія буде видима лише вам";
+"location" = "Розташування";
+"Location" = "Розташування";
+"fee" = "Гонорар";
+"Fee" = "Гонорар";
+"organizer" = "Організатор";
+"coordinator" = "Координатор";
+"rating" = "Рейтинг";
+"Rating" = "Рейтинг";
+"accommodation" = "Проживання";
+"Breakfast included" = "Сніданок включено";
+"notes" = "Примітки";
+"Rate this event:" = "Оцініть цю подію:";
+"Comment (optional)" = "Коментар (необов'язково)";
+"schedule" = "Розклад";
+"Add schedule" = "Додати розклад";
+"No rating" = "Без рейтингу";
+"No setlist selected" = "Сет-лист не обрано";
+"organizers" = "Організатори";
+"coordinators" = "Координатори";
+"finances" = "Фінанси";
+"Fee: %d %@" = "Гонорар: %d %@";
+"No notes" = "Немає приміток";
+"No comment" = "Немає коментарів";
+"Other Contacts" = "Інші контакти";
+"Are you sure you want to delete this event? This action cannot be undone." = "Ви впевнені, що хочете видалити цю подію? Цю дію не можна скасувати.";
+"No text" = "Немає тексту";
+
+// Auth strings
+"Create Account" = "Створити обліковий запис";
+"Verification Email Sent" = "Лист підтвердження відправлено";
+"A verification email has been sent to:" = "Лист підтвердження було відправлено на:";
+"After verifying your email, you can directly go to login to use the application." = "Після підтвердження електронної пошти ви можете перейти до входу для використання додатка.";
+"Already have an account? Log in" = "Вже маєте обліковий запис? Увійти";
+"Welcome Back 👋" = "З поверненням 👋";
+"Login with Face ID" = "Увійти через Face ID";
+"Don't have an account? Register" = "Немає облікового запису? Зареєструватися";
+
+// Auth module - additional strings
+"Reset Your Password" = "Скинути ваш пароль";
+"Reset Email Sent" = "Лист для скидання відправлено";
+"You can now reset your password using the email sent to:" = "Тепер ви можете скинути свій пароль, використовуючи лист, відправлений на:";
+"After resetting your password, log in again using your new credentials." = "Після скидання пароля увійдіть знову, використовуючи нові облікові дані.";
+"Enter your email to receive password reset instructions." = "Введіть свою електронну пошту, щоб отримати інструкції для скидання пароля.";
+"Back to Login" = "Назад до входу";
+"BandSync" = "BandSync";
+"Phone Verification" = "Підтвердження телефону";
+"Send Code" = "Відправити код";
+"Verify" = "Підтвердити";
+"Phone verified ✅" = "Телефон підтверджено ✅";
+
+// Additional Auth strings
+"Email cannot be empty." = "Електронна пошта не може бути порожньою.";
+"Invalid email format." = "Неправильний формат електронної пошти.";
+"Password cannot be empty." = "Пароль не може бути порожнім.";
+"No credentials stored. Please login manually first. You must log in at least once to enable Face ID." = "Облікові дані не збережено. Будь ласка, спочатку увійдіть вручну. Ви повинні увійти принаймні один раз, щоб увімкнути Face ID.";
+"Face ID authentication failed." = "Автентифікація Face ID не вдалася.";
+"Face ID not available on this device." = "Face ID недоступний на цьому пристрої.";
+"Forgot password?" = "Забули пароль?";
+"Phone number" = "Номер телефону";
+"SMS code" = "SMS код";
+"Full Name" = "Повне ім'я";
+"Phone Number" = "Номер телефону";
+"Sending verification email…" = "Відправлення листа підтвердження…";
+"Name must be at least 3 characters" = "Ім'я повинно містити принаймні 3 символи";
+"Invalid email address" = "Неправильна адреса електронної пошти";
+"Password must be at least 6 characters" = "Пароль повинен містити принаймні 6 символів";
+"Enter a valid phone number" = "Введіть дійсний номер телефону";
+"Initializing..." = "Ініціалізація...";
+"Loading user data..." = "Завантаження даних користувача...";
+"Connecting to server..." = "Підключення до сервера...";
+"Preparing interface..." = "Підготовка інтерфейсу...";
+"Almost ready..." = "Майже готово...";
+
+// General loading and states
+"loading" = "Завантаження...";
+
+// Calendar module
+"Event not found" = "Подію не знайдено";
+"No events for selected date" = "Немає подій на обрану дату";
+"No setlist" = "Немає сет-листа";
+"No available setlists" = "Немає доступних сет-листів";
+"No location information" = "Немає інформації про розташування";
+"searching" = "Пошук...";
+"Search for a location above" = "Шукайте розташування вище";
+"Recurring Events" = "Повторювані події";
+"time" = "Час";
+
+// Setlists module
+"duration" = "Тривалість";
+"minutes" = "Хвилини";
+"seconds" = "Секунди";
+
+// Calendar - EventDetailView
+"Clear location" = "Очистити розташування";
+"Hotel name" = "Назва готелю";
+"Hotel address" = "Адреса готелю";
+"Check route" = "Перевірити маршрут";
+"Edit event" = "Редагувати подію";
+"Keep editing" = "Продовжити редагування";
+"Discard" = "Відхилити";
+
+// Calendar - EventRowView
+"Title" = "Назва";
+
+// Calendar - SetlistSelectorView
+"Select setlist" = "Вибрати сет-лист";
+
+// Calendar - CalendarView
+"events" = "події";
+"event" = "подія";
+
+// Calendar - AddEventView
+"Recurring Event" = "Повторювана подія";
+"End Date" = "Дата закінчення";
+"Personal Event" = "Особиста подія";
+
+// Calendar - LocationPickerView
+"Select Location" = "Вибрати розташування";
+"Search for a place" = "Шукати місце";
+"Clear" = "Очистити";
+"Unknown address" = "Невідома адреса";
+
+// Calendar - ScheduleEditorSheet
+"Add Schedule Item" = "Додати елемент розкладу";
+"Daily Schedule" = "Щоденний розклад";
+"Edit Schedule Item" = "Редагувати елемент розкладу";
+"Hour" = "Година";
+"Minute" = "Хвилина";
+
+// AddEventView - additional
+"Schedule" = "Розклад";
+"New event" = "Нова подія";
+
+// Additional UI strings
+"Some events failed to save" = "Деякі події не вдалося зберегти";
+"Failed to save event" = "Не вдалося зберегти подію";
+"Organizers" = "Організатори";
+"Coordinators" = "Координатори";
+
+// Recurring events
+"to" = "до";
+"items" = "елементи";
+
+// Event Types
+"Festival" = "Фестиваль";
+"Rehearsal" = "Репетиція";
+"Meeting" = "Зустріч";
+"Interview" = "Інтерв'ю";
+"Photoshoot" = "Фотосесія";
+"Personal" = "Особисте";
+"booked" = "Заброньовано";
+"confirmed" = "Підтверджено";
+"cancelled" = "Скасовано";
+"postponed" = "Відкладено";
+"pending" = "Очікує";
+
+// Missing enum values
+"Reserved" = "Заброньовано";
+
+// Missing AddEventView keys
+"Select on map" = "Вибрати на карті";
+"Additional Contacts" = "Додаткові контакти";
+"And more" = "та ще %d";
+"No additional contacts added" = "Додаткові контакти не додано";
+
+// Additional missing keys
+"vs. prev." = "проти попер.";
+"Activity" = "Активність";
+"No Records" = "Немає записів";
+"Add income or expenses to track your band's finances." = "Додайте доходи або витрати для відстеження фінансів вашого гурту.";
+"Time Period" = "Часовий період";
+
+// Additional AdminPanel keys
+"Change role" = "Змінити роль";
+"Remove from group" = "Видалити з групи";
+"Reset" = "Скинути";
+"Reset permissions?" = "Скинути дозволи?";
+
+// Chat Actions and Dialogs
+"Delete Message Confirmation" = "Ви впевнені, що хочете видалити це повідомлення? Цю дію не можна скасувати.";
+"Delete Chat Confirmation" = "Ви впевнені, що хочете видалити цей чат? Цю дію не можна скасувати.";
+"Delete Chat With Name Confirmation" = "Ви впевнені, що хочете видалити чат \"%@\"? Цю дію не можна скасувати.";
+
+// Chat Status Messages
+"Failed to load" = "Не вдалося завантажити";
+"edited" = "(відредаговано)";
+"Loading chats..." = "Завантаження чатів...";
+
+// Chat UI Elements
+"Chat Settings" = "Налаштування чату";
+"Participants" = "Учасники";
+"Create band-wide announcement" = "Створити оголошення для всього гурту";
+"Reply to message" = "Відповісти на повідомлення";
+"Editing message" = "Редагування повідомлення";
+
+// Additional Chat UI Elements
+"Chat name" = "Назва чату";
+"Search chats..." = "Пошук чатів...";
+"Priority" = "Пріоритет";
+"Due date" = "Термін виконання";
+"Remind at" = "Нагадати о";
+
+// Empty States
+"No Chats" = "Немає чатів";
+"Create a new chat to start communicating with band members" = "Створіть новий чат, щоб почати спілкування з учасниками гурту";
+
+// Priority Levels
+"Low" = "Низький";
+"Medium" = "Середній";
+"High" = "Високий";
+"A reminder will be created about the message:" = "Буде створено нагадування про повідомлення:";
+
+// Additional Missing Keys
+"Image" = "Зображення";
+"From:" = "Від:";
+"Time:" = "Час:";
+"Edited:" = "Відредаговано:";
+"Content" = "Зміст";
+"Failed to load image" = "Не вдалося завантажити зображення";
+"Source message" = "Вихідне повідомлення";
+"Integration type" = "Тип інтеграції";
+
+// Additional Chat Integration Keys
+"Task from chat" = "Завдання з чату";
+"Event from chat" = "Подія з чату";
+"Authentication error" = "Помилка автентифікації";
+"Task creation error" = "Помилка створення завдання";
+"Task created" = "📋 Завдання створено: %@";
+"Event created" = "📅 Подію створено: %@";
+
+// ChatsListView Additional Keys
+"New chat" = "Новий чат";
+"Double tap to start a new chat" = "Подвійне натискання для створення нового чату";
+"You: " = "Ви: ";
+"📷 Photo" = "📷 Фото";
+"Chat with %@. Last message: %@. %@" = "Чат з %1$@. Останнє повідомлення: %2$@. %3$@";
+
+// Chat fallback names
+"User %@" = "Користувач %@";
+
+// Contacts Module Localization
+"Enter full name" = "Введіть повне ім'я";
+"Email Address" = "Адреса електронної пошти";
+"Enter email address" = "Введіть адресу електронної пошти";
+"Enter phone number" = "Введіть номер телефону";
+"Professional Details" = "Професійні деталі";
+"Role/Position" = "Роль/Посада";
+"Company/Organization" = "Компанія/Організація";
+"Enter company name" = "Введіть назву компанії";
+"How did you meet/Source" = "Як ви познайомилися/Джерело";
+"Contact source placeholder" = "наприклад, Фестиваль 2024, Спільний друг, Онлайн";
+"Notes & Description" = "Примітки та опис";
+"Description/Notes" = "Опис/Примітки";
+"Contact notes placeholder" = "Додайте будь-які додаткові примітки, переваги або важливі деталі про цей контакт...";
+"Add Contact" = "Додати контакт";
+"Saving contact..." = "Збереження контакту...";
+"Name is required" = "Ім'я обов'язкове";
+"Please enter a valid email address" = "Будь ласка, введіть дійсну адресу електронної пошти";
+"Failed to save contact. Please try again." = "Не вдалося зберегти контакт. Спробуйте ще раз.";
+
+// Document Module
+"documents" = "Документи";
+"newDocument" = "Новий документ";
+"createDocument" = "Створити документ";
+"documentInformation" = "Інформація про документ";
+"documentName" = "Назва документа";
+"documentType" = "Тип документа";
+"venueType" = "Тип майданчика";
+"notSpecified" = "Не вказано";
+"descriptionOptional" = "Опис (необов'язково)";
+"templates" = "Шаблони";
+"useTemplate" = "Використати шаблон";
+"noTemplate" = "Без шаблону";
+"selectTemplate" = "Вибрати шаблон";
+"template" = "Шаблон";
+"selectATemplate" = "Вибрати шаблон";
+"fileUpload" = "Завантаження файлу";
+"chooseFile" = "Вибрати файл";
+"photo" = "Фото";
+"remove" = "Видалити";
+"storage" = "Сховище";
+"googleDrive" = "Google Диск";
+"connected" = "Підключено";
+"notConnected" = "Не підключено";
+"connect" = "Підключити";
+"cancel" = "Скасувати";
+"create" = "Створити";
+"creatingDocument" = "Створення документа...";
+"uploadingToGoogleDrive" = "Завантаження в Google Диск";
+"unknownErrorOccurred" = "Сталася невідома помилка";
+"failedToLoadPhoto" = "Не вдалося завантажити фото";
+"failedToAccessSelectedFile" = "Не вдалося отримати доступ до вибраного файлу";
+"permissionDenied" = "Дозвіл відхилено";
+
+// Document Detail
+"openInGoogleDrive" = "Відкрити в Google Диску";
+"downloadPreview" = "Завантажити та переглянути";
+"share" = "Поділитися";
+"editInfo" = "Редагувати інформацію";
+"delete" = "Видалити";
+"deleteDocument" = "Видалити документ";
+"areYouSureDeleteDocument" = "Ви впевнені, що хочете видалити '{name}'? Цю дію не можна скасувати.";
+"loadingDocument" = "Завантаження документа...";
+"properties" = "Властивості";
+"type" = "Тип";
+"created" = "Створено";
+"updated" = "Оновлено";
+"size" = "Розмір";
+"version" = "Версія";
+"yes" = "Так";
+"shareDocument" = "Поділитися документом";
+"unableToDisplayImage" = "Неможливо відобразити зображення";
+"unableToDisplayTextContent" = "Неможливо відобразити текстовий зміст";
+"name" = "Назва";
+"venueInformation" = "Інформація про майданчик";
+"editDocument" = "Редагувати документ";
+"updating" = "Оновлення...";
+
+// Documents View
+"createEventFolders" = "Створити папки подій";
+"refresh" = "Оновити";
+"disconnectGoogleDrive" = "Відключити Google Диск";
+"connectGoogleDrive" = "Підключити Google Диск";
+"googleDriveNotConnected" = "Google Диск не підключено";
+"connectToUploadAndManageDocuments" = "Підключіться для завантаження та керування документами";
+"googleDriveConnected" = "Google Диск підключено";
+"readyToUploadAndManageDocuments" = "Готово для завантаження та керування документами";
+"disconnect" = "Відключити";
+"loadingDocuments" = "Завантаження документів...";
+"noDocumentsYet" = "Документів поки немає";
+"noResultsFound" = "Результатів не знайдено";
+"createYourFirstDocumentToGetStarted" = "Створіть свій перший документ для початку";
+"tryAdjustingYourSearchTerms" = "Спробуйте скорегувати пошукові терміни";
+"all" = "Все";
+
+// Documents Component Views
+"drive" = "Диск";
+
+// Google Drive Auth
+"connectYourGoogleDriveAccountToSecurelyStore" = "Підключіть свій обліковий запис Google Диска для безпечного зберігання";
+"secureStorage" = "Безпечне сховище";
+"yourDocumentsAreEncryptedAndSafelyStored" = "Ваші документи зашифровані та безпечно збережені";
+"teamCollaboration" = "Командна співпраця";
+"shareDocumentsWithBandMembers" = "Діліться документами з учасниками гурту";
+"autoOrganization" = "Автоорганізація";
+"automaticFoldersForEventsAndCategories" = "Автоматичні папки для подій та категорій";
+"accessAnywhere" = "Доступ будь-де";
+"viewDocumentsOnAnyDevice" = "Переглядайте документи на будь-якому пристрої";
+"afterConnection" = "Після підключення";
+"youllSeeYourGoogleAccountEmailInTheDocumentsView" = "Ви побачите електронну пошту свого облікового запису Google у перегляді документів, тому завжди знатимете, який обліковий запис Диска підключено.";
+"connecting" = "Підключення...";
+"maybeLater" = "Можливо пізніше";
+"authenticationError" = "Помилка автентифікації";
+"failedToConnectToGoogleDrive" = "Не вдалося підключитися до Google Диска";
+
+// Finance module
+"newTransaction" = "Нова транзакція";
+"addNewFinancialTransaction" = "Додати нову фінансову транзакцію";
+"transactionType" = "ТИП ТРАНЗАКЦІЇ";
+"chooseTransactionType" = "Виберіть тип транзакції";
+"income" = "Дохід";
+"expense" = "Витрата";
+"category" = "КАТЕГОРІЯ";
+"selectCategory" = "Вибрати категорію";
+"transactionDetails" = "ДЕТАЛІ ТРАНЗАКЦІЇ";
+"enterAmountAndDetails" = "Введіть суму та деталі";
+"amount" = "Сума";
+"pleaseEnterValidAmount" = "Будь ласка, введіть дійсну суму";
+"addDescription" = "Додати опис";
+"date" = "Дата";
+"receipt" = "ЧЕК";
+"scanOrAttachReceipt" = "Сканувати або прикріпити чек";
+"receiptAdded" = "Чек додано";
+"tapToChange" = "Натисніть для зміни";
+"scanReceipt" = "Сканувати чек";
+"captureReceiptDetailsAutomatically" = "Автоматично захопити деталі чека";
+"saveTransaction" = "Зберегти транзакцію";
+"savingTransaction" = "Збереження транзакції...";
+"pleaseWait" = "Будь ласка, зачекайте...";
+"invalidAmountOrUserGroup" = "Неправильна сума або група користувачів";
+"failedToSaveTransaction" = "Не вдалося зберегти транзакцію";
+"uploadingToCloudStorage" = "📤 Завантаження в хмарне сховище...";
+"extractedResults" = "✅ Вилучені результати:";
+"merchant" = "Продавець";
+"uploadingReceiptToCloudStorage" = "📤 Завантаження чека в хмарне сховище...";
+"scannerWillCloseAutomatically" = "📱 Сканер закриється автоматично та передасть дані на екран додавання транзакції.";
+"orUseManualSave" = "🔄 Або використайте ручне збереження, якщо автозакриття не працює:";
+"manualSave" = "Ручне збереження";
+"analyzingReceipt" = "Аналіз чека...";
+"scanWithCamera" = "Сканувати камерою";
+"chooseFromGallery" = "Вибрати з галереї";
+"transactionDetails" = "Деталі транзакції";
+"details" = "ДЕТАЛІ";
+"syncStatus" = "Статус синхронізації";
+"waitingForSynchronization" = "Очікування синхронізації";
+"loadingFromCloud" = "Завантаження з хмари...";
+"receiptInCloudStorage" = "Чек у хмарному сховищі";
+"storedSecurelyInFirebase" = "☁️ Безпечно збережено в Firebase";
+"view" = "Переглянути";
+"actions" = "ДІЇ";
+"edit" = "Редагувати";
+"deletingTransaction" = "Видалення транзакції...";
+"areYouSureDeleteTransaction" = "Ви впевнені, що хочете видалити цю транзакцію?";
+"close" = "Закрити";
+"loadingReceiptFromCloud" = "Завантаження чека з хмари...";
+"receiptUnavailable" = "Чек недоступний";
+"couldNotLoadReceiptFromCloudStorage" = "Не вдалося завантажити чек з хмарного сховища.";
+"editTransaction" = "Редагувати транзакцію";
+"editFinancialTransaction" = "Редагувати фінансову транзакцію";
+"selectCurrency" = "Вибрати валюту";
+"filter" = "Фільтр";
+"currency" = "Валюта";
+"done" = "Готово";
+
+// Finances Module - Additional UI Elements
+"scanAction" = "Сканувати";
+"chartsAction" = "Графіки";
+"filterAction" = "Фільтр";
+"incomeShort" = "Дох";
+"expenseShort" = "Вит";
+"filterType" = "Тип";
+"timePeriod" = "Часовий період";
+
+// Filter Period Options
+"allTime" = "Весь час";
+"thisMonth" = "Цього місяця";
+"last3Months" = "Останні 3 місяці";
+"thisYear" = "Цього року";
+
+// Filter Type Options
+"allTransactions" = "Все";
+"incomeTransactions" = "Доходи";
+"expenseTransactions" = "Витрати";
+
+// Chat Views
+"Chat Info" = "Інформація про чат";
+"Creating chat..." = "Створення чату...";
+"Search participants..." = "Пошук учасників...";
+"Forwarded from chat" = "Переслано з %@";
+"Event title" = "Назва події";
+
+// Finance Categories - Income
+"categoryPerformance" = "Виступи";
+"categoryMerch" = "Мерчандайз";
+"categoryRoyalties" = "Роялті";
+"categorySponsorship" = "Спонсорство";
+"categoryMediaProduction" = "Медіапродукція";
+
+// Finance Categories - Expense
+"categoryLogistics" = "Логістика";
+"categoryAccommodation" = "Проживання";
+"categoryFood" = "Їжа";
+"categoryGear" = "Обладнання";
+"categoryPromo" = "Реклама";
+"categoryProduction" = "Відео/фотопродукція";
+"categoryOther" = "Інше";
+
+// Finance UI Labels
+"expenses" = "Витрати";
+"incomeCategory" = "Категорія доходів";
+"expenseCategory" = "Категорія витрат";
+"categoryOverview" = "Огляд категорій";
+"recentTransactions" = "Останні транзакції";
+"viewAll" = "Переглянути все";
+"noDescription" = "Без опису";
+
+// Chart Labels
+"monthly" = "Щомісячно";
+"financialStatistics" = "Фінансова статистика";
+"transactionsCount" = "%d транзакцій";
+"balance" = "Баланс";
+"balanceShort" = "Бал";
+"noFinancialData" = "Немає фінансових даних";
+"addIncomeExpenseMessage" = "Додайте доходи та витрати, щоб побачити детальну статистику та візуалізації.";
+"addTransactions" = "Додати транзакції";
+"period" = "Період";
+"noMonthlyData" = "Помісячні дані недоступні";
+"monthlyBreakdown" = "Помісячний розподіл";
+"categoriesLabel" = "Категорії:";
+"allFilter" = "Все";
+"noDataForCategory" = "Немає даних для обраного типу категорії";
+
+// Groups Module
+"groupName" = "Назва групи";
+"createGroup" = "Створити групу";
+"joinGroup" = "Приєднатися до групи";
+"join" = "Приєднатися";
+"enterInvitationCode" = "Введіть код запрошення";
+"createNewGroup" = "Створити нову групу";
+"joinAGroup" = "Приєднатися до групи";
+
+// Event Detail - additional keys
+"Event visible only to you" = "Ця подія видима лише вам";
+"Rate this event" = "Оцініть цю подію";
+"Changes will be lost" = "Ваші зміни будуть втрачені";
+"Will create events" = "Буде створено %d подій";
+"Warning many events" = "⚠️ Створення багатьох подій одночасно може зайняти деякий час";
+
+// Auth - additional keys
+"Don't have account" = "Немає облікового запису?";
+"Verification email sent" = "Лист підтвердження відправлено";
+"Verification email sent to" = "Лист підтвердження було відправлено на";
+"After verifying email" = "Після підтвердження електронної пошти ви можете увійти";
+"Already have account" = "Вже маєте обліковий запис?";
+
+// Group Headers
+"Group information" = "Інформація про групу";
+"Group code" = "Код групи";
+
+// Welcome Screen
+"Welcome to BandSync" = "Ласкаво просимо до BandSync";
+"Get started instruction" = "Щоб почати, будь ласка, створіть нову групу або приєднайтеся до існуючої.";
+"Log out" = "Вийти";
+
+// Setlists - ImportSongsView keys
+"Choose songs from setlists" = "Виберіть пісні з існуючих сет-листів";
+"No setlists available" = "Немає доступних сет-листів";
+"Create setlists first" = "Спочатку створіть сет-листи";
+"Choose setlist" = "Виберіть сет-лист";
+"Source setlist" = "Вихідний сет-лист";
+"Select setlist" = "Вибрати сет-лист";
+"Setlist info" = "Інформація про сет-лист";
+"Selected for import" = "Обрано для імпорту";
+
+// Setlists - SetlistView keys
+"Your stage awaits" = "Ваша сцена чекає! 🎤";
+"Create first setlist" = "Створіть свій перший сет-лист для планування виступів";
+"Plus more" = "+ ще %d";
+
+// Setlists - EditSongView keys
+"Edit your song" = "Редагуйте свою пісню";
+"Song information" = "Інформація про пісню";
+"Song title" = "Назва пісні";
+"Music parameters" = "Музичні параметри";
+"BPM (Beats per minute)" = "BPM (Ударів на хвилину)";
+"Musical key" = "Музичний ключ";
+
+// Setlists - TimingDetailView keys
+"Concert timeline" = "Хронологія концерту";
+"Track setlist timing" = "Відстежуйте тайминг свого сет-листа та розклад виступу";
+"Concert information" = "Інформація про концерт";
+"Start date time" = "Дата та час початку";
+"Estimated end time" = "Очікуваний час закінчення";
+"Timeline summary" = "Підсумок хронології";
+
+// Merchandise keys
+"Select images" = "Вибрати зображення";
+"Add more images" = "Додати більше зображень";
+
+// MainTabView subtitles
+"Merchandise subtitle" = "Керуйте мерчандайзом та продажами вашого гурту";
+"Contacts subtitle" = "Відстежуйте контакти в індустрії";
+"Finances subtitle" = "Відстежуйте доходи та витрати";
+"Documents subtitle" = "Зберігайте та організовуйте важливі файли";
+"Additional features" = "Додаткові функції";
+"Admin panel" = "Панель адміністратора";
+"Admin panel subtitle" = "Керуйте налаштуваннями групи та дозволами";
+"Settings subtitle" = "Налаштування додатка та облікового запису";
+
+// Schedule Editor
+"No schedule items" = "Елементи розкладу ще не додано";
+
+// AdminPanel - Additional keys
+"Refresh" = "Оновити";
+"Error updating role" = "Помилка оновлення ролі: %@";
+"Role updated successfully" = "Роль успішно оновлено на %@";
+
+// Contacts
+"Address" = "Адреса";
+"All Contacts" = "Всі контакти";
+"Call (Primary)" = "Зателефонувати (основний)";
+"Company" = "Компанія";
+"Contact notes edit placeholder" = "Введіть примітки або опис...";
+"Contact Source" = "Джерело контакту";
+"Contact source edit placeholder" = "Як ви познайомилися з цим контактом?";
+"Contact Type" = "Тип контакту";
+"Delete Contact" = "Видалити контакт";
+"Delete contact confirmation" = "Ви впевнені, що хочете видалити цей контакт? Цю дію не можна скасувати.";
+"Edit Contact" = "Редагувати контакт";
+"General Contacts" = "Загальні контакти";
+"Import from Phone" = "Імпортувати з телефону";
+"No Contacts" = "Немає контактів";
+"No contacts are associated with this event." = "З цією подією не пов'язано жодних контактів.";
+"No contacts for this event" = "Немає контактів для цієї події";
+"No Event Contacts" = "Немає контактів події";
+"No event contacts found" = "Контакти події не знайдено";
+"No General Contacts" = "Немає загальних контактів";
+"No general contacts found" = "Загальні контакти не знайдено";
+"No notes added" = "Примітки не додано";
+"No phone numbers" = "Немає номерів телефонів";
+"Phone %d" = "Телефон %d";
+"Phone Numbers" = "Номери телефонів";
+"Quick Actions" = "Швидкі дії";
+"Search contacts" = "Пошук контактів";
+"Send Email" = "Відправити електронну пошту";
+"Send SMS (Primary)" = "Відправити SMS (основний)";
+"Website" = "Веб-сайт";
+
+// Documents
+"Are you sure you want to delete this document?" = "Ви впевнені, що хочете видалити цей документ?";
+"Choose File" = "Вибрати файл";
+"Connect Google Drive" = "Підключити Google Диск";
+"Connected" = "Підключено";
+"Create Document" = "Створити документ";
+"Create Event Folders" = "Створити папки подій";
+"Create your first document to get started" = "Створіть свій перший документ для початку";
+"Created" = "Створено";
+"Creating Document" = "Створення документа";
+"Description (Optional)" = "Опис (необов'язково)";
+"Disconnect Google Drive" = "Відключити Google Диск";
+"Document Information" = "Інформація про документ";
+"Document Name" = "Назва документа";
+"Document Type" = "Тип документа";
+"Documents" = "Документи";
+"Download Preview" = "Завантажити попередній перегляд";
+"Drive" = "Диск";
+"Edit Info" = "Редагувати інформацію";
+"Failed to access selected file" = "Не вдалося отримати доступ до вибраного файлу";
+"Failed to delete document" = "Не вдалося видалити документ";
+"Failed to download document" = "Не вдалося завантажити документ";
+"Failed to load photo" = "Не вдалося завантажити фото";
+"Failed to read selected file" = "Не вдалося прочитати вибраний файл";
+"Failed to select file" = "Не вдалося вибрати файл";
+"File Upload" = "Завантаження файлу";
+"Google Drive Connected" = "Google Диск підключено";
+"Loading Document" = "Завантаження документа";
+"Loading Documents" = "Завантаження документів";
+"No Documents Yet" = "Документів поки немає";
+"No Results Found" = "Результатів не знайдено";
+"No shareable content available for this document" = "Для цього документа немає контенту для обміну";
+"Not Connected" = "Не підключено";
+"Not Specified" = "Не вказано";
+"Open in Google Drive" = "Відкрити в Google Диску";
+"Permission denied" = "Дозвіл відхилено";
+"Photo" = "Фото";
+"Properties" = "Властивості";
+"Ready to upload and manage documents" = "Готово для завантаження та керування документами";
+"Remove" = "Видалити";
+"Select a Template" = "Вибрати шаблон";
+"Share Document" = "Поділитися документом";
+"Storage" = "Сховище";
+"Template" = "Шаблон";
+"Templates" = "Шаблони";
+"Try adjusting your search terms" = "Спробуйте скорегувати пошукові терміни";
+"Unable to display image" = "Неможливо відобразити зображення";
+"Unable to display text content" = "Неможливо відобразити текстовий зміст";
+"Unable to present share sheet" = "Неможливо відобразити аркуш обміну";
+"Unknown error occurred" = "Сталася невідома помилка";
+"Updated" = "Оновлено";
+"Updating" = "Оновлення";
+"Uploading to Google Drive" = "Завантаження в Google Диск";
+"Use Template" = "Використати шаблон";
+"Venue Information" = "Інформація про майданчик";
+"Venue Type" = "Тип майданчика";
+
+// Setlists
+"Seconds" = "Секунди";
+
+// Additional UI strings
+"Min" = "Хв";
+"Sec" = "Сек";
+
+// Setlist Management
+"Are you sure you want to delete this setlist? This action cannot be undone." = "Ви впевнені, що хочете видалити цей сет-лист? Цю дію не можна скасувати.";
+"Discard Changes" = "Відхилити зміни";
+"Keep Editing" = "Продовжити редагування";
+"Discard" = "Відхилити";
+"Your changes will be lost if you go back without saving." = "Ваші зміни будуть втрачені, якщо ви повернетеся без збереження.";
+"Back" = "Назад";
+
+// Form Field Labels
+"Low Stock Threshold" = "Поріг низького запасу";
+"SKU" = "Артикул";
+"Cost" = "Собівартість";
+"Price" = "Ціна";
+"Stock By Sizes" = "Запас за розмірами";
+"Item Quantity" = "Кількість товару";
+"Clear and Recreate" = "Очистити та перестворити";
+"Enter Setlist Name" = "Введіть назву сет-листа";
+"Enter Song Name" = "Введіть назву пісні";
+
+// Additional UI Actions
+"Repeat" = "Повторити";
+
+// Merchandise
+"All" = "Усе";
+"ITEMS" = "ТОВАРИ";
+"Sort By" = "Сортувати за";
+"Name" = "Назва";
+"Name (Z-A)" = "Назва (Я-А)";
+"Price (Low to High)" = "Ціна (Низька-Висока)";
+"Price (High to Low)" = "Ціна (Висока-Низька)";
+"Stock (Low to High)" = "Запас (Низький-Високий)";
+"Stock (High to Low)" = "Запас (Високий-Низький)";
+"Newest First" = "Найновіші спочатку";
+"Oldest First" = "Найстаріші спочатку";
+"Loading merchandise items..." = "Завантаження товарів...";
+"No items in selected category" = "Немає товарів у обраній категорії";
+"No items matching '\(searchText)'" = "Немає товарів, що відповідають '\(searchText)'";
+"Add New Item" = "Додати новий товар";
+"There are \(merchService.lowStockItems.count) items with stock below threshold." = "Є \(merchService.lowStockItems.count) товарів з запасом нижче порогу.";
+"Stock:" = "Запас:";
+"Sizes:" = "Розміри:";
+"Quantity:" = "Кількість:";
+"Total: %d" = "Всього: %d";
+"Stock: %d" = "Запас: %d";
+"Category:" = "Категорія:";
+"Subcategory:" = "Підкategорія:";
+"Price:" = "Ціна:";
+"Low stock! Threshold: \(item.lowStockThreshold) pcs." = "Низький запас! Поріг: \(item.lowStockThreshold) шт.";
+"Last 30 days:" = "Останні 30 днів:";
+"No Saved Drafts" = "Немає збережених чернеток";
+"Drafts you save while creating new merchandise will appear here" = "Чернетки, які ви зберігаєте при створенні нових товарів, з'являться тут";
+"Do you want to load and edit this draft?" = "Хочете завантажити та редагувати цю чернетку?";
+"Available quantity:" = "Доступна кількість:";
+"Maximum available: \(maxAvailableQuantity)" = "Максимум доступно: \(maxAvailableQuantity)";
+"Quantity: \(quantity)" = "Кількість: \(quantity)";
+"Item information" = "Інформація про товар";
+"Item" = "Товар";
+"Category" = "Категорія";
+"Price" = "Ціна";
+"Sale date" = "Дата продажу";
+"Sale details" = "Деталі продажу";
+"Total" = "Всього";
+"Gift" = "Подарунок";
+"Delete sale" = "Видалити продаж";
+"Details" = "Деталі";
+"Export PDF" = "Експорт PDF";
+
+// Alert Titles
+"Delete Message" = "Видалити повідомлення";
+"Delete Task" = "Видалити завдання";
+
+// Task Management
+"Task Not Found" = "Завдання не знайдено";
+"No Tasks" = "Немає завдань";
+"Create your first task to get started" = "Створіть своє перше завдання для початку";
+"Loading tasks..." = "Завантаження завдань...";
+"Task Information" = "Інформація про завдання";
+"Assigned To" = "Призначено";
+"Reminder" = "Нагадування";
+"Include Time" = "Включити час";
+"Multi-day Task" = "Багатоденне завдання";
+"No users found" = "Користувачів не знайдено";
+"Are you sure you want to delete this task? This action cannot be undone." = "Ви впевнені, що хочете видалити це завдання? Цю дію не можна скасувати.";
+"Schedule" = "Розклад";
+"Timed Event" = "Подія з часом";
+"No Description" = "Без опису";
+
+// Settings Views
+"Preferences" = "Налаштування";
+"Information" = "Інформація";
+"Account Information" = "Інформація про обліковий запис";
+"Security" = "Безпека";
+"Account Actions" = "Дії з обліковим записом";
+"Deleting your account will permanently remove all your data and cannot be undone." = "Видалення вашого облікового запису назавжди видалить всі ваші дані та не може бути скасовано.";
+"Processing..." = "Обробка...";
+"Are you sure you want to sign out?" = "Ви впевнені, що хочете вийти?";
+"This action cannot be undone. All your data will be permanently deleted." = "Цю дію не можна скасувати. Всі ваші дані будуть назавжди видалені.";
+"Current Password" = "Поточний пароль";
+"New Password" = "Новий пароль";
+"Password must be at least 6 characters long" = "Пароль повинен містити принаймні 6 символів";
+"Updating password..." = "Оновлення пароля...";
+"Your password has been updated successfully" = "Ваш пароль успішно оновлено";
+"Notifications are enabled" = "Сповіщення увімкнено";
+"30 minutes before" = "За 30 хвилин до";
+"1 hour before" = "За 1 годину до";
+"2 hours before" = "За 2 години до";
+"1 day before" = "За 1 день до";
+"2 days before" = "За 2 дні до";
+"1 week before" = "За 1 тиждень до";
+"Please enable notifications in Settings to receive alerts." = "Будь ласка, увімкніть сповіщення в Налаштуваннях, щоб отримувати оповіщення.";
+"Current Cache Size" = "Поточний розмір кешу";
+"Cache Status" = "Статус кешу";
+"Storage Limit" = "Ліміт сховища";
+"When cache exceeds this limit, oldest data will be automatically removed." = "Коли кеш перевищить цей ліміт, найстаріші дані будуть автоматично видалені.";
+"Weekly" = "Щотижня";
+"Every 2 weeks" = "Кожні 2 тижні";
+"Monthly" = "Щомісяця";
+"Automatic Cleanup" = "Автоматичне очищення";
+"What is cached?" = "Що кешується?";
+"• Merchandise items and sales data\n• Event and setlist information\n• Contact details\n• Financial records\n• Task assignments" = "• Товари мерчандайзу та дані продажів\n• Інформація про події та сет-листи\n• Контактні дані\n• Фінансові записи\n• Призначення завдань";
+"About Cache" = "Про кеш";
+"This will remove all cached data. You may experience slower loading times until data is re-cached." = "Це видалить всі кешовані дані. Ви можете відчути повільніше завантаження до повторного кешування даних.";
+"You'll get notified when items are running low" = "Ви отримаєте сповіщення, коли товари закінчуються";
+"Low Stock Threshold" = "Поріг низького запасу";
+
+// Merchandise Views
+"Items" = "Товари";
+"Loading Merchandise Items" = "Завантаження товарів мерчандайзу";
+"Add New Item" = "Додати новий товар";
+"No Saved Drafts" = "Немає збережених чернеток";
+"Drafts You Save While Creating New Merchandise Will Appear Here" = "Чернетки, які ви зберігаєте під час створення нового мерчандайзу, з'являться тут";
+"Item Information" = "Інформація про товар";
+"Item" = "Товар";
+"Category" = "Категорія";
+"Price" = "Ціна";
+"Sale Date" = "Дата продажу";
+"Sale Details" = "Деталі продажу";
+"Gift" = "Подарунок";
+"This is a gift" = "Це подарунок";
+"Delete Sale" = "Видалити продаж";
+"No Sales History" = "Немає історії продажів";
+"Stock By Sizes" = "Запас за розмірами";
+"Recent Sales" = "Останні продажі";
+"No Sizes Available" = "Розміри недоступні";
+"Item Out Of Stock" = "Товар закінчився";
+"Out Of Stock" = "Закінчився";
+
+// Setlists Views
+"Timed" = "З часом";
+"BPM" = "BPM";
+"Summary" = "Підсумок";
+"Total Duration" = "Загальна тривалість";
+"Export To PDF" = "Експорт в PDF";
+"Create A Professional Setlist Document" = "Створити професійний документ сет-листа";
+"PDF Preview" = "Попередній перегляд PDF";
+"Document Ready" = "Документ готовий";
+"PDF Generated Successfully" = "PDF успішно згенеровано";
+"Generating Document" = "Генерація документа";
+"Export Settings" = "Налаштування експорту";
+"Show BPM" = "Показати BPM";
+"Include BPM Information For Each Song" = "Включити інформацію BPM для кожної пісні";
+"Show Musical Key" = "Показати музичний ключ";
+"Include Key Signatures Where Available" = "Включити ключові підписи там, де доступно";
+"Actions" = "Дії";
+"Update PDF" = "Оновити PDF";
+"Share PDF" = "Поділитися PDF";
+"Creating PDF" = "Створення PDF";
+"Export Error" = "Помилка експорту";
+"Select The Duration Of Breaks Between Songs" = "Виберіть тривалість перерв між піснями";
+"Timing Editor" = "Редактор таймінгу";
+"Adjust Your Concert Schedule" = "Налаштуйте свій концертний розклад";
+"Concert Parameters" = "Параметри концерту";
+"Concert Start" = "Початок концерту";
+"Fixed End Time" = "Фіксований час закінчення";
+"Set A Specific End Time For The Concert" = "Встановити конкретний час закінчення концерту";
+"Concert End" = "Кінець концерту";
+"Setlist Timing" = "Тайминг сет-листа";
+
+// Additional merchandise localization
+"Merch" = "Мерч";
+"Search items" = "Пошук товарів";
+"Add item" = "Додати товар";
+"Saved drafts" = "Збережені чернетки";
+"Sales analytics" = "Аналітика продажів";
+"Show low stock items" = "Показати товари з низьким запасом";
+"Export" = "Експорт";
+"Export Inventory" = "Експорт інвентаря";
+"Export Sales" = "Експорт продажів";
+"Export Options" = "Опції експорту";
+"Low stock items" = "Товари з низьким запасом";
+"Done" = "Готово";
+"Clear All" = "Очистити все";
+"Load Draft?" = "Завантажити чернетку?";
+"Edit" = "Редагувати";
+"Delete" = "Видалити";
+"OK" = "OK";
+"Cancel" = "Скасувати";
+"Saved Drafts" = "Збережені чернетки";
+
+// AddMerchView localization
+"Images" = "Зображення";
+"Subcategory" = "Підкатегорія";
+"Inventory" = "Інвентар";
+"Add Item" = "Додати товар";
+"Price (EUR)" = "Ціна (EUR)";
+"Cost (EUR, optional)" = "Собівартість (EUR, необов'язково)";
+"Low stock threshold" = "Поріг низького запасу";
+"%d items" = "%d товарів";
+"SKU (optional)" = "SKU (необов'язково)";
+"Stock by sizes" = "Запас за розмірами";
+"Item quantity" = "Кількість товару";
+"S: %d" = "S: %d";
+"M: %d" = "M: %d";
+"L: %d" = "L: %d";
+"XL: %d" = "XL: %d";
+"XXL: %d" = "XXL: %d";
+"Quantity: %d" = "Кількість: %d";
+"Uploading..." = "Завантаження...";
+"Error loading images: %@" = "Помилка завантаження зображень: %@";
+"Failed to load %d image(s)" = "Не вдалося завантажити %d зображень";
+"User group not found" = "Група користувача не знайдена";
+"Failed to save item" = "Не вдалося зберегти товар";
+"Error uploading images: %@" = "Помилка завантаження зображень: %@";
+"Failed to save draft: %@" = "Не вдалося зберегти чернетку: %@";
+"CSV Data" = "CSV дані";
+"Paste CSV Data Here" = "Вставте CSV дані тут";
+"Import from file" = "Імпорт з файлу";
+"Import CSV" = "Імпорт CSV";
+"Sample Format" = "Приклад формату";
+"Name,Description,Price,Category,Subcategory,S,M,L,XL,XXL\nT-Shirt,Band logo t-shirt,25,Clothing,T-shirt,10,15,20,10,5\nVinyl,Limited edition vinyl,30,Music,Vinyl Record,50,0,0,0,0" = "Назва,Опис,Ціна,Категорія,Підкатегорія,S,M,L,XL,XXL\nФутболка,Футболка з логотипом гурту,25,Одяг,Футболка,10,15,20,10,5\nВініл,Лімітований вініл,30,Музика,Вінілова платівка,50,0,0,0,0";
+"Import From CSV" = "Імпорт з CSV";
+
+// EditMerchView localization
+"Edit Item" = "Редагувати товар";
+"SKU" = "SKU";
+"Profit Margin" = "Маржа прибутку";
+"Saving..." = "Збереження...";
+"Failed to save changes" = "Не вдалося зберегти зміни";
+"Failed to delete item" = "Не вдалося видалити товар";
+"Are you sure you want to delete this item? This action cannot be undone." = "Ви впевнені, що хочете видалити цей товар? Цю дію неможливо скасувати.";
+
+// CookiePolicyView
+"Data & Storage Policy" = "Політика даних та зберігання";
+"BandSync uses minimal data storage and analytics to provide a great user experience. This policy explains our approach to data storage, cookies, and similar technologies." = "BandSync використовує мінімальне зберігання даних та аналітику для забезпечення чудового користувацького досвіду. Ця політика пояснює наш підхід до зберігання даних, файлів cookie та подібних технологій.";
+"Data Storage Overview" = "Огляд зберігання даних";
+"Authentication Tokens" = "Токени автентифікації";
+"Keep you securely logged in to your account" = "Підтримують безпечний вхід до вашого облікового запису";
+"Essential" = "Необхідні";
+"User Preferences" = "Налаштування користувача";
+"Remember your app settings and customizations" = "Запам'ятовують налаштування та персоналізацію програми";
+"Session Data" = "Дані сесії";
+"Maintain your current session and app state" = "Підтримують поточну сесію та стан програми";
+"Offline Cache" = "Офлайн кеш";
+"Store data locally for offline access and faster loading" = "Зберігають дані локально для офлайн доступу та швидшого завантаження";
+"Security Tokens" = "Токени безпеки";
+"Protect your account from unauthorized access" = "Захищають ваш обліковий запис від несанкціонованого доступу";
+"Essential Data Storage" = "Необхідне зберігання даних";
+"Performance Monitoring" = "Моніторинг продуктивності";
+"Track app performance and identify technical issues" = "Відстежують продуктивність програми та виявляють технічні проблеми";
+"Analytics" = "Аналітика";
+"Feature Usage" = "Використання функцій";
+"Understand which features are most helpful to users" = "Дозволяють зрозуміти, які функції найбільш корисні для користувачів";
+"Error Reporting" = "Звіти про помилки";
+"Automatically report crashes and bugs for quick fixes" = "Автоматично повідомляють про збої та помилки для швидкого виправлення";
+"Usage Statistics" = "Статистика використання";
+"Improve app design and user experience" = "Покращують дизайн програми та користувацький досвід";
+"Analytics & Improvement" = "Аналітика та покращення";
+"Essential Data" = "Необхідні дані";
+"Required for app functionality and cannot be disabled" = "Необхідні для функціонування програми та не можуть бути відключені";
+"Analytics Data" = "Аналітичні дані";
+"Can be controlled through iOS Privacy Settings" = "Можна контролювати через налаштування конфіденційності iOS";
+"App Cache" = "Кеш програми";
+"Can be cleared through BandSync Settings" = "Можна очистити через налаштування BandSync";
+"Account Data" = "Дані облікового запису";
+"Managed through your account settings" = "Керуються через налаштування вашого облікового запису";
+"Your Control Options" = "Ваші варіанти контролю";
+"iOS Privacy Settings" = "Налаштування конфіденційності iOS";
+"Control app tracking and analytics through Settings > Privacy & Security > Analytics & Improvements" = "Контролюйте відстеження програми та аналітику через Налаштування > Конфіденційність та безпека > Аналітика та покращення";
+"BandSync Settings" = "Налаштування BandSync";
+"Clear app cache and manage data storage through the Settings tab in BandSync" = "Очищайте кеш програми та керуйте зберіганням даних через вкладку Налаштування в BandSync";
+"Account Management" = "Керування обліковим записом";
+"Export your data or delete your account at any time through Account Settings" = "Експортуйте свої дані або видаліть обліковий запис у будь-який час через Налаштування облікового запису";
+"Managing Your Data" = "Керування вашими даними";
+"Firebase Analytics" = "Firebase Analytics";
+"Google LLC" = "Google LLC";
+"App performance and usage analytics" = "Аналітика продуктивності та використання програми";
+"Firebase Crashlytics" = "Firebase Crashlytics";
+"Crash reporting and error tracking" = "Звіти про збої та відстеження помилок";
+"Google Drive API" = "Google Drive API";
+"Document storage and sharing" = "Зберігання та обмін документами";
+"Apple Analytics" = "Apple Analytics";
+"Apple Inc." = "Apple Inc.";
+"App Store analytics and performance metrics" = "Аналітика App Store та показники продуктивності";
+"Third-Party Services" = "Сторонні сервіси";
+"Notification of Changes" = "Повідомлення про зміни";
+"We will update this policy when we make changes to our data storage practices. Significant changes will be communicated through the app with advance notice." = "Ми оновимо цю політику, коли внесемо зміни до наших практик зберігання даних. Значні зміни будуть повідомлені через програму із завчасним попередженням.";
+"Continued Use" = "Продовжене використання";
+"Your continued use of BandSync after policy updates indicates acceptance of the revised practices." = "Ваше продовжене використання BandSync після оновлення політики вказує на прийняття переглянутих практик.";
+"Policy Updates" = "Оновлення політики";
+"Data Security Commitment" = "Зобов'язання щодо безпеки даних";
+"We implement industry-standard security measures to protect stored data. However, we recommend maintaining your own backups of important information as an additional precaution." = "Ми впроваджуємо галузеві стандарти безпеки для захисту збережених даних. Однак ми рекомендуємо підтримувати власні резервні копії важливої інформації як додаткову застережність.";
+"Third-Party Data Practices" = "Практики сторонніх даних";
+"While we carefully select trusted service providers, we recommend reviewing their privacy policies as well. We work only with providers who meet high security and privacy standards." = "Хоча ми ретельно вибираємо надійних постачальників послуг, ми рекомендуємо також переглянути їхні політики конфіденційності. Ми працюємо лише з постачальниками, які відповідають високим стандартам безпеки та конфіденційності.";
+"User Responsibility" = "Відповідальність користувача";
+"Users are encouraged to understand and utilize available privacy controls on their devices and within the app to customize their data sharing preferences." = "Користувачів заохочують розуміти та використовувати доступні засоби контролю конфіденційності на своїх пристроях та в програмі для налаштування своїх переваг обміну даними.";
+"Important Information" = "Важлива інформація";
+"Last updated: January 2025" = "Останнє оновлення: січень 2025";
+"For questions about data storage practices, contact our support team through the app." = "З питань щодо практик зберігання даних зверніться до нашої команди підтримки через програму.";
+"We are committed to transparent and responsible data handling practices." = "Ми прагнемо прозорих та відповідальних практик обробки даних.";
+
+// GDPRComplianceView
+"GDPR Compliance" = "Відповідність GDPR";
+"BandSync is committed to complying with the General Data Protection Regulation (GDPR) and similar privacy laws. This section explains your rights and how we protect your data." = "BandSync прагне дотримуватися Загального регламенту захисту даних (GDPR) та подібних законів про конфіденційність. Цей розділ пояснює ваші права та те, як ми захищаємо ваші дані.";
+"Our Commitment to GDPR" = "Наше зобов'язання щодо GDPR";
+"Right to be Informed" = "Право на інформування";
+"Clear, transparent information about how we collect and use your data" = "Чітка, прозора інформація про те, як ми збираємо та використовуємо ваші дані";
+"Detailed in our Privacy Policy" = "Детально в нашій Політиці конфіденційності";
+"Right of Access" = "Право доступу";
+"Request copies of your personal data and understand how it's processed" = "Запит копій ваших особистих даних та розуміння того, як вони обробляються";
+"Contact Support or export data in app" = "Зверніться до підтримки або експортуйте дані в програмі";
+"Right to Rectification" = "Право на виправлення";
+"Correct any inaccurate or incomplete personal data" = "Виправлення будь-яких неточних або неповних особистих даних";
+"Update through App Settings or contact Support" = "Оновіть через налаштування програми або зверніться до підтримки";
+"Right to Erasure" = "Право на стирання";
+"Request deletion of your personal data when appropriate" = "Запит на видалення ваших особистих даних, коли це доречно";
+"Delete Account in Settings or contact Support" = "Видаліть обліковий запис у налаштуваннях або зверніться до підтримки";
+"Right to Restrict Processing" = "Право на обмеження обробки";
+"Limit how we process your data in certain circumstances" = "Обмеження того, як ми обробляємо ваші дані за певних обставин";
+"Contact Support for specific requests" = "Зверніться до підтримки для конкретних запитів";
+"Right to Data Portability" = "Право на переносимість даних";
+"Receive your personal data in a structured, machine-readable format" = "Отримання ваших особистих даних у структурованому, машинночитаному форматі";
+"Use Export Data feature or contact Support" = "Використовуйте функцію експорту даних або зверніться до підтримки";
+"Right to Object" = "Право на заперечення";
+"Object to processing of your personal data in certain situations" = "Заперечення щодо обробки ваших особистих даних у певних ситуаціях";
+"Contact Support to discuss your concerns" = "Зверніться до підтримки для обговорення ваших занепокоєнь";
+"Your GDPR Rights" = "Ваші права GDPR";
+"How to exercise: %@" = "Як реалізувати: %@";
+"Lawful Basis for Processing" = "Правова основа для обробки";
+"We process data based on legitimate interests, user consent, and contractual necessity" = "Ми обробляємо дані на основі законних інтересів, згоди користувача та договірної необхідності";
+"Data Minimization" = "Мінімізація даних";
+"We collect only the data necessary to provide our services" = "Ми збираємо лише дані, необхідні для надання наших послуг";
+"Purpose Limitation" = "Обмеження цілей";
+"Your data is used only for the purposes clearly communicated to you" = "Ваші дані використовуються лише для цілей, чітко повідомлених вам";
+"Storage Limitation" = "Обмеження зберігання";
+"We retain data only as long as necessary to fulfill stated purposes" = "Ми зберігаємо дані лише стільки, скільки необхідно для виконання заявлених цілей";
+"Data Security" = "Безпека даних";
+"We implement appropriate technical and organizational security measures" = "Ми впроваджуємо відповідні технічні та організаційні заходи безпеки";
+"Accountability" = "Підзвітність";
+"We maintain records and can demonstrate our compliance efforts" = "Ми ведемо записи та можемо продемонструвати наші зусилля щодо дотримання вимог";
+"GDPR Compliance Principles" = "Принципи дотримання GDPR";
+"Account Information" = "Інформація про обліковий запис";
+"Until account deletion or 3 years of inactivity" = "До видалення облікового запису або 3 років бездіяльності";
+"User authentication and app personalization" = "Автентифікація користувача та персоналізація програми";
+"Band Coordination Data" = "Дані координації гурту";
+"Until manually deleted by user or band admin" = "До ручного видалення користувачем або адміністратором гурту";
+"Team collaboration and task management" = "Співпраця команди та управління завданнями";
+"Event & Calendar Data" = "Дані подій та календаря";
+"Until manually deleted by user" = "До ручного видалення користувачем";
+"Schedule management and coordination" = "Управління розкладом та координація";
+"Financial Records" = "Фінансові записи";
+"Expense tracking and financial management" = "Відстеження витрат та фінансове управління";
+"Usage Analytics" = "Аналітика використання";
+"Maximum 24 months, then anonymized" = "Максимум 24 місяці, потім анонімізуються";
+"App improvement and performance optimization" = "Покращення програми та оптимізація продуктивності";
+"Support Communications" = "Комунікації підтримки";
+"Maximum 3 years for service quality" = "Максимум 3 роки для якості сервісу";
+"Customer support and service improvement" = "Підтримка клієнтів та покращення сервісу";
+"Data Retention Periods" = "Періоди зберігання даних";
+"Retention: %@" = "Зберігання: %@";
+"Purpose: %@" = "Мета: %@";
+"Firebase (Google LLC)" = "Firebase (Google LLC)";
+"Secure data storage, authentication, and real-time synchronization" = "Безпечне зберігання даних, автентифікація та синхронізація в реальному часі";
+"EU/US with Standard Contractual Clauses" = "ЄС/США зі стандартними договірними положеннями";
+"Document storage and sharing integration" = "Зберігання документів та інтеграція обміну";
+"Apple App Store" = "Apple App Store";
+"App distribution and subscription management" = "Розповсюдження програми та управління підписками";
+"Global with appropriate safeguards" = "Глобально з відповідними гарантіями";
+"International Data Transfers" = "Міжнародні передачі даних";
+"Legal basis: %@" = "Правова основа: %@";
+"Contact Information" = "Контактна інформація";
+"For GDPR-related requests or questions, please contact our support team through the in-app contact feature. We aim to respond to all requests within 30 days." = "Для запитів або питань, пов'язаних з GDPR, зверніться до нашої команди підтримки через функцію контакту в програмі. Ми прагнемо відповісти на всі запити протягом 30 днів.";
+"Supervisory Authority Rights" = "Права наглядового органу";
+"You have the right to lodge a complaint with your local data protection authority if you believe we have not handled your data appropriately." = "Ви маєте право подати скаргу до місцевого органу захисту даних, якщо вважаєте, що ми неналежним чином обробили ваші дані.";
+"Exercising Your Rights" = "Реалізація ваших прав";
+"Ongoing Compliance Efforts" = "Поточні зусилля щодо дотримання";
+"We regularly review and update our data protection practices to ensure ongoing GDPR compliance. This includes regular security assessments, staff training, and policy updates." = "Ми регулярно переглядаємо та оновлюємо наші практики захисту даних для забезпечення постійного дотримання GDPR. Це включає регулярні оцінки безпеки, навчання персоналу та оновлення політики.";
+"Third-Party Compliance" = "Дотримання третіми сторонами";
+"We work only with service providers who demonstrate strong data protection practices and GDPR compliance. We maintain data processing agreements with all third-party processors." = "Ми працюємо лише з постачальниками послуг, які демонструють сильні практики захисту даних та дотримання GDPR. Ми підтримуємо угоди про обробку даних з усіма сторонніми обробниками.";
+"Transparency Commitment" = "Зобов'язання щодо прозорості";
+"We are committed to transparency in our data handling practices. If you have questions about how we process your data, please don't hesitate to contact us." = "Ми прагнемо прозорості в наших практиках обробки даних. Якщо у вас є питання про те, як ми обробляємо ваші дані, не вагайтеся зв'язатися з нами.";
+"Our Ongoing Commitment" = "Наше постійне зобов'язання";
+"For GDPR-related requests, use the Contact Support feature in Settings." = "Для запитів, пов'язаних з GDPR, використовуйте функцію зв'язку з підтримкою в налаштуваннях.";
+"We are committed to protecting your privacy rights and maintaining GDPR compliance." = "Ми прагнемо захищати ваші права на конфіденційність та підтримувати дотримання GDPR.";
+
+// Terms of Service
+"Age Requirement" = "Вікова вимога";
+"You must be at least 13 years old to use BandSync" = "Вам повинно бути щонайменше 13 років, щоб використовувати BandSync";
+"Account Security" = "Безпека облікового запису";
+"Keep your login credentials secure and notify us of any unauthorized access" = "Тримайте свої облікові дані в безпеці та повідомляйте нас про будь-який несанкціонований доступ";
+"Accurate Information" = "Точна інформація";
+"Provide truthful information when creating your account" = "Надавайте правдиву інформацію при створенні облікового запису";
+"Respectful Use" = "Шанобливе використання";
+"Use BandSync for legitimate band management and collaboration" = "Використовуйте BandSync для законного управління гуртом та співпраці";
+"Compliance" = "Дотримання";
+"Follow all applicable laws and regulations in your jurisdiction" = "Дотримуйтесь усіх застосовних законів та правил у вашій юрисдикції";
+"Service Availability" = "Доступність послуги";
+"We strive to maintain reliable service but may experience occasional downtime" = "Ми прагнемо підтримувати надійну послугу, але можемо час від часу мати простої";
+"Feature Updates" = "Оновлення функцій";
+"We regularly improve features and may add or modify functionality" = "Ми регулярно покращуємо функції та можемо додавати або змінювати функціональність";
+"Data Backup" = "Резервне копіювання даних";
+"We recommend regularly backing up important data" = "Ми рекомендуємо регулярно створювати резервні копії важливих даних";
+"Third-Party Integration" = "Інтеграція з третіми сторонами";
+"Google Drive and other integrations are subject to their respective terms" = "Google Drive та інші інтеграції підпорядковуються їхнім відповідним умовам";
+"Customer Support" = "Підтримка клієнтів";
+"We provide support through our in-app contact system" = "Ми надаємо підтримку через нашу систему контактів у додатку";
+"Your Content" = "Ваш контент";
+"You own all band data, music, and content you create in BandSync" = "Вам належать усі дані гурту, музика та контент, які ви створюєте в BandSync";
+"App License" = "Ліцензія додатку";
+"You grant us permission to process your data to provide app features" = "Ви надаєте нам дозвіл обробляти ваші дані для забезпечення функцій додатку";
+"Respectful Sharing" = "Шанобливе спільне користування";
+"Only share content you have permission to share" = "Діліться лише контентом, на який ви маєте дозвіл";
+"Content Standards" = "Стандарти контенту";
+"Keep all content appropriate and respectful" = "Тримайте весь контент відповідним та шанобливим";
+"Professional Communication" = "Професійна комунікація";
+"Maintain respectful interactions with team members" = "Підтримуйте шанобливі взаємодії з членами команди";
+"No Harassment" = "Без переслідування";
+"Harassment or inappropriate behavior is not permitted" = "Переслідування або неприйнятна поведінка не дозволяється";
+"Constructive Collaboration" = "Конструктивна співпраця";
+"Use BandSync to enhance your band's productivity" = "Використовуйте BandSync для підвищення продуктивності вашого гурту";
+"Privacy Respect" = "Повага до конфіденційності";
+"Respect other users' privacy and personal information" = "Поважайте конфіденційність та особисту інформацію інших користувачів";
+"Team Guidelines" = "Правила команди";
+"Follow your band leader's guidelines and group rules" = "Дотримуйтесь вказівок вашого лідера гурту та правил групи";
+"Account Deletion" = "Видалення облікового запису";
+"You may delete your account at any time through app settings" = "Ви можете видалити свій обліковий запис у будь-який час через налаштування додатку";
+"Service Termination" = "Припинення обслуговування";
+"We may terminate accounts that violate these terms" = "Ми можемо припинити облікові записи, які порушують ці умови";
+"Data Handling" = "Обробка даних";
+"Upon termination, your data will be handled according to our Privacy Policy" = "При припиненні ваші дані будуть оброблені відповідно до нашої Політики конфіденційності";
+"Continuing Obligations" = "Тривалі зобов'язання";
+"Some provisions of these terms continue after termination" = "Деякі положення цих умов продовжують діяти після припинення";
+"App Store Billing" = "Виставлення рахунків App Store";
+"All subscriptions and purchases are processed through the App Store" = "Всі підписки та покупки обробляються через App Store";
+"Subscription Management" = "Управління підпискою";
+"Manage subscriptions through your Apple ID account settings" = "Керуйте підписками через налаштування вашого облікового запису Apple ID";
+"Automatic Renewal" = "Автоматичне поновлення";
+"Subscriptions automatically renew unless cancelled in App Store" = "Підписки автоматично поновлюються, якщо не скасовані в App Store";
+"Refund Policy" = "Політика повернення коштів";
+"Refunds are subject to Apple's App Store refund policy" = "Повернення коштів підпорядковується політиці повернення коштів App Store Apple";
+"Price Changes" = "Зміни цін";
+"We may update prices with advance notice for new purchases" = "Ми можемо оновлювати ціни з попереднім повідомленням для нових покупок";
+"Free Features" = "Безкоштовні функції";
+"Basic features remain available to all users" = "Базові функції залишаються доступними для всіх користувачів";
+"Limitation of Liability" = "Обмеження відповідальності";
+"Our liability is limited to the extent permitted by applicable law" = "Наша відповідальність обмежена в межах, дозволених застосовним законодавством";
+"Data Security" = "Безпека даних";
+"We implement industry-standard security measures" = "Ми впроваджуємо стандартні для галузі заходи безпеки";
+"User Support" = "Підтримка користувачів";
+"We provide reasonable technical support and assistance" = "Ми надаємо розумну технічну підтримку та допомогу";
+
+// About View
+"Version %@" = "Версія %@";
+"Key Features" = "Основні функції";
+"Support" = "Підтримка";
+"Legal" = "Правові питання";
+"Terms agreed: %@" = "Умови прийняті: %@";
+"Terms agreement required on next launch" = "Потрібно прийняти умови при наступному запуску";
+"Made by musicians for musicians" = "Створено музикантами для музикантів";
+"© 2025 BandSync" = "© 2025 BandSync";
+"All rights reserved." = "Всі права захищені.";
+"About" = "Про додаток";
+"About BandSync" = "Про BandSync";
+"Help & FAQ" = "Допомога та FAQ";
+"Contact Support" = "Зв'язатися з підтримкою";
+"Visit Website" = "Відвідати веб-сайт";
+"Privacy Policy" = "Політика конфіденційності";
+"Terms of Service" = "Умови обслуговування";
+"Cookie Policy" = "Політика cookies";
+"GDPR Compliance" = "Відповідність GDPR";
+"Event Management" = "Управління подіями";
+"Schedule rehearsals, gigs, and performances" = "Плануйте репетиції, виступи та концерти";
+"Setlist Organization" = "Організація сетлістів";
+"Create and manage your song lists" = "Створюйте та керуйте списками пісень";
+"Finance Tracking" = "Відстеження фінансів";
+"Monitor income and expenses" = "Стежте за доходами та витратами";
+"Team Coordination" = "Координація команди";
+"Organize and coordinate with band members" = "Організовуйте та координуйтесь з учасниками гурту";
+"Merchandise" = "Мерчандайз";
+"Track inventory and sales" = "Стежте за запасами та продажами";
+"Getting Started" = "Початок роботи";
+"Calendar & Events" = "Календар та події";
+"Setlists & Music" = "Сетлісти та музика";
+"Communication" = "Комунікація";
+"Finances & Business" = "Фінанси та бізнес";
+"Tasks & Organization" = "Завдання та організація";
+"Documents & Storage" = "Документи та зберігання";
+"Data & Security" = "Дані та безпека";
+"Troubleshooting" = "Усунення неполадок";
+"Need More Help?" = "Потрібна додаткова допомога?";
+"How do I create or join a band group?" = "Як створити або приєднатися до групи гурту?";
+"When you first launch BandSync, choose 'Create Group' to start a new band or 'Join Group' with an invitation code from your band leader." = "При першому запуску BandSync виберіть 'Створити групу' для нового гурту або 'Приєднатися до групи' з кодом запрошення від лідера гурту.";
+"What permissions do I have?" = "Які дозволи я маю?";
+"Your access depends on your role set by the band leader. You may have permissions for Calendar, Setlists, Finances, Merchandise, Tasks, Contacts, Documents, or Admin functions." = "Ваш доступ залежить від ролі, встановленої лідером гурту. Ви можете мати дозволи для календаря, сетлістів, фінансів, мерчандайзу, завдань, контактів, документів або адміністративних функцій.";
+"How do I create events?" = "Як створити події?";
+"Go to Calendar tab, tap + to create concerts, rehearsals, meetings, interviews, photoshoots, or personal events. Add location, fee, organizer contacts, and hotel details." = "Перейдіть до вкладки Календар, натисніть + для створення концертів, репетицій, зустрічей, інтерв'ю, фотосесій або особистих подій. Додайте місце, плату, контакти організатора та деталі готелю.";
+"Can I attach setlists to events?" = "Чи можу я прикріпити сетлісти до подій?";
+"Yes! When creating events, you can select an existing setlist to associate with that performance or rehearsal." = "Так! При створенні подій ви можете вибрати існуючий сетліст для зв'язку з цим виступом або репетицією.";
+"How do I create setlists?" = "Як створити сетлісти?";
+"In Setlists tab, tap + to create new setlists. Add songs with title, duration (minutes:seconds), BPM, and musical key. You can also import songs from existing setlists." = "У вкладці Сетлісти натисніть + для створення нових сетлістів. Додайте пісні з назвою, тривалістю (хвилини:секунди), BPM та музичною тональністю. Ви також можете імпортувати пісні з існуючих сетлістів.";
+"Can I plan concert timing?" = "Чи можу я планувати час концерту?";
+"Yes! Enable concert timing when creating setlists. Set start time and duration - BandSync calculates song start times and break intervals automatically." = "Так! Увімкніть час концерту при створенні сетлістів. Встановіть час початку та тривалість - BandSync автоматично розрахує час початку пісень та інтервали пауз.";
+"How do I export setlists?" = "Як експортувати сетлісти?";
+"Open any setlist, tap the share button to export as PDF. Customize to include/exclude BPM, keys, and timing information." = "Відкрийте будь-який сетліст, натисніть кнопку поділитися для експорту у PDF. Налаштуйте включення/виключення BPM, тональностей та інформації про час.";
+"Can I reorder songs?" = "Чи можу я змінити порядок пісень?";
+"Yes! In edit mode, drag and drop songs to reorder. If using concert timing, all start times recalculate automatically." = "Так! У режимі редагування перетягніть пісні для зміни порядку. При використанні часу концерту всі часи початку перераховуються автоматично.";
+"How do I communicate with bandmates?" = "Як спілкуватися з учасниками гурту?";
+"Use Tasks and Events to coordinate activities. Contact information is available in the Contacts section for direct communication." = "Використовуйте завдання та події для координації діяльності. Контактна інформація доступна у розділі Контакти для прямого спілкування.";
+"Can I create multiple project groups?" = "Чи можу я створити кілька проектних груп?";
+"Yes! Create separate project groups for different topics - general coordination, business matters, or specific projects." = "Так! Створіть окремі проектні групи для різних тем - загальна координація, ділові питання або конкретні проекти.";
+"How do I track income and expenses?" = "Як відстежувати доходи та витрати?";
+"In Finances tab, add income (performances, merchandise, royalties) and expenses (logistics, accommodation, food, gear, promotion). View profit calculations automatically." = "У вкладці Фінанси додайте доходи (виступи, мерчандайз, роялті) та витрати (логістика, проживання, їжа, обладнання, реклама). Переглядайте розрахунки прибутку автоматично.";
+"Can I scan receipts?" = "Чи можу я сканувати чеки?";
+"Yes! Use the scan receipt feature to capture expense information from photos. The app can extract key details to speed up your bookkeeping." = "Так! Використовуйте функцію сканування чеків для отримання інформації про витрати з фотографій. Додаток може витягнути ключові деталі для прискорення ведення обліку.";
+"How do I manage merchandise?" = "Як управляти мерчандайзом?";
+"Merch tab tracks inventory, prices, and sales across different channels (concerts, online, partners). Monitor low stock items and sales performance." = "Вкладка Мерч відстежує запаси, ціни та продажі через різні канали (концерти, онлайн, партнери). Стежте за товарами з низьким запасом та ефективністю продажів.";
+"How do I assign tasks?" = "Як призначити завдання?";
+"Tasks tab lets you create tasks with due dates, priorities, and assignments. Categories include rehearsal, performance, songwriting, booking, marketing, equipment, and more." = "Вкладка Завдання дозволяє створювати завдання з термінами виконання, пріоритетами та призначеннями. Категорії включають репетицію, виступ, написання пісень, бронювання, маркетинг, обладнання та інше.";
+"How do I manage contacts?" = "Як управляти контактами?";
+"Contacts tab organizes musicians, venues, managers, producers, and other industry professionals. Import from device contacts or add manually with roles." = "Вкладка Контакти організовує музикантів, майданчики, менеджерів, продюсерів та інших професіоналів індустрії. Імпортуйте з контактів пристрою або додайте вручну з ролями.";
+"How do I store documents?" = "Як зберігати документи?";
+"Documents tab requires Google Drive connection to create and store documents. Connect your Google Drive account to access document management features." = "Вкладка Документи вимагає підключення Google Drive для створення та зберігання документів. Підключіть свій обліковий запис Google Drive для доступу до функцій управління документами.";
+"Do I need Google Drive?" = "Чи потрібен мені Google Drive?";
+"Yes, Google Drive connection is required for the Documents feature. Without it, you can't create or store documents in the app." = "Так, підключення Google Drive необхідне для функції Документи. Без нього ви не можете створювати або зберігати документи в додатку.";
+"How is my data synced?" = "Як синхронізуються мої дані?";
+"All data automatically syncs to Firebase cloud storage in real-time. Changes appear instantly across all devices where band members are logged in." = "Всі дані автоматично синхронізуються з хмарним сховищем Firebase в реальному часі. Зміни з'являються миттєво на всіх пристроях, де увійшли учасники гурту.";
+"Can I work offline?" = "Чи можу я працювати офлайн?";
+"Yes! BandSync caches data locally. You can view and edit information offline - changes sync automatically when you reconnect." = "Так! BandSync кешує дані локально. Ви можете переглядати та редагувати інформацію офлайн - зміни синхронізуються автоматично при повторному підключенні.";
+"Is my data secure?" = "Чи безпечні мої дані?";
+"Yes! All data uses Firebase security with encryption. Optional Face ID/Touch ID authentication adds extra protection for sensitive information." = "Так! Всі дані використовують безпеку Firebase з шифруванням. Необов'язкова автентифікація Face ID/Touch ID додає додатковий захист для чутливої інформації.";
+"Why can't I edit certain things?" = "Чому я не можу редагувати певні речі?";
+"Your editing permissions are set by your band leader. Contact them if you need access to specific features like finances or merchandise management." = "Ваші дозволи на редагування встановлюються лідером гурту. Зв'яжіться з ним, якщо вам потрібен доступ до конкретних функцій, таких як фінанси або управління мерчандайзом.";
+"The app seems slow. What should I do?" = "Додаток здається повільним. Що мені робити?";
+"Check your internet connection. Clear app cache in Settings > Cache Management. If issues persist, try logging out and back in." = "Перевірте своє інтернет-з'єднання. Очистіть кеш додатку в Налаштуваннях > Управління кешем. Якщо проблеми продовжуються, спробуйте вийти та знову увійти.";
+"How do I invite new members?" = "Як запросити нових учасників?";
+"Band leaders can generate invitation codes in Settings > Account. Share this code with new members to join your group." = "Лідери гурту можуть генерувати коди запрошення в Налаштуваннях > Обліковий запис. Поділіться цим кодом з новими учасниками, щоб приєднатися до вашої групи.";
+
+// Account Settings
+"Account Information" = "Інформація про обліковий запис";
+"Security" = "Безпека";
+"Change Password" = "Змінити пароль";
+"Update your account password" = "Оновити пароль вашого облікового запису";
+"Account Actions" = "Дії з обліковим записом";
+"Sign Out" = "Вийти";
+"Sign out of your account" = "Вийти з вашого облікового запису";
+"Delete Account" = "Видалити обліковий запис";
+"Permanently delete your account and data" = "Назавжди видалити ваш обліковий запис та дані";
+"Deleting your account will permanently remove all your data and cannot be undone." = "Видалення вашого облікового запису назавжди видалить всі ваші дані і не може бути скасовано.";
+"Processing..." = "Обробка...";
+"Account" = "Обліковий запис";
+"Cancel" = "Скасувати";
+"Delete" = "Видалити";
+"Are you sure you want to sign out?" = "Ви впевнені, що хочете вийти?";
+"This action cannot be undone. All your data will be permanently deleted." = "Цю дію неможливо скасувати. Всі ваші дані будуть назавжди видалені.";
+"Error" = "Помилка";
+"Current Password" = "Поточний пароль";
+"New Password" = "Новий пароль";
+"Confirm New Password" = "Підтвердіть новий пароль";
+"Password must be at least 6 characters long" = "Пароль повинен містити принаймні 6 символів";
+"Updating password..." = "Оновлення паролю...";
+"Update" = "Оновити";
+"Success" = "Успіх";
+"Your password has been updated successfully" = "Ваш пароль успішно оновлено";
+
+// Merchandise Categories
+"Clothing" = "Одяг";
+"Music" = "Музика";
+"Accessories" = "Аксесуари";
+"Other" = "Інше";
+
+// Merchandise Subcategories
+"T-shirt" = "Футболка";
+"Hoodie" = "Худі";
+"Jacket" = "Куртка";
+"Cap" = "Кепка";
+"Vinyl Record" = "Вінілова платівка";
+"CD" = "Компакт-диск";
+"Tape" = "Касета";
+"Poster" = "Постер";
+"Sticker" = "Наклейка";
+"Pin" = "Значок";
+"Keychain" = "Брелок";
+
+// EditSaleView
+"Size" = "Розмір";
+"Quantity: %d" = "Кількість: %d";
+"This is a gift" = "Це подарунок";
+"Sales channel" = "Канал продажу";
+"Sale date" = "Дата продажу";
+"Sale details" = "Деталі продажу";
+"Delete sale?" = "Видалити продаж?";
+"Edit sale" = "Редагувати продаж";
+"Updating..." = "Оновлення...";
+
+// Sales channels
+"Concert" = "Концерт";
+"Online" = "Онлайн";
+"Store" = "Магазин";
+"Gift" = "Подарунок";
+"Other" = "Інше";
+
+// MerchDetailView localization
+"Sales history" = "Історія продажів";
+"Sell item" = "Продати товар";
+"Revenue:" = "Дохід:";
+"%d pcs." = "%d шт.";
+"Delete item?" = "Видалити товар?";
+"Are you sure you want to delete item '%@'? This action cannot be undone." = "Ви впевнені, що хочете видалити товар '%@'? Цю дію не можна скасувати.";
+"Export Options" = "Опції експорту";
+"Export as PDF" = "Експорт у PDF";
+"Export Sales History" = "Експорт історії продажів";
+"Item Gallery" = "Галерея товару";
+"Generated on %@" = "Створено %@";
+
+// SalesHistoryView localization
+"Size: %@" = "Розмір: %@";
+"Channel: %@" = "Канал: %@";
+
+// SellMerchView localization
+"Stock" = "Запас";
+"Quantity" = "Кількість";
+"Sale Type" = "Тип продажу";
+"Gift item" = "Подарувати товар";
+"Sale" = "Продаж";
+"Confirm" = "Підтвердити";
+"S (%d available)" = "S (%d доступно)";
+"M (%d available)" = "M (%d доступно)";
+"L (%d available)" = "L (%d доступно)";
+"XL (%d available)" = "XL (%d доступно)";
+"XXL (%d available)" = "XXL (%d доступно)";
+"Maximum available: %d" = "Максимально доступно: %d";
+
+// ConsentDetailsView localization
+"Consent Details" = "Деталі згоди";
+"Agreement Date" = "Дата угоди";
+"Terms Version" = "Версія умов";
+"App Version" = "Версія програми";
+"Consent Information" = "Інформація про згоду";
+"Device Model" = "Модель пристрою";
+"Operating System" = "Операційна система";
+"Device Identifier" = "Ідентифікатор пристрою";
+"Device Information" = "Інформація про пристрій";
+"Agreement Record" = "Запис угоди";
+"This record confirms that you voluntarily agreed to our Terms of Service and Privacy Policy on the date shown above." = "Цей запис підтверджує, що ви добровільно погодились з нашими Умовами користування та Політикою конфіденційності на дату, показану вище.";
+"What This Means" = "Що це означає";
+"• You have read and accepted our terms and privacy policy" = "• Ви прочитали та прийняли наші умови та політику конфіденційності";
+"• Your consent was given freely and voluntarily" = "• Ваша згода була дана вільно та добровільно";
+"• You understand how we collect and use your data" = "• Ви розумієте, як ми збираємо та використовуємо ваші дані";
+"• You can withdraw consent at any time" = "• Ви можете відкликати згоду в будь-який час";
+"• This record helps us maintain compliance with privacy laws" = "• Цей запис допомагає нам дотримуватися законів про конфіденційність";
+"Your Rights" = "Ваші права";
+"• Access and review your personal data" = "• Доступ та перегляд ваших особистих даних";
+"• Request corrections to inaccurate information" = "• Запит на виправлення неточної інформації";
+"• Delete your account and data" = "• Видалення вашого облікового запису та даних";
+"• Export your data in portable formats" = "• Експорт ваших даних у портативних форматах";
+"• Contact support with questions or concerns" = "• Звернення до служби підтримки з питаннями чи проблемами";
+"Agreement Details" = "Деталі угоди";
+"Export Consent Record" = "Експорт запису згоди";
+"Reset Consent (Testing Only)" = "Скинути згоду (тільки для тестування)";
+"Actions" = "Дії";
+"Resetting consent is intended for testing purposes and will require you to review and accept our terms again when you next open the app." = "Скидання згоди призначене для тестування та вимагатиме повторного перегляду та прийняття наших умов при наступному відкритті програми.";
+"No Consent Record Found" = "Запис згоди не знайдено";
+"You have not yet reviewed and accepted our Terms of Service and Privacy Policy. You will be prompted to review these documents when you next launch the app." = "Ви ще не переглянули та не прийняли наші Умови користування та Політику конфіденційності. Вам буде запропоновано переглянути ці документи при наступному запуску програми.";
+"Your privacy and understanding of our terms are important to us." = "Ваша конфіденційність та розуміння наших умов важливі для нас.";
+"Consent Status" = "Статус згоди";
+"BANDSYNC CONSENT RECORD" = "ЗАПИС ЗГОДИ BANDSYNC";
+"Model" = "Модель";
+"System" = "Система";
+"Device ID" = "ID пристрою";
+"Summary" = "Резюме";
+"You voluntarily agreed to BandSync's Terms of Service and Privacy Policy on the date shown above. This record is maintained for compliance with privacy regulations and to document your informed consent." = "Ви добровільно погодились з Умовами користування та Політикою конфіденційності BandSync на дату, показану вище. Цей запис ведеться для дотримання правил конфіденційності та документування вашої поінформованої згоди.";
+"Access your personal data" = "Доступ до ваших особистих даних";
+"Request data corrections" = "Запит на виправлення даних";
+"Delete your account and data" = "Видалення вашого облікового запису та даних";
+"Export your data" = "Експорт ваших даних";
+"Contact support for assistance" = "Звернення до служби підтримки за допомогою";
+"Record Generated" = "Запис створено";
+
+// Cache Settings
+"Cache & Storage" = "Кеш та сховище";
+"Current Cache Size" = "Поточний розмір кешу";
+"Clear Now" = "Очистити зараз";
+"Cache Status" = "Статус кешу";
+"Maximum Cache Size" = "Максимальний розмір кешу";
+"Storage Limit" = "Ліміт сховища";
+"When cache exceeds this limit, oldest data will be automatically removed." = "Коли кеш перевищить цей ліміт, найстаріші дані будуть автоматично видалені.";
+"Auto Cleanup Period" = "Період автоочищення";
+"Automatic Cleanup" = "Автоматичне очищення";
+"Old cached data will be automatically removed every %@." = "Старі кешовані дані будуть автоматично видалені кожні %@.";
+"Weekly" = "Щотижня";
+"Every 2 weeks" = "Кожні 2 тижні";
+"Monthly" = "Щомісяця";
+"week" = "тиждень";
+"2 weeks" = "2 тижні";
+"month" = "місяць";
+"What is cached?" = "Що кешується?";
+"• Merchandise items and sales data\n• Event and setlist information\n• Contact details\n• Financial records\n• Task assignments" = "• Товари та дані про продажі\n• Інформація про події та сет-листи\n• Контактні дані\n• Фінансові записи\n• Призначення завдань";
+"About Cache" = "Про кеш";
+"Clear Cache" = "Очистити кеш";
+"Clear" = "Очистити";
+"This will remove all cached data. You may experience slower loading times until data is re-cached." = "Це видалить усі кешовані дані. Ви можете відчути повільніші часи завантаження, поки дані не будуть знову кешовані.";
+
+// Merchandise Settings
+"Merchandise" = "Мерч";
+"Low Stock Notifications" = "Сповіщення про низький запас";
+"You'll get notified when items are running low" = "Ви отримаєте сповіщення, коли товари закінчуються";
+"Notifications" = "Сповіщення";
+"Threshold" = "Поріг";
+"%d items or less" = "%d товарів або менше";
+"Low Stock Threshold" = "Поріг низького запасу";
+"You'll receive notifications when any merchandise item has %d or fewer items in stock." = "Ви отримаєте сповіщення, коли будь-який мерч товар має %d або менше товарів на складі.";
+
+// Notification Settings
+"Enable Notifications" = "Увімкнути сповіщення";
+"Notifications are enabled" = "Сповіщення увімкнені";
+"Notification Types" = "Типи сповіщень";
+"Events" = "Події";
+"Tasks" = "Завдання";
+"Chats" = "Чати";
+"System" = "Система";
+"Reminder Times" = "Час нагадувань";
+"Event Reminders" = "Нагадування про події";
+"Task Reminders" = "Нагадування про завдання";
+"30 minutes before" = "За 30 хвилин до";
+"1 hour before" = "За 1 годину до";
+"2 hours before" = "За 2 години до";
+"1 day before" = "За 1 день до";
+"2 days before" = "За 2 дні до";
+"1 week before" = "За 1 тиждень до";
+"Chat Notifications" = "Сповіщення чатів";
+"Mentions" = "Згадки";
+"Direct Messages" = "Приватні повідомлення";
+"Group Messages" = "Групові повідомлення";
+"Sound & Badge" = "Звук та значок";
+"Sound" = "Звук";
+"Badge" = "Значок";
+"Quiet Hours" = "Тихі години";
+"Enable Quiet Hours" = "Увімкнути тихі години";
+"Start Time" = "Час початку";
+"End Time" = "Час закінчення";
+"Permission Required" = "Потрібен дозвіл";
+"Settings" = "Налаштування";
+"Please enable notifications in Settings to receive alerts." = "Будь ласка, увімкніть сповіщення в Налаштуваннях, щоб отримувати сповіщення.";
+
+// Profile Edit
+"Edit Profile" = "Редагувати профіль";
+"Tap the camera icon to change your avatar" = "Натисніть на іконку камери, щоб змінити свій аватар";
+"Enter your name" = "Введіть ваше ім'я";
+"Enter your phone number" = "Введіть ваш номер телефону";
+"Unknown error" = "Невідома помилка";
+"Profile updated successfully" = "Профіль успішно оновлено";
+"Are you sure you want to delete your avatar?" = "Ви впевнені, що хочете видалити свій аватар?";
+"Name cannot be empty" = "Ім'я не може бути порожнім";
+"Failed to update profile" = "Не вдалося оновити профіль";
+
+// Settings View
+"Preferences" = "Налаштування";
+"Information" = "Інформація";
+"Manage alerts and reminders" = "Керування сповіщеннями та нагадуваннями";
+"Password, security, delete account" = "Пароль, безпека, видалення облікового запису";
+"About & Legal" = "Про додаток та правові питання";
+"App info, terms, privacy, support" = "Інформація про додаток, умови, конфіденційність, підтримка";
+
+// Main Tab View
+"Calendar" = "Календар";
+"Setlists" = "Сет-листи";
+"Tasks" = "Завдання";
+"Chats" = "Чати";
+"More" = "Більше";
+"Merchandise" = "Мерч";
+"Contacts" = "Контакти";
+"Finances" = "Фінанси";
+"Documents" = "Документи";
+"Additional features" = "Додаткові функції";
+"Admin Panel" = "Панель адміністратора";
+
+// Content View
+"Loading..." = "Завантаження...";
+
+// Add Transaction View
+"New Transaction" = "Нова транзакція";
+"Add New Financial Transaction" = "Додати нову фінансову транзакцію";
+"Transaction Type" = "Тип транзакції";
+"Choose Transaction Type" = "Оберіть тип транзакції";
+"Income" = "Дохід";
+"Expense" = "Витрата";
+"Category" = "Категорія";
+"Select Category" = "Оберіть категорію";
+"Transaction Details" = "Деталі транзакції";
+"Enter amount and details" = "Введіть суму та деталі";
+"Amount" = "Сума";
+"0.00" = "0,00";
+"Please enter a valid amount" = "Будь ласка, введіть правильну суму";
+"Description" = "Опис";
+"Add description" = "Додати опис";
+"Date" = "Дата";
+"Receipt" = "Чек";
+"Scan or attach receipt" = "Сканувати або додати чек";
+"Receipt added" = "Чек додано";
+"Tap to change" = "Натисніть для зміни";
+"Scan Receipt" = "Сканувати чек";
+"Capture receipt details automatically" = "Автоматично захопити деталі чеку";
+"Save Transaction" = "Зберегти транзакцію";
+"Saving transaction" = "Збереження транзакції";
+"Please wait" = "Будь ласка, зачекайте";
+"Invalid amount or user group" = "Неправильна сума або група користувачів";
+"Failed to save transaction" = "Не вдалося зберегти транзакцію";
+
+// Finance Categories
+"categoryLogistics" = "Логістика";
+"categoryAccommodation" = "Проживання";
+"categoryFood" = "Харчування";
+"categoryGear" = "Обладнання";
+"categoryPromo" = "Промо";
+"categoryProduction" = "Відео/Фото виробництво";
+"categoryOther" = "Інше";
+"categoryPerformance" = "Виступи";
+"categoryMerch" = "Мерч";
+"categoryRoyalties" = "Роялті";
+"categorySponsorship" = "Спонсорство";
+"categoryMediaProduction" = "Медіа виробництво";
+
+// End of file marker (keep this at the end)
+
+// Edit Transaction View
+"Edit Transaction" = "Редагувати транзакцію";
+"Edit Financial Transaction" = "Редагувати фінансову транзакцію";
+"Value" = "Значення";
+"Currency" = "Валюта";
+"Details" = "Деталі";
+"Save Changes" = "Зберегти зміни";
+"Saving changes" = "Збереження змін";
+"Invalid amount format" = "Неправильний формат суми";
+"Failed to update transaction" = "Не вдалося оновити транзакцію";
+
+// Enhanced Receipt Scanner View
+"Scan Receipt" = "Сканувати чек";
+"Uploading to cloud storage" = "Завантаження в хмарне сховище";
+"Extracted Results" = "Витягнуті результати";
+"amount: €%.2f" = "сума: €%.2f";
+"merchant: %@" = "продавець: %@";
+"category: %@" = "категорія: %@";
+"Uploading receipt to cloud storage" = "Завантаження чеку в хмарне сховище";
+"Scanner will close automatically" = "Сканер закриється автоматично";
+"Or use manual save" = "Або використати ручне збереження";
+"Manual Save" = "Ручне збереження";
+"Analyzing receipt" = "Аналіз чеку";
+"Scan with Camera" = "Сканувати камерою";
+"Choose from Gallery" = "Вибрати з галереї";
+"Failed to extract amount or groupId" = "Не вдалося витягти суму або ID групи";
+"Failed to save transaction" = "Не вдалося зберегти транзакцію";
+
+// Finance Chart View
+"Financial Statistics" = "Фінансова статистика";
+"%d transactions" = "%d транзакцій";
+"currency:" = "валюта:";
+"Monthly" = "Щомісячно";
+"Category" = "Категорія";
+"Income" = "Дохід";
+"Expenses" = "Витрати";
+"Balance" = "Баланс";
+"No financial data" = "Немає фінансових даних";
+"Add income or expense transactions to track your finances" = "Додайте доходи або витрати, щоб відстежувати свої фінанси";
+"Add Transactions" = "Додати транзакції";
+"Period" = "Період";
+"No monthly data" = "Немає щомісячних даних";
+"Monthly Breakdown" = "Щомісячна розбивка";
+"Categories" = "Категорії";
+"All" = "Всі";
+"Expense" = "Витрата";
+"No data for category" = "Немає даних для категорії";
+"Category Overview" = "Огляд категорій";
+"Income Category" = "Категорія доходів";
+"Expense Category" = "Категорія витрат";
+"View All" = "Переглянути всі";
+"Recent Transactions" = "Останні транзакції";
+"No description" = "Без опису";
+
+// Finances View
+"Finances" = "Фінанси";
+"Band Finances" = "Фінанси Групи";
+"Select Currency" = "Оберіть валюту";
+"Balance" = "Баланс";
+"vs Previous" = "проти попередніх";
+"Activity" = "Активність";
+"No Records" = "Немає записів";
+"Add income or expenses to track your finances" = "Додайте доходи або витрати для відстеження фінансів";
+"Add" = "Додати";
+"All Transactions" = "Всі транзакції";
+"Income Transactions" = "Доходи";
+"Expense Transactions" = "Витрати";
+"All Time" = "Весь час";
+"This Month" = "Цей місяць";
+"Last 3 Months" = "Останні 3 місяці";
+"This Year" = "Цей рік";
+"Time Period" = "Період часу";
+"Filter" = "Фільтр";
+"Done" = "Готово";
+"Repeat" = "Повторити";
+"Details" = "Деталі";
+"Scan Receipt" = "Сканувати чек";
+"View Charts" = "Переглянути діаграми";
+"Filter Transactions" = "Фільтрувати транзакції";
+"Yesterday" = "Вчора";
+"%dd ago" = "%d днів тому";
+"%dh ago" = "%d годин тому";
+"%dm ago" = "%d хвилин тому";
+"Now" = "Зараз";
+
+// Transaction Detail View
+"Financial Transaction" = "Фінансова транзакція";
+"Error: %@" = "Помилка: %@";
+"Type: %@" = "Тип: %@";
+"Category: %@" = "Категорія: %@";
+"Amount: %.2f %@" = "Сума: %.2f %@";
+"Date: %@" = "Дата: %@";
+"Description: %@" = "Опис: %@";
+"Receipt: Available in Firebase Cloud Storage" = "Чек: Доступний у Firebase Cloud Storage";
+"Failed to download from cloud storage" = "Не вдалося завантажити з хмарного сховища";
+"Failed to delete the transaction. Please try again." = "Не вдалося видалити транзакцію. Спробуйте ще раз.";
+
+// Login View
+"Login with Face ID" = "Увійти за допомогою Face ID";
+
+// New Chat View
+"Search participants..." = "Шукати учасників...";
+"Band Announcement" = "Оголошення групи";
+"Administrator" = "Адміністратор";
+"Manager" = "Менеджер";
+"Musician" = "Музикант";
+"Member" = "Учасник";

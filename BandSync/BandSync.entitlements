@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- ОСНОВНОЕ: Push Notifications -->
+    <key>aps-environment</key>
+    <string>development</string>
+    
+    <!-- Время-чувствительные уведомления (доступно без специального разрешения) -->
+    <key>com.apple.developer.usernotifications.time-sensitive</key>
+    <true/>
+    
+    <!-- Associated Domains для Universal Links -->
+    <key>com.apple.developer.associated-domains</key>
+    <array>
+        <string>applinks:bandsync-9dfd3.firebaseapp.com</string>
+        <string>applinks:bandsync-9dfd3.web.app</string>
+    </array>
+    
+    <!-- Keychain Sharing -->
+    <key>keychain-access-groups</key>
+    <array>
+        <string>$(AppIdentifierPrefix)com.olek.bandsynctest</string>
+    </array>
+    
+    <!-- App Groups -->
+    <key>com.apple.security.application-groups</key>
+    <array>
+        <string>group.com.olek.bandsynctest</string>
+    </array>
+    
+    <!-- Data Protection -->
+    <key>com.apple.developer.default-data-protection</key>
+    <string>NSFileProtectionComplete</string>
+</dict>
+</plist>

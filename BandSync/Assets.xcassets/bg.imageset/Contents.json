@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "bg_optimized.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "Oleksandr Kuziakin",
+    "version" : 1
+  }
+}
