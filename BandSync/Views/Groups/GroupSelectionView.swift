@@ -3,7 +3,6 @@
 //  BandSync
 //
 //  Created by Oleksandr Kuziakin on 31.03.2025.
-//  Updated for Fan System - 27.07.2025
 //
 
 import SwiftUI
@@ -13,7 +12,7 @@ struct GroupSelectionView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var showCreateGroup = false
     @State private var showJoinGroup = false
-    @State private var showComingSoonAlert = false // 📝 ДОБАВИЛИ: состояние для alert
+    @State private var showFanRegistration = false
     
     var body: some View {
         VStack(spacing: 20) {
@@ -38,92 +37,54 @@ struct GroupSelectionView: View {
                     .padding(.horizontal, 24)
             }
 
-            VStack(spacing: 16) {
-                // 📝 ДОБАВИЛИ: Заголовок для музикантов
-                Text("For Musicians")
-                    .font(.headline)
-                    .foregroundColor(.secondary)
-                
-                CardButton(icon: "plus.circle", text: "Create New Group".localized, action: {
-                    showCreateGroup = true
-                })
-                CardButton(icon: "person.badge.plus", text: "Join a Group".localized, action: {
-                    showJoinGroup = true
-                })
-                
-                // 📝 ДОБАВИЛИ: Разделитель
-                HStack {
-                    Rectangle()
-                        .fill(Color.secondary.opacity(0.3))
-                        .frame(height: 1)
-                    Text("or")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal, 8)
-                    Rectangle()
-                        .fill(Color.secondary.opacity(0.3))
-                        .frame(height: 1)
-                }
-                .padding(.vertical, 8)
-                
-                // 📝 ДОБАВИЛИ: Секция для фанатов
-                Text("For Fans")
-                    .font(.headline)
-                    .foregroundColor(.secondary)
-                
-                // 📝 ДОБАВИЛИ: Кнопка для фанатов
-                Button(action: {
-                    showComingSoonAlert = true
-                }) {
-                    HStack(spacing: 16) {
-                        // Фиолетовая иконка с сердцем
-                        ZStack {
-                            Circle()
-                                .fill(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [Color.purple, Color.pink]),
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                                .frame(width: 50, height: 50)
-                            
-                            Image(systemName: "heart.fill")
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(.white)
-                        }
+            VStack(spacing: 20) {
+                // For Musicians Section
+                VStack(spacing: 12) {
+                    Text("For Musicians".localized)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                    
+                    VStack(spacing: 12) {
+                        CardButton(
+                            icon: "plus.circle",
+                            text: "Create New Group".localized,
+                            action: { showCreateGroup = true }
+                        )
                         
-                        // Текст кнопки
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("I'm a Fan!")
-                                .font(.system(size: 18, weight: .semibold))
-                                .foregroundColor(.primary)
-                            
-                            Text("Join your favorite band's fan club")
-                                .font(.system(size: 14))
-                                .foregroundColor(.secondary)
-                                .multilineTextAlignment(.leading)
-                        }
-                        
-                        Spacer()
-                        
-                        // Стрелка
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.purple)
+                        CardButton(
+                            icon: "person.badge.plus",
+                            text: "Join a Group".localized,
+                            action: { showJoinGroup = true }
+                        )
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.purple.opacity(0.3), lineWidth: 1)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color(UIColor.secondarySystemBackground))
-                            )
+                }
+                
+                // "or" Divider
+                HStack {
+                    VStack { Divider() }
+                    Text("or".localized)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal, 16)
+                    VStack { Divider() }
+                }
+                .padding(.horizontal, 32)
+                
+                // For Fans Section
+                VStack(spacing: 12) {
+                    Text("For Fans".localized)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                    
+                    FanCardButton(
+                        icon: "heart.fill",
+                        text: "I'm a Fan!".localized,
+                        subtitle: "Join your favorite band's fan club".localized,
+                        action: { showFanRegistration = true }
                     )
                 }
-                .buttonStyle(PlainButtonStyle())
             }
             .padding(.top, 20)
             .padding(.horizontal, 32)
@@ -148,16 +109,13 @@ struct GroupSelectionView: View {
         .sheet(isPresented: $showJoinGroup) {
             JoinGroupView()
         }
-        // 📝 ДОБАВИЛИ: Alert для кнопки фанатов
-        .alert("Coming Soon", isPresented: $showComingSoonAlert) {
-            Button("OK") {}
-        } message: {
-            Text("Fan registration will be available soon!")
+        .sheet(isPresented: $showFanRegistration) {
+            FanRegistrationView()
         }
     }
 }
 
-// Существующий компонент CardButton (БЕЗ ИЗМЕНЕНИЙ)
+// MARK: - Reusable card button view for musicians
 struct CardButton: View {
     let icon: String
     let text: String
@@ -184,5 +142,46 @@ struct CardButton: View {
                     )
             )
         }
+    }
+}
+
+// MARK: - Special fan card button with purple styling
+struct FanCardButton: View {
+    let icon: String
+    let text: String
+    let subtitle: String
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                HStack(spacing: 12) {
+                    Image(systemName: icon)
+                        .font(.title3)
+                    Text(text)
+                        .font(.body)
+                        .fontWeight(.semibold)
+                }
+                .foregroundColor(.white)
+                
+                Text(subtitle)
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.9))
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.vertical, 16)
+            .padding(.horizontal, 20)
+            .frame(maxWidth: .infinity)
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [.purple, .purple.opacity(0.8)]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .cornerRadius(12)
+            .shadow(color: .purple.opacity(0.3), radius: 8, x: 0, y: 4)
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }
