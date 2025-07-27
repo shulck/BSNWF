@@ -37,8 +37,20 @@ final class AppState: ObservableObject {
     private func handleUserUpdate(_ user: UserModel?) {
         self.user = user
         
-        if let groupId = user?.groupId {
-            PermissionService.shared.fetchPermissions(for: groupId)
+        // ОБНОВЛЕННАЯ ЛОГИКА: Учитываем разные типы пользователей
+        if let user = user {
+            switch user.userType {
+            case .bandMember:
+                // Для участников группы загружаем разрешения, если есть groupId
+                if let groupId = user.groupId {
+                    PermissionService.shared.fetchPermissions(for: groupId)
+                }
+                
+            case .fan:
+                // Для фанатов разрешения не нужны (у них свой упрощенный интерфейс)
+                // Можно добавить специальную логику для фанатов при необходимости
+                break
+            }
         }
     }
 
@@ -55,6 +67,9 @@ final class AppState: ObservableObject {
                 case .success:
                     self.isLoggedIn = false
                     self.user = nil
+                    // Очистка кэша разрешений
+                    self.permissionCache.removeAll()
+                    self.lastUserIdForCache = nil
                 case .failure(let error):
                     self.errorMessage = "Error during logout: \(error.localizedDescription)"
                 }
@@ -90,9 +105,21 @@ final class AppState: ObservableObject {
         UserDefaults.standard.set(user.id, forKey: "userID")
         UserDefaults.standard.set(user.name, forKey: "userName")
         UserDefaults.standard.set(user.email, forKey: "userEmail")
-        UserDefaults.standard.set(user.groupId, forKey: "userGroupID")
         UserDefaults.standard.set(user.phone, forKey: "userPhone")
         UserDefaults.standard.set(user.role.rawValue, forKey: "userRole")
+        
+        // ОБНОВЛЕНО: Сохраняем разные данные в зависимости от типа пользователя
+        UserDefaults.standard.set(user.userType.rawValue, forKey: "userType")
+        
+        switch user.userType {
+        case .bandMember:
+            UserDefaults.standard.set(user.groupId, forKey: "userGroupID")
+            UserDefaults.standard.removeObject(forKey: "userFanGroupID") // Очищаем fanGroupId
+            
+        case .fan:
+            UserDefaults.standard.set(user.fanGroupId, forKey: "userFanGroupID")
+            UserDefaults.standard.removeObject(forKey: "userGroupID") // Очищаем groupId
+        }
     }
 
     func refreshAuthState() {
@@ -107,23 +134,55 @@ final class AppState: ObservableObject {
                 self.isLoggedIn = false
                 self.user = nil
                 self.isLoading = false
+                // Очистка кэша при потере аутентификации
+                self.permissionCache.removeAll()
+                self.lastUserIdForCache = nil
             }
         }
     }
     
+    // ОБНОВЛЕНО: Учитываем тип пользователя при проверке доступа
     func hasAccess(to moduleType: ModuleType) -> Bool {
-        guard isLoggedIn, let userRole = user?.role else {
+        guard isLoggedIn, let user = user else {
             return false
         }
         
-        return PermissionService.shared.hasAccess(to: moduleType, role: userRole)
+        // Фанаты имеют доступ только к определенным модулям
+        if user.userType == .fan {
+            return hasFanAccess(to: moduleType)
+        }
+        
+        // Участники группы - обычная система разрешений
+        return PermissionService.shared.hasAccess(to: moduleType, role: user.role)
+    }
+    
+    // НОВОЕ: Система доступа для фанатов
+    private func hasFanAccess(to moduleType: ModuleType) -> Bool {
+        // Фанаты имеют доступ только к ограниченному набору модулей
+        switch moduleType {
+        case .calendar:     // Просмотр концертов и событий
+            return true
+        case .chats:        // Фан-чаты
+            return true
+        case .merchandise:  // Покупка мерча
+            return true
+        default:
+            return false    // Остальные модули недоступны фанатам
+        }
     }
     
     func hasEditPermission(for moduleType: ModuleType) -> Bool {
-        guard isLoggedIn, let userId = user?.id else {
+        guard isLoggedIn, let user = user else {
             return false
         }
         
+        // Фанаты не могут редактировать большинство контента
+        if user.userType == .fan {
+            return hasFanEditPermission(for: moduleType)
+        }
+        
+        // Участники группы - обычная система разрешений
+        let userId = user.id
         if lastUserIdForCache != userId {
             permissionCache.removeAll()
             lastUserIdForCache = userId
@@ -133,11 +192,20 @@ final class AppState: ObservableObject {
             return cachedResult
         }
         
-        // Use PermissionService for accurate permission checking
         let hasPermission = PermissionService.shared.hasEditPermission(for: moduleType)
         permissionCache[moduleType] = hasPermission
         
         return hasPermission
+    }
+    
+    // НОВОЕ: Права редактирования для фанатов
+    private func hasFanEditPermission(for moduleType: ModuleType) -> Bool {
+        switch moduleType {
+        case .chats:
+            return true  // Фанаты могут писать в чатах
+        default:
+            return false // Остальное редактировать нельзя
+        }
     }
     
     func setupNotifications() {
@@ -150,5 +218,15 @@ final class AppState: ObservableObject {
     
     func onLoginSuccess() {
         setupNotifications()
+    }
+    
+    // НОВОЕ: Проверка что пользователь - фанат
+    var isCurrentUserFan: Bool {
+        return user?.userType == .fan
+    }
+    
+    // НОВОЕ: Проверка что пользователь - участник группы
+    var isCurrentUserBandMember: Bool {
+        return user?.userType == .bandMember
     }
 }

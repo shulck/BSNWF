@@ -80,16 +80,9 @@ struct SplashView: View {
                     startLoadingSequence()
                 }
             } else {
-                if !appState.isLoggedIn {
-                    LoginView()
-                        .transition(.opacity)
-                } else if appState.user?.groupId != nil {
-                    MainTabView()
-                        .transition(.opacity)
-                } else {
-                    GroupSelectionView()
-                        .transition(.opacity)
-                }
+                // ОБНОВЛЕНО: Используем новую логику навигации
+                NavigationDestinationView()
+                    .transition(.opacity)
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -141,6 +134,66 @@ struct SplashView: View {
     private func navigateToContentView() {
         withAnimation {
             AppState.shared.refreshAuthState()
+        }
+    }
+}
+
+// MARK: - Navigation Destination Logic (идентично ContentView)
+private struct NavigationDestinationView: View {
+    @EnvironmentObject private var appState: AppState
+    
+    var body: some View {
+        Group {
+            if !appState.isLoggedIn {
+                LoginView()
+            } else {
+                if let user = appState.user {
+                    // Пользователь загружен - определяем куда направить
+                    switch user.userType {
+                    case .bandMember:
+                        // Участники группы
+                        if user.groupId != nil {
+                            MainTabView()  // Основной интерфейс группы
+                        } else {
+                            GroupSelectionView()  // Нужно создать/присоединиться к группе
+                        }
+                        
+                    case .fan:
+                        // Фанаты
+                        if user.fanGroupId != nil {
+                            FanTabView()  // Интерфейс фан-клуба
+                        } else {
+                            GroupSelectionView()  // Нужно присоединиться к фан-клубу
+                        }
+                    }
+                } else {
+                    // Пользователь еще загружается
+                    LoadingUserView()
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Loading User View (идентично ContentView)
+private struct LoadingUserView: View {
+    @EnvironmentObject private var appState: AppState
+    @State private var hasAttemptedLoad = false
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+                .scaleEffect(1.2)
+            
+            Text("Loading user data...".localized)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .onAppear {
+            if !hasAttemptedLoad {
+                hasAttemptedLoad = true
+                appState.loadUser()
+            }
         }
     }
 }
