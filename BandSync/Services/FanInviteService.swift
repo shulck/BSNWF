@@ -1,13 +1,5 @@
 //
 //  FanInviteService.swift
-//  BandSyncApp
-//
-//  Created by Oleksandr Kuziakin on 27.07.2025.
-//
-
-
-//
-//  FanInviteService.swift
 //  BandSync
 //
 //  Created by Claude on 27.07.2025.
@@ -25,20 +17,21 @@ final class FanInviteService: ObservableObject {
     private let db = Firestore.firestore()
     private init() {}
     
-    // MARK: - Generate Fan Invite Code
+    // MARK: - Generate Fan Invite Code (СТАРЫЙ МЕТОД - больше не используется для автогенерации)
     func generateFanInviteCode(for groupId: String, groupName: String, completion: @escaping (Result<FanInviteCode, Error>) -> Void) {
         guard let currentUserId = Auth.auth().currentUser?.uid else {
             completion(.failure(FanInviteError.userNotAuthenticated))
             return
         }
         
-        // Generate unique code
+        // Generate unique code (только для обратной совместимости)
         let code = generateUniqueCode()
         
         let inviteCode = FanInviteCode(
             groupId: groupId,
             code: code,
             createdBy: currentUserId,
+            currentUses: 0,
             groupName: groupName
         )
         
@@ -60,6 +53,101 @@ final class FanInviteService: ObservableObject {
         }
     }
     
+    // MARK: - Create Custom Invite Code (НОВЫЙ МЕТОД - для создания кастомных кодов)
+    func createCustomInviteCode(for groupId: String, customCode: String, groupName: String, completion: @escaping (Result<FanInviteCode, Error>) -> Void) {
+        guard let currentUserId = Auth.auth().currentUser?.uid else {
+            completion(.failure(FanInviteError.userNotAuthenticated))
+            return
+        }
+        
+        let inviteCode = FanInviteCode(
+            groupId: groupId,
+            code: customCode,
+            createdBy: currentUserId,
+            currentUses: 0,
+            groupName: groupName
+        )
+        
+        let docRef = db.collection("groups").document(groupId).collection("fanInviteCode").document("current")
+        
+        do {
+            try docRef.setData(from: inviteCode) { [weak self] error in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    DispatchQueue.main.async {
+                        self?.currentInviteCode = inviteCode
+                    }
+                    completion(.success(inviteCode))
+                }
+            }
+        } catch {
+            completion(.failure(error))
+        }
+    }
+    
+    // MARK: - Update Custom Invite Code (НОВЫЙ МЕТОД - для обновления кодов)
+    func updateCustomInviteCode(for groupId: String, newCode: String, groupName: String, completion: @escaping (Result<FanInviteCode, Error>) -> Void) {
+        guard let currentUserId = Auth.auth().currentUser?.uid else {
+            completion(.failure(FanInviteError.userNotAuthenticated))
+            return
+        }
+        
+        let docRef = db.collection("groups").document(groupId).collection("fanInviteCode").document("current")
+        
+        // Первый шаг: получаем текущий код для сохранения currentUses
+        docRef.getDocument { [weak self] snapshot, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            // Сохраняем текущие использования или 0 для нового кода
+            let currentUses = snapshot?.data()?["currentUses"] as? Int ?? 0
+            
+            // Создаем обновленный код с сохранением использований
+            let updatedCode = FanInviteCode(
+                groupId: groupId,
+                code: newCode,
+                createdBy: currentUserId,
+                currentUses: currentUses,
+                groupName: groupName
+            )
+            
+            // Обновляем код в Firebase
+            do {
+                try docRef.setData(from: updatedCode) { error in
+                    if let error = error {
+                        completion(.failure(error))
+                    } else {
+                        DispatchQueue.main.async {
+                            self?.currentInviteCode = updatedCode
+                        }
+                        completion(.success(updatedCode))
+                    }
+                }
+            } catch {
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    // MARK: - Delete Invite Code (НОВЫЙ МЕТОД - для удаления кодов)
+    func deleteInviteCode(for groupId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let docRef = db.collection("groups").document(groupId).collection("fanInviteCode").document("current")
+        
+        docRef.delete { [weak self] error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                DispatchQueue.main.async {
+                    self?.currentInviteCode = nil
+                }
+                completion(.success(()))
+            }
+        }
+    }
+    
     // MARK: - Validate Fan Invite Code
     func validateFanInviteCode(_ code: String, completion: @escaping (Result<FanInviteCode, Error>) -> Void) {
         let formattedCode = code.uppercased().trimmingCharacters(in: .whitespacesAndNewlines)
@@ -78,16 +166,18 @@ final class FanInviteService: ObservableObject {
                     return
                 }
                 
-                // Take the first matching document
-                let document = documents[0]
+                let document = documents.first!
+                
                 do {
                     let inviteCode = try document.data(as: FanInviteCode.self)
                     
-                    if inviteCode.canBeUsed {
-                        completion(.success(inviteCode))
-                    } else {
+                    // Check if code can still be used
+                    if !inviteCode.canBeUsed {
                         completion(.failure(FanInviteError.codeExpired))
+                        return
                     }
+                    
+                    completion(.success(inviteCode))
                 } catch {
                     completion(.failure(error))
                 }
@@ -101,11 +191,33 @@ final class FanInviteService: ObservableObject {
             return
         }
         
+        // Check if user is already a fan of this group
+        let userRef = db.collection("users").document(currentUserId)
+        
+        userRef.getDocument { [weak self] snapshot, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            // Check if user already has fanGroupId
+            if let userData = snapshot?.data(),
+               let existingGroupId = userData["fanGroupId"] as? String,
+               existingGroupId == inviteCode.groupId {
+                completion(.failure(FanInviteError.alreadyAFan))
+                return
+            }
+            
+            self?.performJoinFanClub(inviteCode: inviteCode, fanProfile: fanProfile, userId: currentUserId, completion: completion)
+        }
+    }
+    
+    private func performJoinFanClub(inviteCode: FanInviteCode, fanProfile: FanProfile, userId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let batch = db.batch()
         
-        // 1. Update user document to become a fan
-        let userRef = db.collection("users").document(currentUserId)
-        let userUpdates: [String: Any] = [
+        // 1. Update user profile to include fan information
+        let userRef = db.collection("users").document(userId)
+        let userUpdateData: [String: Any] = [
             "userType": UserType.fan.rawValue,
             "fanGroupId": inviteCode.groupId,
             "fanProfile": [
@@ -134,16 +246,16 @@ final class FanInviteService: ObservableObject {
                 ]
             ]
         ]
-        batch.updateData(userUpdates, forDocument: userRef)
+        batch.updateData(userUpdateData, forDocument: userRef)
         
         // 2. Increment invite code usage
         let inviteRef = db.collection("groups").document(inviteCode.groupId).collection("fanInviteCode").document("current")
         batch.updateData(["currentUses": FieldValue.increment(Int64(1))], forDocument: inviteRef)
         
         // 3. Add fan to group's fan list
-        let fanRef = db.collection("groups").document(inviteCode.groupId).collection("fans").document(currentUserId)
+        let fanRef = db.collection("groups").document(inviteCode.groupId).collection("fans").document(userId)
         let fanData: [String: Any] = [
-            "userId": currentUserId,
+            "userId": userId,
             "nickname": fanProfile.nickname,
             "joinDate": Timestamp(date: fanProfile.joinDate),
             "level": fanProfile.level.rawValue,
@@ -156,9 +268,9 @@ final class FanInviteService: ObservableObject {
         let currentUses = inviteCode.currentUses + 1
         if currentUses <= 100 {
             // This fan is among the first 100
-            let achievementRef = db.collection("groups").document(inviteCode.groupId).collection("fanAchievements").document(currentUserId)
+            let achievementRef = db.collection("groups").document(inviteCode.groupId).collection("fanAchievements").document(userId)
             let achievementData: [String: Any] = [
-                "fanId": currentUserId,
+                "fanId": userId,
                 "achievementId": "early_adopter",
                 "isUnlocked": true,
                 "unlockedDate": Timestamp(date: Date()),
@@ -173,7 +285,7 @@ final class FanInviteService: ObservableObject {
                 completion(.failure(error))
             } else {
                 // Setup default achievements for the new fan
-                self.setupDefaultAchievements(for: currentUserId, groupId: inviteCode.groupId)
+                self.setupDefaultAchievements(for: userId, groupId: inviteCode.groupId)
                 completion(.success(()))
             }
         }
@@ -182,7 +294,7 @@ final class FanInviteService: ObservableObject {
     // MARK: - Get Current Invite Code
     func getCurrentInviteCode(for groupId: String, completion: @escaping (Result<FanInviteCode?, Error>) -> Void) {
         db.collection("groups").document(groupId).collection("fanInviteCode").document("current")
-            .getDocument { snapshot, error in
+            .getDocument { [weak self] snapshot, error in
                 if let error = error {
                     completion(.failure(error))
                     return
@@ -196,7 +308,7 @@ final class FanInviteService: ObservableObject {
                 do {
                     let inviteCode = try snapshot.data(as: FanInviteCode.self)
                     DispatchQueue.main.async {
-                        self.currentInviteCode = inviteCode
+                        self?.currentInviteCode = inviteCode
                     }
                     completion(.success(inviteCode))
                 } catch {
@@ -205,7 +317,7 @@ final class FanInviteService: ObservableObject {
             }
     }
     
-    // MARK: - Regenerate Invite Code
+    // MARK: - Regenerate Invite Code (УСТАРЕВШИЙ МЕТОД - теперь используется updateCustomInviteCode)
     func regenerateInviteCode(for groupId: String, groupName: String, completion: @escaping (Result<FanInviteCode, Error>) -> Void) {
         guard let currentUserId = Auth.auth().currentUser?.uid else {
             completion(.failure(FanInviteError.userNotAuthenticated))
@@ -237,14 +349,23 @@ final class FanInviteService: ObservableObject {
     private func setupDefaultAchievements(for fanId: String, groupId: String) {
         let batch = db.batch()
         
-        for achievement in Achievement.defaults {
-            let achievementRef = db.collection("groups").document(groupId).collection("fanAchievements").document("\(fanId)_\(achievement.id)")
+        // Настройка базовых достижений для нового фаната
+        let defaultAchievements = [
+            "first_join": false,
+            "early_adopter": false,
+            "first_message": false,
+            "first_concert": false,
+            "loyal_fan": false
+        ]
+        
+        for (achievementId, isUnlocked) in defaultAchievements {
+            let achievementRef = db.collection("groups").document(groupId).collection("fanAchievements").document("\(fanId)_\(achievementId)")
             let achievementData: [String: Any] = [
                 "fanId": fanId,
-                "achievementId": achievement.id,
-                "isUnlocked": false,
-                "unlockedDate": NSNull(),
-                "progress": 0.0
+                "achievementId": achievementId,
+                "isUnlocked": isUnlocked,
+                "unlockedDate": isUnlocked ? Timestamp(date: Date()) : NSNull(),
+                "progress": isUnlocked ? 1.0 : 0.0
             ]
             batch.setData(achievementData, forDocument: achievementRef)
         }
@@ -252,6 +373,8 @@ final class FanInviteService: ObservableObject {
         batch.commit { error in
             if let error = error {
                 print("Error setting up default achievements: \(error.localizedDescription)")
+            } else {
+                print("✅ Default achievements set up for fan: \(fanId)")
             }
         }
     }
@@ -268,15 +391,15 @@ enum FanInviteError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .userNotAuthenticated:
-            return "User not authenticated".localized
+            return "User not authenticated"
         case .invalidCode:
-            return "Invalid invite code".localized
+            return "Invalid invite code"
         case .codeExpired:
-            return "Invite code expired or reached maximum uses".localized
+            return "Invite code expired or reached maximum uses"
         case .alreadyAFan:
-            return "You are already a fan of this group".localized
+            return "You are already a fan of this group"
         case .groupNotFound:
-            return "Group not found".localized
+            return "Group not found"
         }
     }
 }

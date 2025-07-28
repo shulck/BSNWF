@@ -1,4 +1,6 @@
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore  // ✅ ДОБАВЛЕН ИМПОРТ ДЛЯ FIRESTORE
 
 struct FanManagementView: View {
     @StateObject private var fanService = FanInviteService.shared
@@ -13,6 +15,8 @@ struct FanManagementView: View {
     @State private var customCodeInput = ""
     @State private var isValidatingCustomCode = false
     @State private var customCodeValidationMessage = ""
+    @State private var showDeleteCodeAlert = false
+    @State private var isCopyingCode = false
     @State private var fanClubEnabled = true
     @Environment(\.colorScheme) private var colorScheme
     
@@ -29,232 +33,291 @@ struct FanManagementView: View {
                             .fontWeight(.medium)
                             .foregroundColor(.primary)
                         
-                        Text(fanClubEnabled ? "Active - Fans can join your group" : "Inactive - Fan registration disabled")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                        Text(fanClubEnabled ? "Active" : "Inactive")
+                            .font(.caption)
+                            .foregroundColor(fanClubEnabled ? .green : .red)
                     }
                     
                     Spacer()
                     
                     Toggle("", isOn: $fanClubEnabled)
+                        .labelsHidden()
                         .toggleStyle(SwitchToggleStyle(tint: .purple))
                 }
                 .padding(.vertical, 4)
             } header: {
-                Text("Fan Club Settings")
+                Text("Settings")
             }
             
-            // Invite Code Section
+            // Invite Code Section - НОВАЯ ПРОСТАЯ ВЕРСИЯ
             if fanClubEnabled {
                 Section {
                     if let inviteCode = currentInviteCode {
-                        // Current invite code display
-                        HStack(spacing: 12) {
-                            fanIcon(icon: "key.fill", color: .purple)
-                            
-                            VStack(alignment: .leading, spacing: 4) {
+                        // ✅ ПРОСТАЯ И НАДЕЖНАЯ СЕКЦИЯ С КОДОМ
+                        VStack(spacing: 12) {
+                            // Заголовок
+                            HStack {
                                 Text("Current Invite Code")
-                                    .font(.body)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.primary)
-                                
-                                HStack {
-                                    Text(inviteCode.code)
-                                        .font(.system(.title3, design: .monospaced))
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.purple)
-                                    
-                                    Button {
-                                        UIPasteboard.general.string = inviteCode.code
-                                        alertMessage = "Invite code copied to clipboard!"
-                                        showAlert = true
-                                    } label: {
-                                        Image(systemName: "doc.on.clipboard")
-                                            .foregroundColor(.purple)
-                                    }
-                                }
-                                
-                                Text("Uses: \(inviteCode.currentUses)\(inviteCode.maxUses != nil ? "/\(inviteCode.maxUses!)" : "")")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            
-                            Spacer()
-                            
-                            // Edit button
-                            Button {
-                                customCodeInput = inviteCode.code
-                                showEditCodeSheet = true
-                            } label: {
-                                Image(systemName: "pencil")
-                                    .foregroundColor(.blue)
                                     .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                Spacer()
                             }
-                        }
-                        .padding(.vertical, 4)
-                        
-                        // Replace auto-generation with manual creation
-                        Button {
-                            customCodeInput = currentInviteCode?.code ?? ""
-                            showEditCodeSheet = true
-                        } label: {
+                            
+                            // Код в простой рамке
+                            HStack {
+                                Text(inviteCode.code)
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.purple)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color.purple.opacity(0.1))
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(Color.purple, lineWidth: 2)
+                                            )
+                                    )
+                                    .minimumScaleFactor(0.6)
+                            }
+                            
+                            // ✅ ИКОНКИ БЕЗ ТЕКСТА, ОДИНАКОВОГО РАЗМЕРА
                             HStack(spacing: 12) {
-                                fanIcon(icon: "arrow.clockwise", color: .orange)
-                                
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text("Change Invite Code")
-                                        .font(.body)
-                                        .fontWeight(.medium)
-                                        .foregroundColor(.primary)
-                                    
-                                    Text("Create a new custom code for fans")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
+                                // Copy Button
+                                Button {
+                                    copyInviteCode()
+                                } label: {
+                                    Image(systemName: "doc.on.doc")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.white)
+                                        .frame(width: 44, height: 44)
+                                        .background(Color.blue)
+                                        .cornerRadius(8)
                                 }
+                                .disabled(isCopyingCode)
+                                .buttonStyle(PlainButtonStyle())
+                                
+                                // Edit Button
+                                Button {
+                                    customCodeInput = inviteCode.code
+                                    showEditCodeSheet = true
+                                } label: {
+                                    Image(systemName: "pencil")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.white)
+                                        .frame(width: 44, height: 44)
+                                        .background(Color.orange)
+                                        .cornerRadius(8)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                
+                                // Delete Button
+                                Button {
+                                    showDeleteCodeAlert = true
+                                } label: {
+                                    Image(systemName: "trash")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.white)
+                                        .frame(width: 44, height: 44)
+                                        .background(Color.red)
+                                        .cornerRadius(8)
+                                }
+                                .buttonStyle(PlainButtonStyle())
                                 
                                 Spacer()
                             }
-                            .padding(.vertical, 4)
+                            
+                            // Статистика
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text("Uses")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text("\(inviteCode.currentUses)")
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
+                                }
+                                
+                                Spacer()
+                                
+                                VStack(alignment: .trailing) {
+                                    Text("Created")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text(formatDate(inviteCode.createdAt))
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
+                                }
+                            }
                         }
-                        .buttonStyle(PlainButtonStyle())
+                        .padding(.vertical, 8)
                         
                     } else {
-                        // No invite code - create first one manually
-                        Button {
-                            customCodeInput = ""
-                            showEditCodeSheet = true
-                        } label: {
-                            HStack(spacing: 12) {
-                                fanIcon(icon: "plus.circle.fill", color: .green)
-                                
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text("Create Custom Invite Code")
-                                        .font(.body)
-                                        .fontWeight(.medium)
-                                        .foregroundColor(.primary)
-                                    
-                                    Text("Enter your own unique code for the fan club")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                }
-                                
-                                Spacer()
+                        // ✅ ПРОСТАЯ СЕКЦИЯ ДЛЯ СОЗДАНИЯ КОДА
+                        VStack(spacing: 16) {
+                            Image(systemName: "ticket")
+                                .font(.largeTitle)
+                                .foregroundColor(.purple.opacity(0.6))
+                            
+                            Text("No Invite Code")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            Text("Create a custom code for fans to join your fan club")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                            
+                            Button("Create Invite Code") {
+                                customCodeInput = ""
+                                showEditCodeSheet = true
                             }
-                            .padding(.vertical, 4)
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
+                            .background(Color.purple)
+                            .cornerRadius(10)
                         }
-                        .buttonStyle(PlainButtonStyle())
+                        .padding(.vertical, 20)
                     }
                 } header: {
-                    Text("Fan Invite Code")
+                    Text("Invite Code")
                 }
             }
             
             // Fan Statistics Section
-            Section {
-                HStack(spacing: 12) {
-                    fanIcon(icon: "chart.bar.fill", color: .blue)
-                    
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Total Fans")
-                            .font(.body)
-                            .fontWeight(.medium)
-                            .foregroundColor(.primary)
-                        
-                        Text("\(fans.count) fans in your club")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+            if fanClubEnabled {
+                Section {
+                    HStack {
+                        fanIcon(icon: "person.2.fill", color: .blue)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Total Fans")
+                                .font(.body)
+                                .fontWeight(.medium)
+                            Text("\(fans.count) members")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Text("\(fans.count)")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.blue)
                     }
                     
-                    Spacer()
-                    
-                    Text("\(fans.count)")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(.purple)
-                }
-                .padding(.vertical, 4)
-                
-                if fans.count > 0 {
-                    HStack(spacing: 12) {
-                        fanIcon(icon: "clock.fill", color: .green)
-                        
+                    HStack {
+                        fanIcon(icon: "calendar", color: .green)
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Recent Activity")
                                 .font(.body)
                                 .fontWeight(.medium)
-                                .foregroundColor(.primary)
-                            
-                            Text("Last fan joined: \(getLastJoinedDate())")
-                                .font(.subheadline)
+                            Text("Last fan joined")
+                                .font(.caption)
                                 .foregroundColor(.secondary)
                         }
-                        
                         Spacer()
+                        Text(getLastJoinedDate())
+                            .font(.caption)
+                            .foregroundColor(.green)
                     }
-                    .padding(.vertical, 4)
+                } header: {
+                    Text("Statistics")
                 }
-            } header: {
-                Text("Fan Club Statistics")
             }
             
-            // Fan List Section
-            if !fans.isEmpty {
+            // Fans List Section
+            if fanClubEnabled && !fans.isEmpty {
                 Section {
                     ForEach(fans, id: \.id) { fan in
                         FanRowView(fan: fan)
                     }
                 } header: {
-                    Text("Recent Fans (\(min(fans.count, 10)))")
+                    Text("Fan Club Members (\(fans.count))")
+                }
+            } else if fanClubEnabled && fans.isEmpty && !isLoading {
+                Section {
+                    VStack(spacing: 12) {
+                        Image(systemName: "person.2.slash")
+                            .font(.largeTitle)
+                            .foregroundColor(.gray)
+                        
+                        Text("No Fans Yet")
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                        
+                        Text("Share your invite code to get your first fans!")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(.vertical, 20)
+                } header: {
+                    Text("Fan Club Members")
                 }
             }
             
-            // Loading Section
             if isLoading {
                 Section {
                     HStack {
+                        Spacer()
                         ProgressView()
-                            .scaleEffect(0.8)
-                        Text("Loading fan data...")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .tint(.purple)
                         Spacer()
                     }
-                    .padding(.vertical, 8)
+                    .padding()
                 }
             }
         }
         .navigationTitle("Fan Management")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.large)
         .onAppear {
             loadFanData()
         }
-        .refreshable {
-            loadFanData()
-        }
-        .alert("Change Invite Code", isPresented: $showGenerateCodeAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Change") {
-                customCodeInput = currentInviteCode?.code ?? ""
+        .confirmationDialog("Create Invite Code", isPresented: $showGenerateCodeAlert) {
+            Button("Create Custom Code") {
+                customCodeInput = ""
                 showEditCodeSheet = true
             }
         } message: {
             Text("Create a new custom invite code. This will replace the current code.")
         }
         .alert("Fan Management", isPresented: $showAlert) {
-            Button("OK", role: .cancel) {}
+            Button("OK", role: .cancel) {
+                // Сбрасываем все состояния при закрытии алерта
+                alertMessage = ""
+                isCopyingCode = false
+            }
         } message: {
             Text(alertMessage)
         }
-        .sheet(isPresented: $showEditCodeSheet) {
-            EditInviteCodeView(
-                currentCode: currentInviteCode?.code ?? "",
-                customCodeInput: $customCodeInput,
-                isValidatingCustomCode: $isValidatingCustomCode,
-                customCodeValidationMessage: $customCodeValidationMessage,
-                onSave: { newCode in
-                    updateInviteCode(newCode: newCode)
-                }
-            )
+        .alert(currentInviteCode?.code.isEmpty == false ? "Edit Invite Code" : "Create Invite Code", isPresented: $showEditCodeSheet) {
+            TextField("Enter custom code (e.g. ROCKBAND)", text: $customCodeInput)
+                .autocapitalization(.allCharacters)
+                .disableAutocorrection(true)
+            
+            Button("Cancel", role: .cancel) {
+                customCodeInput = ""
+            }
+            
+            Button("Save") {
+                updateInviteCode(newCode: customCodeInput)
+            }
+            .disabled(customCodeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        } message: {
+            Text(currentInviteCode?.code.isEmpty == false ?
+                 "Enter a new custom invite code (up to 25 characters, letters and numbers only)" :
+                 "Create a unique code that fans will use to join your fan club")
+        }
+        // ✅ НОВЫЙ ALERT ДЛЯ УДАЛЕНИЯ КОДА
+        .alert("Delete Invite Code", isPresented: $showDeleteCodeAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Delete", role: .destructive) {
+                deleteInviteCode()
+            }
+        } message: {
+            Text("Are you sure you want to delete the current invite code? This action cannot be undone and will prevent new fans from joining until you create a new code.")
         }
     }
     
@@ -288,8 +351,11 @@ struct FanManagementView: View {
                 switch result {
                 case .success(let inviteCode):
                     self.currentInviteCode = inviteCode
-                case .failure:
+                case .failure(let error):
                     self.currentInviteCode = nil
+                    // ✅ ПОКАЗЫВАЕМ ОШИБКУ ПОЛЬЗОВАТЕЛЮ
+                    self.alertMessage = "Failed to load invite code: \(error.localizedDescription)"
+                    self.showAlert = true
                 }
             }
         }
@@ -299,18 +365,88 @@ struct FanManagementView: View {
     }
     
     private func loadFansList(groupId: String) {
-        // This would load fans from Firebase
-        // For now, we'll simulate loading
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.isLoading = false
-            // TODO: Implement actual fan loading from Firebase
-            // self.fans = loaded fans
-        }
+        // ✅ РЕАЛЬНАЯ ЗАГРУЗКА ФАНАТОВ ИЗ FIREBASE
+        let db = Firestore.firestore()
+        
+        db.collection("groups").document(groupId).collection("fans")
+            .order(by: "joinDate", descending: true)
+            .limit(to: 50)
+            .getDocuments { snapshot, error in
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    
+                    if let error = error {
+                        self.alertMessage = "Failed to load fans: \(error.localizedDescription)"
+                        self.showAlert = true
+                        return
+                    }
+                    
+                    // Преобразуем документы в UserModel (упрощенная версия для фанатов)
+                    self.fans = snapshot?.documents.compactMap { doc in
+                        let data = doc.data()
+                        guard let userId = data["userId"] as? String,
+                              let nickname = data["nickname"] as? String,
+                              let joinTimestamp = data["joinDate"] as? Timestamp else {
+                            return nil
+                        }
+                        
+                        // Создаем упрощенный UserModel для фана
+                        let fanProfile = FanProfile(
+                            nickname: nickname,
+                            joinDate: joinTimestamp.dateValue(),
+                            location: data["location"] as? String ?? "",
+                            favoriteSong: data["favoriteSong"] as? String ?? "",
+                            level: FanLevel(rawValue: data["level"] as? String ?? "newbie") ?? .newbie
+                        )
+                        
+                        // ✅ ПРАВИЛЬНЫЕ ПАРАМЕТРЫ UserModel
+                        return UserModel(
+                            id: userId,
+                            email: "", // Пустой email для фанатов
+                            name: nickname, // ✅ name вместо displayName
+                            phone: "", // Пустой телефон для фанатов
+                            groupId: nil, // У фанатов нет groupId
+                            role: .member, // Роль по умолчанию
+                            userType: .fan,
+                            fanGroupId: data["groupId"] as? String, // ID группы которую они фоловят
+                            fanProfile: fanProfile
+                        )
+                    } ?? []
+                }
+            }
     }
     
     private func generateInviteCode() {
         // This function is no longer used for auto-generation
         // Redirecting to manual creation
+        customCodeInput = ""
+        showEditCodeSheet = true
+    }
+    
+    private func copyInviteCode() {
+        guard !isCopyingCode else { return }  // ✅ ЗАЩИТА ОТ МНОЖЕСТВЕННЫХ НАЖАТИЙ
+        
+        if let code = currentInviteCode?.code {
+            isCopyingCode = true
+            
+            UIPasteboard.general.string = code
+            alertMessage = "Invite code '\(code)' copied to clipboard!"
+            showAlert = true
+            
+            // Сбрасываем флаг через небольшую задержку
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.isCopyingCode = false
+            }
+        }
+    }
+    
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        return formatter.string(from: date)
+    }
+    
+    private func regenerateInviteCode() {
         customCodeInput = ""
         showEditCodeSheet = true
     }
@@ -344,29 +480,90 @@ struct FanManagementView: View {
             return
         }
         
-        // Create new invite code with custom value
-        let newInviteCode = FanInviteCode(
-            groupId: groupId,
-            code: cleanCode,
-            createdBy: Auth.auth().currentUser?.uid ?? "",
-            groupName: groupName,
-            currentUses: 0
-        )
+        // ✅ ВЫБИРАЕМ ПРАВИЛЬНЫЙ МЕТОД: создание или обновление
+        if currentInviteCode == nil {
+            // Создаем новый код
+            fanService.createCustomInviteCode(
+                for: groupId,
+                customCode: cleanCode,
+                groupName: groupName
+            ) { result in
+                self.handleInviteCodeResult(result, action: "created")
+            }
+        } else {
+            // Обновляем существующий код
+            fanService.updateCustomInviteCode(
+                for: groupId,
+                newCode: cleanCode,
+                groupName: groupName
+            ) { result in
+                self.handleInviteCodeResult(result, action: "updated")
+            }
+        }
+    }
+    
+    private func handleInviteCodeResult(_ result: Result<FanInviteCode, Error>, action: String) {
+        DispatchQueue.main.async {
+            self.isLoading = false
+            
+            switch result {
+            case .success(let updatedCode):
+                self.currentInviteCode = updatedCode
+                self.showEditCodeSheet = false
+                self.customCodeInput = ""
+                
+                // ✅ ОБНОВЛЯЕМ ДАННЫЕ ИЗ FIREBASE
+                self.loadFanData()
+                
+                // Показываем успешное сообщение
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.alertMessage = "Invite code \(action) to '\(updatedCode.code)' successfully!"
+                    self.showAlert = true
+                }
+                
+            case .failure(let error):
+                // Показываем ошибку
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.alertMessage = "Failed to \(action.replacingOccurrences(of: "ed", with: "e")) invite code: \(error.localizedDescription)"
+                    self.showAlert = true
+                }
+            }
+        }
+    }
+    
+    // ✅ ФУНКЦИЯ УДАЛЕНИЯ КОДА С ОБНОВЛЕНИЕМ
+    private func deleteInviteCode() {
+        guard let groupId = AppState.shared.user?.groupId else {
+            alertMessage = "Error: Group information not available"
+            showAlert = true
+            return
+        }
         
-        // Save to Firebase (simplified for now)
-        fanService.generateFanInviteCode(for: groupId, groupName: groupName) { result in
+        isLoading = true
+        
+        fanService.deleteInviteCode(for: groupId) { result in
             DispatchQueue.main.async {
                 self.isLoading = false
+                
                 switch result {
                 case .success:
-                    // In real implementation, update the code to custom value in Firebase
-                    self.currentInviteCode = newInviteCode
-                    self.alertMessage = "Custom invite code '\(cleanCode)' created successfully!"
-                    self.showAlert = true
-                    self.showEditCodeSheet = false
+                    self.currentInviteCode = nil
+                    
+                    // ✅ ОБНОВЛЯЕМ ДАННЫЕ ИЗ FIREBASE
+                    self.loadFanData()
+                    
+                    // Показываем успешное сообщение
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        self.alertMessage = "Invite code deleted successfully!"
+                        self.showAlert = true
+                    }
+                    
                 case .failure(let error):
-                    self.alertMessage = "Error creating invite code: \(error.localizedDescription)"
-                    self.showAlert = true
+                    // Показываем ошибку
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        self.alertMessage = "Failed to delete invite code: \(error.localizedDescription)"
+                        self.showAlert = true
+                    }
                 }
             }
         }
@@ -385,7 +582,21 @@ struct FanManagementView: View {
         
         // Check only alphanumeric characters
         let allowedCharacters = CharacterSet.alphanumerics
-        return code.unicodeScalars.allSatisfy { allowedCharacters.contains($0) }
+        guard code.unicodeScalars.allSatisfy({ allowedCharacters.contains($0) }) else {
+            return false
+        }
+        
+        // ✅ ПРОВЕРКА НА ЗАПРЕЩЕННЫЕ СЛОВА
+        let forbiddenWords = ["admin", "test", "temp", "delete", "null", "undefined", "fuck", "shit", "damn"]
+        let lowerCode = code.lowercased()
+        
+        for word in forbiddenWords {
+            if lowerCode.contains(word) {
+                return false
+            }
+        }
+        
+        return true
     }
 }
 
@@ -443,161 +654,30 @@ struct FanRowView: View {
                                 .foregroundColor(.secondary)
                         }
                     }
+                    
+                    Text("Joined \(formatDate(fanProfile.joinDate))")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
             }
             
             Spacer()
             
-            // Join date
+            // Fan level indicator
             if let fanProfile = fan.fanProfile {
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text("Joined")
+                VStack {
+                    Image(systemName: fanProfile.level.iconName)
+                        .foregroundColor(Color(hex: fanProfile.level.color))
                         .font(.caption)
-                        .foregroundColor(.secondary)
-                    
-                    Text(fanProfile.joinDate.formatted(.dateTime.month().day()))
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundColor(.primary)
                 }
             }
         }
-        .padding(.vertical, 4)
-    }
-}
-
-// MARK: - Edit Invite Code View
-struct EditInviteCodeView: View {
-    let currentCode: String
-    @Binding var customCodeInput: String
-    @Binding var isValidatingCustomCode: Bool
-    @Binding var customCodeValidationMessage: String
-    let onSave: (String) -> Void
-    
-    @Environment(\.dismiss) var dismiss
-    @State private var isValidCode = false
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text(currentCode.isEmpty ? "Create Your Fan Club Code" : "Edit Fan Club Code")
-                            .font(.headline)
-                            .foregroundColor(.primary)
-                        
-                        Text(currentCode.isEmpty ?
-                             "Create a unique code that fans will use to join your fan club." :
-                             "Update your fan club invite code. Enter a new custom code.")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                        
-                        TextField("Enter custom code", text: $customCodeInput)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .autocapitalization(.allCharacters)
-                            .disableAutocorrection(true)
-                            .onChange(of: customCodeInput) { oldValue, newValue in
-                                validateCustomCode(newValue)
-                            }
-                        
-                        // Validation message
-                        if !customCodeValidationMessage.isEmpty {
-                            HStack {
-                                Image(systemName: isValidCode ? "checkmark.circle.fill" : "xmark.circle.fill")
-                                    .foregroundColor(isValidCode ? .green : .red)
-                                
-                                Text(customCodeValidationMessage)
-                                    .font(.caption)
-                                    .foregroundColor(isValidCode ? .green : .red)
-                            }
-                        }
-                    }
-                } header: {
-                    Text("Custom Invite Code")
-                }
-                
-                Section {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Code Requirements:")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                        
-                        VStack(alignment: .leading, spacing: 4) {
-                            requirementRow("Up to 25 characters", isValid: customCodeInput.count <= 25 && !customCodeInput.isEmpty)
-                            requirementRow("Only letters and numbers", isValid: isAlphanumeric(customCodeInput))
-                            requirementRow("Uppercase letters preferred", isValid: customCodeInput == customCodeInput.uppercased())
-                        }
-                    }
-                } header: {
-                    Text("Requirements")
-                }
-                
-                Section {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Examples of good codes:")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                        
-                        Text("ROCKBAND2025, MUSIC4US, FANCLUB123, BANDLOVE, MYAWESOMEBAND, JOIN")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
-            }
-            .navigationTitle("Edit Invite Code")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
-                        onSave(customCodeInput.uppercased())
-                    }
-                    .disabled(!isValidCode || customCodeInput.isEmpty)
-                }
-            }
-        }
-        .onAppear {
-            validateCustomCode(customCodeInput)
-        }
+        .padding(.vertical, 2)
     }
     
-    private func requirementRow(_ text: String, isValid: Bool) -> some View {
-        HStack {
-            Image(systemName: isValid ? "checkmark.circle.fill" : "circle")
-                .foregroundColor(isValid ? .green : .gray)
-            
-            Text(text)
-                .font(.caption)
-                .foregroundColor(isValid ? .primary : .secondary)
-        }
-    }
-    
-    private func validateCustomCode(_ code: String) {
-        let cleanCode = code.uppercased().trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        // Check all requirements
-        let lengthValid = cleanCode.count <= 25 && !cleanCode.isEmpty
-        let alphanumericValid = isAlphanumeric(cleanCode)
-        
-        isValidCode = lengthValid && alphanumericValid && !cleanCode.isEmpty
-        
-        if cleanCode.isEmpty {
-            customCodeValidationMessage = ""
-        } else if !lengthValid {
-            customCodeValidationMessage = "Code must be up to 25 characters long"
-        } else if !alphanumericValid {
-            customCodeValidationMessage = "Only letters and numbers are allowed"
-        } else {
-            customCodeValidationMessage = "✓ Valid invite code format"
-        }
-    }
-    
-    private func isAlphanumeric(_ string: String) -> Bool {
-        return string.range(of: "^[a-zA-Z0-9]+$", options: .regularExpression) != nil
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        return formatter.string(from: date)
     }
 }
