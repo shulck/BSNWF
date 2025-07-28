@@ -3,7 +3,7 @@ import Foundation
 import SwiftUI
 
 enum EventStatus: String, Codable, CaseIterable, Identifiable {
-    case booked = "Reserved"
+    case booked = "Booked"
     case confirmed = "Confirmed"
     case cancelled = "Cancelled"
     case postponed = "Postponed"

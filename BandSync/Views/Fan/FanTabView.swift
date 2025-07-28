@@ -1,3 +1,10 @@
+//
+//  FanTabView.swift (ОБНОВЛЕННЫЙ)
+//  BandSync
+//
+//  Created by Claude on 28.07.2025.
+//
+
 import SwiftUI
 
 struct FanTabView: View {
@@ -43,8 +50,8 @@ struct FanTabView: View {
                 }
                 .tag(FanTab.home)
             
-            // Events Tab - События и концерты
-            FanEventsView()
+            // Events Tab - ОБНОВЛЕНО: Реальный календарь вместо заглушки
+            FanCalendarViewWrapper()
                 .tabItem {
                     Image(systemName: FanTab.events.icon)
                     Text(NSLocalizedString(FanTab.events.title, comment: ""))
@@ -158,26 +165,6 @@ struct FanHomeView: View {
 }
 
 // MARK: - Заглушки для остальных вкладок
-struct FanEventsView: View {
-    var body: some View {
-        NavigationView {
-            VStack {
-                Image(systemName: "calendar")
-                    .font(.system(size: 60))
-                    .foregroundColor(.purple)
-                Text("Events Coming Soon!")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                Text("Here you'll see upcoming concerts, meet & greets, and exclusive fan events.")
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding()
-            }
-            .navigationTitle("Events")
-        }
-    }
-}
-
 struct FanMerchandiseView: View {
     var body: some View {
         NavigationView {
