@@ -60,6 +60,8 @@ final class FanInviteService: ObservableObject {
             return
         }
         
+        print("🔧 Creating custom invite code: '\(customCode)' for group: \(groupId)")
+        
         let inviteCode = FanInviteCode(
             groupId: groupId,
             code: customCode,
@@ -73,8 +75,10 @@ final class FanInviteService: ObservableObject {
         do {
             try docRef.setData(from: inviteCode) { [weak self] error in
                 if let error = error {
+                    print("❌ Error saving invite code: \(error)")
                     completion(.failure(error))
                 } else {
+                    print("✅ Successfully saved invite code to Firebase")
                     DispatchQueue.main.async {
                         self?.currentInviteCode = inviteCode
                     }
@@ -82,6 +86,7 @@ final class FanInviteService: ObservableObject {
                 }
             }
         } catch {
+            print("❌ Error encoding invite code: \(error)")
             completion(.failure(error))
         }
     }
@@ -93,17 +98,21 @@ final class FanInviteService: ObservableObject {
             return
         }
         
+        print("🔧 Updating invite code to: '\(newCode)' for group: \(groupId)")
+        
         let docRef = db.collection("groups").document(groupId).collection("fanInviteCode").document("current")
         
         // Первый шаг: получаем текущий код для сохранения currentUses
         docRef.getDocument { [weak self] snapshot, error in
             if let error = error {
+                print("❌ Error getting current code: \(error)")
                 completion(.failure(error))
                 return
             }
             
             // Сохраняем текущие использования или 0 для нового кода
             let currentUses = snapshot?.data()?["currentUses"] as? Int ?? 0
+            print("📊 Current uses: \(currentUses)")
             
             // Создаем обновленный код с сохранением использований
             let updatedCode = FanInviteCode(
@@ -118,8 +127,10 @@ final class FanInviteService: ObservableObject {
             do {
                 try docRef.setData(from: updatedCode) { error in
                     if let error = error {
+                        print("❌ Error updating invite code: \(error)")
                         completion(.failure(error))
                     } else {
+                        print("✅ Successfully updated invite code")
                         DispatchQueue.main.async {
                             self?.currentInviteCode = updatedCode
                         }
@@ -127,6 +138,7 @@ final class FanInviteService: ObservableObject {
                     }
                 }
             } catch {
+                print("❌ Error encoding updated code: \(error)")
                 completion(.failure(error))
             }
         }
@@ -152,36 +164,103 @@ final class FanInviteService: ObservableObject {
     func validateFanInviteCode(_ code: String, completion: @escaping (Result<FanInviteCode, Error>) -> Void) {
         let formattedCode = code.uppercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
-        db.collectionGroup("fanInviteCode")
-            .whereField("code", isEqualTo: formattedCode)
-            .whereField("isActive", isEqualTo: true)
-            .getDocuments { snapshot, error in
-                if let error = error {
+        print("🔍 Validating code: '\(formattedCode)'")
+        
+        // ✅ НОВЫЙ ПОДХОД: перебираем все группы вместо collectionGroup
+        // Сначала получаем список групп
+        db.collection("groups").getDocuments { [weak self] snapshot, error in
+            if let error = error {
+                print("❌ Error getting groups: \(error.localizedDescription)")
+                completion(.failure(error))
+                return
+            }
+            
+            guard let self = self else { return }
+            guard let documents = snapshot?.documents, !documents.isEmpty else {
+                print("❌ No groups found")
+                completion(.failure(FanInviteError.invalidCode))
+                return
+            }
+            
+            print("📄 Found \(documents.count) groups to search")
+            
+            // Ищем код в каждой группе
+            let group = DispatchGroup()
+            var foundCode: FanInviteCode?
+            var searchError: Error?
+            
+            for groupDoc in documents {
+                group.enter()
+                
+                // ✅ ПРЯМОЙ ЗАПРОС К КОНКРЕТНОЙ ГРУППЕ - НЕ ТРЕБУЕТ ИНДЕКСА
+                self.db.collection("groups")
+                    .document(groupDoc.documentID)
+                    .collection("fanInviteCode")
+                    .document("current")
+                    .getDocument { docSnapshot, docError in
+                        defer { group.leave() }
+                        
+                        if let docError = docError {
+                            print("❌ Error getting invite code for group \(groupDoc.documentID): \(docError)")
+                            searchError = docError
+                            return
+                        }
+                        
+                        guard let docSnapshot = docSnapshot,
+                              docSnapshot.exists,
+                              let data = docSnapshot.data() else {
+                            return
+                        }
+                        
+                        // Проверяем соответствие кода
+                        if let storedCode = data["code"] as? String,
+                           storedCode.uppercased() == formattedCode {
+                            
+                            print("✅ Found matching code in group \(groupDoc.documentID)")
+                            
+                            do {
+                                let inviteCode = try docSnapshot.data(as: FanInviteCode.self)
+                                foundCode = inviteCode
+                            } catch {
+                                print("❌ Error parsing FanInviteCode: \(error)")
+                                searchError = error
+                            }
+                        }
+                    }
+            }
+            
+            group.notify(queue: .main) {
+                if let error = searchError {
                     completion(.failure(error))
                     return
                 }
                 
-                guard let documents = snapshot?.documents, !documents.isEmpty else {
+                guard let inviteCode = foundCode else {
+                    print("❌ No matching invite code found")
                     completion(.failure(FanInviteError.invalidCode))
                     return
                 }
                 
-                let document = documents.first!
+                print("✅ Successfully found FanInviteCode: \(inviteCode.code)")
                 
-                do {
-                    let inviteCode = try document.data(as: FanInviteCode.self)
-                    
-                    // Check if code can still be used
-                    if !inviteCode.canBeUsed {
-                        completion(.failure(FanInviteError.codeExpired))
-                        return
-                    }
-                    
-                    completion(.success(inviteCode))
-                } catch {
-                    completion(.failure(error))
+                // ✅ ПРОВЕРЯЕМ isActive ЛОКАЛЬНО
+                if !inviteCode.isActive {
+                    print("❌ Code is not active")
+                    completion(.failure(FanInviteError.codeExpired))
+                    return
                 }
+                
+                // Check if code can still be used
+                if !inviteCode.canBeUsed {
+                    print("❌ Code expired or reached max uses")
+                    completion(.failure(FanInviteError.codeExpired))
+                    return
+                }
+                
+                print("✅ Code is valid and can be used")
+                completion(.success(inviteCode))
             }
+        }
     }
     
     // MARK: - Join Fan Club
