@@ -40,6 +40,7 @@ final class GroupService: ObservableObject {
                     self.group = data
                 }
                 
+                // ИСПРАВЛЕНО: Используем новый метод UserService вместо старого fetchGroupMembers
                 self.fetchGroupMembers(groupId: id) { success in
                     DispatchQueue.main.async {
                         self.isLoading = false
@@ -56,11 +57,15 @@ final class GroupService: ObservableObject {
         }
     }
 
+    // ИСПРАВЛЕНО: Новый метод использует UserService.fetchUsers() для загрузки всех пользователей
     private func fetchGroupMembers(groupId: String, completion: @escaping (Bool) -> Void) {
         guard let group = self.group else {
             completion(false)
             return
         }
+        
+        print("GroupService: Loading members for group: \(groupId)")
+        print("GroupService: Group has \(group.members.count) members and \(group.pendingMembers.count) pending")
         
         // Clear arrays on main queue
         DispatchQueue.main.async {
@@ -68,54 +73,29 @@ final class GroupService: ObservableObject {
             self.pendingMembers = []
         }
         
-        let totalRequests = group.members.count + group.pendingMembers.count
-        
-        if totalRequests == 0 {
-            completion(true)
-            return
-        }
-        
-        var completedRequests = 0
-        let completionQueue = DispatchQueue(label: "groupservice.completion", attributes: .concurrent)
-        
-        func checkCompletion() {
-            completionQueue.sync {
-                completedRequests += 1
+        // НОВАЯ ЛОГИКА: Используем UserService.fetchUsers() для загрузки всех пользователей группы
+        UserService.shared.fetchUsers(for: groupId) { [weak self] allUsers in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
                 
-                if completedRequests == totalRequests {
-                    DispatchQueue.main.async {
-                        completion(true)
-                    }
-                }
-            }
-        }
-        
-        // Fetch members
-        for memberId in group.members {
-            db.collection("users").document(memberId).getDocument { [weak self] snapshot, error in
-                defer { checkCompletion() }
+                print("GroupService: UserService returned \(allUsers.count) users")
                 
-                if let userData = try? snapshot?.data(as: UserModel.self) {
-                    DispatchQueue.main.async {
-                        // Check if user is not already in the array
-                        if !(self?.groupMembers.contains(where: { $0.id == userData.id }) ?? false) {
-                            self?.groupMembers.append(userData)
-                        }
-                    }
+                // Разделяем пользователей на утвержденных и ожидающих
+                let approvedMembers = allUsers.filter { user in
+                    group.members.contains(user.id)
                 }
-            }
-        }
-        
-        // Fetch pending members
-        for pendingId in group.pendingMembers {
-            db.collection("users").document(pendingId).getDocument { [weak self] snapshot, error in
-                defer { checkCompletion() }
                 
-                if let userData = try? snapshot?.data(as: UserModel.self) {
-                    DispatchQueue.main.async {
-                        self?.pendingMembers.append(userData)
-                    }
+                let pendingUsers = allUsers.filter { user in
+                    group.pendingMembers.contains(user.id)
                 }
+                
+                print("GroupService: Approved members: \(approvedMembers.count)")
+                print("GroupService: Pending members: \(pendingUsers.count)")
+                
+                self.groupMembers = approvedMembers
+                self.pendingMembers = pendingUsers
+                
+                completion(true)
             }
         }
     }
@@ -161,21 +141,14 @@ final class GroupService: ObservableObject {
         ]) { [weak self] error in
             DispatchQueue.main.async {
                 self?.isLoading = false
-                
+
                 if let error = error {
                     self?.errorMessage = "Error rejecting user: \(error.localizedDescription)"
                 } else {
-                    // Remove from local pending members array
-                    if let pendingIndex = self?.pendingMembers.firstIndex(where: { $0.id == userId }) {
-                        self?.pendingMembers.remove(at: pendingIndex)
-                    }
+                    // Refresh members after updating
+                    self?.fetchGroupMembers(groupId: groupId) { _ in }
                 }
             }
-            
-            // Update user's group ID (outside main queue to avoid blocking)
-            self?.db.collection("users").document(userId).updateData([
-                "groupId": NSNull()
-            ])
         }
     }
 
@@ -191,27 +164,81 @@ final class GroupService: ObservableObject {
         ]) { [weak self] error in
             DispatchQueue.main.async {
                 self?.isLoading = false
-                
+
                 if let error = error {
                     self?.errorMessage = "Error removing user: \(error.localizedDescription)"
                 } else {
-                    // Remove from local members array
-                    if let memberIndex = self?.groupMembers.firstIndex(where: { $0.id == userId }) {
-                        self?.groupMembers.remove(at: memberIndex)
+                    // Remove user's group ID
+                    self?.db.collection("users").document(userId).updateData([
+                        "groupId": NSNull()
+                    ]) { _ in
+                        // Refresh members after updating
+                        self?.fetchGroupMembers(groupId: groupId) { _ in }
                     }
                 }
             }
-            
-            // Update user's group ID (outside main queue to avoid blocking)
-            self?.db.collection("users").document(userId).updateData([
-                "groupId": NSNull()
-            ])
         }
     }
 
-    func updateGroupName(_ newName: String) {
+    func changeUserRole(userId: String, newRole: UserModel.UserRole) {
+        guard !userId.isEmpty else {
+            DispatchQueue.main.async {
+                self.errorMessage = "Error: Empty user ID"
+            }
+            return
+        }
+        
+        DispatchQueue.main.async {
+            self.isLoading = true
+        }
+        
+        db.collection("users").document(userId).updateData([
+            "role": newRole.rawValue
+        ]) { [weak self] error in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                
+                if let error = error {
+                    self?.errorMessage = "Error changing role: \(error.localizedDescription)"
+                } else {
+                    // Update local data
+                    if let self = self,
+                       let memberIndex = self.groupMembers.firstIndex(where: { $0.id == userId }) {
+                        var updatedMember = self.groupMembers[memberIndex]
+                        updatedMember.role = newRole
+                        self.groupMembers[memberIndex] = updatedMember
+                    }
+                }
+            }
+        }
+    }
+    
+    func regenerateCode() {
         guard let groupId = group?.id else { return }
         
+        DispatchQueue.main.async {
+            self.isLoading = true
+        }
+        
+        let newCode = UUID().uuidString.prefix(6).uppercased()
+
+        db.collection("groups").document(groupId).updateData([
+            "code": String(newCode)
+        ]) { [weak self] error in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                
+                if let error = error {
+                    self?.errorMessage = "Error updating code: \(error.localizedDescription)"
+                } else {
+                    self?.group?.code = String(newCode)
+                }
+            }
+        }
+    }
+    
+    func updateGroupName(_ newName: String) {
+        guard let groupId = group?.id else { return }
         DispatchQueue.main.async {
             self.isLoading = true
         }
@@ -239,7 +266,7 @@ final class GroupService: ObservableObject {
         }
         
         db.collection("groups").document(groupId).updateData([
-            "paypalAddress": paypalAddress.isEmpty ? nil : paypalAddress
+            "paypalAddress": paypalAddress.isEmpty ? NSNull() : paypalAddress
         ]) { [weak self] error in
             DispatchQueue.main.async {
                 self?.isLoading = false
@@ -248,64 +275,6 @@ final class GroupService: ObservableObject {
                     self?.errorMessage = "Error updating PayPal address: \(error.localizedDescription)"
                 } else {
                     self?.group?.paypalAddress = paypalAddress.isEmpty ? nil : paypalAddress
-                }
-            }
-        }
-    }
-
-    func regenerateCode() {
-        guard let groupId = group?.id else { return }
-        
-        DispatchQueue.main.async {
-            self.isLoading = true
-        }
-        
-        let newCode = UUID().uuidString.prefix(6).uppercased()
-
-        db.collection("groups").document(groupId).updateData([
-            "code": String(newCode)
-        ]) { [weak self] error in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-                
-                if let error = error {
-                    self?.errorMessage = "Error updating code: \(error.localizedDescription)"
-                } else {
-                    self?.group?.code = String(newCode)
-                }
-            }
-        }
-    }
-    
-    func changeUserRole(userId: String, newRole: UserModel.UserRole) {
-        guard !userId.isEmpty else {
-            DispatchQueue.main.async {
-                self.errorMessage = "Error: Empty user ID"
-            }
-            return
-        }
-        
-        DispatchQueue.main.async {
-            self.isLoading = true
-        }
-        
-        db.collection("users").document(userId).updateData([
-            "role": newRole.rawValue
-        ]) { [weak self] error in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-                
-                if let error = error {
-                    self?.errorMessage = "Error changing role: \(error.localizedDescription)"
-                } else {
-                    // Update local array
-                    if let memberIndex = self?.groupMembers.firstIndex(where: { $0.id == userId }) {
-                        var updatedMember = self?.groupMembers[memberIndex]
-                        updatedMember?.role = newRole
-                        if let updatedMember = updatedMember {
-                            self?.groupMembers[memberIndex] = updatedMember
-                        }
-                    }
                 }
             }
         }
@@ -323,7 +292,8 @@ final class GroupService: ObservableObject {
             "members": group.members,
             "pendingMembers": group.pendingMembers,
             "logoURL": group.logoURL ?? NSNull(),
-            "description": group.description ?? NSNull()
+            "description": group.description ?? NSNull(),
+            "paypalAddress": group.paypalAddress ?? NSNull()
         ]
         
         db.collection("groups").document(groupId).updateData(groupData) { [weak self] error in

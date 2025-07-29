@@ -16,6 +16,12 @@ struct CalendarViewWrapper: View {
                     }
                 }
         }
+        .onAppear {
+                    // ИСПРАВЛЕНИЕ: Отложенная инициализация сервисов
+                    DispatchQueue.main.async {
+                        _ = EventService.shared // Ленивая инициализация
+                    }
+                }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ResetTab0"))) { _ in
             print("Calendar navigation reset")
             navigationPath = NavigationPath()

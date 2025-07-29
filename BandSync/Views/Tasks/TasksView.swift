@@ -16,6 +16,12 @@ struct TasksViewWrapper: View {
                     }
                 }
         }
+                .onAppear {
+                    // ИСПРАВЛЕНИЕ: Отложенная инициализация сервисов
+                    DispatchQueue.main.async {
+                        _ = TaskService.shared // Ленивая инициализация
+                    }
+                }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ResetTab2"))) { _ in
             navigationPath = NavigationPath()
         }

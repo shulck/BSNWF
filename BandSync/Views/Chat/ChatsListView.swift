@@ -24,6 +24,12 @@ struct ChatsListViewWrapper: View {
                     }
                 }
         }
+                .onAppear {
+                    // ИСПРАВЛЕНИЕ: Отложенная инициализация сервисов
+                    DispatchQueue.main.async {
+                        _ = ChatService.shared // Ленивая инициализация
+                    }
+                }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ResetTab3"))) { _ in
             navigationPath = NavigationPath()
         }

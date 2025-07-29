@@ -50,53 +50,36 @@ struct MainTabView: View {
             
             MoreMenuViewWrapper()
             .tabItem {
-                Image(systemName: "ellipsis.circle")
+                Image(systemName: "ellipsis")
                 Text("More".localized)
             }
             .tag(NavigationManager.TabSelection.more)
         }
-        .accentColor(.blue)
         .onAppear {
-            guard !hasInitialized else { return }
-            hasInitialized = true
-            
-            setupTabBarAppearance()
-            initializeAppComponents()
-        }
-        .onChange(of: permissionService.permissions) { _, _ in
-            ensureValidTab()
-        }
-        .onChange(of: navigationManager.selectedTab) { oldValue, newValue in
-            if oldValue == newValue && NavigationState.shared.lastSelectedTab == newValue.rawValue {
-                NotificationCenter.default.post(name: NSNotification.Name("ResetTab\(newValue.rawValue)"), object: nil)
-            }
-            
-            NavigationState.shared.lastSelectedTab = newValue.rawValue
-            handleTabSelection(newValue.rawValue)
-        }
-        .onChange(of: badgeManager.totalBadgeCount) { oldValue, newValue in
-            if #available(iOS 16.0, *) {
-                UNUserNotificationCenter.current().setBadgeCount(newValue) { error in
-                    if let error = error {
-                        print("Error setting badge count: \(error)")
-                    }
-                }
-            } else {
-                UIApplication.shared.applicationIconBadgeNumber = newValue
+            if !hasInitialized {
+                initializeView()
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("OpenEventNotification"))) { notification in
+        .onChange(of: navigationManager.selectedTab) { newTab in
+            handleTabSelection(newTab)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("OpenEventFromNotification"))) { notification in
             handleEventNotification(notification)
         }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("OpenTaskNotification"))) { notification in
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("OpenTaskFromNotification"))) { notification in
             handleTaskNotification(notification)
         }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("OpenChatNotification"))) { notification in
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("OpenChatFromNotification"))) { notification in
             handleChatNotification(notification)
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-            handleAppBecameActive()
-        }
+    }
+    
+    // ИСПРАВЛЕНИЕ: Инициализация только один раз
+    private func initializeView() {
+        hasInitialized = true
+        setupTabBarAppearance()
+        badgeManager.startMonitoring()
+        ensureValidTab()
     }
     
     private func handleEventNotification(_ notification: Notification) {
@@ -167,42 +150,6 @@ struct MainTabView: View {
         }
     }
     
-    private func handleAppBecameActive() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            badgeManager.refreshBadgeCounts()
-        }
-    }
-    
-    private func initializeAppComponents() {
-        if appState.user == nil && !appState.isLoading {
-            appState.loadUser()
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            requestNotificationPermissions()
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            badgeManager.startMonitoring()
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            ensureValidTab()
-        }
-    }
-    
-    private func requestNotificationPermissions() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if error != nil {
-                
-            } else if granted {
-                DispatchQueue.main.async {
-                    UIApplication.shared.registerForRemoteNotifications()
-                }
-            }
-        }
-    }
-    
     private func setupTabBarAppearance() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -215,12 +162,12 @@ struct MainTabView: View {
         UITabBar.appearance().scrollEdgeAppearance = appearance
     }
     
-    private func handleTabSelection(_ tab: Int) {
-        switch tab {
-        case 2:
+    private func handleTabSelection(_ newTab: NavigationManager.TabSelection) {
+        switch newTab {
+        case .tasks:
             UnifiedBadgeManager.shared.markTasksAsRead()
-        case 3:
-            break
+        case .chats:
+            break // Чаты помечаются как прочитанные в самом ChatDetailView
         default:
             break
         }
@@ -244,13 +191,13 @@ struct MainTabView: View {
             if modules.contains(.calendar) {
                 navigationManager.selectedTab = .calendar
             } else if modules.contains(.setlists) {
-                navigationManager.selectedTab = .home
+                navigationManager.selectedTab = .setlists
             } else if modules.contains(.tasks) {
                 navigationManager.selectedTab = .tasks
             } else if modules.contains(.chats) {
                 navigationManager.selectedTab = .chats
             } else {
-                navigationManager.selectedTab = .home
+                navigationManager.selectedTab = .more
             }
         }
     }
@@ -272,18 +219,18 @@ struct MoreMenuView: View {
                             ))
                             .frame(width: 50, height: 50)
                             .overlay(
-                                Text(String(user.name.first ?? "U").uppercased())
+                                Text(String(user.name.first ?? "U"))
                                     .font(.title2)
-                                    .fontWeight(.bold)
+                                    .fontWeight(.semibold)
                                     .foregroundColor(.white)
                             )
                         
-                        VStack(alignment: .leading, spacing: 4) {
+                        VStack(alignment: .leading, spacing: 2) {
                             Text(user.name)
                                 .font(.headline)
                                 .fontWeight(.semibold)
                             
-                            Text(user.email)
+                            Text(user.role.rawValue.capitalized)
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -298,9 +245,9 @@ struct MoreMenuView: View {
                 if permissionService.currentUserHasAccess(to: .merchandise) {
                     NavigationLink(destination: MerchView()) {
                         moreRow(
-                            title: "Merchandise".localized,
-                            icon: "bag.fill",
-                            color: .brown
+                            title: "Merch".localized,
+                            icon: "tshirt.fill",
+                            color: .orange
                         )
                     }
                 }

@@ -199,21 +199,38 @@ final class UserService: ObservableObject {
         }
     }
     
-    // MARK: - Fetch Users for Group (ОБНОВЛЕНО)
+    // MARK: - Fetch Users for Group (ИСПРАВЛЕНО - загружает и участников группы, и фанатов)
     func fetchUsers(for groupId: String, completion: @escaping ([UserModel]) -> Void) {
+        // Создаем DispatchGroup для выполнения двух запросов параллельно
+        let dispatchGroup = DispatchGroup()
+        var bandMembers: [UserModel] = []
+        var fans: [UserModel] = []
+        var hasError = false
+        
+        print("UserService: Loading users for groupId: \(groupId)")
+        
+        // Запрос 1: Участники группы (userType = bandMember И groupId = groupId)
+        dispatchGroup.enter()
         db.collection("users")
             .whereField("groupId", isEqualTo: groupId)
-            .getDocuments { [weak self] snapshot, error in
+            .getDocuments { snapshot, error in
+                defer { dispatchGroup.leave() }
+                
                 if let error = error {
-                    print("UserService: error loading users: \(error.localizedDescription)")
-                    DispatchQueue.main.async {
-                        completion([])
-                    }
+                    print("UserService: error loading band members: \(error.localizedDescription)")
+                    hasError = true
                     return
                 }
                 
-                let users = snapshot?.documents.compactMap { doc -> UserModel? in
+                bandMembers = snapshot?.documents.compactMap { doc -> UserModel? in
                     let data = doc.data()
+                    
+                    // Дополнительная проверка что это действительно участник группы
+                    let userType = UserType(rawValue: data["userType"] as? String ?? "BandMember") ?? .bandMember
+                    if userType != .bandMember {
+                        return nil
+                    }
+                    
                     return UserModel(
                         id: data["id"] as? String ?? doc.documentID,
                         email: data["email"] as? String ?? "",
@@ -227,17 +244,74 @@ final class UserService: ObservableObject {
                         documentPermissions: nil,
                         googleDriveEmail: data["googleDriveEmail"] as? String,
                         hasGoogleDriveAccess: data["hasGoogleDriveAccess"] as? Bool,
-                        userType: UserType(rawValue: data["userType"] as? String ?? "BandMember") ?? .bandMember,
+                        userType: userType,
                         fanGroupId: data["fanGroupId"] as? String,
                         fanProfile: Self.parseFanProfile(from: data["fanProfile"])
                     )
                 } ?? []
                 
-                DispatchQueue.main.async {
-                    self?.users = users
-                    completion(users)
-                }
+                print("UserService: Found \(bandMembers.count) band members")
             }
+        
+        // Запрос 2: Фанаты (userType = fan И fanGroupId = groupId)
+        dispatchGroup.enter()
+        db.collection("users")
+            .whereField("fanGroupId", isEqualTo: groupId)
+            .getDocuments { snapshot, error in
+                defer { dispatchGroup.leave() }
+                
+                if let error = error {
+                    print("UserService: error loading fans: \(error.localizedDescription)")
+                    hasError = true
+                    return
+                }
+                
+                fans = snapshot?.documents.compactMap { doc -> UserModel? in
+                    let data = doc.data()
+                    
+                    // Дополнительная проверка что это действительно фанат
+                    let userType = UserType(rawValue: data["userType"] as? String ?? "BandMember") ?? .bandMember
+                    if userType != .fan {
+                        return nil
+                    }
+                    
+                    return UserModel(
+                        id: data["id"] as? String ?? doc.documentID,
+                        email: data["email"] as? String ?? "",
+                        name: data["name"] as? String ?? "",
+                        phone: data["phone"] as? String ?? "",
+                        groupId: data["groupId"] as? String,
+                        role: UserModel.UserRole(rawValue: data["role"] as? String ?? "Member") ?? .member,
+                        isOnline: data["isOnline"] as? Bool,
+                        lastSeen: (data["lastSeen"] as? Timestamp)?.dateValue(),
+                        avatarURL: data["avatarURL"] as? String,
+                        documentPermissions: nil,
+                        googleDriveEmail: data["googleDriveEmail"] as? String,
+                        hasGoogleDriveAccess: data["hasGoogleDriveAccess"] as? Bool,
+                        userType: userType,
+                        fanGroupId: data["fanGroupId"] as? String,
+                        fanProfile: Self.parseFanProfile(from: data["fanProfile"])
+                    )
+                } ?? []
+                
+                print("UserService: Found \(fans.count) fans")
+            }
+        
+        // Когда оба запроса завершены, объединяем результаты
+        dispatchGroup.notify(queue: .main) {
+            if hasError {
+                print("UserService: Error occurred during loading, returning empty array")
+                completion([])
+                return
+            }
+            
+            // Объединяем участников группы и фанатов
+            let allUsers = bandMembers + fans
+            print("UserService: Total users loaded: \(allUsers.count) (band: \(bandMembers.count), fans: \(fans.count))")
+            
+            self.users = allUsers
+            completion(allUsers)
+        }
     }
     
     // MARK: - Delete User

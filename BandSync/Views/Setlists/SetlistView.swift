@@ -16,6 +16,12 @@ struct SetlistViewWrapper: View {
         NavigationStack(path: $navigationPath) {
             SetlistView()
         }
+        .onAppear {
+            // ИСПРАВЛЕНИЕ: Отложенная инициализация сервисов
+            DispatchQueue.main.async {
+                _ = SetlistService.shared // Ленивая инициализация
+            }
+        }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ResetTab1"))) { _ in
             logger.info("Resetting setlist navigation")
             navigationPath = NavigationPath()
