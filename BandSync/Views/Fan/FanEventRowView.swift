@@ -1,7 +1,7 @@
 import SwiftUI
 
-// View for individual event row
-struct EventRowView: View {
+// View for individual event row (Fan version)
+struct FanEventRowView: View {
     let event: Event
     
     var body: some View {
@@ -18,15 +18,20 @@ struct EventRowView: View {
                     
                     Spacer()
                     
-                    // Event rating on the right side of the title
-                    if let rating = event.rating {
-                        HStack(spacing: 1) {
-                            ForEach(1...5, id: \.self) { star in
-                                Image(systemName: star <= rating ? "star.fill" : "star")
-                                    .foregroundColor(star <= rating ? .yellow : .gray.opacity(0.3))
-                                    .font(.caption2)
-                            }
+                    // Special "Congratulate" text for birthday events
+                    if event.type == .birthday {
+                        HStack(spacing: 4) {
+                            Text("🎉")
+                                .font(.caption)
+                            Text("Congratulate".localized)
+                                .font(.caption)
+                                .fontWeight(.medium)
+                                .foregroundColor(.pink)
                         }
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Color.pink.opacity(0.1))
+                        .cornerRadius(6)
                     }
                 }
                 
@@ -49,7 +54,8 @@ struct EventRowView: View {
                         .foregroundColor(.secondary)
                 }
                 
-                if let location = event.location, !location.isEmpty {
+                // Show location only for non-birthday events
+                if event.type != .birthday, let location = event.location, !location.isEmpty {
                     Text(location)
                         .font(.caption)
                         .foregroundColor(.gray)

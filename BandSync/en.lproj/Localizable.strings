@@ -18,6 +18,26 @@
 "Success" = "Success";
 "Loading" = "Loading";
 "Search" = "Search";
+
+// Fan Gift Section
+"Send a Gift" = "Send a Gift";
+"Congratulate" = "Congratulate";
+"Want to send a birthday gift?" = "Want to send a birthday gift?";
+"PayPal Address:" = "PayPal Address:";
+"Send Gift via PayPal" = "Send Gift via PayPal";
+"Gift sending is currently unavailable" = "Gift sending is currently unavailable";
+"The band hasn't set up gift receiving yet." = "The band hasn't set up gift receiving yet.";
+"Gift Status" = "Gift Status";
+"Gift sent" = "Gift sent";
+"Thank you for sending a gift! 🎁" = "Thank you for sending a gift! 🎁";
+"Loading gift options..." = "Loading gift options...";
+
+// PayPal Admin Settings
+"PayPal Address for Gifts" = "PayPal Address for Gifts";
+"Enter PayPal email address" = "Enter PayPal email address";
+"Save PayPal Address" = "Save PayPal Address";
+"Save PayPal address for birthday gifts" = "Save PayPal address for birthday gifts";
+"Gift Settings" = "Gift Settings";
 "Yes" = "Yes";
 "Actions" = "Actions";
 "Read" = "Read";

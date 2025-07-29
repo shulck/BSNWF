@@ -30,6 +30,12 @@ final class FanEventService: ObservableObject {
             return
         }
         
+        // ✅ ЗАЩИТА ОТ МНОЖЕСТВЕННЫХ ВЫЗОВОВ
+        guard !isLoading else {
+            print("🔄 FanEventService: Already loading, skipping duplicate request")
+            return
+        }
+        
         print("🔄 FanEventService: Loading public events for group: \(groupId)")
         
         isLoading = true
@@ -126,20 +132,7 @@ final class FanEventService: ObservableObject {
     
     /// Получает событие по ID
     func getEvent(by id: String) -> Event? {
-        print("🔍 FanEventService: Searching for event with ID: '\(id)'")
-        
-        let foundEvent = fanEvents.first { $0.id == id }
-        
-        if let event = foundEvent {
-            print("✅ FanEventService: Found event: '\(event.title)' with ID: '\(event.id ?? "nil")'")
-        } else {
-            print("❌ FanEventService: Event not found. Available events:")
-            for (index, event) in fanEvents.enumerated() {
-                print("   \(index): '\(event.title)' ID: '\(event.id ?? "nil")'")
-            }
-        }
-        
-        return foundEvent
+        return fanEvents.first { $0.id == id }
     }
     
     /// Получает количество событий для даты
@@ -173,9 +166,6 @@ extension FanEventService {
     /// Форматирует событие для отображения фанатам (скрывает приватную информацию)
     func formatEventForFans(_ event: Event) -> Event {
         var fanEvent = event
-        
-        // ✅ ВАЖНО: Сохраняем ID события!
-        // fanEvent.id остается без изменений
         
         // Скрываем контактную информацию организаторов/координаторов
         fanEvent.organizerEmail = nil

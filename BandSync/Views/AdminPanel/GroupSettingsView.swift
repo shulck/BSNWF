@@ -10,6 +10,7 @@ import SwiftUI
 struct GroupSettingsView: View {
     @StateObject private var groupService = GroupService.shared
     @State private var newName = ""
+    @State private var paypalAddress = ""
     @State private var showConfirmation = false
     @State private var showSuccessAlert = false
     
@@ -105,6 +106,56 @@ struct GroupSettingsView: View {
                 .opacity(newName.isEmpty || groupService.isLoading ? 0.5 : 1.0)
             } header: {
                 Text("Group Information".localized)
+            }
+            
+            // PayPal Settings Section
+            Section {
+                HStack(spacing: 12) {
+                    settingsIcon(icon: "creditcard.fill", color: .blue)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("PayPal Address for Gifts".localized)
+                            .font(.body)
+                            .fontWeight(.medium)
+                            .foregroundColor(.primary)
+                        
+                        TextField("Enter PayPal email address".localized, text: $paypalAddress)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                    }
+                    
+                    Spacer()
+                }
+                .padding(.vertical, 4)
+                
+                Button {
+                    groupService.updatePayPalAddress(paypalAddress)
+                    showSuccessAlert = true
+                } label: {
+                    HStack {
+                        settingsIcon(icon: "checkmark.circle.fill", color: .green)
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Save PayPal Address".localized)
+                                .font(.body)
+                                .fontWeight(.medium)
+                                .foregroundColor(.primary)
+                            
+                            Text("Save PayPal address for birthday gifts".localized)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Spacer()
+                    }
+                    .padding(.vertical, 4)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .disabled(paypalAddress.isEmpty || groupService.isLoading)
+                .opacity(paypalAddress.isEmpty || groupService.isLoading ? 0.5 : 1.0)
+            } header: {
+                Text("Gift Settings".localized)
             }
             
             // Invitation Code Section
@@ -270,6 +321,7 @@ struct GroupSettingsView: View {
             if let gid = AppState.shared.user?.groupId {
                 groupService.fetchGroup(by: gid)
                 newName = groupService.group?.name ?? ""
+                paypalAddress = groupService.group?.paypalAddress ?? ""
             }
         }
         // Using onChange API
@@ -277,6 +329,7 @@ struct GroupSettingsView: View {
             if let name = groupService.group?.name {
                 newName = name
             }
+            paypalAddress = groupService.group?.paypalAddress ?? ""
         }
         .alert("Generate new code?".localized, isPresented: $showConfirmation) {
             Button("Cancel".localized, role: .cancel) {}

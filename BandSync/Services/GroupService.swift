@@ -230,6 +230,28 @@ final class GroupService: ObservableObject {
             }
         }
     }
+    
+    func updatePayPalAddress(_ paypalAddress: String) {
+        guard let groupId = group?.id else { return }
+        
+        DispatchQueue.main.async {
+            self.isLoading = true
+        }
+        
+        db.collection("groups").document(groupId).updateData([
+            "paypalAddress": paypalAddress.isEmpty ? nil : paypalAddress
+        ]) { [weak self] error in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                
+                if let error = error {
+                    self?.errorMessage = "Error updating PayPal address: \(error.localizedDescription)"
+                } else {
+                    self?.group?.paypalAddress = paypalAddress.isEmpty ? nil : paypalAddress
+                }
+            }
+        }
+    }
 
     func regenerateCode() {
         guard let groupId = group?.id else { return }

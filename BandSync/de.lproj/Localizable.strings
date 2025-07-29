@@ -17,6 +17,26 @@
 "Success" = "Erfolgreich";
 "Loading" = "Wird geladen";
 "Search" = "Suchen";
+
+// Fan Gift Section
+"Send a Gift" = "Geschenk senden";
+"Congratulate" = "Gratulieren";
+"Want to send a birthday gift?" = "Möchten Sie ein Geburtstagsgeschenk senden?";
+"PayPal Address:" = "PayPal Adresse:";
+"Send Gift via PayPal" = "Geschenk via PayPal senden";
+"Gift sending is currently unavailable" = "Das Senden von Geschenken ist derzeit nicht verfügbar";
+"The band hasn't set up gift receiving yet." = "Die Band hat das Empfangen von Geschenken noch nicht eingerichtet.";
+"Gift Status" = "Geschenkstatus";
+"Gift sent" = "Geschenk gesendet";
+"Thank you for sending a gift! 🎁" = "Vielen Dank für das Geschenk! 🎁";
+"Loading gift options..." = "Geschenkoptionen werden geladen...";
+
+// PayPal Admin Settings
+"PayPal Address for Gifts" = "PayPal Adresse für Geschenke";
+"Enter PayPal email address" = "PayPal E-Mail-Adresse eingeben";
+"Save PayPal Address" = "PayPal Adresse speichern";
+"Save PayPal address for birthday gifts" = "PayPal Adresse für Geburtstagsgeschenke speichern";
+"Gift Settings" = "Geschenk-Einstellungen";
 "Yes" = "Ja";
 "Actions" = "Aktionen";
 "Read" = "Lesen";

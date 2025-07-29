@@ -1,10 +1,3 @@
-//
-//  FanCalendarView.swift
-//  BandSync
-//
-//  Created by Claude on 28.07.2025.
-//
-
 import SwiftUI
 
 struct FanCalendarViewWrapper: View {
@@ -14,11 +7,27 @@ struct FanCalendarViewWrapper: View {
         NavigationStack(path: $navigationPath) {
             FanCalendarView()
                 .navigationDestination(for: String.self) { eventId in
-                    if let event = FanEventService.shared.getEvent(by: eventId) {
-                        FanEventDetailView(event: event)
+                    // ✅ Используем основной EventService.shared!
+                    if let event = EventService.shared.events.first(where: { $0.id == eventId }) {
+                        FanEventDetailView(fanEvent: event)
                     } else {
-                        Text("Event not found")
-                            .foregroundColor(.secondary)
+                        VStack {
+                            Image(systemName: "exclamationmark.triangle")
+                                .font(.largeTitle)
+                                .foregroundColor(.orange)
+                                .padding()
+                            
+                            Text("Event not found")
+                                .font(.headline)
+                                .foregroundColor(.secondary)
+                            
+                            Text("This event may have been deleted or you don't have permission to view it.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal)
+                        }
+                        .padding()
                     }
                 }
         }
@@ -30,19 +39,35 @@ struct FanCalendarViewWrapper: View {
 }
 
 struct FanCalendarView: View {
-    @StateObject private var fanEventService = FanEventService.shared
+    @StateObject private var eventService = EventService.shared  // ✅ Основной сервис!
     @State private var selectedDate = Date()
     @EnvironmentObject private var appState: AppState
+    
+    // ✅ Фильтрация событий для фанатов из основного сервиса
+    private var fanVisibleEvents: [Event] {
+        return eventService.events.filter { event in
+            // 1. Приватные события НЕ видны фанатам
+            if event.isPersonal {
+                return false
+            }
+            
+            // 2. Только определенные типы событий видны фанатам
+            let fanVisibleTypes: [EventType] = [.concert, .festival, .birthday]
+            return fanVisibleTypes.contains(event.type)
+        }.sorted { $0.date < $1.date }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
-            // Calendar Section - используем оригинальный CustomDatePicker
-            CustomDatePicker(selectedDate: $selectedDate, events: fanEventService.fanEvents)
+            // Calendar Section - используем отфильтрованные события
+            let calendarView = CustomDatePicker(selectedDate: $selectedDate, events: fanVisibleEvents)
                 .padding(.horizontal)
                 .padding(.top)
                 .padding(.bottom, 4)
                 .background(Color(UIColor.systemBackground))
                 .cornerRadius(16)
+            
+            calendarView
                 .shadow(color: Color.purple.opacity(0.1), radius: 8, x: 0, y: 4) // Фиолетовая тема для фанатов
                 .padding([.horizontal, .top])
 
@@ -72,70 +97,51 @@ struct FanCalendarView: View {
             .padding(.vertical, 12)
 
             // Events List
-            if fanEventService.isLoading {
+            if eventService.isLoading {
                 VStack {
                     Spacer()
                     ProgressView("Loading events...")
                         .foregroundColor(.purple)
                     Spacer()
                 }
-            } else if let errorMessage = fanEventService.errorMessage {
+            } else if fanVisibleEvents.isEmpty {
                 VStack {
                     Spacer()
-                    Text("Error: \(errorMessage)")
-                        .foregroundColor(.red)
-                        .multilineTextAlignment(.center)
+                    Image(systemName: "calendar.badge.exclamationmark")
+                        .font(.system(size: 60))
+                        .foregroundColor(.purple.opacity(0.3))
                         .padding()
-                    Button("Retry") {
-                        loadEvents()
-                    }
-                    .foregroundColor(.purple)
+                    
+                    Text("No public events")
+                        .font(.title2)
+                        .fontWeight(.medium)
+                        .foregroundColor(.primary)
+                    
+                    Text("There are no concerts or festivals scheduled yet")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 40)
+                    
                     Spacer()
                 }
             } else {
                 List {
-                    let events = eventsForSelectedDate()
-                    if events.isEmpty {
-                        // Empty state for fans
-                        VStack(spacing: 16) {
-                            Image(systemName: "calendar.badge.exclamationmark")
-                                .font(.system(size: 50))
-                                .foregroundColor(.purple.opacity(0.6))
-                            
-                            Text("No events on this date")
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                            
-                            Text("Check other dates to see upcoming concerts, festivals, and celebrations!")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                                .multilineTextAlignment(.center)
-                                .padding(.horizontal)
+                    ForEach(eventsForSelectedDate(), id: \.id) { event in
+                        // ✅ ИСПРАВЛЕНО: Используем правильный ID события
+                        NavigationLink(value: event.id ?? "") {
+                            FanEventRowView(event: event)
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(Color(UIColor.systemBackground))
+                                        .shadow(color: Color.primary.opacity(0.06), radius: 4, x: 0, y: 2)
+                                )
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 40)
-                        .listRowBackground(Color.clear)
+                        .buttonStyle(PlainButtonStyle())
                         .listRowSeparator(.hidden)
-                    } else {
-                        // ✅ Используем тот же стиль что и в основном календаре
-                        ForEach(events, id: \.id) { event in
-                            ZStack {
-                                Color.clear
-                                NavigationLink(value: event.id ?? "") {
-                                    FanEventRowView(event: event)
-                                        .padding()
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 12)
-                                                .fill(Color(UIColor.systemBackground))
-                                                .shadow(color: Color.primary.opacity(0.06), radius: 4, x: 0, y: 2)
-                                        )
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                            }
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.clear)
-                            .padding(.vertical, 4)
-                        }
+                        .listRowBackground(Color.clear)
+                        .padding(.vertical, 4)
                     }
                 }
                 .listStyle(PlainListStyle())
@@ -153,8 +159,12 @@ struct FanCalendarView: View {
         }
     }
 
+    // ✅ Получаем события для выбранной даты из отфильтрованного списка
     private func eventsForSelectedDate() -> [Event] {
-        return fanEventService.getEvents(for: selectedDate)
+        let calendar = Calendar.current
+        return fanVisibleEvents.filter { event in
+            calendar.isDate(event.date, inSameDayAs: selectedDate)
+        }
     }
 
     private func formatDate(_ date: Date) -> String {
@@ -175,82 +185,27 @@ struct FanCalendarView: View {
         }
     }
     
+    // ✅ Загружаем события через основной EventService!
     private func loadEvents() {
-        guard let user = appState.user,
-              let groupId = user.fanGroupId else {
-            print("❌ FanCalendarView: No fan group ID found")
+        guard let user = appState.user else {
+            print("❌ FanCalendarView: No user found")
             return
         }
         
-        fanEventService.loadPublicEvents(for: groupId)
-    }
-}
-
-// MARK: - Fan Event Row View (точная копия оригинального EventRowView)
-
-struct FanEventRowView: View {
-    let event: Event
-    
-    var body: some View {
-        HStack {
-            Rectangle()
-                .fill(Color(hex: event.type.color)) // ✅ Используем .color как в оригинале (возвращает строку)
-                .frame(width: 4)
-                .cornerRadius(2)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Text(event.title)
-                        .font(.headline)
-                    
-                    Spacer()
-                    
-                    // Event rating on the right side of the title
-                    if let rating = event.rating {
-                        HStack(spacing: 1) {
-                            ForEach(1...5, id: \.self) { star in
-                                Image(systemName: star <= rating ? "star.fill" : "star")
-                                    .foregroundColor(star <= rating ? .yellow : .gray.opacity(0.3))
-                                    .font(.caption2)
-                            }
-                        }
-                    }
-                }
-                
-                HStack {
-                    Text(event.type.rawValue.localized)
-                        .font(.caption)
-                        .padding(3)
-                        .padding(.horizontal, 3)
-                        .background(Color(hex: event.type.color).opacity(0.2)) // ✅ Используем .color
-                        .cornerRadius(4)
-                    
-                    Text(event.status.rawValue.localized)
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                    
-                    Spacer()
-                    
-                    Text(formatTime(event.date))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                
-                if let location = event.location, !location.isEmpty {
-                    Text(location)
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                        .lineLimit(1)
-                }
-            }
-            .padding(.leading, 8)
+        // ✅ Для фанатов используем fanGroupId, для участников группы - groupId
+        let groupId: String?
+        if user.userType == .fan {
+            groupId = user.fanGroupId
+        } else {
+            groupId = user.groupId
         }
-        .padding(.vertical, 4)
-    }
-
-    private func formatTime(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
+        
+        guard let groupId = groupId else {
+            print("❌ FanCalendarView: No groupId or fanGroupId found for user type: \(user.userType)")
+            return
+        }
+        
+        print("🔄 FanCalendarView: Loading events for \(user.userType.rawValue) with groupId: \(groupId)")
+        eventService.fetchEvents(for: groupId)  // ✅ Основной сервис загружает ВСЕ события
     }
 }

@@ -17,6 +17,7 @@ struct GroupModel: Identifiable, Codable, Equatable {
     var pendingMembers: [String]
     var logoURL: String?
     var description: String?
+    var paypalAddress: String? // For fan gift donations
     
     // Implementation of Equatable for object comparison
     static func == (lhs: GroupModel, rhs: GroupModel) -> Bool {
@@ -26,6 +27,7 @@ struct GroupModel: Identifiable, Codable, Equatable {
                lhs.members == rhs.members &&
                lhs.pendingMembers == rhs.pendingMembers &&
                lhs.logoURL == rhs.logoURL &&
-               lhs.description == rhs.description
+               lhs.description == rhs.description &&
+               lhs.paypalAddress == rhs.paypalAddress
     }
 }
