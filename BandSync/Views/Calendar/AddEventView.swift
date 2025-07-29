@@ -44,6 +44,8 @@ struct AddEventView: View {
             hotelBreakfastIncluded: nil,
             fee: nil,
             currency: "EUR",
+            isPaidEvent: false,
+            ticketPurchaseUrl: nil,
             notes: nil,
             schedule: [],
             setlistId: nil,
@@ -63,6 +65,7 @@ struct AddEventView: View {
                 RecurringEventsSection
                 LocationSection
                 FeeSection
+                TicketSection
                 OrganizerSection
                 CoordinatorSection
                 AdditionalContactsSection
@@ -272,6 +275,42 @@ struct AddEventView: View {
                             set: { event.currency = $0.isEmpty ? "EUR" : $0 }
                         ))
                         .frame(width: 80)
+                    }
+                }
+            }
+        }
+    }
+    
+    private var TicketSection: some View {
+        Group {
+            if [.concert, .festival].contains(event.type) {
+                Section(header: Text("Ticket Information".localized)) {
+                    Toggle("Paid Event".localized, isOn: Binding(
+                        get: { event.isPaidEvent ?? false },
+                        set: { newValue in
+                            event.isPaidEvent = newValue
+                            if !newValue {
+                                event.ticketPurchaseUrl = nil
+                            }
+                        }
+                    ))
+                    
+                    if event.isPaidEvent ?? false {
+                        TextField("Ticket Purchase URL".localized, text: Binding(
+                            get: { event.ticketPurchaseUrl ?? "" },
+                            set: { event.ticketPurchaseUrl = $0.isEmpty ? nil : $0 }
+                        ))
+                        .keyboardType(.URL)
+                        .autocapitalization(.none)
+                        .textContentType(.URL)
+                        
+                        Text("Buy Tickets".localized)
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    } else {
+                        Text("Event is free".localized)
+                            .font(.caption)
+                            .foregroundColor(.green)
                     }
                 }
             }
@@ -546,6 +585,13 @@ struct AddEventView: View {
             return
         }
         
+        if (event.isPaidEvent ?? false), let urlString = event.ticketPurchaseUrl, !urlString.isEmpty {
+            if !isValidURL(urlString) {
+                errorMessage = "Please enter a valid ticket purchase URL"
+                return
+            }
+        }
+        
         isLoading = true
         event.groupId = groupId
         
@@ -735,5 +781,12 @@ struct AddEventView: View {
                 }
             }
         }
+    }
+    
+    private func isValidURL(_ urlString: String) -> Bool {
+        if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
+            return urlString.lowercased().hasPrefix("http://") || urlString.lowercased().hasPrefix("https://")
+        }
+        return false
     }
 }

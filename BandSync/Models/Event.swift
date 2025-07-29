@@ -35,6 +35,10 @@ struct Event: Identifiable, Codable {
     var fee: Double?
     var currency: String?
     
+    // НОВЫЕ ПОЛЯ ДЛЯ ПЛАТНЫХ СОБЫТИЙ - УБИРАЕМ ДЕФОЛТНЫЕ ЗНАЧЕНИЯ
+    var isPaidEvent: Bool?
+    var ticketPurchaseUrl: String?
+    
     var notes: String?
     var schedule: [String]?
     
@@ -46,6 +50,11 @@ struct Event: Identifiable, Codable {
     var rating: Int?
     var ratingComment: String?
     
+    // ДОБАВЛЯЕМ COMPUTED PROPERTY ДЛЯ ОБРАТНОЙ СОВМЕСТИМОСТИ
+    var isPaid: Bool {
+        return isPaidEvent ?? false
+    }
+    
     enum CodingKeys: String, CodingKey {
         case title, date, type, status, location
         case organizerName, organizerEmail, organizerPhone
@@ -55,5 +64,6 @@ struct Event: Identifiable, Codable {
         case fee, currency, notes, schedule
         case setlistId, groupId, isPersonal, createdBy
         case rating, ratingComment
+        case isPaidEvent, ticketPurchaseUrl
     }
 }

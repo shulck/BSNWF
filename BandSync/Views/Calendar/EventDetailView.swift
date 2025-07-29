@@ -71,9 +71,15 @@ struct EventDetailView: View {
             VStack(alignment: .leading, spacing: 16) {
                 // Event header
                 eventHeaderSection
-                
+
                 Divider()
-                
+
+                // Ticket section
+                if [.concert, .festival].contains(event.type) {
+                    ticketDisplaySection
+                    Divider()
+                }
+
                 // Location section
                 locationSection
                 
@@ -279,6 +285,36 @@ struct EventDetailView: View {
                             set: { event.currency = $0.isEmpty ? "EUR" : $0 }
                         ))
                         .frame(width: 80)
+                    }
+                }
+                // Ticket Information
+                Section(header: Text("Ticket Information".localized)) {
+                    Toggle("Paid Event".localized, isOn: Binding(
+                        get: { event.isPaidEvent ?? false },
+                        set: { newValue in
+                            event.isPaidEvent = newValue
+                            if !newValue {
+                                event.ticketPurchaseUrl = nil
+                            }
+                        }
+                    ))
+                    
+                    if event.isPaidEvent ?? false {
+                        TextField("Ticket Purchase URL".localized, text: Binding(
+                            get: { event.ticketPurchaseUrl ?? "" },
+                            set: { event.ticketPurchaseUrl = $0.isEmpty ? nil : $0 }
+                        ))
+                        .keyboardType(.URL)
+                        .autocapitalization(.none)
+                        .textContentType(.URL)
+                        
+                        Text("Buy Tickets".localized)
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    } else {
+                        Text("Event is free".localized)
+                            .font(.caption)
+                            .foregroundColor(.green)
                     }
                 }
                 
@@ -711,6 +747,53 @@ struct EventDetailView: View {
             
             Label(event.status.rawValue.localized, systemImage: "checkmark.circle")
                 .foregroundColor(event.status.color)
+        }
+    }
+    private var ticketDisplaySection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Ticket Information".localized)
+                .font(.headline)
+                .padding(.horizontal)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Image(systemName: (event.isPaidEvent ?? false) ? "creditcard.fill" : "gift.fill")
+                        .foregroundColor((event.isPaidEvent ?? false) ? .orange : .green)
+                    
+                    Text((event.isPaidEvent ?? false) ? "Event is paid".localized : "Event is free".localized)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor((event.isPaidEvent ?? false) ? .orange : .green)
+                    
+                    Spacer()
+                }
+                
+                if (event.isPaidEvent ?? false), let ticketUrl = event.ticketPurchaseUrl, !ticketUrl.isEmpty {
+                    Button {
+                        if let url = URL(string: ticketUrl) {
+                            UIApplication.shared.open(url)
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "link")
+                                .foregroundColor(.white)
+                            Text("Buy Tickets".localized)
+                                .fontWeight(.medium)
+                                .foregroundColor(.white)
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(8)
+                    }
+                    .padding(.top, 4)
+                }
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.gray.opacity(0.1))
+            .cornerRadius(8)
+            .padding(.horizontal)
         }
     }
     
@@ -1206,7 +1289,9 @@ struct EventDetailView: View {
                         event.currency != originalEvent.currency ||
                         event.isPersonal != originalEvent.isPersonal ||
                         event.rating != originalEvent.rating ||
-                        event.ratingComment != originalEvent.ratingComment
+                        event.ratingComment != originalEvent.ratingComment ||
+                        event.isPaidEvent != originalEvent.isPaidEvent ||
+                        event.ticketPurchaseUrl != originalEvent.ticketPurchaseUrl
         
         return hasChanges
     }
@@ -1263,6 +1348,12 @@ struct EventDetailView: View {
             print("❌ Cannot save event without ID")
             errorMessage = "Cannot save event: missing event ID"
             return
+        }
+        if (event.isPaidEvent ?? false), let urlString = event.ticketPurchaseUrl, !urlString.isEmpty {
+            if !isValidURL(urlString) {
+                errorMessage = "Please enter a valid ticket purchase URL"
+                return
+            }
         }
         
         // Проверяем Firebase Auth
@@ -1738,4 +1829,10 @@ extension AppState {
         
         return true
     }
+}
+private func isValidURL(_ urlString: String) -> Bool {
+    if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
+        return urlString.lowercased().hasPrefix("http://") || urlString.lowercased().hasPrefix("https://")
+    }
+    return false
 }
