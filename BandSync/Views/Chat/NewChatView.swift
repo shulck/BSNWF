@@ -19,13 +19,21 @@ struct NewChatView: View {
         (userService.currentUser?.role == .admin || userService.currentUser?.role == .manager)
     }
     
+    // ИСПРАВЛЕНИЕ: Фильтруем только участников группы (исключаем фанатов)
     private var filteredUsers: [UserModel] {
-        let allUsers = userService.users.filter { $0.id != (Auth.auth().currentUser?.uid ?? "") }
+        let currentUserId = Auth.auth().currentUser?.uid ?? ""
+        
+        // Показываем только участников группы (БЕЗ фанатов)
+        let bandMembers = userService.users.filter { user in
+            user.id != currentUserId &&  // Исключаем текущего пользователя
+            user.userType == .bandMember &&  // Только участники группы
+            user.groupId != nil  // У них должен быть groupId
+        }
         
         if searchText.isEmpty {
-            return allUsers
+            return bandMembers
         } else {
-            return allUsers.filter { user in
+            return bandMembers.filter { user in
                 user.name.localizedCaseInsensitiveContains(searchText) ||
                 user.email.localizedCaseInsensitiveContains(searchText)
             }
@@ -51,11 +59,22 @@ struct NewChatView: View {
                                     HStack {
                                         Image(systemName: "megaphone.fill")
                                             .foregroundColor(.orange)
-                                        Text("Create band-wide announcement".localized)
-                                            .foregroundColor(.primary)
+                                        
+                                        VStack(alignment: .leading) {
+                                            Text("Create band-wide announcement".localized)
+                                                .font(.headline)
+                                                .foregroundColor(.primary)
+                                            
+                                            Text("Create announcement for all band members".localized)
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        }
+                                        
                                         Spacer()
                                     }
+                                    .padding(.vertical, 4)
                                 }
+                                .buttonStyle(PlainButtonStyle())
                             }
                             
                             SimpleSearchBar(text: $searchText)
@@ -64,7 +83,13 @@ struct NewChatView: View {
                                 UserSelectionRow(
                                     user: user,
                                     isSelected: selectedUsers.contains(user.id),
-                                    onToggle: { toggleUserSelection(user.id) }
+                                    onToggle: {
+                                        if selectedUsers.contains(user.id) {
+                                            selectedUsers.remove(user.id)
+                                        } else {
+                                            selectedUsers.insert(user.id)
+                                        }
+                                    }
                                 )
                             }
                         }
@@ -84,39 +109,18 @@ struct NewChatView: View {
                     Button("Create".localized) {
                         createChat()
                     }
-                    .disabled(!canCreateChat || isLoading)
+                    .disabled(selectedUsers.isEmpty || isLoading)
                 }
             }
             .alert("Error".localized, isPresented: $showingError) {
-                Button("OK".localized, role: .cancel) { }
+                Button("OK".localized) { }
             } message: {
                 Text(errorMessage)
             }
             .onAppear {
-                loadUsers()
+                userService.fetchUsers()
             }
         }
-    }
-    
-    private var canCreateChat: Bool {
-        if selectedUsers.count == 1 {
-            return true
-        } else if selectedUsers.count > 1 && !chatName.isEmpty {
-            return true
-        }
-        return false
-    }
-    
-    private func toggleUserSelection(_ userId: String) {
-        if selectedUsers.contains(userId) {
-            selectedUsers.remove(userId)
-        } else {
-            selectedUsers.insert(userId)
-        }
-    }
-    
-    private func loadUsers() {
-        userService.fetchUsers()
     }
     
     private func createChat() {
@@ -169,14 +173,26 @@ struct NewChatView: View {
         }
     }
     
+    // ИСПРАВЛЕНИЕ: Строгая фильтрация только участников группы (БЕЗ фанатов)
     private func createBandWideChat() {
-        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+        guard let currentUserId = Auth.auth().currentUser?.uid,
+              let currentGroupId = userService.currentUser?.groupId else { return }
         
         isLoading = true
         
-        let allUserIds = userService.users.map { $0.id }
-        var participants = allUserIds
+        // КРИТИЧНОЕ ИСПРАВЛЕНИЕ: Только участники группы, исключаем всех фанатов
+        let bandMemberIds = userService.users
+            .filter { user in
+                user.userType == .bandMember &&  // ТОЛЬКО участники группы
+                user.groupId == currentGroupId &&  // Проверяем правильный groupId
+                user.fanGroupId == nil  // Дополнительная защита: у участников НЕТ fanGroupId
+            }
+            .map { $0.id }
+        
+        var participants = bandMemberIds
         participants.append(currentUserId)
+        
+        print("NewChatView: Creating BandWide chat with \(participants.count) participants (excluding fans)")
         
         let chat = Chat(
             type: .bandWide,
@@ -185,7 +201,7 @@ struct NewChatView: View {
             createdAt: Date(),
             updatedAt: Date(),
             name: chatName.isEmpty ? "Band Announcement".localized : chatName,
-            bandId: userService.currentUser?.groupId,
+            bandId: currentGroupId,
             adminIds: [currentUserId]
         )
         
@@ -216,9 +232,23 @@ struct UserSelectionRow: View {
                 AvatarView(user: user, size: 40)
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(user.name)
-                        .font(.headline)
-                        .foregroundColor(.primary)
+                    HStack {
+                        Text(user.name)
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                        
+                        // ДОБАВЛЕНО: Показываем тип пользователя для безопасности
+                        if user.userType == .fan {
+                            Text("FAN")
+                                .font(.caption2)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 4)
+                                .padding(.vertical, 1)
+                                .background(Color.orange)
+                                .cornerRadius(4)
+                        }
+                    }
                     
                     Text(user.email)
                         .font(.caption)

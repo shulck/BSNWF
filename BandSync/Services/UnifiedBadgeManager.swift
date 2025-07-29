@@ -19,6 +19,10 @@ final class UnifiedBadgeManager: ObservableObject {
     @Published var unreadChatsCount: Int = 0
     @Published var totalBadgeCount: Int = 0
     
+    var hasUnreadItems: Bool {
+        return totalBadgeCount > 0
+    }
+    
     private let firestore = Firestore.firestore()
     private let rtdb = Database.database().reference()
     private var firestoreListeners: [ListenerRegistration] = []
@@ -121,6 +125,10 @@ final class UnifiedBadgeManager: ObservableObject {
     
     func forceRefreshBadgeCounts() {
         refreshBadgeCounts()
+    }
+    
+    func refreshBadges() {
+        forceRefreshBadgeCounts()
     }
     
     @objc private func appDidBecomeActive() {
@@ -308,9 +316,11 @@ final class UnifiedBadgeManager: ObservableObject {
         group.notify(queue: .main) { [weak self] in
             guard let self = self else { return }
             self.unreadChatsCount = totalUnreadCount
+            print("🔔 Badge Debug: Updated unread chats count to \(totalUnreadCount)")
         }
     }
     
+    // ИСПРАВЛЕНИЕ: Улучшенный метод markChatAsRead
     func markChatAsRead(_ chatId: String) {
         let currentTime = Date()
         let lastReadKey = "lastReadTime_\(chatId)"
@@ -320,7 +330,8 @@ final class UnifiedBadgeManager: ObservableObject {
             NotificationCenter.default.post(name: .chatMarkedAsRead, object: chatId)
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+        // ИСПРАВЛЕНИЕ: Немедленно пересчитываем бейджи
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             guard let self = self, let userId = self.currentUserId else { return }
             self.calculateUnreadChatsCount(for: userId)
         }
@@ -364,7 +375,7 @@ final class UnifiedBadgeManager: ObservableObject {
         print("   - Unread tasks: \(unreadTasksCount)")
         print("   - Unread chats: \(unreadChatsCount)")
         print("   - Total badge: \(totalBadgeCount)")
-        print("   - App badge: \(totalBadgeCount)") // Since we set it to totalBadgeCount
+        print("   - App badge: \(totalBadgeCount)")
         print("   - Is monitoring: \(isMonitoring)")
     }
     

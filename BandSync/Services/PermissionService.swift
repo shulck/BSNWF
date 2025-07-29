@@ -16,8 +16,8 @@ final class PermissionService: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     
-    // ИСПРАВЛЕНИЕ: Кэшируем результаты проверки доступа
-    @Published private(set) var accessibleModules: Set<ModuleType> = []
+    // ИСПРАВЛЕНИЕ: Кэширование результатов проверки доступа
+    private var accessCache: [String: Bool] = [:]
     private var lastCacheUpdate: Date = Date()
     private let cacheTimeout: TimeInterval = 30.0
     
@@ -32,17 +32,45 @@ final class PermissionService: ObservableObject {
                     self?.fetchPermissions(for: groupId)
                 } else {
                     self?.permissions = nil
-                    self?.clearAccessCache()
+                    self?.clearCache()
                 }
             }
             .store(in: &cancellables)
-            
-        // Обновляем кэш при изменении разрешений
-        $permissions
-            .sink { [weak self] _ in
-                self?.updateAccessCache()
-            }
-            .store(in: &cancellables)
+    }
+    
+    // ИСПРАВЛЕНИЕ: Оптимизированная проверка доступа с кэшированием
+    func currentUserHasAccess(to moduleId: ModuleType) -> Bool {
+        guard let userId = AppState.shared.user?.id,
+              let userRole = AppState.shared.user?.role else {
+            return false
+        }
+        
+        if permissions == nil {
+            return false
+        }
+        
+        // Проверяем кэш
+        let cacheKey = "\(userId)_\(moduleId.rawValue)"
+        if isCacheValid(), let cachedResult = accessCache[cacheKey] {
+            return cachedResult
+        }
+        
+        // Вычисляем результат
+        let result = hasAccess(to: moduleId, userId: userId, role: userRole)
+        
+        // Сохраняем в кэш
+        accessCache[cacheKey] = result
+        
+        return result
+    }
+    
+    private func clearCache() {
+        accessCache.removeAll()
+        lastCacheUpdate = Date()
+    }
+    
+    private func isCacheValid() -> Bool {
+        return Date().timeIntervalSince(lastCacheUpdate) < cacheTimeout
     }
     
     // MARK: - Fetch Permissions
@@ -66,7 +94,8 @@ final class PermissionService: ObservableObject {
                     if let document = snapshot?.documents.first,
                        let permissionData = try? document.data(as: PermissionModel.self) {
                         self.permissions = permissionData
-                        self.objectWillChange.send()
+                        self.clearCache() // Очищаем кэш при получении новых разрешений
+                        // ИСПРАВЛЕНИЕ: Убираем objectWillChange.send() - @Published делает это автоматически
                     } else {
                         self.createDefaultPermissions(for: groupId)
                     }
@@ -116,7 +145,8 @@ final class PermissionService: ObservableObject {
                         self?.errorMessage = "Error creating permissions: \(error.localizedDescription)"
                     } else {
                         self?.permissions = newPermission
-                        self?.objectWillChange.send()
+                        self?.clearCache()
+                        // ИСПРАВЛЕНИЕ: Убираем objectWillChange.send() - @Published делает это автоматически
                     }
                 }
             }
@@ -128,49 +158,7 @@ final class PermissionService: ObservableObject {
         }
     }
     
-    // MARK: - ИСПРАВЛЕНИЕ: Оптимизированные методы проверки доступа
-    
-    // Быстрая проверка через кэш
-    func currentUserHasAccess(to moduleId: ModuleType) -> Bool {
-        // Проверяем кэш сначала
-        if isCacheValid() {
-            return accessibleModules.contains(moduleId)
-        }
-        
-        // Если кэш устарел, обновляем и проверяем
-        updateAccessCache()
-        return accessibleModules.contains(moduleId)
-    }
-    
-    private func updateAccessCache() {
-        guard let userId = AppState.shared.user?.id,
-              let userRole = AppState.shared.user?.role else {
-            clearAccessCache()
-            return
-        }
-        
-        var newAccessibleModules: Set<ModuleType> = []
-        
-        for module in ModuleType.allCases {
-            if hasAccess(to: module, userId: userId, role: userRole) {
-                newAccessibleModules.insert(module)
-            }
-        }
-        
-        accessibleModules = newAccessibleModules
-        lastCacheUpdate = Date()
-    }
-    
-    private func clearAccessCache() {
-        accessibleModules = []
-        lastCacheUpdate = Date()
-    }
-    
-    private func isCacheValid() -> Bool {
-        return Date().timeIntervalSince(lastCacheUpdate) < cacheTimeout
-    }
-    
-    // MARK: - Update module permissions
+    // Update module permissions
     func updateModulePermission(moduleId: ModuleType, roles: [UserModel.UserRole]) {
         guard let permissionId = permissions?.id else { return }
         isLoading = true
@@ -195,7 +183,8 @@ final class PermissionService: ObservableObject {
                     self?.errorMessage = "Error updating modules array: \(error.localizedDescription)"
                 } else {
                     self?.permissions?.modules = newModules
-                    self?.objectWillChange.send()
+                    self?.clearCache() // Очищаем кэш при обновлении разрешений
+                    // ИСПРАВЛЕНИЕ: Убираем objectWillChange.send() - @Published делает это автоматически
                 }
             }
         }
@@ -303,6 +292,7 @@ final class PermissionService: ObservableObject {
                     self?.errorMessage = "Error updating user permissions: \(error.localizedDescription)"
                 } else {
                     self?.permissions?.userPermissions = userPermissions
+                    self?.clearCache()
                 }
             }
         }

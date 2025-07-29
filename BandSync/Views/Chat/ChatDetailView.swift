@@ -88,53 +88,34 @@ class ChatDetailViewModel: ObservableObject {
               let chatId = chat.id else { return }
         
         let currentUserId = Auth.auth().currentUser?.uid ?? ""
+        let message = Message(
+            chatId: chatId,
+            content: messageText,
+            senderID: currentUserId,
+            senderName: getCurrentUserName(),
+            timestamp: Date(),
+            type: .text,
+            replyToMessageId: replyingTo?.id,
+            replyToContent: replyingTo?.content,
+            replyToSenderName: replyingTo?.senderName
+        )
         
-        if let editingMessage = editingMessage, let messageId = editingMessage.id {
-            chatService.editMessage(messageId, newContent: messageText) { [weak self] result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        self?.editingMessage = nil
-                    case .failure(let error):
-                        self?.showError("Error editing message: \(error.localizedDescription)")
-                    }
-                }
-            }
-        } else {
-            let message = Message(
-                chatId: chatId,
-                content: messageText,
-                senderID: currentUserId,
-                senderName: getCurrentUserName(),
-                timestamp: Date(),
-                type: replyingTo != nil ? .reply : .text,
-                replyToMessageId: replyingTo?.id,
-                replyToContent: replyingTo?.content,
-                replyToSenderName: replyingTo?.senderName,
-                mentions: extractMentions(from: messageText)
-            )
-            
-            chatService.sendMessage(message) { [weak self] result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        self?.replyingTo = nil
-                    case .failure(let error):
-                        self?.showError("Error sending message: \(error.localizedDescription)")
-                    }
+        chatService.sendMessage(message) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self?.replyingTo = nil
+                case .failure(let error):
+                    self?.showError("Failed to send message: \(error.localizedDescription)")
                 }
             }
         }
     }
     
     func sendImageMessage(_ image: UIImage) {
-        guard let chatId = chat.id else {
-            showError("Invalid chat".localized)
-            return
-        }
+        guard let chatId = chat.id else { return }
         
         isSendingImage = true
-        
         let currentUserId = Auth.auth().currentUser?.uid ?? ""
         let message = Message(
             chatId: chatId,
@@ -175,23 +156,24 @@ class ChatDetailViewModel: ObservableObject {
         }
     }
     
+    // ИСПРАВЛЕНИЕ: Улучшенный метод markMessagesAsRead
     func markMessagesAsRead() {
         guard let chatId = chat.id else { return }
         
         let currentUserId = Auth.auth().currentUser?.uid ?? ""
         let unreadMessages = messages.filter { !$0.readBy.keys.contains(currentUserId) }
         
-        guard !unreadMessages.isEmpty else {
-            return
-        }
-        
+        // ИСПРАВЛЕНИЕ: Всегда помечаем чат как прочитанный, даже если нет непрочитанных сообщений
         UnifiedBadgeManager.shared.markChatAsRead(chatId)
         
-        DispatchQueue.global(qos: .utility).async {
-            for message in unreadMessages {
-                if let messageId = message.id {
-                    self.chatService.markMessageAsRead(messageId, userId: currentUserId) { _ in
-                        // Silent completion
+        // Если есть непрочитанные сообщения, помечаем их в Firebase
+        if !unreadMessages.isEmpty {
+            DispatchQueue.global(qos: .utility).async {
+                for message in unreadMessages {
+                    if let messageId = message.id {
+                        self.chatService.markMessageAsRead(messageId, userId: currentUserId) { _ in
+                            // Silent completion
+                        }
                     }
                 }
             }
@@ -292,58 +274,21 @@ struct ChatDetailView: View {
             return chat.name ?? "Group Chat".localized
             
         case .bandWide:
-            return chat.name ?? "Band Announcement"
+            return chat.name ?? "Band Announcement".localized
         }
     }
     
     private var navigationTitleView: some View {
-        HStack(spacing: 8) {
-            // Avatar for band-wide chats
-            if chat.type == .bandWide {
-                if let group = groupService.group {
-                    GroupAvatarView(group: group, size: 28)
-                } else {
-                    ZStack {
-                        Circle()
-                            .fill(LinearGradient(
-                                gradient: Gradient(colors: [Color.orange.opacity(0.6), Color.red.opacity(0.6)]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            ))
-                            .frame(width: 28, height: 28)
-                        
-                        Image(systemName: "music.note.house.fill")
-                            .foregroundColor(.white)
-                            .font(.system(size: 12))
-                    }
-                }
-            } else if chat.type == .direct {
-                // User avatar for direct chats
-                let otherUserId = chat.participants.first { $0 != currentUserId } ?? ""
-                if let otherUser = viewModel.userService.users.first(where: { $0.id == otherUserId }) {
-                    AvatarView(user: otherUser, size: 28)
-                }
-            } else {
-                // Group icon for group chats
-                ZStack {
-                    Circle()
-                        .fill(LinearGradient(
-                            gradient: Gradient(colors: [Color.purple.opacity(0.6), Color.blue.opacity(0.6)]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ))
-                        .frame(width: 28, height: 28)
-                    
-                    Image(systemName: "person.3.fill")
-                        .foregroundColor(.white)
-                        .font(.system(size: 12))
-                }
-            }
-            
+        VStack {
             Text(navigationTitle)
                 .font(.headline)
                 .fontWeight(.semibold)
-                .lineLimit(1)
+            
+            if !viewModel.chatService.typingUsers.isEmpty {
+                Text("\(viewModel.chatService.typingUsers.first ?? "") is typing...".localized)
+                    .font(.caption)
+                    .foregroundColor(.green)
+            }
         }
     }
     
@@ -351,14 +296,17 @@ struct ChatDetailView: View {
         VStack(spacing: 0) {
             ScrollViewReader { proxy in
                 ScrollView {
-                    LazyVStack(spacing: 12) {
-                        if !viewModel.messages.isEmpty {
-                            Button(action: viewModel.loadOlderMessages) {
+                    LazyVStack(spacing: 8) {
+                        if viewModel.messages.count >= 20 {
+                            Button {
+                                viewModel.loadOlderMessages()
+                            } label: {
                                 HStack {
                                     if viewModel.isLoadingOlderMessages {
                                         ProgressView()
                                             .scaleEffect(0.8)
                                     }
+                                    
                                     Text(viewModel.isLoadingOlderMessages ? "Loading...".localized : "Load older messages".localized)
                                         .font(.caption)
                                         .foregroundColor(.blue)
@@ -531,7 +479,7 @@ struct ChatDetailView: View {
             }
             
             Button("Create Task".localized) {
-                print("🔄 ChatDetailView Create Task button pressed") 
+                print("🔄 ChatDetailView Create Task button pressed")
                 showingIntegrationSheet = true
             }
             
@@ -572,6 +520,7 @@ struct ChatDetailView: View {
         }
     }
     
+    // ИСПРАВЛЕНИЕ: Улучшенный setupView
     private func setupView() {
         // Prevent multiple setups for the same chat
         guard viewModel.messages.isEmpty else { return }
@@ -589,14 +538,24 @@ struct ChatDetailView: View {
             groupService.fetchGroup(by: groupId)
         }
         
-        // Mark messages as read
-        viewModel.markMessagesAsRead()
+        // ИСПРАВЛЕНИЕ: Помечаем сообщения как прочитанные с задержкой
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            viewModel.markMessagesAsRead()
+        }
     }
     
+    // ИСПРАВЛЕНИЕ: Улучшенный cleanupView
     private func cleanupView() {
         viewModel.chatService.stopListeningToMessages()
         viewModel.stopTyping()
+        
+        // ИСПРАВЛЕНИЕ: Окончательно помечаем как прочитанные при выходе
         viewModel.markMessagesAsRead()
+        
+        // ИСПРАВЛЕНИЕ: Принудительно обновляем бейджи
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            UnifiedBadgeManager.shared.forceRefreshBadgeCounts()
+        }
     }
     
     private func deleteChatAndDismiss() {
@@ -630,21 +589,22 @@ struct ReplyBannerView: View {
                     .foregroundColor(.blue)
                 
                 Text(message.content.isEmpty ? "📷 Photo" : message.content)
-                    .font(.body)
-                    .lineLimit(1)
+                    .font(.caption)
                     .foregroundColor(.secondary)
+                    .lineLimit(1)
             }
             
             Spacer()
             
             Button(action: onCancel) {
                 Image(systemName: "xmark")
-                    .foregroundColor(.gray)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 16)
         .padding(.vertical, 8)
-        .background(Color.gray.opacity(0.1))
+        .background(Color(.systemGray6))
     }
 }
 
@@ -653,7 +613,7 @@ struct EditBannerView: View {
     
     var body: some View {
         HStack {
-            Text("Editing message".localized)
+            Text("Edit message".localized)
                 .font(.caption)
                 .foregroundColor(.orange)
             
@@ -661,12 +621,13 @@ struct EditBannerView: View {
             
             Button(action: onCancel) {
                 Image(systemName: "xmark")
-                    .foregroundColor(.gray)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 16)
         .padding(.vertical, 8)
-        .background(Color.orange.opacity(0.1))
+        .background(Color(.systemGray6))
     }
 }
 
@@ -679,33 +640,34 @@ struct MessageInputView: View {
     let onCancel: () -> Void
     
     var body: some View {
-        VStack(spacing: 0) {
-            Divider()
-            
-            HStack(alignment: .bottom, spacing: 12) {
+        HStack(spacing: 12) {
+            if !isEditing {
                 Button(action: onImagePick) {
-                    Image(systemName: "camera.fill")
+                    Image(systemName: "camera")
                         .font(.title2)
-                        .foregroundColor(isSendingImage ? .gray : .blue)
+                        .foregroundColor(.blue)
                 }
                 .disabled(isSendingImage)
-                .accessibilityLabel("Attach image")
-                
-                TextField(isEditing ? "Edit message..." : "Message...", text: $text, axis: .vertical)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .lineLimit(1...4)
-                    .disabled(isSendingImage)
-                    .accessibilityLabel(isEditing ? "Edit message field" : "Message input field")
+                .accessibilityLabel("Add photo")
+            }
+            
+            HStack {
+                TextField(isEditing ? "Edit message...".localized : "Type a message...".localized, text: $text, axis: .vertical)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .lineLimit(1...5)
                 
                 if isEditing {
-                    Button(action: onCancel) {
-                        Image(systemName: "xmark")
-                            .font(.title2)
-                            .foregroundColor(.gray)
-                    }
-                    .accessibilityLabel("Cancel editing")
+                    Button("Cancel".localized, action: onCancel)
+                        .font(.caption)
+                        .foregroundColor(.red)
                 }
-                
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(Color(.systemGray6))
+            .cornerRadius(20)
+            
+            if canSend {
                 Button(action: onSend) {
                     Image(systemName: isEditing ? "checkmark" : "arrow.up.circle.fill")
                         .font(.title2)
@@ -714,8 +676,8 @@ struct MessageInputView: View {
                 .disabled(!canSend || isSendingImage)
                 .accessibilityLabel(isEditing ? "Save changes" : "Send message")
             }
-            .padding()
         }
+        .padding()
         .background(Color(.systemBackground))
     }
     
