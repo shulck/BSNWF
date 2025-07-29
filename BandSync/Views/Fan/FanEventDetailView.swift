@@ -9,7 +9,7 @@ struct FanEventDetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
                 // Event Header with adaptive title and rating
                 eventHeaderSection
                 
@@ -18,6 +18,12 @@ struct FanEventDetailView: View {
                 // Location section with map (not shown for birthday events)
                 if fanEvent.type != .birthday {
                     locationSection
+                    Divider()
+                }
+                
+                // ✅ НОВАЯ СЕКЦИЯ: Ticket Information (для концертов и фестивалей)
+                if [.concert, .festival].contains(fanEvent.type) {
+                    ticketInfoSection
                     Divider()
                 }
                 
@@ -30,9 +36,9 @@ struct FanEventDetailView: View {
                 // Attendance
                 attendanceSection
                 
-                Spacer(minLength: 40)
+                Spacer(minLength: 20)
             }
-            .padding(.vertical)
+            .padding(.vertical, 16)
         }
         .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Event".localized)
@@ -41,7 +47,7 @@ struct FanEventDetailView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: shareEvent) {
                     Image(systemName: "square.and.arrow.up")
-                        .foregroundColor(.purple)
+                        .foregroundColor(.blue)
                 }
             }
         }
@@ -56,23 +62,19 @@ struct FanEventDetailView: View {
     // MARK: - Event Header Section
     
     private var eventHeaderSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Adaptive event title
-            GeometryReader { geometry in
-                Text(fanEvent.title)
-                    .font(adaptiveTitleFont(for: geometry.size.width))
-                    .fontWeight(.bold)
-                    .foregroundColor(Color(hex: fanEvent.type.colorHex))
-                    .lineLimit(nil)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .multilineTextAlignment(.leading)
-            }
-            .frame(minHeight: adaptiveTitleHeight())
-            .padding(.bottom, 4)
+        VStack(alignment: .leading, spacing: 12) {
+            // ✅ ИСПРАВЛЕНО: Убрал GeometryReader и упростил
+            Text(fanEvent.title)
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(Color(hex: fanEvent.type.colorHex))
+                .lineLimit(nil)
+                .multilineTextAlignment(.leading)
             
             eventTypeAndStatusRow
             
             Label(formatDate(fanEvent.date), systemImage: "calendar")
+                .foregroundColor(.secondary)
         }
         .padding(.horizontal)
     }
@@ -175,6 +177,65 @@ struct FanEventDetailView: View {
                 }
             }
         }
+    }
+    
+    // MARK: - ✅ НОВАЯ СЕКЦИЯ: Ticket Information Section
+    
+    private var ticketInfoSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Label("Ticket Information", systemImage: "ticket")
+                .font(.headline)
+                .foregroundColor(.blue)
+            
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 8) {
+                    Image(systemName: (fanEvent.isPaidEvent ?? false) ? "creditcard.fill" : "gift.fill")
+                        .foregroundColor((fanEvent.isPaidEvent ?? false) ? .orange : .green)
+                    
+                    Text((fanEvent.isPaidEvent ?? false) ? "Event is paid".localized : "Event is free".localized)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor((fanEvent.isPaidEvent ?? false) ? .orange : .green)
+                    
+                    Spacer()
+                }
+                
+                // Кнопка "Buy Tickets" если событие платное и есть ссылка
+                if (fanEvent.isPaidEvent ?? false), let ticketUrl = fanEvent.ticketPurchaseUrl, !ticketUrl.isEmpty {
+                    Button {
+                        if let url = URL(string: ticketUrl) {
+                            UIApplication.shared.open(url)
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "link")
+                                .foregroundColor(.white)
+                            Text("Buy Tickets".localized)
+                                .fontWeight(.medium)
+                                .foregroundColor(.white)
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(8)
+                    }
+                } else if !(fanEvent.isPaidEvent ?? false) {
+                    // Дополнительное сообщение для бесплатных событий
+                    HStack {
+                        Image(systemName: "party.popper")
+                            .foregroundColor(.green)
+                        Text("No tickets required - just come and enjoy!")
+                            .font(.caption)
+                            .foregroundColor(.green)
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color(UIColor.secondarySystemGroupedBackground))
+        .cornerRadius(12)
+        .padding(.horizontal)
     }
     
     // MARK: - Birthday Gift Section
@@ -286,7 +347,7 @@ struct FanEventDetailView: View {
             } else {
                 Label("Attendance", systemImage: "hand.raised")
                     .font(.headline)
-                    .foregroundColor(.purple)
+                    .foregroundColor(.blue)
             }
             
             VStack(spacing: 12) {
@@ -306,13 +367,13 @@ struct FanEventDetailView: View {
                     
                     Toggle("", isOn: $willAttend)
                         .labelsHidden()
-                        .toggleStyle(SwitchToggleStyle(tint: fanEvent.type == .birthday ? .pink : .purple))
+                        .toggleStyle(SwitchToggleStyle(tint: fanEvent.type == .birthday ? .pink : .blue))
                 }
                 
                 if willAttend {
                     HStack {
                         Image(systemName: fanEvent.type == .birthday ? "gift.fill" : "heart.fill")
-                            .foregroundColor(fanEvent.type == .birthday ? .pink : .purple)
+                            .foregroundColor(fanEvent.type == .birthday ? .pink : .blue)
                         
                         if fanEvent.type == .birthday {
                             Text("Thank you for sending a gift! 🎁")
@@ -322,7 +383,7 @@ struct FanEventDetailView: View {
                         } else {
                             Text("Great! We're excited to see you there!")
                                 .font(.subheadline)
-                                .foregroundColor(.purple)
+                                .foregroundColor(.blue)
                                 .fontWeight(.medium)
                         }
                         
@@ -333,8 +394,8 @@ struct FanEventDetailView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(willAttend ? 
-                   (fanEvent.type == .birthday ? Color.pink.opacity(0.1) : Color.purple.opacity(0.1)) : 
+        .background(willAttend ?
+                   (fanEvent.type == .birthday ? Color.pink.opacity(0.1) : Color.blue.opacity(0.1)) :
                    Color(UIColor.secondarySystemGroupedBackground))
         .cornerRadius(12)
         .padding(.horizontal)
@@ -409,5 +470,3 @@ struct FanEventDetailView: View {
         }
     }
 }
-
-

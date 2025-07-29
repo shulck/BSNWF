@@ -83,7 +83,14 @@ struct FanTabView: View {
                 }
                 .tag(FanTab.profile)
         }
-
+        // ✅ ДОБАВЛЕНО: Отслеживание переключения вкладок для сброса даты календаря
+        .onChange(of: selectedTab) { newTab in
+            // Отправляем уведомление при переключении на вкладку Events (календарь)
+            if newTab == .events {
+                NotificationCenter.default.post(name: NSNotification.Name("FanCalendarTabSelected"), object: nil)
+                print("🔄 FanTabView: Switched to Events tab, sending calendar reset notification")
+            }
+        }
         .onAppear {
             if !hasInitialized {
                 initializeView()

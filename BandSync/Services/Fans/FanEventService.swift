@@ -180,9 +180,14 @@ extension FanEventService {
         fanEvent.hotelCheckOut = nil
         fanEvent.hotelBreakfastIncluded = nil
         
-        // Скрываем финансовую информацию
-        fanEvent.fee = nil
-        fanEvent.currency = nil
+        // ✅ ИСПРАВЛЕНО: НЕ скрываем информацию о платности событий для фанатов
+        // Фанаты ДОЛЖНЫ видеть:
+        // - fanEvent.isPaidEvent (платное ли событие)
+        // - fanEvent.ticketPurchaseUrl (ссылка на покупку билетов)
+        
+        // ❌ Скрываем только внутреннюю финансовую информацию группы:
+        fanEvent.fee = nil        // Гонорар группы - приватная информация
+        fanEvent.currency = nil   // Валюта гонорара - приватная информация
         
         // Скрываем приватные заметки
         fanEvent.notes = nil

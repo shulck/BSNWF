@@ -68,7 +68,7 @@ struct FanCalendarView: View {
                 .cornerRadius(16)
             
             calendarView
-                .shadow(color: Color.purple.opacity(0.1), radius: 8, x: 0, y: 4) // Фиолетовая тема для фанатов
+                .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
                 .padding([.horizontal, .top])
 
             Divider()
@@ -86,10 +86,10 @@ struct FanCalendarView: View {
                 if eventCount > 0 {
                     Text("\(eventCount) \(eventCountLabel(eventCount))")
                         .font(.subheadline)
-                        .foregroundColor(.purple) // Фиолетовая тема
+                        .foregroundColor(.secondary)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 4)
-                        .background(Color.purple.opacity(0.1))
+                        .background(Color.secondary.opacity(0.1))
                         .cornerRadius(12)
                 }
             }
@@ -101,34 +101,34 @@ struct FanCalendarView: View {
                 VStack {
                     Spacer()
                     ProgressView("Loading events...")
-                        .foregroundColor(.purple)
+                        .foregroundColor(.secondary)
                     Spacer()
                 }
             } else if fanVisibleEvents.isEmpty {
                 VStack {
                     Spacer()
+                    
                     Image(systemName: "calendar.badge.exclamationmark")
                         .font(.system(size: 60))
-                        .foregroundColor(.purple.opacity(0.3))
-                        .padding()
+                        .foregroundColor(.gray.opacity(0.6))
                     
-                    Text("No public events")
+                    Text("No Events Yet")
                         .font(.title2)
-                        .fontWeight(.medium)
+                        .fontWeight(.bold)
                         .foregroundColor(.primary)
+                        .padding(.top, 8)
                     
-                    Text("There are no concerts or festivals scheduled yet")
-                        .font(.subheadline)
+                    Text("Check back later for upcoming concerts and events!")
+                        .font(.body)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
-                        .padding(.horizontal, 40)
+                        .padding(.horizontal, 32)
                     
                     Spacer()
                 }
             } else {
                 List {
                     ForEach(eventsForSelectedDate(), id: \.id) { event in
-                        // ✅ ИСПРАВЛЕНО: Используем правильный ID события
                         NavigationLink(value: event.id ?? "") {
                             FanEventRowView(event: event)
                                 .padding()
@@ -152,10 +152,27 @@ struct FanCalendarView: View {
         .navigationTitle("Events") // Заголовок для фанатов
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
+            // ✅ ГЛАВНОЕ ИЗМЕНЕНИЕ: Сбрасываем дату на текущую при появлении вкладки
+            resetToCurrentDate()
             loadEvents()
         }
         .refreshable {
             loadEvents()
+        }
+        // ✅ ДОБАВЛЯЕМ: Слушаем уведомления о переключении вкладок
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("FanCalendarTabSelected"))) { _ in
+            resetToCurrentDate()
+        }
+    }
+
+    // ✅ НОВЫЙ МЕТОД: Сброс к текущей дате
+    private func resetToCurrentDate() {
+        let now = Date()
+        // Проверяем, отличается ли выбранная дата от текущей
+        let calendar = Calendar.current
+        if !calendar.isDate(selectedDate, inSameDayAs: now) {
+            print("🔄 FanCalendarView: Resetting selected date to current date")
+            selectedDate = now
         }
     }
 
