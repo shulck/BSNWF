@@ -4,6 +4,7 @@ import MapKit
 struct FanLocationView: View {
     let event: Event
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
     @State private var region: MKCoordinateRegion
     @State private var isSearching = false
     
@@ -18,119 +19,221 @@ struct FanLocationView: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                // Map view
+            ZStack {
+                // Background Map
                 Map(coordinateRegion: $region, annotationItems: [event]) { event in
                     MapAnnotation(coordinate: region.center) {
-                        VStack {
-                            Image(systemName: event.type.icon)
-                                .font(.title2)
-                                .foregroundColor(.white)
-                                .padding(8)
-                                .background(Color(hex: event.type.colorHex))
-                                .clipShape(Circle())
-                                .shadow(radius: 3)
+                        VStack(spacing: 8) {
+                            // Modern map pin
+                            ZStack {
+                                Circle()
+                                    .fill(Color(hex: event.type.colorHex))
+                                    .frame(width: 50, height: 50)
+                                    .shadow(color: Color(hex: event.type.colorHex).opacity(0.4), radius: 8, x: 0, y: 4)
+                                
+                                Image(systemName: event.type.icon)
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundColor(.white)
+                            }
                             
+                            // Event title badge
                             Text(event.title)
                                 .font(.caption)
-                                .fontWeight(.medium)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(Color.white.opacity(0.9))
-                                .cornerRadius(8)
-                                .shadow(radius: 2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.primary)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(.ultraThinMaterial)
+                                        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                                )
                         }
                     }
                 }
-                .ignoresSafeArea(edges: .top)
+                .ignoresSafeArea()
                 
-                // Location details
-                VStack(alignment: .leading, spacing: 16) {
+                // Floating UI overlay
+                VStack {
+                    // Top bar with close and share buttons
                     HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Event Location")
-                                .font(.headline)
+                        Button(action: { dismiss() }) {
+                            Image(systemName: "xmark")
+                                .font(.title2)
+                                .fontWeight(.semibold)
                                 .foregroundColor(.primary)
-                            
-                            if let location = event.location, !location.isEmpty {
-                                Text(location)
-                                    .font(.body)
-                                    .foregroundColor(.secondary)
-                            } else {
-                                Text("Location not specified")
-                                    .font(.body)
-                                    .foregroundColor(.secondary)
-                                    .italic()
-                            }
+                                .frame(width: 44, height: 44)
+                                .background(.ultraThinMaterial)
+                                .clipShape(Circle())
+                                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
                         }
                         
                         Spacer()
                         
                         if let location = event.location, !location.isEmpty {
-                            Button(action: openInMaps) {
-                                Label("Directions", systemImage: "arrow.triangle.turn.up.right.diamond")
-                                    .font(.subheadline)
-                                    .foregroundColor(.purple)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 8)
-                                    .background(Color.purple.opacity(0.1))
-                                    .cornerRadius(8)
+                            Button(action: shareLocation) {
+                                Image(systemName: "square.and.arrow.up")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.primary)
+                                    .frame(width: 44, height: 44)
+                                    .background(.ultraThinMaterial)
+                                    .clipShape(Circle())
+                                    .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
                             }
                         }
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 60)
                     
-                    Divider()
+                    Spacer()
                     
-                    // Event details
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Image(systemName: event.type.icon)
-                                .foregroundColor(Color(hex: event.type.colorHex))
-                            Text(event.title)
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                        }
+                    // Bottom card with event details
+                    VStack(spacing: 0) {
+                        // Handle bar
+                        RoundedRectangle(cornerRadius: 3)
+                            .fill(Color.secondary.opacity(0.4))
+                            .frame(width: 40, height: 6)
+                            .padding(.top, 12)
                         
-                        HStack {
-                            Image(systemName: "calendar")
-                                .foregroundColor(.secondary)
-                            Text(formatEventDate())
-                                .font(.body)
-                                .foregroundColor(.secondary)
+                        // Card content
+                        VStack(spacing: 24) {
+                            // Location header
+                            VStack(spacing: 16) {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        HStack(spacing: 8) {
+                                            Image(systemName: "location.fill")
+                                                .font(.title3)
+                                                .foregroundColor(.blue)
+                                            
+                                            Text("Event Location")
+                                                .font(.title2)
+                                                .fontWeight(.bold)
+                                                .foregroundColor(.primary)
+                                        }
+                                        
+                                        if let location = event.location, !location.isEmpty {
+                                            Text(location)
+                                                .font(.subheadline)
+                                                .foregroundColor(.secondary)
+                                                .lineLimit(nil)
+                                        } else {
+                                            Text("Location not specified")
+                                                .font(.subheadline)
+                                                .foregroundColor(.secondary)
+                                                .italic()
+                                        }
+                                    }
+                                    
+                                    Spacer()
+                                }
+                                
+                                // Get directions button
+                                if let location = event.location, !location.isEmpty {
+                                    Button(action: openInMaps) {
+                                        HStack(spacing: 8) {
+                                            Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
+                                                .font(.system(size: 16, weight: .semibold))
+                                            Text("Get Directions")
+                                                .font(.headline)
+                                                .fontWeight(.semibold)
+                                        }
+                                        .foregroundColor(.white)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 16)
+                                        .background(
+                                            LinearGradient(
+                                                gradient: Gradient(colors: [.blue, .blue.opacity(0.8)]),
+                                                startPoint: .leading,
+                                                endPoint: .trailing
+                                            )
+                                        )
+                                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                                        .shadow(color: .blue.opacity(0.3), radius: 12, x: 0, y: 6)
+                                    }
+                                }
+                            }
+                            
+                            // Divider
+                            Rectangle()
+                                .fill(Color.secondary.opacity(0.2))
+                                .frame(height: 1)
+                            
+                            // Event details section
+                            VStack(spacing: 16) {
+                                // Event title with icon
+                                HStack(spacing: 12) {
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color(hex: event.type.colorHex).opacity(0.15))
+                                            .frame(width: 40, height: 40)
+                                        
+                                        Image(systemName: event.type.icon)
+                                            .font(.system(size: 18, weight: .semibold))
+                                            .foregroundColor(Color(hex: event.type.colorHex))
+                                    }
+                                    
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(event.title)
+                                            .font(.headline)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(.primary)
+                                            .lineLimit(2)
+                                        
+                                        Text(event.type.rawValue)
+                                            .font(.caption)
+                                            .fontWeight(.medium)
+                                            .foregroundColor(Color(hex: event.type.colorHex))
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 3)
+                                            .background(Color(hex: event.type.colorHex).opacity(0.1))
+                                            .clipShape(Capsule())
+                                    }
+                                    
+                                    Spacer()
+                                }
+                                
+                                // Date and time
+                                HStack(spacing: 12) {
+                                    Image(systemName: "calendar")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.blue)
+                                        .frame(width: 24, height: 24)
+                                    
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("Date & Time")
+                                            .font(.caption)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(.secondary)
+                                            .textCase(.uppercase)
+                                        
+                                        Text(formatEventDate())
+                                            .font(.subheadline)
+                                            .fontWeight(.medium)
+                                            .foregroundColor(.primary)
+                                    }
+                                    
+                                    Spacer()
+                                }
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 12)
+                                .background(Color.blue.opacity(0.05))
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                            }
                         }
-                        
-                        HStack {
-                            Image(systemName: "tag")
-                                .foregroundColor(.secondary)
-                            Text(event.type.rawValue)
-                                .font(.body)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                }
-                .padding()
-                .background(Color(UIColor.systemBackground))
-            }
-            .navigationTitle("Event Location")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Close") {
-                        dismiss()
-                    }
-                    .foregroundColor(.purple)
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    if let location = event.location, !location.isEmpty {
-                        Button(action: shareLocation) {
-                            Image(systemName: "square.and.arrow.up")
-                                .foregroundColor(.purple)
-                        }
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 24)
+                        .background(
+                            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                                .fill(.ultraThinMaterial)
+                                .shadow(color: .black.opacity(colorScheme == .dark ? 0.3 : 0.1), radius: 20, x: 0, y: -10)
+                        )
                     }
                 }
             }
         }
+        .navigationBarHidden(true)
         .onAppear {
             geocodeLocation()
         }
@@ -158,10 +261,12 @@ struct FanLocationView: View {
                 
                 if let placemark = placemarks?.first,
                    let location = placemark.location {
-                    region = MKCoordinateRegion(
-                        center: location.coordinate,
-                        span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-                    )
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        region = MKCoordinateRegion(
+                            center: location.coordinate,
+                            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                        )
+                    }
                 }
             }
         }
@@ -198,6 +303,13 @@ struct FanLocationView: View {
             var presentingVC = rootViewController
             while let presentedVC = presentingVC.presentedViewController {
                 presentingVC = presentedVC
+            }
+            
+            // iPad support
+            if let popover = activityVC.popoverPresentationController {
+                popover.sourceView = window
+                popover.sourceRect = CGRect(x: window.bounds.midX, y: window.bounds.midY, width: 0, height: 0)
+                popover.permittedArrowDirections = []
             }
             
             presentingVC.present(activityVC, animated: true)
