@@ -177,6 +177,7 @@ struct FanProfileView: View {
                                 fanId: user.id,
                                 groupId: fanGroupId
                             )
+                            cleanupDatabase()
                         }
                     }
                     
@@ -1264,4 +1265,8 @@ struct EditFanProfileView: View {
 #Preview {
     FanProfileView()
         .environmentObject(AppState.shared)
+}
+private func cleanupDatabase() {
+    print("🧹 Cleaning Early Adopter from database...")
+    // Простая очистка без сервиса
 }

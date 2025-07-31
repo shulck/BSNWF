@@ -343,21 +343,6 @@ final class FanInviteService: ObservableObject {
         ]
         batch.setData(fanData, forDocument: fanRef)
         
-        // 4. Check if eligible for "early adopter" achievement
-        let currentUses = inviteCode.currentUses + 1
-        if currentUses <= 100 {
-            // This fan is among the first 100
-            let achievementRef = db.collection("groups").document(inviteCode.groupId).collection("fanAchievements").document(userId)
-            let achievementData: [String: Any] = [
-                "fanId": userId,
-                "achievementId": "early_adopter",
-                "isUnlocked": true,
-                "unlockedDate": Timestamp(date: Date()),
-                "progress": 1.0
-            ]
-            batch.setData(achievementData, forDocument: achievementRef, merge: true)
-        }
-        
         // Commit batch
         batch.commit { error in
             if let error = error {
@@ -431,7 +416,6 @@ final class FanInviteService: ObservableObject {
         // Настройка базовых достижений для нового фаната
         let defaultAchievements = [
             "first_join": false,
-            "early_adopter": false,
             "first_message": false,
             "first_concert": false,
             "loyal_fan": false

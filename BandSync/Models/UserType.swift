@@ -299,15 +299,6 @@ struct AchievementRequirements: Codable {
 extension Achievement {
     static let defaults: [Achievement] = [
         Achievement(
-            id: "first_concert",
-            title: "First Concert",
-            description: "Attended your first concert",
-            iconName: "music.note",
-            requirements: AchievementRequirements(concertsAttended: 1),
-            category: .concerts,
-            points: 20
-        ),
-        Achievement(
             id: "year_member",
             title: "Loyal Fan",
             description: "One year in the fan club",
@@ -351,15 +342,6 @@ extension Achievement {
             requirements: AchievementRequirements(messagesCount: 100),
             category: .social,
             points: 25
-        ),
-        Achievement(
-            id: "early_adopter",
-            title: "Early Adopter",
-            description: "Among the first 100 fans",
-            iconName: "medal",
-            requirements: AchievementRequirements(isAmongFirst: 100),
-            category: .special,
-            points: 75
         )
     ]
 }

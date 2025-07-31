@@ -179,12 +179,6 @@ final class FanAchievementService: ObservableObject {
             }
         }
         
-        // Проверяем "среди первых" (это проверяется отдельно при регистрации)
-        if requirements.isAmongFirst != nil {
-            // Это достижение должно быть разблокировано при регистрации
-            return fanAchievements[achievement.id] == true
-        }
-        
         return true
     }
     
