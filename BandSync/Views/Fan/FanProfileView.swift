@@ -14,7 +14,7 @@ struct FanProfileView: View {
                     heroProfileSection
                     
                     // Profile Content
-                    VStack(spacing: 32) {
+                    VStack(spacing: 10) { // Увеличили spacing между основными секциями
                         // Stats Section
                         profileStatsSection
                         
@@ -27,7 +27,7 @@ struct FanProfileView: View {
                         Spacer(minLength: 100)
                     }
                     .padding(.horizontal, 20)
-                    .padding(.top, -40) // Overlap with hero
+                    .padding(.top, 30) // Увеличили отступ от hero до stats
                 }
             }
             .background(
@@ -56,221 +56,191 @@ struct FanProfileView: View {
         }
     }
     
-    // MARK: - Hero Profile Section
+    // MARK: - Hero Profile Section (ИСПРАВЛЕННЫЙ ДИЗАЙН)
     
     private var heroProfileSection: some View {
-        ZStack {
-            // Dynamic Background with Animated Gradient
-            if let user = appState.user, let fanProfile = user.fanProfile {
-                ZStack {
-                    // Base gradient
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color(hex: fanProfile.level.color),
-                            Color(hex: fanProfile.level.color).opacity(0.8),
-                            Color(hex: fanProfile.level.color).opacity(0.6)
-                        ]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                    
-                    // Animated floating circles
-                    GeometryReader { geometry in
-                        ZStack {
-                            Circle()
-                                .fill(Color.white.opacity(0.1))
-                                .frame(width: 120, height: 120)
-                                .offset(x: geometry.size.width * 0.8, y: geometry.size.height * 0.2)
-                            
-                            Circle()
-                                .fill(Color.white.opacity(0.15))
-                                .frame(width: 80, height: 80)
-                                .offset(x: geometry.size.width * 0.1, y: geometry.size.height * 0.6)
-                            
-                            Circle()
-                                .fill(Color.white.opacity(0.08))
-                                .frame(width: 200, height: 200)
-                                .offset(x: geometry.size.width * 0.7, y: geometry.size.height * 0.8)
-                        }
-                    }
-                    
-                    // Mesh gradient effect
-                    RadialGradient(
-                        gradient: Gradient(colors: [
-                            Color.white.opacity(0.2),
-                            Color.clear
-                        ]),
-                        center: .topTrailing,
-                        startRadius: 50,
-                        endRadius: 300
-                    )
-                }
-            } else {
-                LinearGradient(
-                    gradient: Gradient(colors: [.blue, .purple]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            }
-        }
-        .frame(height: 320)
-        .overlay(
-            VStack(spacing: 0) {
-                // Top spacing
+        VStack(spacing: 0) {
+            // Минималистичный топ-бар
+            HStack {
                 Spacer()
-                    .frame(height: 80)
-                
-                // Modern Profile Content
-                if let user = appState.user, let fanProfile = user.fanProfile {
-                    VStack(spacing: 28) {
-                        // Avatar with advanced styling
-                        ZStack {
-                            // Outer glow ring
-                            Circle()
-                                .stroke(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [
-                                            Color.white.opacity(0.6),
-                                            Color.white.opacity(0.3),
-                                            Color.white.opacity(0.1)
-                                        ]),
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
-                                    lineWidth: 3
-                                )
-                                .frame(width: 140, height: 140)
-                                .shadow(color: .white.opacity(0.3), radius: 10, x: 0, y: 0)
-                            
-                            // Progress ring (mock level progress)
-                            Circle()
-                                .trim(from: 0, to: 0.75) // Mock 75% progress
-                                .stroke(
-                                    Color.white.opacity(0.8),
-                                    style: StrokeStyle(lineWidth: 4, lineCap: .round)
-                                )
-                                .rotationEffect(.degrees(-90))
-                                .frame(width: 130, height: 130)
-                            
-                            // Avatar background
-                            Circle()
-                                .fill(.ultraThinMaterial.opacity(0.3))
-                                .frame(width: 110, height: 110)
-                                .overlay(
-                                    Circle()
-                                        .stroke(Color.white.opacity(0.4), lineWidth: 2)
-                                )
-                            
-                            // Avatar text with better styling
-                            Text(String(fanProfile.nickname.prefix(2)).uppercased())
-                                .font(.system(size: 32, weight: .black, design: .rounded))
-                                .foregroundColor(.white)
-                                .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
-                        }
+                Button(action: { showingEditProfile = true }) {
+                    Image(systemName: "ellipsis")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.primary)
+                        .padding(12)
+                        .background(.regularMaterial, in: Circle())
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 50)
+            
+            // Основной контент профиля
+            if let user = appState.user, let fanProfile = user.fanProfile {
+                VStack(spacing: 10) {
+                    // Аватар с уровнем - уменьшенный размер
+                    ZStack {
+                        // Круг прогресса уровня
+                        Circle()
+                            .stroke(
+                                LinearGradient(
+                                    colors: [
+                                        Color(hex: fanProfile.level.color),
+                                        Color(hex: fanProfile.level.color).opacity(0.3)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 3
+                            )
+                            .frame(width: 82, height: 82)
+                            .rotationEffect(.degrees(-90))
                         
-                        // Profile info with modern cards
-                        VStack(spacing: 20) {
-                            // Name with typing effect style
-                            Text(fanProfile.nickname)
-                                .font(.system(size: 28, weight: .black, design: .rounded))
-                                .foregroundColor(.white)
-                                .shadow(color: .black.opacity(0.4), radius: 3, x: 0, y: 2)
-                            
-                            // Level badge with modern design
-                            HStack(spacing: 8) {
+                        // Аватар
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [.white, Color(.systemGray6)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .frame(width: 76, height: 76)
+                            .overlay(
+                                Text(String(fanProfile.nickname.prefix(2)).uppercased())
+                                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                                    .foregroundColor(.primary)
+                            )
+                            .shadow(
+                                color: Color.black.opacity(0.1),
+                                radius: 15,
+                                x: 0,
+                                y: 8
+                            )
+                        
+                        // Значок уровня
+                        VStack {
+                            Spacer()
+                            HStack {
+                                Spacer()
                                 ZStack {
                                     Circle()
-                                        .fill(Color.white.opacity(0.2))
-                                        .frame(width: 24, height: 24)
+                                        .fill(Color(hex: fanProfile.level.color))
+                                        .frame(width: 26, height: 26)
                                     
                                     Image(systemName: "star.fill")
-                                        .font(.system(size: 10, weight: .bold))
+                                        .font(.system(size: 12, weight: .bold))
                                         .foregroundColor(.white)
                                 }
-                                
-                                Text(fanProfile.level.localizedName.uppercased())
-                                    .font(.system(size: 14, weight: .black, design: .rounded))
-                                    .foregroundColor(.white)
-                                    .tracking(1.5)
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 8)
-                            .background(.ultraThinMaterial.opacity(0.4))
-                            .clipShape(Capsule())
-                            .overlay(
-                                Capsule()
-                                    .stroke(Color.white.opacity(0.4), lineWidth: 1)
-                            )
-                            
-                            // Compact info cards
-                            VStack(spacing: 8) {
-                                HStack(spacing: 12) {
-                                    if !fanProfile.location.isEmpty {
-                                        CompactInfoCard(
-                                            icon: "location.fill",
-                                            text: fanProfile.location,
-                                            maxWidth: 120
-                                        )
-                                    }
-                                    
-                                    CompactInfoCard(
-                                        icon: "calendar",
-                                        text: "Since \(formatJoinDateShort(fanProfile.joinDate))",
-                                        maxWidth: 100
-                                    )
-                                }
-                                
-                                if !fanProfile.favoriteSong.isEmpty {
-                                    CompactInfoCard(
-                                        icon: "music.note",
-                                        text: fanProfile.favoriteSong,
-                                        maxWidth: 200
-                                    )
-                                }
-                            }
-                            
-                            // Edit button moved down here
-                            Button(action: { showingEditProfile = true }) {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "pencil")
-                                        .font(.system(size: 14, weight: .semibold))
-                                    Text("Edit Profile")
-                                        .font(.system(size: 14, weight: .semibold, design: .rounded))
-                                }
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 12)
-                                .background(.ultraThinMaterial.opacity(0.4))
-                                .clipShape(Capsule())
-                                .overlay(
-                                    Capsule()
-                                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                                )
+                                .offset(x: 6, y: 6)
                             }
                         }
+                        .frame(width: 76, height: 76)
                     }
-                } else {
-                    // Guest state with better styling
-                    VStack(spacing: 20) {
-                        ZStack {
-                            Circle()
-                                .fill(.ultraThinMaterial.opacity(0.3))
-                                .frame(width: 110, height: 110)
-                            
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 40, weight: .medium))
-                                .foregroundColor(.white)
+                    .padding(.top, 10)
+                    
+                    // Имя
+                    Text(fanProfile.nickname)
+                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                    
+                    // Уровень
+                    HStack(spacing: 8) {
+                        Image(systemName: "crown.fill")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(Color(hex: fanProfile.level.color))
+                        
+                        Text(fanProfile.level.localizedName)
+                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                            .foregroundColor(Color(hex: fanProfile.level.color))
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 6)
+                    .background(
+                        Capsule()
+                            .fill(Color(hex: fanProfile.level.color).opacity(0.1))
+                    )
+                    
+                    // Простая информация тремя строками
+                    VStack(spacing: 4) {
+                        if !fanProfile.location.isEmpty {
+                            HStack(spacing: 8) {
+                                Image(systemName: "location.fill")
+                                    .font(.system(size: 10, weight: .semibold))
+                                    .foregroundColor(.blue)
+                                Text(fanProfile.location)
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(.primary)
+                            }
                         }
                         
+                        HStack(spacing: 8) {
+                            Image(systemName: "calendar")
+                                .font(.system(size: 10, weight: .semibold))
+                                .foregroundColor(.green)
+                            Text(formatJoinDateShort(fanProfile.joinDate))
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(.primary)
+                        }
+                        
+                        if !fanProfile.favoriteSong.isEmpty {
+                            HStack(spacing: 8) {
+                                Image(systemName: "music.note")
+                                    .font(.system(size: 10, weight: .semibold))
+                                    .foregroundColor(.purple)
+                                Text(fanProfile.favoriteSong)
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(.primary)
+                                    .lineLimit(1)
+                            }
+                        }
+                    }
+                    .padding(.top, 5)
+                }
+            } else {
+                // Guest состояние
+                VStack(spacing: 24) {
+                    ZStack {
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [.gray.opacity(0.3), .gray.opacity(0.1)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .frame(width: 76, height: 76)
+                        
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 30, weight: .semibold))
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.top, 30)
+                    
+                    VStack(spacing: 8) {
                         Text("Guest User")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
+                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                            .foregroundColor(.primary)
+                        
+                        Text("Sign in to access your profile")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                     }
                 }
-                
-                Spacer(minLength: 32)
             }
+            
+            Spacer(minLength: 40)
+        }
+        .frame(height: 280)
+        .background(
+            // Очень тонкий градиент для глубины
+            LinearGradient(
+                colors: [
+                    Color(.systemBackground),
+                    Color(.systemGray6).opacity(0.3)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         )
     }
     
@@ -678,6 +648,52 @@ struct SettingsRow: View {
     }
 }
 
+// MARK: - New Info Card for Profile
+
+struct InfoCard: View {
+    let icon: String
+    let title: String
+    let value: String
+    let color: Color
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            HStack(spacing: 6) {
+                Image(systemName: icon)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundColor(color)
+                
+                Text(title)
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(.secondary)
+                    .textCase(.uppercase)
+                    .tracking(0.5)
+                
+                Spacer()
+            }
+            
+            HStack {
+                Text(value)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                
+                Spacer()
+            }
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(color.opacity(0.05))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .stroke(color.opacity(0.2), lineWidth: 1)
+                )
+        )
+    }
+}
+
 // MARK: - Edit Profile View (Placeholder)
 
 struct EditFanProfileView: View {
@@ -715,6 +731,8 @@ struct EditFanProfileView: View {
         }
     }
 }
+
+
 
 // MARK: - Preview
 
