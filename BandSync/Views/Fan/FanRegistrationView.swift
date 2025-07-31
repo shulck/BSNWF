@@ -4,7 +4,6 @@ struct FanRegistrationView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var appState: AppState
     @StateObject private var fanService = FanInviteService.shared
-    @Environment(\.colorScheme) private var colorScheme
     
     // Form fields
     @State private var inviteCode = ""
@@ -35,457 +34,190 @@ struct FanRegistrationView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(spacing: 32) {
-                    // Hero Section
-                    heroSection
-                    
-                    // Form Sections
-                    VStack(spacing: 24) {
-                        inviteCodeSection
-                        profileSection
-                        joinButton
+            Form {
+                // Header section with fan club info
+                Section {
+                    VStack(spacing: 16) {
+                        Image(systemName: "heart.fill")
+                            .font(.system(size: 50))
+                            .foregroundColor(.purple)
+                        
+                        VStack(spacing: 8) {
+                            Text(NSLocalizedString("Join Fan Club", comment: ""))
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            
+                            Text(NSLocalizedString("Connect with your favorite band and get exclusive access to events, merchandise, and updates!", comment: ""))
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
                     }
-                    .padding(.horizontal, 20)
-                    
-                    Spacer(minLength: 100)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical)
+                }
+                .listRowBackground(Color.clear)
+                
+                // Invite code section
+                Section {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text(NSLocalizedString("Invitation Code", comment: ""))
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                        
+                        Text(NSLocalizedString("Enter the invite code you received from the band", comment: ""))
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        
+                        HStack {
+                            TextField(NSLocalizedString("Enter invite code", comment: ""), text: $inviteCode)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .textInputAutocapitalization(.characters)
+                                .disableAutocorrection(true)
+                                .onSubmit {
+                                    validateInviteCode()
+                                }
+                                .onChange(of: inviteCode) { oldValue, newValue in
+                                    // Reset validation when code changes
+                                    validationStatus = .none
+                                    
+                                    // Auto-validate after user stops typing
+                                    if !newValue.isEmpty && newValue != oldValue {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            if inviteCode == newValue {
+                                                validateInviteCode()
+                                            }
+                                        }
+                                    }
+                                }
+                            
+                            // Validation indicator
+                            Group {
+                                switch validationStatus {
+                                case .none:
+                                    EmptyView()
+                                case .validating:
+                                    ProgressView()
+                                        .scaleEffect(0.8)
+                                case .valid:
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.green)
+                                case .invalid:
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.red)
+                                }
+                            }
+                            .frame(width: 24, height: 24)
+                        }
+                        
+                        // Validation message
+                        if validationStatus == .invalid {
+                            Text(NSLocalizedString("Invalid invite code. Please check and try again.", comment: ""))
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        } else if validationStatus == .valid {
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                                Text(NSLocalizedString("Valid invite code! You can join this fan club.", comment: ""))
+                                    .font(.caption)
+                                    .foregroundColor(.green)
+                            }
+                        }
+                    }
+                } header: {
+                    Text(NSLocalizedString("Step 1", comment: ""))
+                }
+                
+                // Fan profile section
+                Section {
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text(NSLocalizedString("Fan Profile", comment: ""))
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                        
+                        // Nickname field
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(NSLocalizedString("Nickname", comment: ""))
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                            TextField(NSLocalizedString("Enter your fan nickname", comment: ""), text: $nickname)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        
+                        // Location field (optional)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(NSLocalizedString("Location (Optional)", comment: ""))
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                            TextField(NSLocalizedString("City, Country", comment: ""), text: $location)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        
+                        // Favorite song field (optional)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(NSLocalizedString("Favorite Song (Optional)", comment: ""))
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                            TextField(NSLocalizedString("What's your favorite song?", comment: ""), text: $favoriteSong)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                    }
+                } header: {
+                    Text(NSLocalizedString("Step 2", comment: ""))
+                }
+                
+                // Join button
+                Section {
+                    Button(action: joinFanClub) {
+                        HStack {
+                            if isRegistering {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .scaleEffect(0.9)
+                            } else {
+                                Image(systemName: "heart.fill")
+                                Text(NSLocalizedString("Join Fan Club", comment: ""))
+                            }
+                        }
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, minHeight: 50)
+                        .background(
+                            LinearGradient(
+                                gradient: Gradient(colors: [.purple, .purple.opacity(0.8)]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .cornerRadius(12)
+                        .shadow(color: .purple.opacity(0.3), radius: 8, x: 0, y: 4)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .disabled(!isFormValid)
+                    .opacity(isFormValid ? 1.0 : 0.6)
+                }
+                .listRowBackground(Color.clear)
+            }
+            .navigationTitle(NSLocalizedString("Fan Registration", comment: ""))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(NSLocalizedString("Cancel", comment: "")) {
+                        dismiss()
+                    }
+                    .foregroundColor(.primary)
                 }
             }
-            .background(
-                ZStack {
-                    // Base background
-                    Color(UIColor.systemGroupedBackground)
-                        .ignoresSafeArea()
-                    
-                    // Gradient overlay
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color.purple.opacity(0.03),
-                            Color.blue.opacity(0.03),
-                            Color.clear
-                        ]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                    .ignoresSafeArea()
-                }
-            )
-            .navigationBarHidden(true)
         }
-        .alert("Registration Error", isPresented: $showErrorAlert) {
-            Button("OK", role: .cancel) {}
+        .alert(NSLocalizedString("Registration Error", comment: ""), isPresented: $showErrorAlert) {
+            Button(NSLocalizedString("OK", comment: ""), role: .cancel) {}
         } message: {
             Text(errorMessage)
         }
     }
     
-    // MARK: - Hero Section
-    
-    private var heroSection: some View {
-        VStack(spacing: 24) {
-            // Close Button
-            HStack {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "xmark")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.primary)
-                        .frame(width: 44, height: 44)
-                        .background(.ultraThinMaterial)
-                        .clipShape(Circle())
-                        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
-                }
-                
-                Spacer()
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 60)
-            
-            // Hero Content
-            VStack(spacing: 24) {
-                // Animated Hero Icon
-                ZStack {
-                    Circle()
-                        .fill(
-                            LinearGradient(
-                                gradient: Gradient(colors: [.purple, .blue]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 120, height: 120)
-                        .shadow(color: .purple.opacity(0.3), radius: 20, x: 0, y: 10)
-                    
-                    Circle()
-                        .fill(
-                            RadialGradient(
-                                gradient: Gradient(colors: [
-                                    Color.white.opacity(0.2),
-                                    Color.clear
-                                ]),
-                                center: .topLeading,
-                                startRadius: 20,
-                                endRadius: 60
-                            )
-                        )
-                        .frame(width: 120, height: 120)
-                    
-                    Image(systemName: "heart.fill")
-                        .font(.system(size: 40, weight: .bold))
-                        .foregroundColor(.white)
-                }
-                
-                VStack(spacing: 16) {
-                    Text("Join Fan Club")
-                        .font(.largeTitle)
-                        .fontWeight(.heavy)
-                        .foregroundColor(.primary)
-                    
-                    Text("Connect with your favorite band and get exclusive access to events, merchandise, and updates!")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(nil)
-                        .padding(.horizontal, 20)
-                }
-            }
-        }
-    }
-    
-    // MARK: - Invite Code Section
-    
-    private var inviteCodeSection: some View {
-        VStack(spacing: 20) {
-            // Section Header
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 12) {
-                    ZStack {
-                        Circle()
-                            .fill(Color.purple)
-                            .frame(width: 32, height: 32)
-                        
-                        Text("1")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Invitation Code")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                        
-                        Text("Enter the invite code you received from the band")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    Spacer()
-                }
-            }
-            
-            // Input Field with Modern Design
-            VStack(spacing: 12) {
-                HStack(spacing: 12) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        TextField("Enter invite code", text: $inviteCode)
-                            .textFieldStyle(PlainTextFieldStyle())
-                            .font(.body)
-                            .fontWeight(.medium)
-                            .textInputAutocapitalization(.characters)
-                            .disableAutocorrection(true)
-                            .onSubmit {
-                                validateInviteCode()
-                            }
-                            .onChange(of: inviteCode) { oldValue, newValue in
-                                validationStatus = .none
-                                
-                                if !newValue.isEmpty && newValue != oldValue {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                        if inviteCode == newValue {
-                                            validateInviteCode()
-                                        }
-                                    }
-                                }
-                            }
-                    }
-                    
-                    // Validation Status Icon
-                    Group {
-                        switch validationStatus {
-                        case .none:
-                            Image(systemName: "key.fill")
-                                .font(.title3)
-                                .foregroundColor(.secondary.opacity(0.5))
-                        case .validating:
-                            ProgressView()
-                                .scaleEffect(0.8)
-                                .progressViewStyle(CircularProgressViewStyle(tint: .blue))
-                        case .valid:
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.title3)
-                                .foregroundColor(.green)
-                        case .invalid:
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.title3)
-                                .foregroundColor(.red)
-                        }
-                    }
-                    .frame(width: 28, height: 28)
-                }
-                .padding(20)
-                .background(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(colorScheme == .dark ?
-                              Color(UIColor.secondarySystemGroupedBackground) :
-                              Color.white)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                .stroke(
-                                    validationStatus == .valid ? Color.green :
-                                        validationStatus == .invalid ? Color.red :
-                                        Color.secondary.opacity(0.2),
-                                    lineWidth: validationStatus != .none ? 2 : 1
-                                )
-                        )
-                        .shadow(
-                            color: colorScheme == .dark ?
-                                Color.clear :
-                                Color.black.opacity(0.05),
-                            radius: 8,
-                            x: 0,
-                            y: 2
-                        )
-                )
-                
-                // Validation Message
-                Group {
-                    if validationStatus == .invalid {
-                        HStack(spacing: 8) {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .font(.caption)
-                                .foregroundColor(.red)
-                            Text("Invalid invite code. Please check and try again.")
-                                .font(.caption)
-                                .foregroundColor(.red)
-                        }
-                        .transition(.asymmetric(
-                            insertion: .scale.combined(with: .opacity),
-                            removal: .opacity
-                        ))
-                    } else if validationStatus == .valid {
-                        HStack(spacing: 8) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.caption)
-                                .foregroundColor(.green)
-                            Text("Valid invite code! You can join this fan club.")
-                                .font(.caption)
-                                .foregroundColor(.green)
-                        }
-                        .transition(.asymmetric(
-                            insertion: .scale.combined(with: .opacity),
-                            removal: .opacity
-                        ))
-                    }
-                }
-                .animation(.easeInOut(duration: 0.3), value: validationStatus)
-            }
-        }
-        .padding(24)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(colorScheme == .dark ?
-                      Color(UIColor.secondarySystemGroupedBackground) :
-                      Color.white)
-                .shadow(
-                    color: colorScheme == .dark ?
-                        Color.clear :
-                        Color.black.opacity(0.08),
-                    radius: 12,
-                    x: 0,
-                    y: 4
-                )
-        )
-    }
-    
-    // MARK: - Profile Section
-    
-    private var profileSection: some View {
-        VStack(spacing: 20) {
-            // Section Header
-            HStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .fill(Color.blue)
-                        .frame(width: 32, height: 32)
-                    
-                    Text("2")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                }
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Fan Profile")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(.primary)
-                    
-                    Text("Tell us about yourself")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-                
-                Spacer()
-            }
-            
-            // Form Fields
-            VStack(spacing: 16) {
-                modernTextField(
-                    title: "Nickname",
-                    placeholder: "Enter your fan nickname",
-                    text: $nickname,
-                    icon: "person.fill",
-                    required: true
-                )
-                
-                modernTextField(
-                    title: "Location",
-                    placeholder: "City, Country",
-                    text: $location,
-                    icon: "location.fill",
-                    required: false
-                )
-                
-                modernTextField(
-                    title: "Favorite Song",
-                    placeholder: "What's your favorite song?",
-                    text: $favoriteSong,
-                    icon: "music.note",
-                    required: false
-                )
-            }
-        }
-        .padding(24)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(colorScheme == .dark ?
-                      Color(UIColor.secondarySystemGroupedBackground) :
-                      Color.white)
-                .shadow(
-                    color: colorScheme == .dark ?
-                        Color.clear :
-                        Color.black.opacity(0.08),
-                    radius: 12,
-                    x: 0,
-                    y: 4
-                )
-        )
-    }
-    
-    // MARK: - Modern Text Field
-    
-    private func modernTextField(title: String, placeholder: String, text: Binding<String>, icon: String, required: Bool) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 8) {
-                Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.primary)
-                
-                if !required {
-                    Text("Optional")
-                        .font(.caption2)
-                        .fontWeight(.medium)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(Color.secondary.opacity(0.1))
-                        .clipShape(Capsule())
-                }
-                
-                Spacer()
-            }
-            
-            HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.blue)
-                    .frame(width: 20, height: 20)
-                
-                TextField(placeholder, text: text)
-                    .textFieldStyle(PlainTextFieldStyle())
-                    .font(.body)
-                    .fontWeight(.medium)
-            }
-            .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color(UIColor.systemBackground))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
-                    )
-            )
-        }
-    }
-    
-    // MARK: - Join Button
-    
-    private var joinButton: some View {
-        Button(action: joinFanClub) {
-            HStack(spacing: 12) {
-                if isRegistering {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        .scaleEffect(0.9)
-                } else {
-                    Image(systemName: "heart.fill")
-                        .font(.system(size: 18, weight: .semibold))
-                    Text("Join Fan Club")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                }
-            }
-            .foregroundColor(.white)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 18)
-            .background(
-                Group {
-                    if isFormValid {
-                        LinearGradient(
-                            gradient: Gradient(colors: [.purple, .blue]),
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    } else {
-                        LinearGradient(
-                            gradient: Gradient(colors: [.gray, .gray.opacity(0.8)]),
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    }
-                }
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .shadow(
-                color: isFormValid ?
-                    .purple.opacity(0.3) :
-                    .clear,
-                radius: 12,
-                x: 0,
-                y: 6
-            )
-            .scaleEffect(isFormValid ? 1.0 : 0.98)
-        }
-        .buttonStyle(PlainButtonStyle())
-        .disabled(!isFormValid)
-        .animation(.easeInOut(duration: 0.2), value: isFormValid)
-        .animation(.easeInOut(duration: 0.2), value: isRegistering)
-    }
-    
-    // MARK: - Helper Methods (остаются без изменений)
+    // MARK: - Functions
     
     private func validateInviteCode() {
         let trimmedCode = inviteCode.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -513,6 +245,7 @@ struct FanRegistrationView: View {
         
         isRegistering = true
         
+        // First validate code to get FanInviteCode object
         fanService.validateFanInviteCode(inviteCode.trimmingCharacters(in: .whitespacesAndNewlines)) { result in
             switch result {
             case .success(let inviteCodeObject):
@@ -529,10 +262,12 @@ struct FanRegistrationView: View {
                         
                         switch joinResult {
                         case .success:
+                            // Registration successful - update app state
                             self.appState.refreshAuthState()
                             self.dismiss()
                             
                         case .failure(let error):
+                            // Show error to user
                             if let fanError = error as? FanInviteError {
                                 self.errorMessage = fanError.localizedDescription
                             } else {
@@ -556,4 +291,11 @@ struct FanRegistrationView: View {
             }
         }
     }
+}
+
+// MARK: - Preview
+
+#Preview {
+    FanRegistrationView()
+        .environmentObject(AppState.shared)
 }
