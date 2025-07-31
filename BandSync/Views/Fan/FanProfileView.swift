@@ -1,3 +1,10 @@
+//
+//  FanProfileView.swift
+//  BandSync
+//
+//  ОБНОВЛЕНО: Убрана заглушка EditFanProfileView - теперь используется полная реализация
+//
+
 import SwiftUI
 
 struct FanProfileView: View {
@@ -47,6 +54,8 @@ struct FanProfileView: View {
             .navigationBarHidden(true)
         }
         .sheet(isPresented: $showingEditProfile) {
+            // ✅ ТЕПЕРЬ ИСПОЛЬЗУЕТ ПОЛНУЮ РЕАЛИЗАЦИЮ EditFanProfileView
+            // (из отдельного файла EditFanProfileView.swift)
             EditFanProfileView()
         }
         .alert("Logout", isPresented: $showingLogoutAlert) {
@@ -109,9 +118,26 @@ struct FanProfileView: View {
                             )
                             .frame(width: 76, height: 76)
                             .overlay(
-                                Text(String(fanProfile.nickname.prefix(2)).uppercased())
-                                    .font(.system(size: 24, weight: .bold, design: .rounded))
-                                    .foregroundColor(.primary)
+                                // Проверяем есть ли аватар URL
+                                Group {
+                                    if let avatarURL = user.avatarURL {
+                                        AsyncImage(url: URL(string: avatarURL)) { image in
+                                            image
+                                                .resizable()
+                                                .scaledToFill()
+                                        } placeholder: {
+                                            Text(String(fanProfile.nickname.prefix(2)).uppercased())
+                                                .font(.system(size: 24, weight: .bold, design: .rounded))
+                                                .foregroundColor(.primary)
+                                        }
+                                        .frame(width: 76, height: 76)
+                                        .clipShape(Circle())
+                                    } else {
+                                        Text(String(fanProfile.nickname.prefix(2)).uppercased())
+                                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                                            .foregroundColor(.primary)
+                                    }
+                                }
                             )
                             .shadow(
                                 color: Color.black.opacity(0.1),
@@ -130,7 +156,7 @@ struct FanProfileView: View {
                                         .fill(Color(hex: fanProfile.level.color))
                                         .frame(width: 26, height: 26)
                                     
-                                    Image(systemName: "star.fill")
+                                    Image(systemName: fanProfile.level.iconName)
                                         .font(.system(size: 12, weight: .bold))
                                         .foregroundColor(.white)
                                 }
@@ -211,40 +237,8 @@ struct FanProfileView: View {
                                 Text(fanProfile.favoriteSong)
                                     .font(.system(size: 12, weight: .medium))
                                     .foregroundColor(.primary)
-                                    .lineLimit(1)
                             }
                         }
-                    }
-                    .padding(.top, 8)
-                }
-            } else {
-                // Guest состояние
-                VStack(spacing: 24) {
-                    ZStack {
-                        Circle()
-                            .fill(
-                                LinearGradient(
-                                    colors: [.gray.opacity(0.3), .gray.opacity(0.1)],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .frame(width: 76, height: 76)
-                        
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 30, weight: .semibold))
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.top, 30)
-                    
-                    VStack(spacing: 8) {
-                        Text("Guest User")
-                            .font(.system(size: 24, weight: .bold, design: .rounded))
-                            .foregroundColor(.primary)
-                        
-                        Text("Sign in to access your profile")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
                     }
                 }
             }
@@ -314,193 +308,147 @@ struct FanProfileView: View {
                           Color.white)
                     .shadow(
                         color: colorScheme == .dark ?
-                            Color.clear :
-                            Color.black.opacity(0.08),
-                        radius: 12,
+                        Color.black.opacity(0.3) :
+                        Color.gray.opacity(0.2),
+                        radius: 15,
                         x: 0,
-                        y: 4
+                        y: 8
+                    )
+            )
+            .padding(.horizontal, 4)
+        }
+    }
+    
+    // MARK: - Fan Activity Section
+    
+    private var fanActivitySection: some View {
+        VStack(spacing: 16) {
+            HStack {
+                Image(systemName: "clock.fill")
+                    .font(.title3)
+                    .foregroundColor(.orange)
+                
+                Text("Recent Activity")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                
+                Spacer()
+            }
+            
+            VStack(spacing: 12) {
+                ActivityRow(
+                    icon: "message.fill",
+                    title: "Last message sent",
+                    subtitle: "General chat",
+                    time: "2h ago"
+                )
+                
+                ActivityRow(
+                    icon: "calendar",
+                    title: "Concert attended",
+                    subtitle: "Summer Festival 2024",
+                    time: "1 week ago"
+                )
+                
+                ActivityRow(
+                    icon: "star.fill",
+                    title: "Achievement unlocked",
+                    subtitle: "First Concert",
+                    time: "1 week ago"
+                )
+            }
+            .padding(.vertical, 16)
+            .padding(.horizontal, 20)
+            .background(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(colorScheme == .dark ?
+                          Color(UIColor.secondarySystemGroupedBackground) :
+                          Color.white)
+                    .shadow(
+                        color: colorScheme == .dark ?
+                        Color.black.opacity(0.3) :
+                        Color.gray.opacity(0.2),
+                        radius: 10,
+                        x: 0,
+                        y: 5
                     )
             )
         }
     }
     
-    // Fan Activity Section
-    private var fanActivitySection: some View {
-        VStack(spacing: 20) {
-            HStack {
-                Text("Recent Activity")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-                
-                Spacer()
-                
-                Button("View All") {
-                    // Navigate to activity view
-                }
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .foregroundColor(.blue)
-            }
-            
-            VStack(spacing: 12) {
-                // Mock activity items
-                ActivityRow(
-                    icon: "calendar",
-                    title: "Attended Concert",
-                    subtitle: "Rock Festival 2025",
-                    time: "2 days ago",
-                    color: .blue
-                )
-                
-                ActivityRow(
-                    icon: "gift.fill",
-                    title: "Sent Birthday Gift",
-                    subtitle: "To band member",
-                    time: "1 week ago",
-                    color: .pink
-                )
-                
-                ActivityRow(
-                    icon: "star.fill",
-                    title: "Level Up!",
-                    subtitle: "Reached Silver Fan",
-                    time: "2 weeks ago",
-                    color: .orange
-                )
-            }
-        }
-        .padding(24)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(colorScheme == .dark ?
-                      Color(UIColor.secondarySystemGroupedBackground) :
-                      Color.white)
-                .shadow(
-                    color: colorScheme == .dark ?
-                        Color.clear :
-                        Color.black.opacity(0.08),
-                    radius: 12,
-                    x: 0,
-                    y: 4
-                )
-        )
-    }
+    // MARK: - Settings Section
     
-    // Settings Section
     private var settingsSection: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 16) {
             HStack {
+                Image(systemName: "gearshape.fill")
+                    .font(.title3)
+                    .foregroundColor(.gray)
+                
                 Text("Settings")
-                    .font(.title2)
+                    .font(.headline)
                     .fontWeight(.bold)
-                    .foregroundColor(.primary)
                 
                 Spacer()
             }
             
             VStack(spacing: 12) {
+                SettingsRow(
+                    icon: "person.fill",
+                    title: "Edit Profile",
+                    subtitle: "Update your fan information",
+                    color: .blue
+                ) {
+                    showingEditProfile = true
+                }
+                
                 SettingsRow(
                     icon: "bell.fill",
                     title: "Notifications",
-                    subtitle: "Event reminders and updates",
-                    color: .orange,
-                    action: { /* Navigate to notifications */ }
-                )
-                
-                SettingsRow(
-                    icon: "lock.fill",
-                    title: "Privacy",
-                    subtitle: "Profile visibility settings",
-                    color: .blue,
-                    action: { /* Navigate to privacy */ }
-                )
-                
-                SettingsRow(
-                    icon: "questionmark.circle.fill",
-                    title: "Help & Support",
-                    subtitle: "Get help and contact support",
-                    color: .green,
-                    action: { /* Navigate to help */ }
-                )
-                
-                // Logout Button
-                Button(action: { showingLogoutAlert = true }) {
-                    HStack(spacing: 12) {
-                        ZStack {
-                            Circle()
-                                .fill(Color.red.opacity(0.15))
-                                .frame(width: 40, height: 40)
-                            
-                            Image(systemName: "rectangle.portrait.and.arrow.right")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(.red)
-                        }
-                        
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Logout")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.red)
-                            
-                            Text("Sign out of your account")
-                                .font(.caption)
-                                .foregroundColor(.red.opacity(0.7))
-                        }
-                        
-                        Spacer()
-                        
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.red.opacity(0.6))
-                    }
-                    .padding(16)
-                    .background(Color.red.opacity(0.05))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.red.opacity(0.2), lineWidth: 1)
-                    )
+                    subtitle: "Manage notification preferences",
+                    color: .orange
+                ) {
+                    // TODO: Implement notifications settings
                 }
-                .buttonStyle(PlainButtonStyle())
+                
+                SettingsRow(
+                    icon: "shield.fill",
+                    title: "Privacy",
+                    subtitle: "Privacy and security settings",
+                    color: .green
+                ) {
+                    // TODO: Implement privacy settings
+                }
+                
+                SettingsRow(
+                    icon: "rectangle.portrait.and.arrow.right.fill",
+                    title: "Logout",
+                    subtitle: "Sign out of your account",
+                    color: .red
+                ) {
+                    showingLogoutAlert = true
+                }
             }
+            .padding(.vertical, 16)
+            .padding(.horizontal, 20)
+            .background(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(colorScheme == .dark ?
+                          Color(UIColor.secondarySystemGroupedBackground) :
+                          Color.white)
+                    .shadow(
+                        color: colorScheme == .dark ?
+                        Color.black.opacity(0.3) :
+                        Color.gray.opacity(0.2),
+                        radius: 10,
+                        x: 0,
+                        y: 5
+                    )
+            )
         }
-        .padding(24)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(colorScheme == .dark ?
-                      Color(UIColor.secondarySystemGroupedBackground) :
-                      Color.white)
-                .shadow(
-                    color: colorScheme == .dark ?
-                        Color.clear :
-                        Color.black.opacity(0.08),
-                    radius: 12,
-                    x: 0,
-                    y: 4
-                )
-        )
     }
     
-    // MARK: - Helper Methods
-    
-    private func daysSinceJoining(_ date: Date) -> Int {
-        let days = Calendar.current.dateComponents([.day], from: date, to: Date()).day ?? 0
-        return max(days, 1)
-    }
-    
-    private func formatJoinDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: date)
-    }
-    
-    private func formatJoinDateShort(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM yyyy"
-        return formatter.string(from: date)
-    }
+    // MARK: - Helper Functions
     
     private func levelProgressText(_ level: FanLevel, stats: FanStats) -> String {
         let currentConcerts = stats.concertsAttended
@@ -520,193 +468,21 @@ struct FanProfileView: View {
             return "MAX"
         }
     }
-}
-
-// MARK: - ✅ СЕКЦИЯ ДОСТИЖЕНИЙ
-
-struct FanAchievementsProfileSection: View {
-    @StateObject private var achievementService = FanAchievementService.shared
-    @EnvironmentObject private var appState: AppState
-    @Environment(\.colorScheme) private var colorScheme
     
-    @State private var showingAllAchievements = false
-    
-    private var fanProfile: FanProfile? {
-        appState.user?.fanProfile
+    private func daysSinceJoining(_ joinDate: Date) -> Int {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.day], from: joinDate, to: Date())
+        return max(components.day ?? 0, 1)
     }
     
-    private var fanStats: FanStats {
-        fanProfile?.stats ?? FanStats()
-    }
-    
-    // Получаем топ-3 достижения для отображения в профиле
-    private var topAchievements: [(achievement: Achievement, isUnlocked: Bool, progress: Double)] {
-        let allAchievements = achievementService.getAllAchievementsWithStatus(
-            stats: fanStats,
-            fanProfile: fanProfile ?? FanProfile(nickname: "", location: "", favoriteSong: "")
-        )
-        
-        // Сортируем: сначала разблокированные, потом по прогрессу
-        return allAchievements
-            .sorted { first, second in
-                if first.isUnlocked && !second.isUnlocked {
-                    return true
-                } else if !first.isUnlocked && second.isUnlocked {
-                    return false
-                } else if !first.isUnlocked && !second.isUnlocked {
-                    return first.progress > second.progress
-                } else {
-                    return first.achievement.points > second.achievement.points
-                }
-            }
-            .prefix(3)
-            .map { $0 }
-    }
-    
-    var body: some View {
-        VStack(spacing: 16) {
-            // Header с общей статистикой
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "trophy.fill")
-                            .font(.title3)
-                            .foregroundColor(.yellow)
-                        
-                        Text("Achievements")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                    }
-                    
-                    HStack(spacing: 16) {
-                        // Очки
-                        HStack(spacing: 4) {
-                            Image(systemName: "star.fill")
-                                .font(.caption)
-                                .foregroundColor(.yellow)
-                            
-                            Text("\(achievementService.totalPoints) pts")
-                                .font(.caption)
-                                .fontWeight(.semibold)
-                        }
-                        
-                        // Прогресс
-                        HStack(spacing: 4) {
-                            let unlockedCount = achievementService.fanAchievements.values.filter { $0 }.count
-                            let totalCount = Achievement.defaults.count
-                            
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.caption)
-                                .foregroundColor(.green)
-                            
-                            Text("\(unlockedCount)/\(totalCount)")
-                                .font(.caption)
-                                .fontWeight(.semibold)
-                        }
-                    }
-                    .foregroundColor(.secondary)
-                }
-                
-                Spacer()
-            }
-            
-            // Топ-3 достижения
-            if !topAchievements.isEmpty {
-                LazyVStack(spacing: 12) {
-                    ForEach(topAchievements, id: \.achievement.id) { item in
-                        CompactAchievementCard(
-                            achievement: item.achievement,
-                            isUnlocked: item.isUnlocked,
-                            progress: item.progress
-                        )
-                    }
-                }
-                
-                // Кнопка "Показать все"
-                Button {
-                    showingAllAchievements = true
-                } label: {
-                    HStack {
-                        Text("View All Achievements")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                        
-                        Spacer()
-                        
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                    }
-                    .foregroundColor(.blue)
-                    .padding(.vertical, 8)
-                }
-            } else {
-                Text("Loading achievements...")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .padding()
-            }
-        }
-        .padding(24)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(colorScheme == .dark ?
-                      Color(UIColor.secondarySystemGroupedBackground) :
-                      Color.white)
-                .shadow(
-                    color: colorScheme == .dark ?
-                        Color.clear :
-                        Color.black.opacity(0.08),
-                    radius: 12,
-                    x: 0,
-                    y: 4
-                )
-        )
-        .onAppear {
-            loadAchievements()
-        }
-        .sheet(isPresented: $showingAllAchievements) {
-            FanAchievementsDetailView()
-        }
-    }
-    
-    private func loadAchievements() {
-        guard let user = appState.user,
-              let fanGroupId = user.fanGroupId else { return }
-        
-        achievementService.loadFanAchievements(fanId: user.id, groupId: fanGroupId)
+    private func formatJoinDateShort(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        return "Since \(formatter.string(from: date))"
     }
 }
 
-// MARK: - Supporting Views (остаются без изменений)
-
-struct CompactInfoCard: View {
-    let icon: String
-    let text: String
-    let maxWidth: CGFloat
-    
-    var body: some View {
-        HStack(spacing: 6) {
-            Image(systemName: icon)
-                .font(.system(size: 10, weight: .semibold))
-                .foregroundColor(.white.opacity(0.9))
-            
-            Text(text)
-                .font(.system(size: 11, weight: .semibold, design: .rounded))
-                .foregroundColor(.white.opacity(0.95))
-                .lineLimit(1)
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .frame(maxWidth: maxWidth)
-        .background(.ultraThinMaterial.opacity(0.3))
-        .clipShape(Capsule())
-        .overlay(
-            Capsule()
-                .stroke(Color.white.opacity(0.3), lineWidth: 0.5)
-        )
-    }
-}
+// MARK: - Supporting Views
 
 struct StatCard: View {
     let title: String
@@ -716,43 +492,29 @@ struct StatCard: View {
     let color: Color
     
     var body: some View {
-        VStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(color.opacity(0.15))
-                    .frame(width: 44, height: 44)
-                    .overlay(
-                        Circle()
-                            .stroke(color.opacity(0.3), lineWidth: 2)
-                    )
-                
-                Image(systemName: icon)
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundColor(color)
-            }
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(color)
             
-            VStack(spacing: 4) {
-                Text(value)
-                    .font(.system(size: 22, weight: .black, design: .rounded))
+            Text(value)
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
+            
+            VStack(spacing: 2) {
+                Text(title)
+                    .font(.caption)
+                    .fontWeight(.semibold)
                     .foregroundColor(.primary)
                 
-                VStack(spacing: 2) {
-                    Text(title)
-                        .font(.system(size: 11, weight: .bold, design: .rounded))
-                        .foregroundColor(.primary)
-                        .textCase(.uppercase)
-                        .tracking(0.5)
-                    
-                    Text(subtitle)
-                        .font(.system(size: 10, weight: .medium))
-                        .foregroundColor(.secondary)
-                        .textCase(.uppercase)
-                        .tracking(0.3)
-                }
+                Text(subtitle)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
+        .padding(.vertical, 16)
     }
 }
 
@@ -761,19 +523,13 @@ struct ActivityRow: View {
     let title: String
     let subtitle: String
     let time: String
-    let color: Color
     
     var body: some View {
         HStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(color.opacity(0.15))
-                    .frame(width: 36, height: 36)
-                
-                Image(systemName: icon)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(color)
-            }
+            Image(systemName: icon)
+                .font(.subheadline)
+                .foregroundColor(.blue)
+                .frame(width: 20)
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
@@ -834,55 +590,143 @@ struct SettingsRow: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.secondary.opacity(0.6))
             }
-            .padding(16)
-            .background(Color.clear)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(PlainButtonStyle())
+        .padding(.vertical, 8)
     }
 }
 
-struct InfoCard: View {
-    let icon: String
-    let title: String
-    let value: String
-    let color: Color
+// MARK: - Achievements Profile Section
+
+struct FanAchievementsProfileSection: View {
+    @StateObject private var achievementService = FanAchievementService.shared
+    @EnvironmentObject private var appState: AppState
+    @Environment(\.colorScheme) private var colorScheme
+    @State private var showingAllAchievements = false
+    
+    private var fanProfile: FanProfile? {
+        appState.user?.fanProfile
+    }
+    
+    private var fanStats: FanStats {
+        fanProfile?.stats ?? FanStats()
+    }
+    
+    // Получаем топ-3 достижения для отображения в профиле
+    private var topAchievements: [(achievement: Achievement, isUnlocked: Bool, progress: Double)] {
+        let allAchievements = achievementService.getAllAchievementsWithStatus(
+            stats: fanStats,
+            fanProfile: fanProfile ?? FanProfile(nickname: "", location: "", favoriteSong: "")
+        )
+        
+        // Сортируем: сначала разблокированные, потом по прогрессу
+        return allAchievements
+            .sorted { first, second in
+                if first.isUnlocked && !second.isUnlocked {
+                    return true
+                } else if !first.isUnlocked && second.isUnlocked {
+                    return false
+                } else if !first.isUnlocked && !second.isUnlocked {
+                    return first.progress > second.progress
+                } else {
+                    return first.achievement.points > second.achievement.points
+                }
+            }
+            .prefix(3)
+            .map { $0 }
+    }
     
     var body: some View {
-        VStack(spacing: 8) {
-            HStack(spacing: 6) {
-                Image(systemName: icon)
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(color)
-                
-                Text(title)
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundColor(.secondary)
-                    .textCase(.uppercase)
-                    .tracking(0.5)
+        VStack(spacing: 16) {
+            // Header с общей статистикой
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "trophy.fill")
+                            .font(.title3)
+                            .foregroundColor(.yellow)
+                        
+                        Text("Achievements")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                    }
+                    
+                    HStack(spacing: 16) {
+                        // Очки
+                        HStack(spacing: 4) {
+                            Image(systemName: "star.fill")
+                                .font(.caption)
+                                .foregroundColor(.yellow)
+                            Text("\(calculateTotalPoints()) pts")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        // Разблокированные достижения
+                        HStack(spacing: 4) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.caption)
+                                .foregroundColor(.green)
+                            Text("\(unlockedCount())/\(Achievement.defaults.count)")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
                 
                 Spacer()
+                
+                Button("View All") {
+                    showingAllAchievements = true
+                }
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundColor(.blue)
             }
             
-            HStack {
-                Text(value)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(.primary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-                
-                Spacer()
+            // Топ-3 достижения
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 3), spacing: 12) {
+                ForEach(Array(topAchievements.prefix(3).enumerated()), id: \.element.achievement.id) { index, item in
+                    CompactAchievementCard(
+                        achievement: item.achievement,
+                        isUnlocked: item.isUnlocked,
+                        progress: item.progress
+                    )
+                }
             }
         }
-        .padding(12)
+        .padding(.vertical, 16)
+        .padding(.horizontal, 20)
         .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(color.opacity(0.05))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(color.opacity(0.2), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(colorScheme == .dark ?
+                      Color(UIColor.secondarySystemGroupedBackground) :
+                      Color.white)
+                .shadow(
+                    color: colorScheme == .dark ?
+                    Color.black.opacity(0.3) :
+                    Color.gray.opacity(0.2),
+                    radius: 10,
+                    x: 0,
+                    y: 5
                 )
         )
+        .sheet(isPresented: $showingAllAchievements) {
+            FanAchievementsDetailView()
+        }
+    }
+    
+    private func calculateTotalPoints() -> Int {
+        let unlockedAchievements = Achievement.defaults.filter { achievement in
+            achievementService.fanAchievements[achievement.id] == true
+        }
+        return unlockedAchievements.reduce(0) { $0 + $1.points }
+    }
+    
+    private func unlockedCount() -> Int {
+        return achievementService.fanAchievements.values.filter { $0 }.count
     }
 }
 
@@ -891,76 +735,43 @@ struct CompactAchievementCard: View {
     let isUnlocked: Bool
     let progress: Double
     
+    @Environment(\.colorScheme) private var colorScheme
+    
     var body: some View {
-        HStack(spacing: 12) {
-            // Иконка
+        VStack(spacing: 8) {
             ZStack {
                 Circle()
-                    .fill(isUnlocked ? achievementColor : Color(.systemGray4))
-                    .frame(width: 40, height: 40)
+                    .fill(
+                        isUnlocked ?
+                        achievementColor :
+                        Color.gray.opacity(0.3)
+                    )
+                    .frame(width: 50, height: 50)
+                
+                if !isUnlocked {
+                    Circle()
+                        .trim(from: 0, to: progress)
+                        .stroke(
+                            achievementColor,
+                            style: StrokeStyle(lineWidth: 2, lineCap: .round)
+                        )
+                        .frame(width: 50, height: 50)
+                        .rotationEffect(.degrees(-90))
+                }
                 
                 Image(systemName: achievement.iconName)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.title2)
                     .foregroundColor(.white)
+                    .opacity(isUnlocked ? 1.0 : 0.7)
             }
             
-            // Информация
-            VStack(alignment: .leading, spacing: 2) {
-                HStack {
-                    Text(achievement.title)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundColor(isUnlocked ? .primary : .secondary)
-                    
-                    Spacer()
-                    
-                    // Очки
-                    HStack(spacing: 2) {
-                        Image(systemName: "star.fill")
-                            .font(.caption2)
-                            .foregroundColor(.yellow)
-                        
-                        Text("\(achievement.points)")
-                            .font(.caption2)
-                            .fontWeight(.semibold)
-                    }
-                }
-                
-                if isUnlocked {
-                    HStack(spacing: 4) {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.caption2)
-                            .foregroundColor(.green)
-                        
-                        Text("Unlocked")
-                            .font(.caption2)
-                            .fontWeight(.medium)
-                            .foregroundColor(.green)
-                    }
-                } else {
-                    // Прогресс
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Text("Progress: \(Int(progress * 100))%")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                            
-                            Spacer()
-                        }
-                        
-                        ProgressView(value: progress)
-                            .tint(achievementColor)
-                            .scaleEffect(y: 0.7)
-                    }
-                }
-            }
+            Text(achievement.title)
+                .font(.caption2)
+                .fontWeight(.medium)
+                .foregroundColor(isUnlocked ? .primary : .secondary)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
         }
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemGray6).opacity(0.5))
-        )
-        .opacity(isUnlocked ? 1.0 : 0.7)
     }
     
     private var achievementColor: Color {
@@ -979,7 +790,128 @@ struct CompactAchievementCard: View {
     }
 }
 
-struct CategoryChip: View {
+struct FanAchievementsDetailView: View {
+    @StateObject private var achievementService = FanAchievementService.shared
+    @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var selectedCategory: AchievementCategory? = nil
+    
+    private var fanProfile: FanProfile? {
+        appState.user?.fanProfile
+    }
+    
+    private var fanStats: FanStats {
+        fanProfile?.stats ?? FanStats()
+    }
+    
+    private var filteredAchievements: [(achievement: Achievement, isUnlocked: Bool, progress: Double)] {
+        let allAchievements = achievementService.getAllAchievementsWithStatus(
+            stats: fanStats,
+            fanProfile: fanProfile ?? FanProfile(nickname: "", location: "", favoriteSong: "")
+        )
+        
+        if let selectedCategory = selectedCategory {
+            return allAchievements.filter { $0.achievement.category == selectedCategory }
+        }
+        
+        return allAchievements.sorted { first, second in
+            if first.isUnlocked && !second.isUnlocked {
+                return true
+            } else if !first.isUnlocked && second.isUnlocked {
+                return false
+            } else {
+                return first.achievement.points > second.achievement.points
+            }
+        }
+    }
+    
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 24) {
+                    // Статистика
+                    VStack(spacing: 16) {
+                        HStack(spacing: 8) {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.yellow)
+                                .font(.title2)
+                            
+                            Text("\(achievementService.totalPoints)")
+                                .font(.title)
+                                .fontWeight(.bold)
+                            
+                            Text("points")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        let unlockedCount = achievementService.fanAchievements.values.filter { $0 }.count
+                        let totalCount = Achievement.defaults.count
+                        
+                        ProgressView(value: Double(unlockedCount), total: Double(totalCount))
+                            .tint(.green)
+                        
+                        Text("\(unlockedCount) of \(totalCount) achievements unlocked")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color(.systemBackground))
+                            .shadow(color: .black.opacity(0.05), radius: 2)
+                    )
+                    
+                    // Фильтры по категориям
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            CategoryButton(
+                                title: "All",
+                                isSelected: selectedCategory == nil
+                            ) {
+                                selectedCategory = nil
+                            }
+                            
+                            ForEach(AchievementCategory.allCases.filter { $0 != .special }, id: \.self) { category in
+                                CategoryButton(
+                                    title: category.localizedName,
+                                    isSelected: selectedCategory == category
+                                ) {
+                                    selectedCategory = category
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                    
+                    // Список достижений
+                    LazyVStack(spacing: 16) {
+                        ForEach(filteredAchievements, id: \.achievement.id) { item in
+                            FullAchievementCard(
+                                achievement: item.achievement,
+                                isUnlocked: item.isUnlocked,
+                                progress: item.progress
+                            )
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+            }
+            .navigationTitle("Achievements")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct CategoryButton: View {
     let title: String
     let isSelected: Bool
     let action: () -> Void
@@ -989,13 +921,13 @@ struct CategoryChip: View {
             Text(title)
                 .font(.subheadline)
                 .fontWeight(.medium)
+                .foregroundColor(isSelected ? .white : .primary)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(isSelected ? Color.blue : Color(.systemGray5))
+                    Capsule()
+                        .fill(isSelected ? Color.blue : Color.gray.opacity(0.2))
                 )
-                .foregroundColor(isSelected ? .white : .primary)
         }
     }
 }
@@ -1005,9 +937,11 @@ struct FullAchievementCard: View {
     let isUnlocked: Bool
     let progress: Double
     
+    @Environment(\.colorScheme) private var colorScheme
+    
     var body: some View {
         HStack(spacing: 16) {
-            // Иконка
+            // Иконка достижения
             ZStack {
                 Circle()
                     .fill(isUnlocked ? achievementColor : Color(.systemGray4))
@@ -1095,178 +1029,19 @@ struct FullAchievementCard: View {
     }
 }
 
-struct FanAchievementsDetailView: View {
-    @StateObject private var achievementService = FanAchievementService.shared
-    @EnvironmentObject private var appState: AppState
-    @Environment(\.dismiss) private var dismiss
-    
-    @State private var selectedCategory: AchievementCategory? = nil
-    
-    private var fanProfile: FanProfile? {
-        appState.user?.fanProfile
-    }
-    
-    private var fanStats: FanStats {
-        fanProfile?.stats ?? FanStats()
-    }
-    
-    private var filteredAchievements: [(achievement: Achievement, isUnlocked: Bool, progress: Double)] {
-        let allAchievements = achievementService.getAllAchievementsWithStatus(
-            stats: fanStats,
-            fanProfile: fanProfile ?? FanProfile(nickname: "", location: "", favoriteSong: "")
-        )
-        
-        if let selectedCategory = selectedCategory {
-            return allAchievements.filter { $0.achievement.category == selectedCategory }
-        }
-        
-        return allAchievements.sorted { first, second in
-            if first.isUnlocked && !second.isUnlocked {
-                return true
-            } else if !first.isUnlocked && second.isUnlocked {
-                return false
-            } else {
-                return first.achievement.points > second.achievement.points
-            }
-        }
-    }
-    
-    var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: 24) {
-                    // Статистика
-                    VStack(spacing: 16) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "star.fill")
-                                .foregroundColor(.yellow)
-                                .font(.title2)
-                            
-                            Text("\(achievementService.totalPoints)")
-                                .font(.title)
-                                .fontWeight(.bold)
-                            
-                            Text("points")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        
-                        let unlockedCount = achievementService.fanAchievements.values.filter { $0 }.count
-                        let totalCount = Achievement.defaults.count
-                        
-                        VStack(spacing: 8) {
-                            HStack {
-                                Text("Progress")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                
-                                Spacer()
-                                
-                                Text("\(unlockedCount)/\(totalCount)")
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                            }
-                            
-                            ProgressView(value: Double(unlockedCount), total: Double(totalCount))
-                                .tint(.blue)
-                        }
-                    }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color(.systemGray6))
-                    )
-                    .padding(.horizontal)
-                    
-                    // Фильтр по категориям
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 12) {
-                            CategoryChip(
-                                title: "All",
-                                isSelected: selectedCategory == nil
-                            ) {
-                                selectedCategory = nil
-                            }
-                            
-                            ForEach(AchievementCategory.allCases, id: \.self) { category in
-                                CategoryChip(
-                                    title: category.localizedName,
-                                    isSelected: selectedCategory == category
-                                ) {
-                                    selectedCategory = category
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                    
-                    // Список достижений
-                    LazyVStack(spacing: 16) {
-                        ForEach(filteredAchievements, id: \.achievement.id) { item in
-                            FullAchievementCard(
-                                achievement: item.achievement,
-                                isUnlocked: item.isUnlocked,
-                                progress: item.progress
-                            )
-                        }
-                    }
-                    .padding(.horizontal)
-                }
-            }
-            .navigationTitle("Achievements")
-            .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-            }
-        }
-    }
-}
 
-struct EditFanProfileView: View {
-    @Environment(\.dismiss) private var dismiss
-    
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text("Edit Profile")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                
-                Text("Profile editing coming soon!")
-                    .foregroundColor(.secondary)
-                
-                Spacer()
-            }
-            .padding()
-            .navigationTitle("Edit Profile")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
-                        dismiss()
-                    }
-                    .fontWeight(.semibold)
-                }
-            }
-        }
-    }
-}
+
+// MARK: - Preview
 
 #Preview {
     FanProfileView()
         .environmentObject(AppState.shared)
 }
+
 private func cleanupDatabase() {
     print("🧹 Cleaning Early Adopter from database...")
     // Простая очистка без сервиса
 }
+
+// ✅ ЗАГЛУШКА EditFanProfileView УДАЛЕНА!
+// Теперь используется полная реализация из отдельного файла EditFanProfileView.swift
