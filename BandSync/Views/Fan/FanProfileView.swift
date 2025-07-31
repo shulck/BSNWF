@@ -14,9 +14,12 @@ struct FanProfileView: View {
                     heroProfileSection
                     
                     // Profile Content
-                    VStack(spacing: 10) { // Увеличили spacing между основными секциями
+                    VStack(spacing: 20) {
                         // Stats Section
                         profileStatsSection
+                        
+                        // ✅ СЕКЦИЯ ДОСТИЖЕНИЙ
+                        FanAchievementsProfileSection()
                         
                         // Fan Activity
                         fanActivitySection
@@ -27,7 +30,7 @@ struct FanProfileView: View {
                         Spacer(minLength: 100)
                     }
                     .padding(.horizontal, 20)
-                    .padding(.top, 30) // Увеличили отступ от hero до stats
+                    .padding(.top, 30)
                 }
             }
             .background(
@@ -56,7 +59,7 @@ struct FanProfileView: View {
         }
     }
     
-    // MARK: - Hero Profile Section (ИСПРАВЛЕННЫЙ ДИЗАЙН)
+    // MARK: - Hero Profile Section (ОБНОВЛЕННЫЙ С ЗНАЧКАМИ)
     
     private var heroProfileSection: some View {
         VStack(spacing: 0) {
@@ -160,6 +163,23 @@ struct FanProfileView: View {
                             .fill(Color(hex: fanProfile.level.color).opacity(0.1))
                     )
                     
+                    // ✅ ЗНАЧКИ ДОСТИЖЕНИЙ ПОД АВАТАРОМ
+                    FanAchievementBadges(
+                        fanProfile: fanProfile,
+                        maxBadges: 5,
+                        size: .medium
+                    )
+                    .padding(.top, 12)
+                    .onAppear {
+                        // Загружаем достижения при появлении профиля
+                        if let fanGroupId = user.fanGroupId {
+                            FanAchievementService.shared.loadFanAchievements(
+                                fanId: user.id,
+                                groupId: fanGroupId
+                            )
+                        }
+                    }
+                    
                     // Простая информация тремя строками
                     VStack(spacing: 4) {
                         if !fanProfile.location.isEmpty {
@@ -194,7 +214,7 @@ struct FanProfileView: View {
                             }
                         }
                     }
-                    .padding(.top, 5)
+                    .padding(.top, 8)
                 }
             } else {
                 // Guest состояние
@@ -230,7 +250,7 @@ struct FanProfileView: View {
             
             Spacer(minLength: 40)
         }
-        .frame(height: 280)
+        .frame(height: 320) // ✅ УВЕЛИЧИЛ ВЫСОТУ для значков
         .background(
             // Очень тонкий градиент для глубины
             LinearGradient(
@@ -244,7 +264,7 @@ struct FanProfileView: View {
         )
     }
     
-    // MARK: - Profile Stats Section
+    // MARK: - Profile Stats Section (ОБНОВЛЕННАЯ С РЕАЛЬНЫМИ ДАННЫМИ)
     
     @ViewBuilder
     private var profileStatsSection: some View {
@@ -253,7 +273,7 @@ struct FanProfileView: View {
                 // Events Attended
                 StatCard(
                     title: "Events",
-                    value: "12", // Mock data
+                    value: "\(fanProfile.stats.concertsAttended)",
                     subtitle: "Attended",
                     icon: "calendar",
                     color: .blue
@@ -266,7 +286,7 @@ struct FanProfileView: View {
                 // Fan Level Progress
                 StatCard(
                     title: "Level",
-                    value: "70%", // Mock data
+                    value: levelProgressText(fanProfile.level, stats: fanProfile.stats),
                     subtitle: "Progress",
                     icon: "star.fill",
                     color: Color(hex: fanProfile.level.color)
@@ -303,8 +323,7 @@ struct FanProfileView: View {
         }
     }
     
-    // MARK: - Fan Activity Section
-    
+    // Fan Activity Section
     private var fanActivitySection: some View {
         VStack(spacing: 20) {
             HStack {
@@ -367,8 +386,7 @@ struct FanProfileView: View {
         )
     }
     
-    // MARK: - Settings Section
-    
+    // Settings Section
     private var settingsSection: some View {
         VStack(spacing: 20) {
             HStack {
@@ -482,9 +500,530 @@ struct FanProfileView: View {
         formatter.dateFormat = "MMM yyyy"
         return formatter.string(from: date)
     }
+    
+    private func levelProgressText(_ level: FanLevel, stats: FanStats) -> String {
+        let currentConcerts = stats.concertsAttended
+        
+        switch level {
+        case .newbie:
+            let required = FanLevel.regular.requiredConcerts
+            if required == 0 { return "100%" }
+            let progress = min(100, (currentConcerts * 100) / required)
+            return "\(progress)%"
+        case .regular:
+            let required = FanLevel.vip.requiredConcerts
+            if required == 0 { return "MAX" }
+            let progress = min(100, (currentConcerts * 100) / required)
+            return "\(progress)%"
+        case .vip:
+            return "MAX"
+        }
+    }
 }
 
-// MARK: - Supporting Views
+// MARK: - ✅ КОМПОНЕНТ ЗНАЧКОВ ДОСТИЖЕНИЙ
+
+struct FanAchievementBadges: View {
+    let fanProfile: FanProfile
+    let maxBadges: Int
+    let size: BadgeSize
+    
+    @StateObject private var achievementService = FanAchievementService.shared
+    @State private var showingAllBadges = false
+    
+    init(fanProfile: FanProfile, maxBadges: Int = 5, size: BadgeSize = .medium) {
+        self.fanProfile = fanProfile
+        self.maxBadges = maxBadges
+        self.size = size
+    }
+    
+    // Получаем разблокированные достижения, отсортированные по важности
+    private var unlockedAchievements: [Achievement] {
+        let allAchievements = Achievement.defaults
+        let unlockedIds = Set(achievementService.fanAchievements.compactMap { key, isUnlocked in
+            isUnlocked ? key : nil
+        })
+        
+        return allAchievements
+            .filter { unlockedIds.contains($0.id) }
+            .sorted { first, second in
+                // Сортируем по приоритету: сначала особые, потом по очкам
+                if first.category == .special && second.category != .special {
+                    return true
+                } else if first.category != .special && second.category == .special {
+                    return false
+                } else {
+                    return first.points > second.points
+                }
+            }
+    }
+    
+    // Достижения для отображения
+    private var displayedAchievements: [Achievement] {
+        Array(unlockedAchievements.prefix(maxBadges))
+    }
+    
+    // Количество скрытых достижений
+    private var hiddenCount: Int {
+        max(0, unlockedAchievements.count - maxBadges)
+    }
+    
+    var body: some View {
+        if !displayedAchievements.isEmpty {
+            HStack(spacing: size.spacing) {
+                // Отображаем значки достижений
+                ForEach(displayedAchievements, id: \.id) { achievement in
+                    AchievementBadge(
+                        achievement: achievement,
+                        size: size
+                    )
+                    .onTapGesture {
+                        showingAllBadges = true
+                    }
+                }
+                
+                // Показываем "+N" если есть скрытые достижения
+                if hiddenCount > 0 {
+                    Button {
+                        showingAllBadges = true
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [Color(.systemGray4), Color(.systemGray5)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: size.diameter, height: size.diameter)
+                            
+                            Text("+\(hiddenCount)")
+                                .font(.system(size: size.fontSize, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                        }
+                        .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 1)
+                    }
+                }
+            }
+            .sheet(isPresented: $showingAllBadges) {
+                FanAchievementBadgesDetailView(fanProfile: fanProfile)
+            }
+        }
+    }
+}
+
+// MARK: - Individual Achievement Badge
+struct AchievementBadge: View {
+    let achievement: Achievement
+    let size: BadgeSize
+    
+    var body: some View {
+        ZStack {
+            // Фоновый круг с градиентом по категории
+            Circle()
+                .fill(
+                    LinearGradient(
+                        colors: [achievementColor, achievementColor.opacity(0.7)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .frame(width: size.diameter, height: size.diameter)
+            
+            // Иконка достижения
+            Image(systemName: achievement.iconName)
+                .font(.system(size: size.iconSize, weight: .bold))
+                .foregroundColor(.white)
+        }
+        .shadow(color: achievementColor.opacity(0.3), radius: 3, x: 0, y: 2)
+        .scaleEffect(1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: achievement.id)
+    }
+    
+    private var achievementColor: Color {
+        switch achievement.category {
+        case .concerts:
+            return .orange
+        case .social:
+            return .blue
+        case .loyalty:
+            return .purple
+        case .merchandise:
+            return .green
+        case .special:
+            return .red
+        }
+    }
+}
+
+// MARK: - Badge Size Configuration
+enum BadgeSize {
+    case small, medium, large
+    
+    var diameter: CGFloat {
+        switch self {
+        case .small: return 20
+        case .medium: return 28
+        case .large: return 36
+        }
+    }
+    
+    var iconSize: CGFloat {
+        switch self {
+        case .small: return 10
+        case .medium: return 14
+        case .large: return 18
+        }
+    }
+    
+    var fontSize: CGFloat {
+        switch self {
+        case .small: return 8
+        case .medium: return 10
+        case .large: return 12
+        }
+    }
+    
+    var spacing: CGFloat {
+        switch self {
+        case .small: return 4
+        case .medium: return 6
+        case .large: return 8
+        }
+    }
+}
+
+// MARK: - Detail View for All Badges
+struct FanAchievementBadgesDetailView: View {
+    let fanProfile: FanProfile
+    @StateObject private var achievementService = FanAchievementService.shared
+    @Environment(\.dismiss) private var dismiss
+    
+    private var unlockedAchievements: [Achievement] {
+        let allAchievements = Achievement.defaults
+        let unlockedIds = Set(achievementService.fanAchievements.compactMap { key, isUnlocked in
+            isUnlocked ? key : nil
+        })
+        
+        return allAchievements
+            .filter { unlockedIds.contains($0.id) }
+            .sorted { $0.points > $1.points }
+    }
+    
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 24) {
+                    // Header с информацией о фанате
+                    VStack(spacing: 16) {
+                        // Аватар
+                        ZStack {
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [
+                                            Color(hex: fanProfile.level.color),
+                                            Color(hex: fanProfile.level.color).opacity(0.7)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: 80, height: 80)
+                            
+                            Text(String(fanProfile.nickname.prefix(2)).uppercased())
+                                .font(.system(size: 28, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                        }
+                        
+                        VStack(spacing: 4) {
+                            Text(fanProfile.nickname)
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            
+                            Text(fanProfile.level.localizedName)
+                                .font(.subheadline)
+                                .foregroundColor(Color(hex: fanProfile.level.color))
+                                .fontWeight(.semibold)
+                        }
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color(.systemGray6))
+                    )
+                    .padding(.horizontal)
+                    
+                    // Заголовок достижений
+                    HStack {
+                        Text("Unlocked Achievements")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        
+                        Spacer()
+                        
+                        Text("\(unlockedAchievements.count)")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.blue)
+                    }
+                    .padding(.horizontal)
+                    
+                    // Сетка достижений
+                    if unlockedAchievements.isEmpty {
+                        VStack(spacing: 16) {
+                            Image(systemName: "trophy")
+                                .font(.system(size: 48))
+                                .foregroundColor(.gray)
+                            
+                            Text("No achievements yet")
+                                .font(.headline)
+                                .foregroundColor(.secondary)
+                            
+                            Text("Keep participating to unlock achievements!")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding()
+                    } else {
+                        LazyVGrid(columns: [
+                            GridItem(.flexible()),
+                            GridItem(.flexible()),
+                            GridItem(.flexible())
+                        ], spacing: 20) {
+                            ForEach(unlockedAchievements, id: \.id) { achievement in
+                                VStack(spacing: 12) {
+                                    // Большой значок
+                                    ZStack {
+                                        Circle()
+                                            .fill(
+                                                LinearGradient(
+                                                    colors: [achievementColor(achievement), achievementColor(achievement).opacity(0.7)],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
+                                            )
+                                            .frame(width: 60, height: 60)
+                                        
+                                        Image(systemName: achievement.iconName)
+                                            .font(.system(size: 24, weight: .bold))
+                                            .foregroundColor(.white)
+                                    }
+                                    .shadow(color: achievementColor(achievement).opacity(0.3), radius: 8, x: 0, y: 4)
+                                    
+                                    // Информация
+                                    VStack(spacing: 4) {
+                                        Text(achievement.title)
+                                            .font(.caption)
+                                            .fontWeight(.semibold)
+                                            .multilineTextAlignment(.center)
+                                            .lineLimit(2)
+                                        
+                                        HStack(spacing: 2) {
+                                            Image(systemName: "star.fill")
+                                                .font(.caption2)
+                                                .foregroundColor(.yellow)
+                                            
+                                            Text("\(achievement.points)")
+                                                .font(.caption2)
+                                                .fontWeight(.semibold)
+                                        }
+                                    }
+                                }
+                                .padding(.vertical, 8)
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                }
+            }
+            .navigationTitle("Achievements")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+    
+    private func achievementColor(_ achievement: Achievement) -> Color {
+        switch achievement.category {
+        case .concerts:
+            return .orange
+        case .social:
+            return .blue
+        case .loyalty:
+            return .purple
+        case .merchandise:
+            return .green
+        case .special:
+            return .red
+        }
+    }
+}
+
+// MARK: - ✅ СЕКЦИЯ ДОСТИЖЕНИЙ
+
+struct FanAchievementsProfileSection: View {
+    @StateObject private var achievementService = FanAchievementService.shared
+    @EnvironmentObject private var appState: AppState
+    @Environment(\.colorScheme) private var colorScheme
+    
+    @State private var showingAllAchievements = false
+    
+    private var fanProfile: FanProfile? {
+        appState.user?.fanProfile
+    }
+    
+    private var fanStats: FanStats {
+        fanProfile?.stats ?? FanStats()
+    }
+    
+    // Получаем топ-3 достижения для отображения в профиле
+    private var topAchievements: [(achievement: Achievement, isUnlocked: Bool, progress: Double)] {
+        let allAchievements = achievementService.getAllAchievementsWithStatus(
+            stats: fanStats,
+            fanProfile: fanProfile ?? FanProfile(nickname: "", location: "", favoriteSong: "")
+        )
+        
+        // Сортируем: сначала разблокированные, потом по прогрессу
+        return allAchievements
+            .sorted { first, second in
+                if first.isUnlocked && !second.isUnlocked {
+                    return true
+                } else if !first.isUnlocked && second.isUnlocked {
+                    return false
+                } else if !first.isUnlocked && !second.isUnlocked {
+                    return first.progress > second.progress
+                } else {
+                    return first.achievement.points > second.achievement.points
+                }
+            }
+            .prefix(3)
+            .map { $0 }
+    }
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            // Header с общей статистикой
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "trophy.fill")
+                            .font(.title3)
+                            .foregroundColor(.yellow)
+                        
+                        Text("Achievements")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                    }
+                    
+                    HStack(spacing: 16) {
+                        // Очки
+                        HStack(spacing: 4) {
+                            Image(systemName: "star.fill")
+                                .font(.caption)
+                                .foregroundColor(.yellow)
+                            
+                            Text("\(achievementService.totalPoints) pts")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                        }
+                        
+                        // Прогресс
+                        HStack(spacing: 4) {
+                            let unlockedCount = achievementService.fanAchievements.values.filter { $0 }.count
+                            let totalCount = Achievement.defaults.count
+                            
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.caption)
+                                .foregroundColor(.green)
+                            
+                            Text("\(unlockedCount)/\(totalCount)")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                        }
+                    }
+                    .foregroundColor(.secondary)
+                }
+                
+                Spacer()
+            }
+            
+            // Топ-3 достижения
+            if !topAchievements.isEmpty {
+                LazyVStack(spacing: 12) {
+                    ForEach(topAchievements, id: \.achievement.id) { item in
+                        CompactAchievementCard(
+                            achievement: item.achievement,
+                            isUnlocked: item.isUnlocked,
+                            progress: item.progress
+                        )
+                    }
+                }
+                
+                // Кнопка "Показать все"
+                Button {
+                    showingAllAchievements = true
+                } label: {
+                    HStack {
+                        Text("View All Achievements")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                    }
+                    .foregroundColor(.blue)
+                    .padding(.vertical, 8)
+                }
+            } else {
+                Text("Loading achievements...")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .padding()
+            }
+        }
+        .padding(24)
+        .background(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(colorScheme == .dark ?
+                      Color(UIColor.secondarySystemGroupedBackground) :
+                      Color.white)
+                .shadow(
+                    color: colorScheme == .dark ?
+                        Color.clear :
+                        Color.black.opacity(0.08),
+                    radius: 12,
+                    x: 0,
+                    y: 4
+                )
+        )
+        .onAppear {
+            loadAchievements()
+        }
+        .sheet(isPresented: $showingAllAchievements) {
+            FanAchievementsDetailView()
+        }
+    }
+    
+    private func loadAchievements() {
+        guard let user = appState.user,
+              let fanGroupId = user.fanGroupId else { return }
+        
+        achievementService.loadFanAchievements(fanId: user.id, groupId: fanGroupId)
+    }
+}
+
+// MARK: - Supporting Views (остаются без изменений)
 
 struct CompactInfoCard: View {
     let icon: String
@@ -648,8 +1187,6 @@ struct SettingsRow: View {
     }
 }
 
-// MARK: - New Info Card for Profile
-
 struct InfoCard: View {
     let icon: String
     let title: String
@@ -694,7 +1231,345 @@ struct InfoCard: View {
     }
 }
 
-// MARK: - Edit Profile View (Placeholder)
+struct CompactAchievementCard: View {
+    let achievement: Achievement
+    let isUnlocked: Bool
+    let progress: Double
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            // Иконка
+            ZStack {
+                Circle()
+                    .fill(isUnlocked ? achievementColor : Color(.systemGray4))
+                    .frame(width: 40, height: 40)
+                
+                Image(systemName: achievement.iconName)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.white)
+            }
+            
+            // Информация
+            VStack(alignment: .leading, spacing: 2) {
+                HStack {
+                    Text(achievement.title)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(isUnlocked ? .primary : .secondary)
+                    
+                    Spacer()
+                    
+                    // Очки
+                    HStack(spacing: 2) {
+                        Image(systemName: "star.fill")
+                            .font(.caption2)
+                            .foregroundColor(.yellow)
+                        
+                        Text("\(achievement.points)")
+                            .font(.caption2)
+                            .fontWeight(.semibold)
+                    }
+                }
+                
+                if isUnlocked {
+                    HStack(spacing: 4) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.caption2)
+                            .foregroundColor(.green)
+                        
+                        Text("Unlocked")
+                            .font(.caption2)
+                            .fontWeight(.medium)
+                            .foregroundColor(.green)
+                    }
+                } else {
+                    // Прогресс
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text("Progress: \(Int(progress * 100))%")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                            
+                            Spacer()
+                        }
+                        
+                        ProgressView(value: progress)
+                            .tint(achievementColor)
+                            .scaleEffect(y: 0.7)
+                    }
+                }
+            }
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(.systemGray6).opacity(0.5))
+        )
+        .opacity(isUnlocked ? 1.0 : 0.7)
+    }
+    
+    private var achievementColor: Color {
+        switch achievement.category {
+        case .concerts:
+            return .orange
+        case .social:
+            return .blue
+        case .loyalty:
+            return .purple
+        case .merchandise:
+            return .green
+        case .special:
+            return .red
+        }
+    }
+}
+
+struct CategoryChip: View {
+    let title: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(isSelected ? Color.blue : Color(.systemGray5))
+                )
+                .foregroundColor(isSelected ? .white : .primary)
+        }
+    }
+}
+
+struct FullAchievementCard: View {
+    let achievement: Achievement
+    let isUnlocked: Bool
+    let progress: Double
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            // Иконка
+            ZStack {
+                Circle()
+                    .fill(isUnlocked ? achievementColor : Color(.systemGray4))
+                    .frame(width: 60, height: 60)
+                
+                Image(systemName: achievement.iconName)
+                    .font(.title2)
+                    .foregroundColor(.white)
+            }
+            
+            // Информация
+            VStack(alignment: .leading, spacing: 4) {
+                Text(achievement.title)
+                    .font(.headline)
+                    .foregroundColor(isUnlocked ? .primary : .secondary)
+                
+                Text(achievement.description)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .lineLimit(2)
+                
+                if !isUnlocked {
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text("Progress")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            
+                            Spacer()
+                            
+                            Text("\(Int(progress * 100))%")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                        }
+                        
+                        ProgressView(value: progress)
+                            .tint(achievementColor)
+                    }
+                }
+            }
+            
+            Spacer()
+            
+            // Очки и статус
+            VStack(alignment: .trailing, spacing: 4) {
+                HStack(spacing: 4) {
+                    Image(systemName: "star.fill")
+                        .font(.caption)
+                        .foregroundColor(.yellow)
+                    
+                    Text("\(achievement.points)")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                }
+                
+                if isUnlocked {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.green)
+                        .font(.title3)
+                }
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(.systemBackground))
+                .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+        )
+        .opacity(isUnlocked ? 1.0 : 0.7)
+    }
+    
+    private var achievementColor: Color {
+        switch achievement.category {
+        case .concerts:
+            return .orange
+        case .social:
+            return .blue
+        case .loyalty:
+            return .purple
+        case .merchandise:
+            return .green
+        case .special:
+            return .red
+        }
+    }
+}
+
+struct FanAchievementsDetailView: View {
+    @StateObject private var achievementService = FanAchievementService.shared
+    @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var selectedCategory: AchievementCategory? = nil
+    
+    private var fanProfile: FanProfile? {
+        appState.user?.fanProfile
+    }
+    
+    private var fanStats: FanStats {
+        fanProfile?.stats ?? FanStats()
+    }
+    
+    private var filteredAchievements: [(achievement: Achievement, isUnlocked: Bool, progress: Double)] {
+        let allAchievements = achievementService.getAllAchievementsWithStatus(
+            stats: fanStats,
+            fanProfile: fanProfile ?? FanProfile(nickname: "", location: "", favoriteSong: "")
+        )
+        
+        if let selectedCategory = selectedCategory {
+            return allAchievements.filter { $0.achievement.category == selectedCategory }
+        }
+        
+        return allAchievements.sorted { first, second in
+            if first.isUnlocked && !second.isUnlocked {
+                return true
+            } else if !first.isUnlocked && second.isUnlocked {
+                return false
+            } else {
+                return first.achievement.points > second.achievement.points
+            }
+        }
+    }
+    
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 24) {
+                    // Статистика
+                    VStack(spacing: 16) {
+                        HStack(spacing: 8) {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.yellow)
+                                .font(.title2)
+                            
+                            Text("\(achievementService.totalPoints)")
+                                .font(.title)
+                                .fontWeight(.bold)
+                            
+                            Text("points")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        let unlockedCount = achievementService.fanAchievements.values.filter { $0 }.count
+                        let totalCount = Achievement.defaults.count
+                        
+                        VStack(spacing: 8) {
+                            HStack {
+                                Text("Progress")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                
+                                Spacer()
+                                
+                                Text("\(unlockedCount)/\(totalCount)")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                            }
+                            
+                            ProgressView(value: Double(unlockedCount), total: Double(totalCount))
+                                .tint(.blue)
+                        }
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color(.systemGray6))
+                    )
+                    .padding(.horizontal)
+                    
+                    // Фильтр по категориям
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            CategoryChip(
+                                title: "All",
+                                isSelected: selectedCategory == nil
+                            ) {
+                                selectedCategory = nil
+                            }
+                            
+                            ForEach(AchievementCategory.allCases, id: \.self) { category in
+                                CategoryChip(
+                                    title: category.localizedName,
+                                    isSelected: selectedCategory == category
+                                ) {
+                                    selectedCategory = category
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                    
+                    // Список достижений
+                    LazyVStack(spacing: 16) {
+                        ForEach(filteredAchievements, id: \.achievement.id) { item in
+                            FullAchievementCard(
+                                achievement: item.achievement,
+                                isUnlocked: item.isUnlocked,
+                                progress: item.progress
+                            )
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+            }
+            .navigationTitle("Achievements")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
 
 struct EditFanProfileView: View {
     @Environment(\.dismiss) private var dismiss
@@ -731,10 +1606,6 @@ struct EditFanProfileView: View {
         }
     }
 }
-
-
-
-// MARK: - Preview
 
 #Preview {
     FanProfileView()

@@ -33,7 +33,7 @@ enum FanLevel: String, Codable, CaseIterable, Identifiable {
     var localizedName: String {
         switch self {
         case .newbie:
-            return "Newbie"
+            return "New fan"
         case .regular:
             return "Regular"
         case .vip:
@@ -68,9 +68,9 @@ enum FanLevel: String, Codable, CaseIterable, Identifiable {
         case .newbie:
             return 0
         case .regular:
-            return 3
-        case .vip:
             return 10
+        case .vip:
+            return 25
         }
     }
 }
