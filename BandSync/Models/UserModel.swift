@@ -23,7 +23,7 @@ struct UserModel: Identifiable, Codable, Equatable {
     // MARK: - Fan System Properties (NEW)
     let userType: UserType
     let fanGroupId: String?        // For fans - ID of the group they follow
-    let fanProfile: FanProfile?    // Fan-specific data
+    var fanProfile: FanProfile?    // Fan-specific data
 
     enum UserRole: String, Codable, CaseIterable, Identifiable {
         case admin = "Admin"

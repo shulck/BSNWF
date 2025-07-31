@@ -4,7 +4,9 @@ struct FanEventDetailView: View {
     let fanEvent: Event
     @State private var willAttend = false
     @State private var showingLocationSheet = false
+    @State private var isUpdatingAttendance = false
     @StateObject private var groupService = GroupService.shared
+    @StateObject private var fanStatsService = FanStatsService.shared
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
     
@@ -560,7 +562,7 @@ struct FanEventDetailView: View {
         .background(cardBackground)
     }
     
-    // MARK: - Attendance Card
+    // MARK: - Attendance Card (ИСПРАВЛЕННАЯ ВЕРСИЯ)
     
     private var attendanceCard: some View {
         VStack(spacing: 20) {
@@ -584,7 +586,7 @@ struct FanEventDetailView: View {
                         
                         Text(fanEvent.type == .birthday ?
                              "Mark if you've sent a gift" :
-                             "Let us know if you're coming")
+                             "Mark if you attended this event")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -592,10 +594,24 @@ struct FanEventDetailView: View {
                 
                 Spacer()
                 
-                Toggle("", isOn: $willAttend)
-                    .labelsHidden()
-                    .toggleStyle(SwitchToggleStyle(tint: fanEvent.type == .birthday ? .pink : .blue))
-                    .scaleEffect(1.1)
+                if isUpdatingAttendance {
+                    VStack(spacing: 4) {
+                        ProgressView()
+                            .scaleEffect(0.8)
+                        Text("Updating...")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                } else {
+                    Toggle("", isOn: $willAttend)
+                        .labelsHidden()
+                        .toggleStyle(SwitchToggleStyle(tint: fanEvent.type == .birthday ? .pink : .blue))
+                        .scaleEffect(1.1)
+                        .disabled(isUpdatingAttendance)
+                        .onChange(of: willAttend) { newValue in
+                            handleAttendanceToggle(newValue)
+                        }
+                }
             }
             
             if willAttend {
@@ -638,6 +654,52 @@ struct FanEventDetailView: View {
         .padding(24)
         .background(attendanceCardBackground)
         .animation(.easeInOut(duration: 0.3), value: willAttend)
+    }
+    
+    // MARK: - NEW: Handle Attendance Toggle
+    
+    private func handleAttendanceToggle(_ newValue: Bool) {
+        print("🎯 Attendance toggled to: \(newValue)")
+        
+        // Если отмечают как посещенный и это концерт/фестиваль
+        if newValue && [.concert, .festival].contains(fanEvent.type) {
+            guard let user = AppState.shared.user,
+                  let fanGroupId = user.fanGroupId else {
+                print("❌ No user or fanGroupId found")
+                // Возвращаем toggle в исходное состояние
+                DispatchQueue.main.async {
+                    self.willAttend = !newValue
+                }
+                return
+            }
+            
+            print("🔄 Updating concert attendance for fan: \(user.id)")
+            isUpdatingAttendance = true
+            
+            // Обновляем статистику и проверяем достижения
+            fanStatsService.markConcertAttended(
+                fanId: user.id,
+                groupId: fanGroupId
+            ) { result in
+                DispatchQueue.main.async {
+                    self.isUpdatingAttendance = false
+                    
+                    switch result {
+                    case .success:
+                        print("✅ Concert attendance marked successfully!")
+                        // willAttend уже установлен правильно
+                        
+                    case .failure(let error):
+                        print("❌ Failed to mark concert attendance: \(error)")
+                        // Возвращаем toggle в исходное состояние
+                        self.willAttend = !newValue
+                    }
+                }
+            }
+        } else {
+            // Для других типов событий или снятия отметки просто обновляем UI
+            print("ℹ️ Non-concert event or unmarking attendance")
+        }
     }
     
     // MARK: - Computed Properties для исправления ошибки компилятора
