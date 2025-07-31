@@ -38,176 +38,162 @@ final class GroupService: ObservableObject {
             if let data = try? snapshot?.data(as: GroupModel.self) {
                 DispatchQueue.main.async {
                     self.group = data
-                }
-                
-                // ИСПРАВЛЕНО: Используем новый метод UserService вместо старого fetchGroupMembers
-                self.fetchGroupMembers(groupId: id) { success in
-                    DispatchQueue.main.async {
-                        self.isLoading = false
-                    }
-                    completion(success)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.errorMessage = "Error converting group data"
                     self.isLoading = false
                 }
-                completion(false)
+                completion(true)
+            } else {
+                // ✅ ОБНОВЛЕНО: Ручной парсинг для совместимости с Firebase
+                if let data = snapshot?.data() {
+                    let group = self.parseGroupFromFirebase(data, id: id)
+                    DispatchQueue.main.async {
+                        self.group = group
+                        self.isLoading = false
+                    }
+                    completion(true)
+                } else {
+                    DispatchQueue.main.async {
+                        self.errorMessage = "Group not found"
+                        self.isLoading = false
+                    }
+                    completion(false)
+                }
             }
         }
     }
-
-    // ИСПРАВЛЕНО: Новый метод использует UserService.fetchUsers() для загрузки всех пользователей
-    private func fetchGroupMembers(groupId: String, completion: @escaping (Bool) -> Void) {
-        guard let group = self.group else {
+    
+    // ✅ НОВЫЙ: Парсинг группы из Firebase данных
+    private func parseGroupFromFirebase(_ data: [String: Any], id: String) -> GroupModel {
+        return GroupModel(
+            id: id,
+            name: data["name"] as? String ?? "",
+            code: data["code"] as? String ?? "",
+            members: data["members"] as? [String] ?? [],
+            pendingMembers: data["pendingMembers"] as? [String] ?? [],
+            logoURL: data["logoURL"] as? String,
+            description: data["description"] as? String,
+            paypalAddress: data["paypalAddress"] as? String,
+            establishedDate: data["establishedDate"] as? String,
+            genre: data["genre"] as? String,
+            location: data["location"] as? String,
+            socialMediaLinks: parseSocialMediaLinks(from: data["socialMediaLinks"]),
+            admins: data["admins"] as? [String],
+            membersCount: data["membersCount"] as? String,
+            createdAt: (data["createdAt"] as? Timestamp)?.dateValue(),
+            createdBy: data["createdBy"] as? String
+        )
+    }
+    
+    // ✅ НОВЫЙ: Парсинг социальных сетей
+    private func parseSocialMediaLinks(from data: Any?) -> SocialMediaLinks? {
+        guard let socialDict = data as? [String: Any] else { return nil }
+        
+        return SocialMediaLinks(
+            website: socialDict["website"] as? String,
+            facebook: socialDict["facebook"] as? String,
+            instagram: socialDict["instagram"] as? String,
+            youtube: socialDict["youtube"] as? String,
+            spotify: socialDict["spotify"] as? String,
+            appleMusic: socialDict["appleMusic"] as? String,
+            twitter: socialDict["twitter"] as? String,
+            tiktok: socialDict["tiktok"] as? String,
+            soundcloud: socialDict["soundcloud"] as? String,
+            bandcamp: socialDict["bandcamp"] as? String,
+            patreon: socialDict["patreon"] as? String,
+            discord: socialDict["discord"] as? String,
+            linkedin: socialDict["linkedin"] as? String,
+            pinterest: socialDict["pinterest"] as? String,
+            snapchat: socialDict["snapchat"] as? String,
+            telegram: socialDict["telegram"] as? String,
+            whatsapp: socialDict["whatsapp"] as? String,
+            reddit: socialDict["reddit"] as? String
+        )
+    }
+    
+    func fetchGroupMembers() {
+        guard let groupId = group?.id else { return }
+        
+        UserService.shared.fetchUsers(for: groupId) { [weak self] users in
+            DispatchQueue.main.async {
+                self?.groupMembers = users.filter { $0.groupId == groupId }
+                self?.pendingMembers = [] // Calculate pending separately if needed
+            }
+        }
+    }
+    
+    func approveUser(_ userId: String, completion: @escaping (Bool) -> Void) {
+        guard let groupId = group?.id else {
             completion(false)
             return
         }
         
-        print("GroupService: Loading members for group: \(groupId)")
-        print("GroupService: Group has \(group.members.count) members and \(group.pendingMembers.count) pending")
+        // Remove from pending and add to members
+        var updatedGroup = group!
+        updatedGroup.pendingMembers.removeAll { $0 == userId }
+        updatedGroup.members.append(userId)
         
-        // Clear arrays on main queue
-        DispatchQueue.main.async {
-            self.groupMembers = []
-            self.pendingMembers = []
-        }
-        
-        // НОВАЯ ЛОГИКА: Используем UserService.fetchUsers() для загрузки всех пользователей группы
-        UserService.shared.fetchUsers(for: groupId) { [weak self] allUsers in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                
-                print("GroupService: UserService returned \(allUsers.count) users")
-                
-                // Разделяем пользователей на утвержденных и ожидающих
-                let approvedMembers = allUsers.filter { user in
-                    group.members.contains(user.id)
+        // Update user's groupId
+        UserService.shared.updateUserGroup(userId: userId, groupId: groupId) { [weak self] success in
+            if success {
+                self?.updateGroup(updatedGroup) { success in
+                    completion(success)
                 }
-                
-                let pendingUsers = allUsers.filter { user in
-                    group.pendingMembers.contains(user.id)
-                }
-                
-                print("GroupService: Approved members: \(approvedMembers.count)")
-                print("GroupService: Pending members: \(pendingUsers.count)")
-                
-                self.groupMembers = approvedMembers
-                self.pendingMembers = pendingUsers
-                
-                completion(true)
+            } else {
+                completion(false)
             }
         }
     }
-
-    func approveUser(userId: String) {
-        guard let groupId = group?.id else { return }
-        
-        DispatchQueue.main.async {
-            self.isLoading = true
-        }
-
-        db.collection("groups").document(groupId).updateData([
-            "pendingMembers": FieldValue.arrayRemove([userId]),
-            "members": FieldValue.arrayUnion([userId])
-        ]) { [weak self] error in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-
-                if let error = error {
-                    self?.errorMessage = "Error approving user: \(error.localizedDescription)"
-                } else {
-                    // Update user's group ID
-                    self?.db.collection("users").document(userId).updateData([
-                        "groupId": groupId
-                    ]) { _ in
-                        // Refresh members after updating user
-                        self?.fetchGroupMembers(groupId: groupId) { _ in }
-                    }
-                }
-            }
-        }
-    }
-
-    func rejectUser(userId: String) {
-        guard let groupId = group?.id else { return }
-        
-        DispatchQueue.main.async {
-            self.isLoading = true
-        }
-        
-        db.collection("groups").document(groupId).updateData([
-            "pendingMembers": FieldValue.arrayRemove([userId])
-        ]) { [weak self] error in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-
-                if let error = error {
-                    self?.errorMessage = "Error rejecting user: \(error.localizedDescription)"
-                } else {
-                    // Refresh members after updating
-                    self?.fetchGroupMembers(groupId: groupId) { _ in }
-                }
-            }
-        }
-    }
-
-    func removeUser(userId: String) {
-        guard let groupId = group?.id else { return }
-        
-        DispatchQueue.main.async {
-            self.isLoading = true
-        }
-        
-        db.collection("groups").document(groupId).updateData([
-            "members": FieldValue.arrayRemove([userId])
-        ]) { [weak self] error in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-
-                if let error = error {
-                    self?.errorMessage = "Error removing user: \(error.localizedDescription)"
-                } else {
-                    // Remove user's group ID
-                    self?.db.collection("users").document(userId).updateData([
-                        "groupId": NSNull()
-                    ]) { _ in
-                        // Refresh members after updating
-                        self?.fetchGroupMembers(groupId: groupId) { _ in }
-                    }
-                }
-            }
-        }
-    }
-
-    func changeUserRole(userId: String, newRole: UserModel.UserRole) {
-        guard !userId.isEmpty else {
-            DispatchQueue.main.async {
-                self.errorMessage = "Error: Empty user ID"
-            }
+    
+    func rejectUser(_ userId: String, completion: @escaping (Bool) -> Void) {
+        guard var updatedGroup = group else {
+            completion(false)
             return
         }
         
-        DispatchQueue.main.async {
-            self.isLoading = true
+        updatedGroup.pendingMembers.removeAll { $0 == userId }
+        
+        updateGroup(updatedGroup) { success in
+            completion(success)
+        }
+    }
+    
+    func removeUser(_ userId: String, completion: @escaping (Bool) -> Void) {
+        guard var updatedGroup = group else {
+            completion(false)
+            return
         }
         
-        db.collection("users").document(userId).updateData([
+        updatedGroup.members.removeAll { $0 == userId }
+        
+        // Clear user's groupId
+        UserService.shared.updateUserGroup(userId: userId, groupId: nil) { [weak self] success in
+            if success {
+                self?.updateGroup(updatedGroup) { success in
+                    completion(success)
+                }
+            } else {
+                completion(false)
+            }
+        }
+    }
+    
+    func changeUserRole(userId: String, newRole: UserModel.UserRole, completion: @escaping (Bool) -> Void) {
+        let roleUpdateData: [String: Any] = [
             "role": newRole.rawValue
-        ]) { [weak self] error in
+        ]
+        
+        db.collection("users").document(userId).updateData(roleUpdateData) { [weak self] error in
             DispatchQueue.main.async {
-                self?.isLoading = false
-                
                 if let error = error {
-                    self?.errorMessage = "Error changing role: \(error.localizedDescription)"
+                    self?.errorMessage = "Error updating user role: \(error.localizedDescription)"
+                    completion(false)
                 } else {
                     // Update local data
-                    if let self = self,
-                       let memberIndex = self.groupMembers.firstIndex(where: { $0.id == userId }) {
-                        var updatedMember = self.groupMembers[memberIndex]
-                        updatedMember.role = newRole
-                        self.groupMembers[memberIndex] = updatedMember
+                    if let memberIndex = self?.groupMembers.firstIndex(where: { $0.id == userId }) {
+                        var updatedMember = self?.groupMembers[memberIndex]
+                        updatedMember?.role = newRole
+                        self?.groupMembers[memberIndex] = updatedMember!
                     }
+                    completion(true)
                 }
             }
         }
@@ -280,6 +266,74 @@ final class GroupService: ObservableObject {
         }
     }
     
+    // ✅ НОВЫЙ: Обновление дополнительной информации о группе
+    func updateGroupDetails(
+        description: String?,
+        establishedDate: String?,
+        genre: String?,
+        location: String?,
+        socialMediaLinks: SocialMediaLinks?
+    ) {
+        guard let groupId = group?.id else { return }
+        
+        DispatchQueue.main.async {
+            self.isLoading = true
+        }
+        
+        var updateData: [String: Any] = [:]
+        
+        // Основная информация
+        updateData["description"] = description?.isEmpty == false ? description : NSNull()
+        updateData["establishedDate"] = establishedDate?.isEmpty == false ? establishedDate : NSNull()
+        updateData["genre"] = genre?.isEmpty == false ? genre : NSNull()
+        updateData["location"] = location?.isEmpty == false ? location : NSNull()
+        
+        // Социальные сети
+        if let socialMedia = socialMediaLinks, !socialMedia.isEmpty {
+            var socialDict: [String: Any] = [:]
+            
+            if let website = socialMedia.website, !website.isEmpty { socialDict["website"] = website }
+            if let facebook = socialMedia.facebook, !facebook.isEmpty { socialDict["facebook"] = facebook }
+            if let instagram = socialMedia.instagram, !instagram.isEmpty { socialDict["instagram"] = instagram }
+            if let youtube = socialMedia.youtube, !youtube.isEmpty { socialDict["youtube"] = youtube }
+            if let spotify = socialMedia.spotify, !spotify.isEmpty { socialDict["spotify"] = spotify }
+            if let appleMusic = socialMedia.appleMusic, !appleMusic.isEmpty { socialDict["appleMusic"] = appleMusic }
+            if let twitter = socialMedia.twitter, !twitter.isEmpty { socialDict["twitter"] = twitter }
+            if let tiktok = socialMedia.tiktok, !tiktok.isEmpty { socialDict["tiktok"] = tiktok }
+            if let soundcloud = socialMedia.soundcloud, !soundcloud.isEmpty { socialDict["soundcloud"] = soundcloud }
+            if let bandcamp = socialMedia.bandcamp, !bandcamp.isEmpty { socialDict["bandcamp"] = bandcamp }
+            if let patreon = socialMedia.patreon, !patreon.isEmpty { socialDict["patreon"] = patreon }
+            if let discord = socialMedia.discord, !discord.isEmpty { socialDict["discord"] = discord }
+            if let linkedin = socialMedia.linkedin, !linkedin.isEmpty { socialDict["linkedin"] = linkedin }
+            if let pinterest = socialMedia.pinterest, !pinterest.isEmpty { socialDict["pinterest"] = pinterest }
+            if let snapchat = socialMedia.snapchat, !snapchat.isEmpty { socialDict["snapchat"] = snapchat }
+            if let telegram = socialMedia.telegram, !telegram.isEmpty { socialDict["telegram"] = telegram }
+            if let whatsapp = socialMedia.whatsapp, !whatsapp.isEmpty { socialDict["whatsapp"] = whatsapp }
+            if let reddit = socialMedia.reddit, !reddit.isEmpty { socialDict["reddit"] = reddit }
+            
+            updateData["socialMediaLinks"] = socialDict.isEmpty ? NSNull() : socialDict
+        } else {
+            updateData["socialMediaLinks"] = NSNull()
+        }
+        
+        db.collection("groups").document(groupId).updateData(updateData) { [weak self] error in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                
+                if let error = error {
+                    self?.errorMessage = "Error updating group details: \(error.localizedDescription)"
+                } else {
+                    // Обновляем локальные данные
+                    self?.group?.description = description
+                    self?.group?.establishedDate = establishedDate
+                    self?.group?.genre = genre
+                    self?.group?.location = location
+                    self?.group?.socialMediaLinks = socialMediaLinks
+                }
+            }
+        }
+    }
+    
     func updateGroup(_ group: GroupModel, completion: @escaping (Bool) -> Void) {
         guard let groupId = group.id else {
             completion(false)
@@ -293,7 +347,10 @@ final class GroupService: ObservableObject {
             "pendingMembers": group.pendingMembers,
             "logoURL": group.logoURL ?? NSNull(),
             "description": group.description ?? NSNull(),
-            "paypalAddress": group.paypalAddress ?? NSNull()
+            "paypalAddress": group.paypalAddress ?? NSNull(),
+            "establishedDate": group.establishedDate ?? NSNull(),
+            "genre": group.genre ?? NSNull(),
+            "location": group.location ?? NSNull()
         ]
         
         db.collection("groups").document(groupId).updateData(groupData) { [weak self] error in

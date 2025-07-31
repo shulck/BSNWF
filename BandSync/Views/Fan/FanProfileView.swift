@@ -3,6 +3,7 @@
 //  BandSync
 //
 //  ОБНОВЛЕНО: Убрана заглушка EditFanProfileView - теперь используется полная реализация
+//  ДОБАВЛЕНО: Отображение приватного адреса фаната
 //
 
 import SwiftUI
@@ -24,6 +25,11 @@ struct FanProfileView: View {
                     VStack(spacing: 20) {
                         // Stats Section
                         profileStatsSection
+                        
+                        // ✅ ДОБАВЛЕНО: Приватная контактная информация (только для самого фаната)
+                        if let currentUser = appState.user, currentUser.id == appState.user?.id {
+                            PrivateAddressSection()
+                        }
                         
                         // ✅ СЕКЦИЯ ДОСТИЖЕНИЙ
                         FanAchievementsProfileSection()
@@ -396,28 +402,10 @@ struct FanProfileView: View {
                 SettingsRow(
                     icon: "person.fill",
                     title: "Edit Profile",
-                    subtitle: "Update your fan information",
+                    subtitle: "Update your fan information and contact details",
                     color: .blue
                 ) {
                     showingEditProfile = true
-                }
-                
-                SettingsRow(
-                    icon: "bell.fill",
-                    title: "Notifications",
-                    subtitle: "Manage notification preferences",
-                    color: .orange
-                ) {
-                    // TODO: Implement notifications settings
-                }
-                
-                SettingsRow(
-                    icon: "shield.fill",
-                    title: "Privacy",
-                    subtitle: "Privacy and security settings",
-                    color: .green
-                ) {
-                    // TODO: Implement privacy settings
                 }
                 
                 SettingsRow(
@@ -1028,8 +1016,6 @@ struct FullAchievementCard: View {
         }
     }
 }
-
-
 
 // MARK: - Preview
 

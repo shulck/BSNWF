@@ -10,6 +10,7 @@ import SwiftUI
 import PhotosUI
 import FirebaseFirestore
 import FirebaseStorage
+import FirebaseAuth
 
 struct EditFanProfileView: View {
     @Environment(\.dismiss) private var dismiss
@@ -42,6 +43,8 @@ struct EditFanProfileView: View {
     @State private var showError = false
     @State private var errorMessage = ""
     @State private var showSuccessAlert = false
+    @State private var showDeleteAccountAlert = false
+    @State private var isDeleting = false
     
     // MARK: - Focus State
     @FocusState private var focusedField: EditField?
@@ -72,6 +75,9 @@ struct EditFanProfileView: View {
                         // Address Section
                         addressSection
                         
+                        // Delete Account Section
+                        deleteAccountSection
+                        
                         Spacer(minLength: 100)
                     }
                     .padding(.horizontal, 20)
@@ -96,7 +102,15 @@ struct EditFanProfileView: View {
                     dismiss()
                 }
             } message: {
-                Text("Your fan profile has been successfully updated!")
+                Text("Your fan profile has been successfully updated! Your address is saved privately and only visible to you.")
+            }
+            .alert("Delete Account", isPresented: $showDeleteAccountAlert) {
+                Button("Cancel", role: .cancel) {}
+                Button("Delete Forever", role: .destructive) {
+                    deleteAccount()
+                }
+            } message: {
+                Text("This action cannot be undone. Your fan profile, achievements, and all data will be permanently deleted.")
             }
         }
     }
@@ -277,6 +291,65 @@ struct EditFanProfileView: View {
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
     
+    // MARK: - Delete Account Section
+    private var deleteAccountSection: some View {
+        VStack(spacing: 0) {
+            HStack {
+                sectionHeader(title: "Danger Zone", icon: "exclamationmark.triangle.fill", color: .red)
+                Spacer()
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
+            .padding(.bottom, 8)
+            
+            VStack(spacing: 16) {
+                // Warning message
+                HStack {
+                    Image(systemName: "exclamationmark.circle")
+                        .foregroundColor(.red)
+                        .font(.caption)
+                    Text("Deleting your account is permanent and cannot be undone")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                }
+                .padding(.horizontal, 20)
+                
+                // Delete button
+                Button(action: {
+                    showDeleteAccountAlert = true
+                }) {
+                    HStack(spacing: 12) {
+                        if isDeleting {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                                .tint(.white)
+                        } else {
+                            Image(systemName: "trash.fill")
+                                .font(.system(size: 16, weight: .semibold))
+                        }
+                        
+                        Text(isDeleting ? "Deleting Account..." : "Delete Account")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.red)
+                    )
+                }
+                .disabled(isDeleting || isUploading)
+                .padding(.horizontal, 20)
+            }
+            .padding(.vertical, 20)
+        }
+        .background(cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+    
     // MARK: - Fan Profile Section
     private var fanProfileSection: some View {
         VStack(spacing: 0) {
@@ -314,9 +387,41 @@ struct EditFanProfileView: View {
     // MARK: - Address Section
     private var addressSection: some View {
         VStack(spacing: 0) {
-            sectionHeader(title: "Shipping Address", icon: "location.fill", color: .green)
+            HStack {
+                sectionHeader(title: "Shipping Address", icon: "location.fill", color: .green)
+                
+                Spacer()
+                
+                // Значок приватности
+                HStack(spacing: 4) {
+                    Image(systemName: "lock.fill")
+                        .font(.caption)
+                    Text("Private")
+                        .font(.caption)
+                }
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(Color.secondary.opacity(0.1))
+                .cornerRadius(6)
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
+            .padding(.bottom, 8)
             
             VStack(spacing: 16) {
+                // Info message
+                HStack {
+                    Image(systemName: "info.circle")
+                        .foregroundColor(.blue)
+                        .font(.caption)
+                    Text("This information is private and only visible to you")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                }
+                .padding(.horizontal, 20)
+                
                 // Country Picker
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Country")
@@ -359,6 +464,7 @@ struct EditFanProfileView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                 }
+                .padding(.horizontal, 20)
                 
                 // Dynamic address fields based on country
                 VStack(spacing: 16) {
@@ -405,8 +511,8 @@ struct EditFanProfileView: View {
                         )
                     }
                 }
+                .padding(.horizontal, 20)
             }
-            .padding(.horizontal, 20)
             .padding(.vertical, 20)
         }
         .background(cardBackground)
@@ -430,12 +536,7 @@ struct EditFanProfileView: View {
                 .font(.headline)
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
-            
-            Spacer()
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 16)
-        .padding(.bottom, 8)
     }
     
     private func editField(
@@ -483,6 +584,7 @@ struct EditFanProfileView: View {
         return firstInitial + lastInitial
     }
     
+    // ✅ ОБНОВЛЕННАЯ функция загрузки данных
     private func loadCurrentUserData() {
         guard let user = appState.user else { return }
         
@@ -499,6 +601,37 @@ struct EditFanProfileView: View {
             nickname = fanProfile.nickname
             location = fanProfile.location
             favoriteSong = fanProfile.favoriteSong
+        }
+        
+        // ✅ ДОБАВЛЕНО: Загрузка адреса
+        loadAddressFromFirebase()
+    }
+    
+    // ✅ НОВАЯ функция загрузки адреса
+    private func loadAddressFromFirebase() {
+        guard let user = appState.user else { return }
+        
+        Task {
+            do {
+                let addressDoc = try await db.collection("users").document(user.id)
+                    .collection("profile").document("address").getDocument()
+                
+                if let addressData = addressDoc.data() {
+                    await MainActor.run {
+                        if let countryCode = addressData["country"] as? String,
+                           let country = Country(rawValue: countryCode) {
+                            selectedCountry = country
+                        }
+                        addressLine1 = addressData["addressLine1"] as? String ?? ""
+                        addressLine2 = addressData["addressLine2"] as? String ?? ""
+                        city = addressData["city"] as? String ?? ""
+                        state = addressData["state"] as? String ?? ""
+                        zipCode = addressData["zipCode"] as? String ?? ""
+                    }
+                }
+            } catch {
+                print("Error loading address: \(error)")
+            }
         }
     }
     
@@ -647,6 +780,64 @@ struct EditFanProfileView: View {
         
         try await db.collection("users").document(userId)
             .collection("profile").document("address").setData(addressData)
+    }
+    
+    // MARK: - Delete Account Function
+    private func deleteAccount() {
+        guard let user = appState.user else { return }
+        
+        isDeleting = true
+        
+        Task {
+            do {
+                // 1. Удаляем из коллекции фанатов группы (если фанат)
+                if user.isFan, let fanGroupId = user.fanGroupId {
+                    try await db.collection("groups").document(fanGroupId)
+                        .collection("fans").document(user.id).delete()
+                }
+                
+                // 2. Удаляем адрес из подколлекции profile
+                try await db.collection("users").document(user.id)
+                    .collection("profile").document("address").delete()
+                
+                // 3. Удаляем всю подколлекцию profile (если есть другие документы)
+                let profileDocs = try await db.collection("users").document(user.id)
+                    .collection("profile").getDocuments()
+                
+                for doc in profileDocs.documents {
+                    try await doc.reference.delete()
+                }
+                
+                // 4. Удаляем аватар из Storage (если есть)
+                if let avatarURL = user.avatarURL {
+                    let storageRef = storage.reference().child("avatars/\(user.id).jpg")
+                    try? await storageRef.delete()
+                }
+                
+                // 5. Удаляем основной документ пользователя
+                try await db.collection("users").document(user.id).delete()
+                
+                // 6. Удаляем аккаунт из Firebase Auth
+                try await Auth.auth().currentUser?.delete()
+                
+                await MainActor.run {
+                    // 7. Очищаем состояние приложения
+                    self.appState.user = nil
+                    self.appState.isLoggedIn = false
+                    self.isDeleting = false
+                    
+                    // 8. Закрываем экран редактирования
+                    self.dismiss()
+                }
+                
+            } catch {
+                await MainActor.run {
+                    self.isDeleting = false
+                    self.errorMessage = "Failed to delete account: \(error.localizedDescription)"
+                    self.showError = true
+                }
+            }
+        }
     }
 }
 

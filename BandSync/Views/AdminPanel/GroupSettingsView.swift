@@ -14,6 +14,26 @@ struct GroupSettingsView: View {
     @State private var showConfirmation = false
     @State private var showSuccessAlert = false
     
+    // ✅ ДОБАВЛЕНО: Поля для информации о группе (точно как в Firebase)
+    @State private var groupDescription = ""
+    @State private var establishedDate = ""
+    @State private var genre = ""
+    @State private var location = ""
+    
+    // ✅ ДОБАВЛЕНО: Поля для социальных сетей (расширенный список)
+    @State private var website = ""
+    @State private var facebook = ""
+    @State private var instagram = ""
+    @State private var youtube = ""
+    @State private var spotify = ""
+    @State private var appleMusic = ""
+    @State private var twitter = ""
+    @State private var tiktok = ""
+    @State private var soundcloud = ""
+    @State private var bandcamp = ""
+    @State private var patreon = ""
+    @State private var discord = ""
+    
     var body: some View {
         List {
             // Group Name Section
@@ -80,19 +100,18 @@ struct GroupSettingsView: View {
                 .padding(.vertical, 4)
                 
                 Button {
-                    groupService.updateGroupName(newName)
-                    showSuccessAlert = true
+                    updateGroupBasicInfo()
                 } label: {
                     HStack {
                         settingsIcon(icon: "checkmark.circle.fill", color: .green)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Update Name".localized)
+                            Text("Update Group Info".localized)
                                 .font(.body)
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary)
                             
-                            Text("Save the new group name".localized)
+                            Text("Save basic group information".localized)
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -106,6 +125,219 @@ struct GroupSettingsView: View {
                 .opacity(newName.isEmpty || groupService.isLoading ? 0.5 : 1.0)
             } header: {
                 Text("Group Information".localized)
+            }
+            
+            // ✅ НОВАЯ СЕКЦИЯ: Band Details
+            Section {
+                VStack(spacing: 16) {
+                    // Description
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Description")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundColor(.primary)
+                        
+                        TextField("Brief description of your band", text: $groupDescription, axis: .vertical)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .lineLimit(2...4)
+                    }
+                    
+                    HStack(spacing: 12) {
+                        // Established Date
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Established Date")
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .foregroundColor(.primary)
+                            
+                            TextField("April 7, 2018", text: $establishedDate)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        
+                        // Genre
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Genre")
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .foregroundColor(.primary)
+                            
+                            TextField("Rock, Pop, Jazz...", text: $genre)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                    }
+                    
+                    // Location
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Location")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundColor(.primary)
+                        
+                        TextField("City, Country", text: $location)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
+                }
+                .padding(.vertical, 8)
+            } header: {
+                Text("Band Details")
+            }
+            
+            // ✅ НОВАЯ СЕКЦИЯ: Main Social Media
+            Section {
+                VStack(spacing: 16) {
+                    // Website
+                    socialMediaField(
+                        icon: "globe",
+                        title: "Official Website",
+                        placeholder: "https://your-band.com",
+                        text: $website,
+                        color: .blue
+                    )
+                    
+                    // Instagram
+                    socialMediaField(
+                        icon: "camera.fill",
+                        title: "Instagram",
+                        placeholder: "https://instagram.com/yourband",
+                        text: $instagram,
+                        color: .pink
+                    )
+                    
+                    // Facebook
+                    socialMediaField(
+                        icon: "person.2.fill",
+                        title: "Facebook",
+                        placeholder: "https://facebook.com/yourband",
+                        text: $facebook,
+                        color: .blue
+                    )
+                    
+                    // YouTube
+                    socialMediaField(
+                        icon: "play.rectangle.fill",
+                        title: "YouTube",
+                        placeholder: "https://youtube.com/@yourband",
+                        text: $youtube,
+                        color: .red
+                    )
+                }
+                .padding(.vertical, 8)
+            } header: {
+                Text("Main Social Media")
+            }
+            
+            // ✅ НОВАЯ СЕКЦИЯ: Music Platforms
+            Section {
+                VStack(spacing: 16) {
+                    // Spotify
+                    socialMediaField(
+                        icon: "music.note.list",
+                        title: "Spotify",
+                        placeholder: "https://open.spotify.com/artist/...",
+                        text: $spotify,
+                        color: .green
+                    )
+                    
+                    // Apple Music
+                    socialMediaField(
+                        icon: "music.note",
+                        title: "Apple Music",
+                        placeholder: "https://music.apple.com/artist/...",
+                        text: $appleMusic,
+                        color: .gray
+                    )
+                    
+                    // SoundCloud
+                    socialMediaField(
+                        icon: "waveform",
+                        title: "SoundCloud",
+                        placeholder: "https://soundcloud.com/yourband",
+                        text: $soundcloud,
+                        color: .orange
+                    )
+                    
+                    // Bandcamp
+                    socialMediaField(
+                        icon: "music.quarternote.3",
+                        title: "Bandcamp",
+                        placeholder: "https://yourband.bandcamp.com",
+                        text: $bandcamp,
+                        color: .blue
+                    )
+                }
+                .padding(.vertical, 8)
+            } header: {
+                Text("Music Platforms")
+            }
+            
+            // ✅ НОВАЯ СЕКЦИЯ: Additional Platforms
+            Section {
+                VStack(spacing: 16) {
+                    // Twitter
+                    socialMediaField(
+                        icon: "bird.fill",
+                        title: "Twitter/X",
+                        placeholder: "https://twitter.com/yourband",
+                        text: $twitter,
+                        color: .black
+                    )
+                    
+                    // TikTok
+                    socialMediaField(
+                        icon: "video.fill",
+                        title: "TikTok",
+                        placeholder: "https://tiktok.com/@yourband",
+                        text: $tiktok,
+                        color: .black
+                    )
+                    
+                    // Patreon
+                    socialMediaField(
+                        icon: "heart.circle.fill",
+                        title: "Patreon",
+                        placeholder: "https://patreon.com/yourband",
+                        text: $patreon,
+                        color: .orange
+                    )
+                    
+                    // Discord
+                    socialMediaField(
+                        icon: "message.circle.fill",
+                        title: "Discord",
+                        placeholder: "https://discord.gg/yourserver",
+                        text: $discord,
+                        color: .purple
+                    )
+                }
+                .padding(.vertical, 8)
+                
+                // ✅ Кнопка сохранения для всей информации о группе
+                Button {
+                    saveGroupDetails()
+                } label: {
+                    HStack {
+                        settingsIcon(icon: "checkmark.circle.fill", color: .green)
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Save Band Details")
+                                .font(.body)
+                                .fontWeight(.medium)
+                                .foregroundColor(.primary)
+                            
+                            Text("Update band information and social media")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Spacer()
+                    }
+                    .padding(.vertical, 4)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .disabled(groupService.isLoading)
+                .opacity(groupService.isLoading ? 0.5 : 1.0)
+            } header: {
+                Text("Additional Platforms")
             }
             
             // PayPal Settings Section
@@ -318,18 +550,10 @@ struct GroupSettingsView: View {
         .navigationTitle("Group Settings".localized)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            if let gid = AppState.shared.user?.groupId {
-                groupService.fetchGroup(by: gid)
-                newName = groupService.group?.name ?? ""
-                paypalAddress = groupService.group?.paypalAddress ?? ""
-            }
+            loadGroupData()
         }
-        // Using onChange API
         .onChange(of: groupService.group) {
-            if let name = groupService.group?.name {
-                newName = name
-            }
-            paypalAddress = groupService.group?.paypalAddress ?? ""
+            loadGroupData()
         }
         .alert("Generate new code?".localized, isPresented: $showConfirmation) {
             Button("Cancel".localized, role: .cancel) {}
@@ -345,6 +569,101 @@ struct GroupSettingsView: View {
         } message: {
             Text("Changes saved successfully.".localized)
         }
+    }
+    
+    // MARK: - Helper Views
+    
+    private func socialMediaField(
+        icon: String,
+        title: String,
+        placeholder: String,
+        text: Binding<String>,
+        color: Color
+    ) -> some View {
+        HStack(spacing: 12) {
+            settingsIcon(icon: icon, color: color)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.primary)
+                
+                TextField(placeholder, text: text)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .keyboardType(.URL)
+                    .autocapitalization(.none)
+            }
+        }
+    }
+    
+    // MARK: - Helper Functions
+    
+    // ✅ ОБНОВЛЕНО: Загрузка данных из реальной Firebase структуры
+    private func loadGroupData() {
+        if let gid = AppState.shared.user?.groupId {
+            groupService.fetchGroup(by: gid)
+            
+            if let group = groupService.group {
+                newName = group.name
+                paypalAddress = group.paypalAddress ?? ""
+                
+                // ✅ Загружаем дополнительную информацию о группе
+                groupDescription = group.description ?? ""
+                establishedDate = group.establishedDate ?? ""
+                genre = group.genre ?? ""
+                location = group.location ?? ""
+                
+                // ✅ Загружаем социальные сети
+                if let socialMedia = group.socialMediaLinks {
+                    website = socialMedia.website ?? ""
+                    facebook = socialMedia.facebook ?? ""
+                    instagram = socialMedia.instagram ?? ""
+                    youtube = socialMedia.youtube ?? ""
+                    spotify = socialMedia.spotify ?? ""
+                    appleMusic = socialMedia.appleMusic ?? ""
+                    twitter = socialMedia.twitter ?? ""
+                    tiktok = socialMedia.tiktok ?? ""
+                    soundcloud = socialMedia.soundcloud ?? ""
+                    bandcamp = socialMedia.bandcamp ?? ""
+                    patreon = socialMedia.patreon ?? ""
+                    discord = socialMedia.discord ?? ""
+                }
+            }
+        }
+    }
+    
+    // ✅ ОБНОВЛЕНО: Функция обновления основной информации
+    private func updateGroupBasicInfo() {
+        groupService.updateGroupName(newName)
+        showSuccessAlert = true
+    }
+    
+    // ✅ ОБНОВЛЕНО: Функция сохранения всех деталей группы
+    private func saveGroupDetails() {
+        let socialMediaLinks = SocialMediaLinks(
+            website: website.isEmpty ? nil : website,
+            facebook: facebook.isEmpty ? nil : facebook,
+            instagram: instagram.isEmpty ? nil : instagram,
+            youtube: youtube.isEmpty ? nil : youtube,
+            spotify: spotify.isEmpty ? nil : spotify,
+            appleMusic: appleMusic.isEmpty ? nil : appleMusic,
+            twitter: twitter.isEmpty ? nil : twitter,
+            tiktok: tiktok.isEmpty ? nil : tiktok,
+            soundcloud: soundcloud.isEmpty ? nil : soundcloud,
+            bandcamp: bandcamp.isEmpty ? nil : bandcamp,
+            patreon: patreon.isEmpty ? nil : patreon,
+            discord: discord.isEmpty ? nil : discord
+        )
+        
+        groupService.updateGroupDetails(
+            description: groupDescription.isEmpty ? nil : groupDescription,
+            establishedDate: establishedDate.isEmpty ? nil : establishedDate,
+            genre: genre.isEmpty ? nil : genre,
+            location: location.isEmpty ? nil : location,
+            socialMediaLinks: socialMediaLinks.isEmpty ? nil : socialMediaLinks
+        )
+        showSuccessAlert = true
     }
     
     // MARK: - Helper Views
