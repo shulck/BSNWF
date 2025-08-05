@@ -21,11 +21,11 @@ struct EmptyDocumentsView: View {
                 .foregroundColor(.gray)
             
             VStack(spacing: 8) {
-                Text(hasSearchText ? "noResultsFound".localized : "noDocumentsYet".localized)
+                Text(hasSearchText ? NSLocalizedString("noResultsFound", comment: "No search results found message") : NSLocalizedString("noDocumentsYet", comment: "No documents available message"))
                     .font(.title2)
                     .fontWeight(.medium)
                 
-                Text(hasSearchText ? "tryAdjustingYourSearchTerms".localized : "createYourFirstDocumentToGetStarted".localized)
+                Text(hasSearchText ? NSLocalizedString("tryAdjustingYourSearchTerms", comment: "Search adjustment suggestion") : NSLocalizedString("createYourFirstDocumentToGetStarted", comment: "Create first document suggestion"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -33,7 +33,7 @@ struct EmptyDocumentsView: View {
             
             if !hasSearchText {
                 Button(action: onCreateDocument) {
-                    Label("createDocument".localized, systemImage: "doc.badge.plus")
+                    Label(NSLocalizedString("createDocument", comment: "Create document button"), systemImage: "doc.badge.plus")
                         .padding()
                         .background(Color.blue)
                         .foregroundColor(.white)
@@ -118,13 +118,13 @@ struct DocumentRowView: View {
                     // Additional info
                     HStack(spacing: 16) {
                         if document.isTemplate {
-                            Label("Template".localized, systemImage: "doc.on.doc")
+                            Label(NSLocalizedString("Template", comment: "Document template label"), systemImage: "doc.on.doc")
                                 .font(.caption2)
                                 .foregroundColor(.orange)
                         }
                         
                         if document.isGoogleDriveDocument {
-                            Label("Drive".localized, systemImage: "icloud")
+                            Label(NSLocalizedString("Drive", comment: "Google Drive document label"), systemImage: "icloud")
                                 .font(.caption2)
                                 .foregroundColor(.green)
                         }
@@ -146,7 +146,7 @@ struct DocumentRowView: View {
             Button {
                 onShare()
             } label: {
-                Label("Share".localized, systemImage: "square.and.arrow.up")
+                Label(NSLocalizedString("Share", comment: "Share document button"), systemImage: "square.and.arrow.up")
             }
             .tint(.blue)
             
@@ -154,7 +154,7 @@ struct DocumentRowView: View {
                 Button {
                     onOpenInGoogleDrive()
                 } label: {
-                    Label("Drive".localized, systemImage: "arrow.up.right.square")
+                    Label(NSLocalizedString("Drive", comment: "Open in Google Drive button"), systemImage: "arrow.up.right.square")
                 }
                 .tint(.green)
             }
@@ -182,18 +182,18 @@ struct GoogleDriveConnectionBanner: View {
                     .foregroundColor(.orange)
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("googleDriveNotConnected".localized)
+                    Text(NSLocalizedString("googleDriveNotConnected", comment: "Google Drive not connected message"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                     
-                    Text("connectToUploadAndManageDocuments".localized)
+                    Text(NSLocalizedString("connectToUploadAndManageDocuments", comment: "Connect to upload documents message"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 
                 Spacer()
                 
-                Button("Connect".localized, action: onConnect)
+                Button(NSLocalizedString("Connect", comment: "Connect to Google Drive button"), action: onConnect)
                     .buttonStyle(.borderedProminent)
                     .controlSize(.small)
             }

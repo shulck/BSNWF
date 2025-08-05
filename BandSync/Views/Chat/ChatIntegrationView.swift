@@ -35,12 +35,23 @@ struct ChatIntegrationView: View {
         case task = "Task"
         case event = "Event"
         case reminder = "Reminder"
+        
+        var localizedTitle: String {
+            switch self {
+            case .task:
+                return NSLocalizedString("Task", comment: "Task integration type")
+            case .event:
+                return NSLocalizedString("Event", comment: "Event integration type")
+            case .reminder:
+                return NSLocalizedString("Reminder", comment: "Reminder integration type")
+            }
+        }
     }
     
     var body: some View {
         NavigationView {
             Form {
-                Section("Source message".localized) {
+                Section(NSLocalizedString("Source message", comment: "Source message section title")) {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text(message.senderName)
@@ -63,10 +74,10 @@ struct ChatIntegrationView: View {
                     }
                 }
                 
-                Section("Integration type".localized) {
-                    Picker("Type".localized, selection: $selectedIntegrationType) {
+                Section(NSLocalizedString("Integration type", comment: "Integration type section title")) {
+                    Picker(NSLocalizedString("Type", comment: "Type picker label"), selection: $selectedIntegrationType) {
                         ForEach(IntegrationType.allCases, id: \.self) { type in
-                            Text(type.rawValue).tag(type)
+                            Text(type.localizedTitle).tag(type)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
@@ -81,24 +92,24 @@ struct ChatIntegrationView: View {
                     ReminderCreationSection()
                 }
             }
-            .navigationTitle("Create from message".localized)
+            .navigationTitle(NSLocalizedString("Create from message", comment: "Navigation title for create from message view"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Create".localized) {
+                    Button(NSLocalizedString("Create", comment: "Create button")) {
                         createIntegration()
                     }
                     .disabled(isLoading || !canCreate)
                 }
             }
-            .alert("Error".localized, isPresented: $showingError) {
-                Button("OK".localized) { }
+            .alert(NSLocalizedString("Error", comment: "Error alert title"), isPresented: $showingError) {
+                Button(NSLocalizedString("OK", comment: "OK button")) { }
             } message: {
                 Text(errorMessage)
             }
@@ -126,31 +137,31 @@ struct ChatIntegrationView: View {
         // Try to extract information from message for prefilling
         let content = message.content
         
-        taskTitle = content.isEmpty ? "Task from chat".localized : String(content.prefix(50))
+        taskTitle = content.isEmpty ? NSLocalizedString("Task from chat", comment: "Default task title from chat") : String(content.prefix(50))
         taskDescription = content
         
-        eventTitle = content.isEmpty ? "Event from chat".localized : String(content.prefix(50))
+        eventTitle = content.isEmpty ? NSLocalizedString("Event from chat", comment: "Default event title from chat") : String(content.prefix(50))
         eventDescription = content
     }
     
     @ViewBuilder
     private func TaskCreationSection() -> some View {
-        Section("Task details".localized) {
-            TextField("Task title".localized, text: $taskTitle)
+        Section(NSLocalizedString("Task details", comment: "Task details section title")) {
+            TextField(NSLocalizedString("Task title", comment: "Task title text field"), text: $taskTitle)
             
-            TextField("Description".localized, text: $taskDescription, axis: .vertical)
+            TextField(NSLocalizedString("Description", comment: "Description text field"), text: $taskDescription, axis: .vertical)
                 .lineLimit(3...6)
             
-            DatePicker("Due date".localized, selection: $taskDueDate, displayedComponents: [.date, .hourAndMinute])
+            DatePicker(NSLocalizedString("Due date", comment: "Due date picker"), selection: $taskDueDate, displayedComponents: [.date, .hourAndMinute])
             
-            Picker("Priority".localized, selection: $taskPriority) {
-                Text("Low".localized).tag(BandTaskPriority.low)
-                Text("Medium".localized).tag(BandTaskPriority.medium)
-                Text("High".localized).tag(BandTaskPriority.high)
+            Picker(NSLocalizedString("Priority", comment: "Priority picker"), selection: $taskPriority) {
+                Text(NSLocalizedString("Low", comment: "Low priority")).tag(BandTaskPriority.low)
+                Text(NSLocalizedString("Medium", comment: "Medium priority")).tag(BandTaskPriority.medium)
+                Text(NSLocalizedString("High", comment: "High priority")).tag(BandTaskPriority.high)
             }
         }
         
-        Section("Assignees".localized) {
+        Section(NSLocalizedString("Assignees", comment: "Assignees section title")) {
             ForEach(chat.participants, id: \.self) { userId in
                 HStack(spacing: 12) {
                     // User avatar
@@ -166,11 +177,11 @@ struct ChatIntegrationView: View {
                             .fontWeight(.medium)
                         
                         if userId == Auth.auth().currentUser?.uid {
-                            Text("You".localized)
+                            Text(NSLocalizedString("You", comment: "You label for current user"))
                                 .font(.caption)
                                 .foregroundColor(.blue)
                         } else {
-                            Text("Participant".localized)
+                            Text(NSLocalizedString("Participant", comment: "Participant label"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -195,24 +206,24 @@ struct ChatIntegrationView: View {
     
     @ViewBuilder
     private func EventCreationSection() -> some View {
-        Section("Event details".localized) {
-            TextField("Event title".localized, text: $eventTitle)
+        Section(NSLocalizedString("Event details", comment: "Event details section title")) {
+            TextField(NSLocalizedString("Event title", comment: "Event title text field"), text: $eventTitle)
             
-            TextField("Description".localized, text: $eventDescription, axis: .vertical)
+            TextField(NSLocalizedString("Description", comment: "Description text field"), text: $eventDescription, axis: .vertical)
                 .lineLimit(3...6)
             
-            DatePicker("Date and time".localized, selection: $eventDate, displayedComponents: [.date, .hourAndMinute])
+            DatePicker(NSLocalizedString("Date and time", comment: "Date and time picker"), selection: $eventDate, displayedComponents: [.date, .hourAndMinute])
             
-            TextField("Location".localized, text: $eventLocation)
+            TextField(NSLocalizedString("Location", comment: "Location text field"), text: $eventLocation)
         }
     }
     
     @ViewBuilder
     private func ReminderCreationSection() -> some View {
-        Section("Reminder".localized) {
-            DatePicker("Remind at".localized, selection: $eventDate, displayedComponents: [.date, .hourAndMinute])
+        Section(NSLocalizedString("Reminder", comment: "Reminder section title")) {
+            DatePicker(NSLocalizedString("Remind at", comment: "Remind at date picker"), selection: $eventDate, displayedComponents: [.date, .hourAndMinute])
             
-            Text("A reminder will be created about the message:".localized)
+            Text(NSLocalizedString("A reminder will be created about the message:", comment: "Reminder explanation text"))
                 .font(.caption)
                 .foregroundColor(.secondary)
             
@@ -248,7 +259,7 @@ struct ChatIntegrationView: View {
     private func createTask() {
         guard let currentUserId = Auth.auth().currentUser?.uid,
               let groupId = UserService.shared.currentUser?.groupId else {
-            showError("Authentication error".localized)
+            showError(NSLocalizedString("Authentication error", comment: "Authentication error message"))
             return
         }
         
@@ -278,7 +289,7 @@ struct ChatIntegrationView: View {
                     self.sendTaskCreatedMessage(title: self.taskTitle)
                     self.dismiss()
                 } else {
-                    self.showError("Task creation error".localized)
+                    self.showError(NSLocalizedString("Task creation error", comment: "Task creation error message"))
                 }
             }
         }
@@ -286,7 +297,7 @@ struct ChatIntegrationView: View {
     
     private func createEvent() {
         guard Auth.auth().currentUser?.uid != nil else {
-            showError("Authentication error".localized)
+            showError(NSLocalizedString("Authentication error", comment: "Authentication error message"))
             return
         }
         
@@ -313,7 +324,7 @@ struct ChatIntegrationView: View {
         
         let message = Message(
             chatId: chatId,
-            content: String(format: "Task created".localized, title),
+            content: String(format: NSLocalizedString("Task created: %@", comment: "Task created system message"), title),
             senderID: Auth.auth().currentUser?.uid ?? "",
             senderName: UserService.shared.currentUser?.name ?? "System",
             timestamp: Date(),
@@ -329,7 +340,7 @@ struct ChatIntegrationView: View {
         
         let message = Message(
             chatId: chatId,
-            content: String(format: "Event created".localized, title),
+            content: String(format: NSLocalizedString("Event created: %@", comment: "Event created system message"), title),
             senderID: Auth.auth().currentUser?.uid ?? "",
             senderName: UserService.shared.currentUser?.name ?? "System",
             timestamp: Date(),

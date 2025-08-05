@@ -49,18 +49,18 @@ struct ProfileEditView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Edit Profile".localized)
+            .navigationTitle(NSLocalizedString("edit_profile", comment: "Navigation title for edit profile screen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("cancel", comment: "Cancel button")) {
                         dismiss()
                     }
                     .disabled(isUploading)
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save".localized) {
+                    Button(NSLocalizedString("save", comment: "Save button")) {
                         saveProfile()
                     }
                     .disabled(isUploading || !hasChanges)
@@ -69,25 +69,25 @@ struct ProfileEditView: View {
             .sheet(isPresented: $showingImagePicker) {
                 ImagePickerView(selectedImage: $selectedImage)
             }
-            .alert("Error".localized, isPresented: $showError) {
+            .alert(NSLocalizedString("error", comment: "Error alert title"), isPresented: $showError) {
                 Button("OK") { }
             } message: {
-                Text(errorMessage ?? "Unknown error".localized)
+                Text(errorMessage ?? NSLocalizedString("unknown_error", comment: "Unknown error message"))
             }
-            .alert("Success".localized, isPresented: $showSuccess) {
+            .alert(NSLocalizedString("success", comment: "Success alert title"), isPresented: $showSuccess) {
                 Button("OK") {
                     dismiss()
                 }
             } message: {
-                Text("Profile updated successfully".localized)
+                Text(NSLocalizedString("profile_updated_successfully", comment: "Profile update success message"))
             }
-            .confirmationDialog("Delete Avatar".localized, isPresented: $showingDeleteConfirmation) {
-                Button("Delete".localized, role: .destructive) {
+            .confirmationDialog(NSLocalizedString("delete_avatar", comment: "Delete avatar dialog title"), isPresented: $showingDeleteConfirmation) {
+                Button(NSLocalizedString("delete", comment: "Delete button"), role: .destructive) {
                     deleteAvatar()
                 }
-                Button("Cancel".localized, role: .cancel) { }
+                Button(NSLocalizedString("cancel", comment: "Cancel button"), role: .cancel) { }
             } message: {
-                Text("Are you sure you want to delete your avatar?".localized)
+                Text(NSLocalizedString("delete_avatar_confirmation", comment: "Delete avatar confirmation message"))
             }
         }
     }
@@ -151,7 +151,7 @@ struct ProfileEditView: View {
                 }
             }
             
-            Text("Tap the camera icon to change your avatar".localized)
+            Text(NSLocalizedString("tap_camera_icon_to_change_avatar", comment: "Instruction text for changing avatar"))
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -164,22 +164,22 @@ struct ProfileEditView: View {
         VStack(spacing: 20) {
             // Name Field
             VStack(alignment: .leading, spacing: 8) {
-                Text("Name".localized)
+                Text(NSLocalizedString("name", comment: "Name field label"))
                     .font(.headline)
                     .foregroundColor(.primary)
                 
-                TextField("Enter your name".localized, text: $name)
+                TextField(NSLocalizedString("enter_your_name", comment: "Name field placeholder"), text: $name)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .disabled(isUploading)
             }
             
             // Phone Field
             VStack(alignment: .leading, spacing: 8) {
-                Text("Phone".localized)
+                Text(NSLocalizedString("phone", comment: "Phone field label"))
                     .font(.headline)
                     .foregroundColor(.primary)
                 
-                TextField("Enter your phone number".localized, text: $phone)
+                TextField(NSLocalizedString("enter_your_phone_number", comment: "Phone field placeholder"), text: $phone)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.phonePad)
                     .disabled(isUploading)
@@ -187,7 +187,7 @@ struct ProfileEditView: View {
             
             // Email Field (Read-only)
             VStack(alignment: .leading, spacing: 8) {
-                Text("Email".localized)
+                Text(NSLocalizedString("email", comment: "Email field label"))
                     .font(.headline)
                     .foregroundColor(.primary)
                 
@@ -201,7 +201,7 @@ struct ProfileEditView: View {
             
             // Role Field (Read-only)
             VStack(alignment: .leading, spacing: 8) {
-                Text("Role".localized)
+                Text(NSLocalizedString("role", comment: "Role field label"))
                     .font(.headline)
                     .foregroundColor(.primary)
                 
@@ -226,7 +226,7 @@ struct ProfileEditView: View {
         } label: {
             HStack {
                 Image(systemName: "trash")
-                Text("Delete Avatar".localized)
+                Text(NSLocalizedString("delete_avatar", comment: "Delete avatar button text"))
             }
             .foregroundColor(.red)
             .padding()
@@ -249,7 +249,7 @@ struct ProfileEditView: View {
     
     private func saveProfile() {
         guard !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            errorMessage = "Name cannot be empty".localized
+            errorMessage = NSLocalizedString("name_cannot_be_empty", comment: "Error message when name field is empty")
             showError = true
             return
         }
@@ -313,7 +313,7 @@ struct ProfileEditView: View {
                     
                     self.showSuccess = true
                 } else {
-                    self.errorMessage = "Failed to update profile".localized
+                    self.errorMessage = NSLocalizedString("failed_to_update_profile", comment: "Error message when profile update fails")
                     self.showError = true
                 }
             }

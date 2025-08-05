@@ -28,12 +28,12 @@ struct FanManagementView: View {
                     fanIcon(icon: fanClubEnabled ? "heart.fill" : "heart", color: fanClubEnabled ? .purple : .gray)
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Fan Club Status")
+                        Text(NSLocalizedString("Fan Club Status", comment: ""))
                             .font(.body)
                             .fontWeight(.medium)
                             .foregroundColor(.primary)
                         
-                        Text(fanClubEnabled ? "Active" : "Inactive")
+                        Text(fanClubEnabled ? NSLocalizedString("Active", comment: "") : NSLocalizedString("Inactive", comment: ""))
                             .font(.caption)
                             .foregroundColor(fanClubEnabled ? .green : .red)
                     }
@@ -46,7 +46,7 @@ struct FanManagementView: View {
                 }
                 .padding(.vertical, 4)
             } header: {
-                Text("Settings")
+                Text(NSLocalizedString("Settings", comment: ""))
             }
             
             // Invite Code Section - НОВАЯ ПРОСТАЯ ВЕРСИЯ
@@ -57,7 +57,7 @@ struct FanManagementView: View {
                         VStack(spacing: 12) {
                             // Заголовок
                             HStack {
-                                Text("Current Invite Code")
+                                Text(NSLocalizedString("Current Invite Code", comment: ""))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                 Spacer()
@@ -131,7 +131,7 @@ struct FanManagementView: View {
                             // Статистика
                             HStack {
                                 VStack(alignment: .leading) {
-                                    Text("Uses")
+                                    Text(NSLocalizedString("Uses", comment: ""))
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                     Text("\(inviteCode.currentUses)")
@@ -142,7 +142,7 @@ struct FanManagementView: View {
                                 Spacer()
                                 
                                 VStack(alignment: .trailing) {
-                                    Text("Created")
+                                    Text(NSLocalizedString("Created", comment: ""))
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                     Text(formatDate(inviteCode.createdAt))
@@ -160,16 +160,16 @@ struct FanManagementView: View {
                                 .font(.largeTitle)
                                 .foregroundColor(.purple.opacity(0.6))
                             
-                            Text("No Invite Code")
+                            Text(NSLocalizedString("No Invite Code", comment: ""))
                                 .font(.headline)
                                 .foregroundColor(.primary)
                             
-                            Text("Create a custom code for fans to join your fan club")
+                            Text(NSLocalizedString("Create a custom code for fans to join your fan club", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.center)
                             
-                            Button("Create Invite Code") {
+                            Button(NSLocalizedString("Create Invite Code", comment: "")) {
                                 customCodeInput = ""
                                 showEditCodeSheet = true
                             }
@@ -183,7 +183,7 @@ struct FanManagementView: View {
                         .padding(.vertical, 20)
                     }
                 } header: {
-                    Text("Invite Code")
+                    Text(NSLocalizedString("Invite Code", comment: ""))
                 }
             }
             
@@ -193,10 +193,10 @@ struct FanManagementView: View {
                     HStack {
                         fanIcon(icon: "person.2.fill", color: .blue)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Total Fans")
+                            Text(NSLocalizedString("Total Fans", comment: ""))
                                 .font(.body)
                                 .fontWeight(.medium)
-                            Text("\(fans.count) members")
+                            Text(String(format: NSLocalizedString("%d members", comment: ""), fans.count))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -210,10 +210,10 @@ struct FanManagementView: View {
                     HStack {
                         fanIcon(icon: "calendar", color: .green)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Recent Activity")
+                            Text(NSLocalizedString("Recent Activity", comment: ""))
                                 .font(.body)
                                 .fontWeight(.medium)
-                            Text("Last fan joined")
+                            Text(NSLocalizedString("Last fan joined", comment: ""))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -223,38 +223,45 @@ struct FanManagementView: View {
                             .foregroundColor(.green)
                     }
                 } header: {
-                    Text("Statistics")
+                    Text(NSLocalizedString("Statistics", comment: ""))
                 }
             }
             
-            // Fans List Section
-            if fanClubEnabled && !fans.isEmpty {
+            // Fans List Section - ЗАМЕНЕНО НА КНОПКУ
+            if fanClubEnabled {
                 Section {
-                    ForEach(fans, id: \.id) { fan in
-                        FanRowView(fan: fan)
+                    NavigationLink {
+                        FanClubMembersView(totalFans: fans.count)
+                    } label: {
+                        HStack(spacing: 12) {
+                            fanIcon(icon: "person.3.fill", color: .purple)
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(NSLocalizedString("View All Members", comment: ""))
+                                    .font(.body)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.primary)
+                                
+                                Text(String(format: NSLocalizedString("%d fans in your club", comment: ""), fans.count))
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            Text("\(fans.count)")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundColor(.purple)
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.vertical, 4)
                     }
                 } header: {
-                    Text("Fan Club Members (\(fans.count))")
-                }
-            } else if fanClubEnabled && fans.isEmpty && !isLoading {
-                Section {
-                    VStack(spacing: 12) {
-                        Image(systemName: "person.2.slash")
-                            .font(.largeTitle)
-                            .foregroundColor(.gray)
-                        
-                        Text("No Fans Yet")
-                            .font(.headline)
-                            .foregroundColor(.primary)
-                        
-                        Text("Share your invite code to get your first fans!")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding(.vertical, 20)
-                } header: {
-                    Text("Fan Club Members")
+                    Text(NSLocalizedString("Fan Club Members", comment: ""))
                 }
             }
             
@@ -270,21 +277,21 @@ struct FanManagementView: View {
                 }
             }
         }
-        .navigationTitle("Fan Management")
+        .navigationTitle(NSLocalizedString("Fan Management", comment: ""))
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
             loadFanData()
         }
-        .confirmationDialog("Create Invite Code", isPresented: $showGenerateCodeAlert) {
-            Button("Create Custom Code") {
+        .confirmationDialog(NSLocalizedString("Create Invite Code", comment: ""), isPresented: $showGenerateCodeAlert) {
+            Button(NSLocalizedString("Create Custom Code", comment: "")) {
                 customCodeInput = ""
                 showEditCodeSheet = true
             }
         } message: {
-            Text("Create a new custom invite code. This will replace the current code.")
+            Text(NSLocalizedString("Create a new custom invite code. This will replace the current code.", comment: ""))
         }
-        .alert("Fan Management", isPresented: $showAlert) {
-            Button("OK", role: .cancel) {
+        .alert(NSLocalizedString("Fan Management", comment: ""), isPresented: $showAlert) {
+            Button(NSLocalizedString("OK", comment: ""), role: .cancel) {
                 // Сбрасываем все состояния при закрытии алерта
                 alertMessage = ""
                 isCopyingCode = false
@@ -292,32 +299,32 @@ struct FanManagementView: View {
         } message: {
             Text(alertMessage)
         }
-        .alert(currentInviteCode?.code.isEmpty == false ? "Edit Invite Code" : "Create Invite Code", isPresented: $showEditCodeSheet) {
-            TextField("Enter custom code (e.g. ROCKBAND)", text: $customCodeInput)
+        .alert(currentInviteCode?.code.isEmpty == false ? NSLocalizedString("Edit Invite Code", comment: "") : NSLocalizedString("Create Invite Code", comment: ""), isPresented: $showEditCodeSheet) {
+            TextField(NSLocalizedString("Enter custom code (e.g. ROCKBAND)", comment: ""), text: $customCodeInput)
                 .autocapitalization(.allCharacters)
                 .disableAutocorrection(true)
             
-            Button("Cancel", role: .cancel) {
+            Button(NSLocalizedString("Cancel", comment: ""), role: .cancel) {
                 customCodeInput = ""
             }
             
-            Button("Save") {
+            Button(NSLocalizedString("Save", comment: "")) {
                 updateInviteCode(newCode: customCodeInput)
             }
             .disabled(customCodeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         } message: {
             Text(currentInviteCode?.code.isEmpty == false ?
-                 "Enter a new custom invite code (up to 25 characters, letters and numbers only)" :
-                 "Create a unique code that fans will use to join your fan club")
+                 NSLocalizedString("Enter a new custom invite code (up to 25 characters, letters and numbers only)", comment: "") :
+                 NSLocalizedString("Create a unique code that fans will use to join your fan club", comment: ""))
         }
         // ✅ НОВЫЙ ALERT ДЛЯ УДАЛЕНИЯ КОДА
-        .alert("Delete Invite Code", isPresented: $showDeleteCodeAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Delete", role: .destructive) {
+        .alert(NSLocalizedString("Delete Invite Code", comment: ""), isPresented: $showDeleteCodeAlert) {
+            Button(NSLocalizedString("Cancel", comment: ""), role: .cancel) {}
+            Button(NSLocalizedString("Delete", comment: ""), role: .destructive) {
                 deleteInviteCode()
             }
         } message: {
-            Text("Are you sure you want to delete the current invite code? This action cannot be undone and will prevent new fans from joining until you create a new code.")
+            Text(NSLocalizedString("Are you sure you want to delete the current invite code? This action cannot be undone and will prevent new fans from joining until you create a new code.", comment: ""))
         }
     }
     
@@ -458,7 +465,7 @@ struct FanManagementView: View {
             formatter.dateStyle = .medium
             return formatter.string(from: fanProfile.joinDate)
         }
-        return "No recent activity"
+        return NSLocalizedString("No recent activity", comment: "")
     }
     
     private func updateInviteCode(newCode: String) {
@@ -655,7 +662,7 @@ struct FanRowView: View {
                         }
                     }
                     
-                    Text("Joined \(formatDate(fanProfile.joinDate))")
+                    Text(String(format: NSLocalizedString("Joined %@", comment: ""), formatDate(fanProfile.joinDate)))
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
@@ -679,5 +686,143 @@ struct FanRowView: View {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
         return formatter.string(from: date)
+    }
+}
+
+// MARK: - FanClubMembersView - ОТДЕЛЬНЫЙ ВЬЮ ДЛЯ ВСЕХ ФАНАТОВ
+struct FanClubMembersView: View {
+    let totalFans: Int
+    @State private var fans: [UserModel] = []
+    @State private var isLoading = false
+    @State private var searchText = ""
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    
+    var filteredFans: [UserModel] {
+        if searchText.isEmpty {
+            return fans
+        } else {
+            return fans.filter { fan in
+                fan.displayName.localizedCaseInsensitiveContains(searchText) ||
+                (fan.fanProfile?.location.localizedCaseInsensitiveContains(searchText) ?? false)
+            }
+        }
+    }
+    
+    var body: some View {
+        List {
+            if isLoading {
+                Section {
+                    HStack {
+                        Spacer()
+                        ProgressView(NSLocalizedString("Loading fans...", comment: ""))
+                            .tint(.purple)
+                        Spacer()
+                    }
+                    .padding()
+                }
+            } else if fans.isEmpty {
+                Section {
+                    VStack(spacing: 16) {
+                        Image(systemName: "person.2.slash")
+                            .font(.system(size: 50))
+                            .foregroundColor(.gray)
+                        
+                        Text(NSLocalizedString("No Fans Yet", comment: ""))
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+                        
+                        Text(NSLocalizedString("Share your invite code to get your first fans!", comment: ""))
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(.vertical, 40)
+                }
+            } else {
+                Section {
+                    ForEach(filteredFans, id: \.id) { fan in
+                        FanRowView(fan: fan)
+                    }
+                } header: {
+                    HStack {
+                        Text(String(format: NSLocalizedString("Members (%d)", comment: ""), filteredFans.count))
+                        Spacer()
+                        if !searchText.isEmpty {
+                            Text(String(format: NSLocalizedString("Filtered from %d", comment: ""), fans.count))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+            }
+        }
+        .navigationTitle(NSLocalizedString("Fan Club Members", comment: ""))
+        .navigationBarTitleDisplayMode(.large)
+        .searchable(text: $searchText, prompt: NSLocalizedString("Search fans...", comment: ""))
+        .onAppear {
+            loadFans()
+        }
+        .alert(NSLocalizedString("Error", comment: ""), isPresented: $showAlert) {
+            Button(NSLocalizedString("OK", comment: ""), role: .cancel) {}
+        } message: {
+            Text(alertMessage)
+        }
+    }
+    
+    private func loadFans() {
+        guard let groupId = AppState.shared.user?.groupId else {
+            alertMessage = "Group information not available"
+            showAlert = true
+            return
+        }
+        
+        isLoading = true
+        
+        let db = Firestore.firestore()
+        
+        db.collection("groups").document(groupId).collection("fans")
+            .order(by: "joinDate", descending: true)
+            .getDocuments { snapshot, error in
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    
+                    if let error = error {
+                        self.alertMessage = "Failed to load fans: \(error.localizedDescription)"
+                        self.showAlert = true
+                        return
+                    }
+                    
+                    self.fans = snapshot?.documents.compactMap { doc in
+                        let data = doc.data()
+                        guard let userId = data["userId"] as? String,
+                              let nickname = data["nickname"] as? String,
+                              let joinTimestamp = data["joinDate"] as? Timestamp else {
+                            return nil
+                        }
+                        
+                        let fanProfile = FanProfile(
+                            nickname: nickname,
+                            joinDate: joinTimestamp.dateValue(),
+                            location: data["location"] as? String ?? "",
+                            favoriteSong: data["favoriteSong"] as? String ?? "",
+                            level: FanLevel(rawValue: data["level"] as? String ?? "newbie") ?? .newbie
+                        )
+                        
+                        return UserModel(
+                            id: userId,
+                            email: "",
+                            name: nickname,
+                            phone: "",
+                            groupId: nil,
+                            role: .member,
+                            userType: .fan,
+                            fanGroupId: data["groupId"] as? String,
+                            fanProfile: fanProfile
+                        )
+                    } ?? []
+                }
+            }
     }
 }

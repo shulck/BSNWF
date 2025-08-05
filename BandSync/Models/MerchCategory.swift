@@ -34,6 +34,15 @@ enum MerchCategory: String, Codable, CaseIterable, Identifiable {
         case .other: return 3
         }
     }
+    
+    var localizedName: String {
+        switch self {
+        case .clothing: return NSLocalizedString("Clothing", comment: "Clothing category")
+        case .music: return NSLocalizedString("Music", comment: "Music category")
+        case .accessory: return NSLocalizedString("Accessories", comment: "Accessories category")
+        case .other: return NSLocalizedString("Other", comment: "Other category")
+        }
+    }
 }
 
 struct MerchSizeStock: Codable {

@@ -11,7 +11,7 @@ struct TasksViewWrapper: View {
                     if let task = TaskService.shared.tasks.first(where: { $0.id == taskId }) {
                         TaskDetailView(task: task)
                     } else {
-                        Text("Task Not Found".localized)
+                        Text(NSLocalizedString("task_not_found", comment: "Message when task is not found"))
                             .foregroundColor(.secondary)
                     }
                 }
@@ -72,7 +72,7 @@ struct TasksView: View {
                 tasksList
             }
         }
-        .navigationTitle("Tasks".localized)
+        .navigationTitle(NSLocalizedString("tasks", comment: "Navigation title for tasks screen"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -106,15 +106,15 @@ struct TasksView: View {
                 .font(.system(size: 60))
                 .foregroundColor(.secondary)
             
-            Text("No Tasks".localized)
+            Text(NSLocalizedString("no_tasks", comment: "Message when there are no tasks"))
                 .font(.title2)
                 .fontWeight(.semibold)
                 .foregroundColor(.secondary)
             
-            Text("Create your first task to get started".localized)
+            Text(NSLocalizedString("create_first_task", comment: "Instructions to create first task"))
             
             if permissionService.currentUserCanWrite(to: .tasks) {
-                Button("Create Task".localized) {
+                Button(NSLocalizedString("create_task", comment: "Button to create new task")) {
                     showAddTask = true
                 }
                 .buttonStyle(.borderedProminent)
@@ -153,7 +153,7 @@ struct TasksView: View {
         HStack {
             ProgressView()
                 .scaleEffect(0.8)
-            Text("Loading tasks...".localized)
+            Text(NSLocalizedString("Loading tasks...", comment: "Loading tasks indicator"))
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .center)
@@ -231,19 +231,19 @@ struct TasksView: View {
         let now = Date()
         
         if calendar.isDateInToday(date) {
-            return "Today".localized
+            return NSLocalizedString("Today", comment: "Today date")
         } else if calendar.isDateInTomorrow(date) {
-            return "Tomorrow".localized
+            return NSLocalizedString("Tomorrow", comment: "Tomorrow date")
         } else if calendar.isDateInYesterday(date) {
-            return "Yesterday".localized
+            return NSLocalizedString("Yesterday", comment: "Yesterday date")
         } else if date < now {
             let daysAgo = calendar.dateComponents([.day], from: date, to: now).day ?? 0
             if daysAgo <= 7 {
-                return "Overdue".localized + " (\(daysAgo) " + pluralizeDaysAgo(daysAgo) + ")"
+                return NSLocalizedString("Overdue", comment: "Overdue status") + " (\(daysAgo) " + pluralizeDaysAgo(daysAgo) + ")"
             } else {
                 let formatter = DateFormatter()
                 formatter.dateFormat = "MMM d"
-                return "Overdue".localized + " - \(formatter.string(from: date))"
+                return NSLocalizedString("Overdue", comment: "Overdue status") + " - \(formatter.string(from: date))"
             }
         } else {
             let daysAhead = calendar.dateComponents([.day], from: now, to: date).day ?? 0
@@ -294,11 +294,7 @@ struct TasksView: View {
     }
     
     private func formatOverdueText(_ daysAgo: Int) -> String {
-        if Locale.current.language.languageCode?.identifier == "uk" {
-            return "Просрочено \(daysAgo)д"
-        } else {
-            return "Overdue".localized + " \(daysAgo)d"
-        }
+        return NSLocalizedString("Overdue", comment: "Overdue status") + " \(daysAgo)" + NSLocalizedString("d", comment: "Day abbreviation")
     }
     
     private func pluralizeDaysAgo(_ count: Int) -> String {
@@ -316,7 +312,7 @@ struct TasksView: View {
                 return "днів тому"
             }
         } else {
-            return count == 1 ? "day ago".localized : "days ago".localized
+            return count == 1 ? NSLocalizedString("day ago", comment: "Day ago singular") : NSLocalizedString("days ago", comment: "Days ago plural")
         }
     }
 }
@@ -375,7 +371,7 @@ struct TaskRowComponent: View {
         HStack(spacing: 4) {
             Image(systemName: priorityIcon)
                 .font(.caption)
-            Text(task.priority.displayName.localized)
+            Text(NSLocalizedString(task.priority.displayName, comment: "Task priority display name"))
                 .font(.caption2)
                 .fontWeight(.medium)
         }
@@ -426,7 +422,7 @@ struct TaskRowComponent: View {
         HStack(spacing: 4) {
             Image(systemName: task.category.icon)
                 .font(.caption)
-            Text(task.category.displayName.localized)
+            Text(NSLocalizedString(task.category.displayName, comment: "Task category display name"))
                 .font(.caption)
         }
         .foregroundColor(.secondary)
@@ -457,25 +453,25 @@ struct TaskRowComponent: View {
             if includeTime {
                 let formatter = DateFormatter()
                 formatter.timeStyle = .short
-                return "Today".localized + " \(formatter.string(from: date))"
+                return NSLocalizedString("Today", comment: "Today date") + " \(formatter.string(from: date))"
             } else {
-                return "Today".localized
+                return NSLocalizedString("Today", comment: "Today date")
             }
         } else if calendar.isDateInTomorrow(date) {
             if includeTime {
                 let formatter = DateFormatter()
                 formatter.timeStyle = .short
-                return "Tomorrow".localized + " \(formatter.string(from: date))"
+                return NSLocalizedString("Tomorrow", comment: "Tomorrow date") + " \(formatter.string(from: date))"
             } else {
-                return "Tomorrow".localized
+                return NSLocalizedString("Tomorrow", comment: "Tomorrow date")
             }
         } else if calendar.isDateInYesterday(date) {
             if includeTime {
                 let formatter = DateFormatter()
                 formatter.timeStyle = .short
-                return "Yesterday".localized + " \(formatter.string(from: date))"
+                return NSLocalizedString("Yesterday", comment: "Yesterday date") + " \(formatter.string(from: date))"
             } else {
-                return "Yesterday".localized
+                return NSLocalizedString("Yesterday", comment: "Yesterday date")
             }
         } else {
             let formatter = DateFormatter()
@@ -492,11 +488,11 @@ struct TaskRowComponent: View {
         let calendar = Calendar.current
         
         if calendar.isDateInToday(date) {
-            return "Today".localized
+            return NSLocalizedString("Today", comment: "Today date")
         } else if calendar.isDateInTomorrow(date) {
-            return "Tomorrow".localized
+            return NSLocalizedString("Tomorrow", comment: "Tomorrow date")
         } else if calendar.isDateInYesterday(date) {
-            return "Yesterday".localized
+            return NSLocalizedString("Yesterday", comment: "Yesterday date")
         } else {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMM d"
@@ -510,7 +506,7 @@ struct TaskRowComponent: View {
         }
         
         if names.isEmpty {
-            return "Unassigned".localized
+            return NSLocalizedString("Unassigned", comment: "Task not assigned")
         } else if names.count == 1 {
             return names[0]
         } else if names.count == 2 {

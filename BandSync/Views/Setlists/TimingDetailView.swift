@@ -54,7 +54,7 @@ struct TimingDetailView: View {
                     .padding(.top, 20)
                 }
             }
-            .navigationTitle("Setlist Timing".localized)
+            .navigationTitle(NSLocalizedString("Setlist Timing", comment: "Navigation title for setlist timing view"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -85,12 +85,12 @@ struct TimingDetailView: View {
             }
             
             VStack(spacing: 8) {
-                Text("Concert timeline".localized)
+                Text(NSLocalizedString("Concert timeline", comment: "Header for concert timeline section"))
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 
-                Text("Track setlist timing".localized)
+                Text(NSLocalizedString("Track setlist timing", comment: "Description for concert timeline section"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -107,7 +107,7 @@ struct TimingDetailView: View {
                     .foregroundColor(.orange)
                     .font(.title3)
                 
-                Text("Concert information".localized)
+                Text(NSLocalizedString("Concert information", comment: "Section header for concert information"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -124,7 +124,7 @@ struct TimingDetailView: View {
                 // Start Date and Time
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Start date time".localized)
+                        Text(NSLocalizedString("Start date time", comment: "Label for concert start date and time"))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
@@ -152,7 +152,7 @@ struct TimingDetailView: View {
                 if let estimatedEndTime = calculateEstimatedEndTime(from: concertDate) {
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Estimated end time".localized)
+                            Text(NSLocalizedString("Estimated end time", comment: "Label for estimated concert end time"))
                                 .font(.subheadline)
                                 .fontWeight(.medium)
                                 .foregroundColor(.secondary)
@@ -194,7 +194,7 @@ struct TimingDetailView: View {
                     .foregroundColor(.purple)
                     .font(.title3)
                 
-                Text("Song Timeline".localized + " (\(setlist.songs.count))")
+                Text(NSLocalizedString("Song Timeline", comment: "Section header for song timeline") + " (\(setlist.songs.count))")
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -236,7 +236,7 @@ struct TimingDetailView: View {
                     .foregroundColor(.green)
                     .font(.title3)
                 
-                Text("Timeline summary".localized)
+                Text(NSLocalizedString("Timeline summary", comment: "Section header for timeline summary"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -253,7 +253,7 @@ struct TimingDetailView: View {
                 // Total Songs
                 SummaryRowView(
                     icon: "music.note",
-                    title: "Total Songs".localized,
+                    title: NSLocalizedString("Total Songs", comment: "Title for total songs statistic"),
                     value: "\(setlist.songs.count) " + String.ukrainianSongsPlural(count: setlist.songs.count),
                     color: .purple
                 )
@@ -261,7 +261,7 @@ struct TimingDetailView: View {
                 // Total Duration
                 SummaryRowView(
                     icon: "clock",
-                    title: "Total Duration".localized,
+                    title: NSLocalizedString("Total Duration", comment: "Title for total duration statistic"),
                     value: setlist.formattedTotalDuration,
                     color: .orange
                 )
@@ -269,7 +269,7 @@ struct TimingDetailView: View {
                 // Average Song Length
                 SummaryRowView(
                     icon: "timer",
-                    title: "Average Song Length".localized,
+                    title: NSLocalizedString("Average Song Length", comment: "Title for average song length statistic"),
                     value: averageSongLength,
                     color: .blue
                 )
@@ -278,7 +278,7 @@ struct TimingDetailView: View {
                 if let shortestSong = setlist.songs.min(by: { $0.totalSeconds < $1.totalSeconds }) {
                     SummaryRowView(
                         icon: "backward",
-                        title: "Shortest Song".localized,
+                        title: NSLocalizedString("Shortest Song", comment: "Title for shortest song statistic"),
                         value: "\(shortestSong.title) (\(shortestSong.formattedDuration))",
                         color: .green
                     )
@@ -288,7 +288,7 @@ struct TimingDetailView: View {
                 if let longestSong = setlist.songs.max(by: { $0.totalSeconds < $1.totalSeconds }) {
                     SummaryRowView(
                         icon: "forward",
-                        title: "Longest Song".localized,
+                        title: NSLocalizedString("Longest Song", comment: "Title for longest song statistic"),
                         value: "\(longestSong.title) (\(longestSong.formattedDuration))",
                         color: .red
                     )

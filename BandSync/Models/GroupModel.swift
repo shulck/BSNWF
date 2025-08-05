@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestore
 
-struct GroupModel: Identifiable, Codable, Equatable {
+struct GroupModel: Identifiable, Equatable {
     @DocumentID var id: String?
     var name: String
     var code: String
@@ -42,6 +42,14 @@ struct GroupModel: Identifiable, Codable, Equatable {
                lhs.genre == rhs.genre &&
                lhs.location == rhs.location &&
                lhs.socialMediaLinks == rhs.socialMediaLinks
+    }
+}
+
+// Добавляем Codable через extension для совместимости с @DocumentID
+extension GroupModel: Codable {
+    enum CodingKeys: String, CodingKey {
+        case name, code, members, pendingMembers, logoURL, description, paypalAddress
+        case establishedDate, genre, location, socialMediaLinks, admins, membersCount, createdAt, createdBy
     }
 }
 

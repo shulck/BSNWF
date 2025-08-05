@@ -66,7 +66,7 @@ struct SetlistExportView: View {
                 .padding(.top, 20)
             }
         }
-        .navigationTitle("Export Setlist".localized)
+        .navigationTitle(NSLocalizedString("Export Setlist", comment: "Navigation title for exporting setlist"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -109,12 +109,12 @@ struct SetlistExportView: View {
             }
             
             VStack(spacing: 8) {
-                Text("Export To PDF".localized)
+                Text(NSLocalizedString("Export To PDF", comment: "Header title for PDF export"))
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 
-                Text("Create A Professional Setlist Document".localized)
+                Text(NSLocalizedString("Create A Professional Setlist Document", comment: "Header description for PDF export"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -131,7 +131,7 @@ struct SetlistExportView: View {
                     .foregroundColor(.blue)
                     .font(.title3)
                 
-                Text("PDF Preview".localized)
+                Text(NSLocalizedString("PDF Preview", comment: "Section header for PDF preview"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -161,12 +161,12 @@ struct SetlistExportView: View {
                     
                     // PDF Info
                     VStack(spacing: 4) {
-                        Text("Document Ready".localized)
+                        Text(NSLocalizedString("Document Ready", comment: "Message when PDF is ready"))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.green)
                         
-                        Text("PDF Generated Successfully".localized)
+                        Text(NSLocalizedString("PDF Generated Successfully", comment: "Success message for PDF generation"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -186,11 +186,11 @@ struct SetlistExportView: View {
                                 .foregroundColor(.secondary)
                             
                             VStack(spacing: 4) {
-                                Text("PDF Preview".localized)
+                                Text(NSLocalizedString("PDF Preview", comment: "Placeholder PDF preview title"))
                                     .font(.headline)
                                     .foregroundColor(.primary)
                                 
-                                Text("Generating Document".localized)
+                                Text(NSLocalizedString("Generating Document", comment: "Loading message for PDF generation"))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
@@ -227,7 +227,7 @@ struct SetlistExportView: View {
                     .foregroundColor(.purple)
                     .font(.title3)
                 
-                Text("Export Settings".localized)
+                Text(NSLocalizedString("Export Settings", comment: "Section header for export settings"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -244,12 +244,12 @@ struct SetlistExportView: View {
                 // Show BPM Toggle
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Show BPM".localized)
+                        Text(NSLocalizedString("Show BPM", comment: "Toggle option to show BPM in PDF"))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.primary)
                         
-                        Text("Include BPM Information For Each Song".localized)
+                        Text(NSLocalizedString("Include BPM Information For Each Song", comment: "Description for BPM toggle option"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -270,12 +270,12 @@ struct SetlistExportView: View {
                 // Show Key Toggle
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Show Musical Key".localized)
+                        Text(NSLocalizedString("Show Musical Key", comment: "Toggle option to show musical key in PDF"))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.primary)
                         
-                        Text("Include Key Signatures Where Available".localized)
+                        Text(NSLocalizedString("Include Key Signatures Where Available", comment: "Description for musical key toggle option"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -311,7 +311,7 @@ struct SetlistExportView: View {
                     .foregroundColor(.green)
                     .font(.title3)
                 
-                Text("Actions".localized)
+                Text(NSLocalizedString("Actions", comment: "Section header for action buttons"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -333,7 +333,7 @@ struct SetlistExportView: View {
                         Image(systemName: "arrow.clockwise")
                             .font(.headline)
                         
-                        Text("Update PDF".localized)
+                        Text(NSLocalizedString("Update PDF", comment: "Button to regenerate PDF"))
                             .font(.headline)
                             .fontWeight(.medium)
                     }
@@ -359,7 +359,7 @@ struct SetlistExportView: View {
                         Image(systemName: "square.and.arrow.up")
                             .font(.headline)
                         
-                        Text("Share PDF".localized)
+                        Text(NSLocalizedString("Share PDF", comment: "Button to share the generated PDF"))
                             .font(.headline)
                             .fontWeight(.medium)
                     }
@@ -389,7 +389,7 @@ struct SetlistExportView: View {
     
     // MARK: - Close Button
     private var closeButton: some View {
-        Button("Close") {
+        Button(NSLocalizedString("Close", comment: "Button to close the export view")) {
             dismiss()
         }
         .font(.body)
@@ -407,7 +407,7 @@ struct SetlistExportView: View {
                     .scaleEffect(1.5)
                     .progressViewStyle(CircularProgressViewStyle(tint: .white))
                 
-                Text("Creating PDF".localized)
+                Text(NSLocalizedString("Creating PDF", comment: "Loading message when generating PDF"))
                     .font(.headline)
                     .fontWeight(.medium)
                     .foregroundColor(.white)
@@ -428,7 +428,7 @@ struct SetlistExportView: View {
                 .font(.title3)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text("Export Error".localized)
+                Text(NSLocalizedString("Export Error", comment: "Title for export error message"))
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundColor(.red)

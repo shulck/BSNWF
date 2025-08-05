@@ -161,12 +161,12 @@ struct EventDetailView: View {
             }
             .padding(.vertical)
         }
-        .navigationTitle("Event".localized)
+        .navigationTitle(NSLocalizedString("Event", comment: "Event navigation title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 if userCanEdit {
-                    Button("Edit".localized) {
+                    Button(NSLocalizedString("Edit", comment: "Edit button")) {
                         isEditing = true
                     }
                 }
@@ -181,20 +181,20 @@ struct EventDetailView: View {
     
     private var editingView: some View {
         Form {
-            Section(header: Text("Basic Information".localized)) {
-                TextField("Title".localized, text: $event.title)
+            Section(header: Text(NSLocalizedString("Basic Information", comment: "Basic information section title"))) {
+                TextField(NSLocalizedString("Title", comment: "Title placeholder"), text: $event.title)
                 
-                DatePicker("Date".localized, selection: $event.date)
+                DatePicker(NSLocalizedString("Date", comment: "Date picker label"), selection: $event.date)
                 
-                Picker("Type".localized, selection: $event.type) {
+                Picker(NSLocalizedString("Type", comment: "Type picker label"), selection: $event.type) {
                     ForEach(EventType.allCases, id: \.self) {
-                        Text($0.rawValue.localized).tag($0)
+                        Text(NSLocalizedString($0.rawValue, comment: "Event type")).tag($0)
                     }
                 }
                 
-                Picker("Status".localized, selection: $event.status) {
+                Picker(NSLocalizedString("Status", comment: "Status picker label"), selection: $event.status) {
                     ForEach(EventStatus.allCases, id: \.self) {
-                        Text($0.rawValue.localized).tag($0)
+                        Text(NSLocalizedString($0.rawValue, comment: "Event status")).tag($0)
                     }
                 }
                 
@@ -204,7 +204,7 @@ struct EventDetailView: View {
                         showingSetlistSelector = true
                     } label: {
                         HStack {
-                            Text("Setlist".localized)
+                            Text(NSLocalizedString("Setlist", comment: "Setlist label"))
                             Spacer()
                             Text(getSetlistName())
                                 .foregroundColor(.gray)
@@ -216,8 +216,8 @@ struct EventDetailView: View {
             }
             
             // СЕКЦИЯ ДЛЯ ПЕРСОНАЛЬНЫХ СОБЫТИЙ
-            Section(header: Text("Privacy".localized)) {
-                Toggle("Personal Event".localized, isOn: $event.isPersonal)
+            Section(header: Text(NSLocalizedString("Privacy", comment: "Privacy section title"))) {
+                Toggle(NSLocalizedString("Personal Event", comment: "Personal event toggle"), isOn: $event.isPersonal)
                     .onChange(of: event.isPersonal) { oldValue, newValue in
                         if newValue {
                             // Если делаем событие персональным, устанавливаем создателя
@@ -226,13 +226,13 @@ struct EventDetailView: View {
                     }
                 
                 if event.isPersonal {
-                    Text("Event visible only to you".localized)
+                    Text(NSLocalizedString("Event visible only to you", comment: "Event visibility description"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
 
-            Section(header: Text("Location".localized)) {
+            Section(header: Text(NSLocalizedString("Location", comment: "Location section title"))) {
                 // Button for selecting location on map
                 Button(action: {
                     showingLocationPicker = true
@@ -240,7 +240,7 @@ struct EventDetailView: View {
                     HStack {
                         Image(systemName: "map")
                             .foregroundColor(.blue)
-                        Text("Select on map".localized)
+                        Text(NSLocalizedString("Select on map", comment: "Select on map button"))
                     }
                 }
                 
@@ -256,13 +256,13 @@ struct EventDetailView: View {
                     .padding(.vertical, 4)
                     
                     // Button to clear selected location
-                    Button("Clear location".localized) {
+                    Button(NSLocalizedString("Clear location", comment: "Clear location button")) {
                         selectedLocation = nil
                         event.location = nil
                     }
                     .foregroundColor(.red)
                 } else {
-                    TextField("Venue".localized, text: Binding(
+                    TextField(NSLocalizedString("Venue", comment: "Venue placeholder"), text: Binding(
                         get: { event.location ?? "" },
                         set: { event.location = $0.isEmpty ? nil : $0 }
                     ))
@@ -272,15 +272,15 @@ struct EventDetailView: View {
             // Additional fields depending on event type
             if [.concert, .festival].contains(event.type) {
                 // For concerts and festivals show fee information
-                Section(header: Text("Fee".localized)) {
+                Section(header: Text(NSLocalizedString("Fee", comment: "Fee section title"))) {
                     HStack {
-                        TextField("Amount".localized, value: Binding(
+                        TextField(NSLocalizedString("Amount", comment: "Amount placeholder"), value: Binding(
                             get: { event.fee ?? 0 },
                             set: { event.fee = $0 > 0 ? $0 : nil }
                         ), formatter: NumberFormatter())
                         .keyboardType(.decimalPad)
                         
-                        TextField("Currency".localized, text: Binding(
+                        TextField(NSLocalizedString("Currency", comment: "Currency placeholder"), text: Binding(
                             get: { event.currency ?? "EUR" },
                             set: { event.currency = $0.isEmpty ? "EUR" : $0 }
                         ))
@@ -288,8 +288,8 @@ struct EventDetailView: View {
                     }
                 }
                 // Ticket Information
-                Section(header: Text("Ticket Information".localized)) {
-                    Toggle("Paid Event".localized, isOn: Binding(
+                Section(header: Text(NSLocalizedString("Ticket Information", comment: "Ticket information section title"))) {
+                    Toggle(NSLocalizedString("Paid Event", comment: "Paid event toggle"), isOn: Binding(
                         get: { event.isPaidEvent ?? false },
                         set: { newValue in
                             event.isPaidEvent = newValue
@@ -300,7 +300,7 @@ struct EventDetailView: View {
                     ))
                     
                     if event.isPaidEvent ?? false {
-                        TextField("Ticket Purchase URL".localized, text: Binding(
+                        TextField(NSLocalizedString("Ticket Purchase URL", comment: "Ticket purchase URL placeholder"), text: Binding(
                             get: { event.ticketPurchaseUrl ?? "" },
                             set: { event.ticketPurchaseUrl = $0.isEmpty ? nil : $0 }
                         ))
@@ -308,31 +308,31 @@ struct EventDetailView: View {
                         .autocapitalization(.none)
                         .textContentType(.URL)
                         
-                        Text("Buy Tickets".localized)
+                        Text(NSLocalizedString("Buy Tickets", comment: "Buy tickets text"))
                             .font(.caption)
                             .foregroundColor(.orange)
                     } else {
-                        Text("Event is free".localized)
+                        Text(NSLocalizedString("Event is free", comment: "Event is free text"))
                             .font(.caption)
                             .foregroundColor(.green)
                     }
                 }
                 
                 // Organizer information
-                Section(header: Text("Organizer".localized)) {
-                    TextField("Name".localized, text: Binding(
+                Section(header: Text(NSLocalizedString("Organizer", comment: "Organizer section title"))) {
+                    TextField(NSLocalizedString("Name", comment: "Name placeholder"), text: Binding(
                         get: { event.organizerName ?? "" },
                         set: { event.organizerName = $0.isEmpty ? nil : $0 }
                     ))
                     
-                    TextField("Email".localized, text: Binding(
+                    TextField(NSLocalizedString("Email", comment: "Email placeholder"), text: Binding(
                         get: { event.organizerEmail ?? "" },
                         set: { event.organizerEmail = $0.isEmpty ? nil : $0 }
                     ))
                     .keyboardType(.emailAddress)
                     .autocapitalization(.none)
                     
-                    TextField("Phone".localized, text: Binding(
+                    TextField(NSLocalizedString("Phone", comment: "Phone placeholder"), text: Binding(
                         get: { event.organizerPhone ?? "" },
                         set: { event.organizerPhone = $0.isEmpty ? nil : $0 }
                     ))
@@ -340,20 +340,20 @@ struct EventDetailView: View {
                 }
                 
                 // Coordinator (only for festivals and concerts)
-                Section(header: Text("Coordinator".localized)) {
-                    TextField("Name".localized, text: Binding(
+                Section(header: Text(NSLocalizedString("Coordinator", comment: "Coordinator section title"))) {
+                    TextField(NSLocalizedString("Name", comment: "Name placeholder"), text: Binding(
                         get: { event.coordinatorName ?? "" },
                         set: { event.coordinatorName = $0.isEmpty ? nil : $0 }
                     ))
                     
-                    TextField("Email".localized, text: Binding(
+                    TextField(NSLocalizedString("Email", comment: "Email placeholder"), text: Binding(
                         get: { event.coordinatorEmail ?? "" },
                         set: { event.coordinatorEmail = $0.isEmpty ? nil : $0 }
                     ))
                     .keyboardType(.emailAddress)
                     .autocapitalization(.none)
                     
-                    TextField("Phone".localized, text: Binding(
+                    TextField(NSLocalizedString("Phone", comment: "Phone placeholder"), text: Binding(
                         get: { event.coordinatorPhone ?? "" },
                         set: { event.coordinatorPhone = $0.isEmpty ? nil : $0 }
                     ))
@@ -362,7 +362,7 @@ struct EventDetailView: View {
                 
                 // Additional Contacts Section
                 Section(header: HStack {
-                    Text("Additional Contacts".localized)
+                    Text(NSLocalizedString("Additional Contacts", comment: "Additional contacts section title"))
                     Spacer()
                     Button(action: {
                         editingContactIndex = nil
@@ -373,7 +373,7 @@ struct EventDetailView: View {
                     }
                 }) {
                     if additionalContacts.isEmpty {
-                        Text("No additional contacts added".localized)
+                        Text(NSLocalizedString("No additional contacts added", comment: "No additional contacts message"))
                             .foregroundColor(.gray)
                             .italic()
                     } else {
@@ -410,14 +410,14 @@ struct EventDetailView: View {
 
             // For events requiring accommodation - ОБНОВЛЕННАЯ СЕКЦИЯ С ЗАВТРАКАМИ
             if [.concert, .festival, .photoshoot].contains(event.type) {
-                Section(header: Text("Accommodation".localized)) {
-                    TextField("Hotel name".localized, text: Binding(
+                Section(header: Text(NSLocalizedString("Accommodation", comment: "Accommodation section title"))) {
+                    TextField(NSLocalizedString("Hotel name", comment: "Hotel name placeholder"), text: Binding(
                         get: { event.hotelName ?? "" },
                         set: { event.hotelName = $0.isEmpty ? nil : $0 }
                     ))
                     .autocapitalization(.words)
 
-                    TextField("Hotel address".localized, text: Binding(
+                    TextField(NSLocalizedString("Hotel address", comment: "Hotel address placeholder"), text: Binding(
                         get: { event.hotelAddress ?? "" },
                         set: { event.hotelAddress = $0.isEmpty ? nil : $0 }
                     ))
@@ -425,12 +425,12 @@ struct EventDetailView: View {
 
                     // Show remaining fields only if hotel name is filled
                     if let hotelName = event.hotelName, !hotelName.isEmpty {
-                        DatePicker("Check-in".localized, selection: Binding(
+                        DatePicker(NSLocalizedString("Check-in", comment: "Check-in date picker"), selection: Binding(
                             get: { event.hotelCheckIn ?? event.date },
                             set: { event.hotelCheckIn = $0 }
                         ), displayedComponents: [.date, .hourAndMinute])
                         
-                        DatePicker("Check-out".localized, selection: Binding(
+                        DatePicker(NSLocalizedString("Check-out", comment: "Check-out date picker"), selection: Binding(
                             get: { event.hotelCheckOut ?? Calendar.current.date(byAdding: .day, value: 1, to: event.date)! },
                             set: { event.hotelCheckOut = $0 }
                         ), displayedComponents: [.date, .hourAndMinute])
@@ -441,7 +441,7 @@ struct EventDetailView: View {
                                 .foregroundColor(event.hotelBreakfastIncluded == true ? .green : .gray)
                                 .font(.title3)
                             
-                            Text("Breakfast included".localized)
+                            Text(NSLocalizedString("Breakfast included", comment: "Breakfast included text"))
                                 .font(.body)
                             
                             Spacer()
@@ -462,7 +462,7 @@ struct EventDetailView: View {
                             Button {
                                 checkRouteToHotel(address)
                             } label: {
-                                Label("Check route".localized, systemImage: "map")
+                                Label(NSLocalizedString("Check route", comment: "Check route button"), systemImage: "map")
                                     .foregroundColor(.blue)
                             }
                         }
@@ -470,7 +470,7 @@ struct EventDetailView: View {
                 }
             }
 
-            Section(header: Text("Notes".localized)) {
+            Section(header: Text(NSLocalizedString("Notes", comment: "Notes section title"))) {
                 TextEditor(text: Binding(
                     get: { event.notes ?? "" },
                     set: { event.notes = $0.isEmpty ? nil : $0 }
@@ -479,10 +479,10 @@ struct EventDetailView: View {
             }
             
             // Rating section
-            Section(header: Text("Rating".localized)) {
+            Section(header: Text(NSLocalizedString("Rating", comment: "Rating section title"))) {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack(spacing: 8) {
-                        Text("Rate this event".localized)
+                        Text(NSLocalizedString("Rate this event", comment: "Rate this event text"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
@@ -498,7 +498,7 @@ struct EventDetailView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Comment (optional)".localized)
+                        Text(NSLocalizedString("Comment (optional)", comment: "Comment optional text"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
@@ -512,18 +512,18 @@ struct EventDetailView: View {
             }
             
             // Daily schedule section - should always be visible
-            Section(header: Text("Daily Schedule".localized)) {
+            Section(header: Text(NSLocalizedString("Daily Schedule", comment: "Daily schedule section title"))) {
                 Button {
                     showingScheduleEditor = true
                 } label: {
                     HStack {
-                        Text("Schedule".localized)
+                        Text(NSLocalizedString("Schedule", comment: "Schedule text"))
                         Spacer()
                         if let schedule = event.schedule, !schedule.isEmpty {
-                            Text("\(schedule.count) " + "Items".localized)
+                            Text("\(schedule.count) " + NSLocalizedString("entries", comment: "Entries count text"))
                                 .foregroundColor(.gray)
                         } else {
-                            Text("Add schedule".localized)
+                            Text(NSLocalizedString("Add schedule", comment: "Add schedule button"))
                                 .foregroundColor(.blue)
                         }
                         Image(systemName: "chevron.right")
@@ -541,7 +541,7 @@ struct EventDetailView: View {
                         }
                         
                         if schedule.count > 3 {
-                            Text("And \(schedule.count - 3) more".localized)
+                            Text(String(format: NSLocalizedString("And %d more", comment: "And more items format"), schedule.count - 3))
                                 .font(.caption)
                                 .foregroundColor(.gray)
                         }
@@ -558,19 +558,19 @@ struct EventDetailView: View {
                 }
             }
         }
-        .navigationTitle("Edit Event".localized)
+        .navigationTitle(NSLocalizedString("Edit Event", comment: "Edit event navigation title"))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Save".localized) {
+                Button(NSLocalizedString("Save", comment: "Save button")) {
                     saveChanges()
                 }
                 .disabled(event.title.isEmpty || isLoading)
             }
 
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel".localized, role: .cancel) {
+                Button(NSLocalizedString("Cancel", comment: "Cancel button"), role: .cancel) {
                     if hasChanges() {
                         showingCancelConfirmation = true
                     } else {
@@ -616,13 +616,13 @@ struct EventDetailView: View {
                     .shadow(radius: 3)
             }
         })
-        .alert("Discard Changes?".localized, isPresented: $showingCancelConfirmation) {
-            Button("Keep Editing".localized, role: .cancel) {}
-            Button("Discard".localized, role: .destructive) {
+        .alert(NSLocalizedString("Discard Changes?", comment: "Discard changes alert title"), isPresented: $showingCancelConfirmation) {
+            Button(NSLocalizedString("Keep Editing", comment: "Keep editing button"), role: .cancel) {}
+            Button(NSLocalizedString("Discard", comment: "Discard button"), role: .destructive) {
                 cancelEditing()
             }
         } message: {
-            Text("Changes will be lost".localized)
+            Text(NSLocalizedString("Changes will be lost", comment: "Changes will be lost message"))
         }
     }
     
@@ -656,7 +656,7 @@ struct EventDetailView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("No Rating".localized)
+                        Text(NSLocalizedString("No Rating", comment: "Rating display when no rating is available"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -742,16 +742,16 @@ struct EventDetailView: View {
     
     private var eventTypeAndStatusRow: some View {
         HStack(spacing: 16) {
-            Label(event.type.rawValue.localized, systemImage: getIconForEventType(event.type))
+            Label(NSLocalizedString(event.type.rawValue, comment: "Event type"), systemImage: getIconForEventType(event.type))
                 .foregroundColor(Color(hex: event.type.colorHex))
             
-            Label(event.status.rawValue.localized, systemImage: "checkmark.circle")
+            Label(NSLocalizedString(event.status.rawValue, comment: "Event status"), systemImage: "checkmark.circle")
                 .foregroundColor(event.status.color)
         }
     }
     private var ticketDisplaySection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Ticket Information".localized)
+            Text(NSLocalizedString("Ticket Information", comment: "Ticket information section title"))
                 .font(.headline)
                 .padding(.horizontal)
             
@@ -760,7 +760,7 @@ struct EventDetailView: View {
                     Image(systemName: (event.isPaidEvent ?? false) ? "creditcard.fill" : "gift.fill")
                         .foregroundColor((event.isPaidEvent ?? false) ? .orange : .green)
                     
-                    Text((event.isPaidEvent ?? false) ? "Event is paid".localized : "Event is free".localized)
+                    Text((event.isPaidEvent ?? false) ? NSLocalizedString("Event is paid", comment: "Event is paid text") : NSLocalizedString("Event is free", comment: "Event is free text"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor((event.isPaidEvent ?? false) ? .orange : .green)
@@ -777,7 +777,7 @@ struct EventDetailView: View {
                         HStack {
                             Image(systemName: "link")
                                 .foregroundColor(.white)
-                            Text("Buy Tickets".localized)
+                            Text(NSLocalizedString("Buy Tickets", comment: "Buy tickets text"))
                                 .fontWeight(.medium)
                                 .foregroundColor(.white)
                         }
@@ -799,7 +799,7 @@ struct EventDetailView: View {
     
     private var locationSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Location".localized)
+            Text(NSLocalizedString("Location", comment: "Location section title"))
                 .font(.headline)
                 .padding(.horizontal)
             
@@ -810,7 +810,7 @@ struct EventDetailView: View {
                     Button {
                         showLocationDirections(address: location, name: event.title)
                     } label: {
-                        Label("Get directions".localized, systemImage: "arrow.triangle.turn.up.right.diamond")
+                        Label(NSLocalizedString("Get directions", comment: "Get directions button"), systemImage: "arrow.triangle.turn.up.right.diamond")
                             .foregroundColor(.blue)
                             .padding(8)
                             .frame(maxWidth: .infinity)
@@ -825,7 +825,7 @@ struct EventDetailView: View {
     
     private var scheduleSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Daily Schedule".localized)
+            Text(NSLocalizedString("Daily Schedule", comment: "Section title for event daily schedule"))
                 .font(.headline)
                 .padding(.horizontal)
             
@@ -860,7 +860,7 @@ struct EventDetailView: View {
     
     private var setlistSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Setlist".localized)
+            Text(NSLocalizedString("Setlist", comment: "Section title for event setlist"))
                 .font(.headline)
                 .padding(.horizontal)
             
@@ -880,7 +880,7 @@ struct EventDetailView: View {
                 }
                 .padding(.horizontal)
             } else {
-                Text("No Setlist Selected".localized)
+                Text(NSLocalizedString("No Setlist Selected", comment: "Message when no setlist is selected for event"))
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.gray.opacity(0.1))
@@ -893,7 +893,7 @@ struct EventDetailView: View {
     
     private var organizerSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Organizers".localized)
+            Text(NSLocalizedString("Organizers", comment: "Section title for event organizers"))
                 .font(.headline)
                 .padding(.horizontal)
             
@@ -944,7 +944,7 @@ struct EventDetailView: View {
     
     private var coordinatorSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Coordinators".localized)
+            Text(NSLocalizedString("Coordinators", comment: "Section title for event coordinators"))
                 .font(.headline)
                 .padding(.horizontal)
             
@@ -995,7 +995,7 @@ struct EventDetailView: View {
     
     private var hotelSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Accommodation".localized)
+            Text(NSLocalizedString("Accommodation", comment: "Section title for event accommodation"))
                 .font(.headline)
                 .padding(.horizontal)
             
@@ -1009,31 +1009,31 @@ struct EventDetailView: View {
                         Button {
                             openMaps(for: hotelAddress)
                         } label: {
-                            Label("Open in Maps".localized, systemImage: "map")
+                            Label(NSLocalizedString("Open in Maps", comment: "Button to open location in Maps app"), systemImage: "map")
                                 .foregroundColor(.blue)
                         }
                         
                         Button {
                             NavigationService.shared.navigateToAddress(hotelAddress, name: hotelName)
                         } label: {
-                            Label("Get directions".localized, systemImage: "arrow.triangle.turn.up.right.diamond")
+                            Label(NSLocalizedString("Get directions", comment: "Button to get directions to location"), systemImage: "arrow.triangle.turn.up.right.diamond")
                                 .foregroundColor(.blue)
                         }
                     }
                     
                     if let checkIn = event.hotelCheckIn {
-                        Label("Check-in: \(formatDateTime(checkIn))".localized, systemImage: "arrow.down.to.line")
+                        Label(NSLocalizedString("Check-in", comment: "Hotel check-in time label") + ": \(formatDateTime(checkIn))", systemImage: "arrow.down.to.line")
                     }
                     
                     if let checkOut = event.hotelCheckOut {
-                        Label("Check-out: \(formatDateTime(checkOut))".localized, systemImage: "arrow.up.to.line")
+                        Label(NSLocalizedString("Check-out", comment: "Hotel check-out time label") + ": \(formatDateTime(checkOut))", systemImage: "arrow.up.to.line")
                     }
                     
                     HStack {
                         Image(systemName: event.hotelBreakfastIncluded == true ? "checkmark.circle.fill" : "xmark.circle")
                             .foregroundColor(event.hotelBreakfastIncluded == true ? .green : .red)
                         
-                        Text(event.hotelBreakfastIncluded == true ? "Breakfast included".localized : "Breakfast not included".localized)
+                        Text(event.hotelBreakfastIncluded == true ? NSLocalizedString("Breakfast included", comment: "Hotel breakfast is included") : NSLocalizedString("Breakfast not included", comment: "Hotel breakfast is not included"))
                             .foregroundColor(event.hotelBreakfastIncluded == true ? .green : .secondary)
                     }
                 }
@@ -1048,13 +1048,13 @@ struct EventDetailView: View {
     
     private var financesSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Finances".localized)
+            Text(NSLocalizedString("Finances", comment: "Section title for event finances"))
                 .font(.headline)
                 .padding(.horizontal)
             
             if let fee = event.fee, let currency = event.currency {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Fee: \(Int(fee)) \(currency)".localized)
+                    Text(NSLocalizedString("Fee", comment: "Event fee label") + ": \(Int(fee)) \(currency)")
                 }
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -1068,7 +1068,7 @@ struct EventDetailView: View {
     private var notesSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Notes".localized)
+                Text(NSLocalizedString("Notes", comment: "Section title for event notes"))
                     .font(.headline)
                 
                 if let notes = event.notes, !notes.isEmpty, hasLinks(in: notes) {
@@ -1087,7 +1087,7 @@ struct EventDetailView: View {
                     .cornerRadius(8)
                     .padding(.horizontal)
             } else {
-                Text("No Notes".localized)
+                Text(NSLocalizedString("No Notes", comment: "Message when no notes are available"))
                     .foregroundColor(.gray)
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -1102,7 +1102,7 @@ struct EventDetailView: View {
     /*
     private var ratingSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Rating".localized)
+            Text(NSLocalizedString("Rating", comment: "Section title for event rating"))
                 .font(.headline)
                 .padding(.horizontal)
             
@@ -1119,7 +1119,7 @@ struct EventDetailView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("No Rating".localized)
+                        Text(NSLocalizedString("No Rating", comment: "Rating display when no rating is available in second location"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -1132,7 +1132,7 @@ struct EventDetailView: View {
                         .foregroundColor(.primary)
                         .padding(.top, 4)
                 } else if event.rating != nil {
-                    Text("No Comment".localized)
+                    Text(NSLocalizedString("No Comment", comment: "Message when no rating comment is available"))
                         .font(.body)
                         .foregroundColor(.secondary)
                         .italic()
@@ -1150,7 +1150,7 @@ struct EventDetailView: View {
     
     private var otherContactsSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Other Contacts".localized)
+            Text(NSLocalizedString("Other Contacts", comment: "Section title for other event contacts"))
                 .font(.headline)
                 .padding(.horizontal)
             
@@ -1229,7 +1229,7 @@ struct EventDetailView: View {
         Button {
             showingDeleteConfirmation = true
         } label: {
-            Label("Delete Event".localized, systemImage: "trash")
+            Label(NSLocalizedString("Delete Event", comment: "Button to delete event"), systemImage: "trash")
                 .foregroundColor(.red)
                 .frame(maxWidth: .infinity)
                 .padding()
@@ -1238,13 +1238,13 @@ struct EventDetailView: View {
         }
         .padding(.horizontal)
         .padding(.top, 16)
-        .alert("Delete Event?".localized, isPresented: $showingDeleteConfirmation) {
-            Button("Cancel".localized, role: .cancel) {}
-            Button("Delete".localized, role: .destructive) {
+        .alert(NSLocalizedString("Delete Event?", comment: "Alert title for delete confirmation"), isPresented: $showingDeleteConfirmation) {
+            Button(NSLocalizedString("Cancel", comment: "Cancel button in delete confirmation"), role: .cancel) {}
+            Button(NSLocalizedString("Delete", comment: "Delete button in delete confirmation"), role: .destructive) {
                 deleteEvent()
             }
         } message: {
-            Text("Are you sure you want to delete this event? This action cannot be undone.".localized)
+            Text(NSLocalizedString("Are you sure you want to delete this event? This action cannot be undone.", comment: "Delete confirmation message"))
         }
     }
     
@@ -1259,11 +1259,11 @@ struct EventDetailView: View {
            let setlist = setlistService.setlists.first(where: { $0.id == setlistId }) {
             return setlist.name
         }
-        return "Not Selected".localized
+        return NSLocalizedString("Not Selected", comment: "Not selected text")
     }
     
     private func checkRouteToHotel(_ address: String) {
-        NavigationService.shared.navigateToAddress(address, name: event.hotelName ?? "Hotel".localized)
+        NavigationService.shared.navigateToAddress(address, name: event.hotelName ?? NSLocalizedString("Hotel", comment: "Hotel name fallback"))
     }
     
     private func hasChanges() -> Bool {
@@ -1346,12 +1346,12 @@ struct EventDetailView: View {
         // Проверяем наличие ID
         guard let eventId = event.id, !eventId.isEmpty else {
             print("❌ Cannot save event without ID")
-            errorMessage = "Cannot save event: missing event ID"
+            errorMessage = NSLocalizedString("Cannot save event: missing event ID", comment: "Cannot save event missing ID error")
             return
         }
         if (event.isPaidEvent ?? false), let urlString = event.ticketPurchaseUrl, !urlString.isEmpty {
             if !isValidURL(urlString) {
-                errorMessage = "Please enter a valid ticket purchase URL"
+                errorMessage = NSLocalizedString("Please enter a valid ticket purchase URL", comment: "Invalid ticket URL error")
                 return
             }
         }
@@ -1359,7 +1359,7 @@ struct EventDetailView: View {
         // Проверяем Firebase Auth
         guard Auth.auth().currentUser != nil else {
             print("❌ No Firebase Auth user found!")
-            errorMessage = "Authentication Required to Save Changes".localized
+            errorMessage = NSLocalizedString("Authentication required to save changes", comment: "Authentication required error")
             return
         }
         
@@ -1399,7 +1399,7 @@ struct EventDetailView: View {
             print("✅ Edit mode disabled")
         } else {
             print("❌ Save failed")
-            errorMessage = "Failed to Save Changes".localized
+            errorMessage = NSLocalizedString("Failed to save changes", comment: "Failed to save changes error")
         }
     }
     
@@ -1442,7 +1442,7 @@ struct EventDetailView: View {
             ContactService.shared.addContact(organizerContact) { success in
                 if !success {
                     DispatchQueue.main.async {
-                        self.errorMessage = "Failed to Save Organizer Contact".localized
+                        self.errorMessage = NSLocalizedString("Failed to Save Organizer Contact", comment: "Error message when organizer contact save fails")
                     }
                 }
             }
@@ -1462,7 +1462,7 @@ struct EventDetailView: View {
             ContactService.shared.addContact(coordinatorContact) { success in
                 if !success {
                     DispatchQueue.main.async {
-                        self.errorMessage = "Failed to Save Coordinator Contact".localized
+                        self.errorMessage = NSLocalizedString("Failed to Save Coordinator Contact", comment: "Error message when coordinator contact save fails")
                     }
                 }
             }
@@ -1481,7 +1481,7 @@ struct EventDetailView: View {
                 ContactService.shared.addContact(contact) { success in
                     if !success {
                         DispatchQueue.main.async {
-                            self.errorMessage = "Failed to save contact: \(tempContact.name)"
+                            self.errorMessage = NSLocalizedString("Failed to save contact: ", comment: "Error message when contact save fails") + tempContact.name
                         }
                     }
                 }
@@ -1509,7 +1509,7 @@ struct EventDetailView: View {
             } else if let eventLocation = self.event.location {
                 name = eventLocation
             } else {
-                name = "Event Location".localized
+                name = NSLocalizedString("Event Location", comment: "Default name for event location when none provided")
             }
             
             let address = self.formatAddress(from: placemark)
@@ -1558,7 +1558,7 @@ struct EventDetailView: View {
         }
         
         if address.isEmpty {
-            address = "Unknown Address".localized
+            address = NSLocalizedString("Unknown Address", comment: "Default address when location cannot be determined")
         }
         
         return address
@@ -1712,7 +1712,7 @@ struct TextWithLinks: View {
     
     var body: some View {
         if text.isEmpty {
-            Text("No Text".localized)
+            Text(NSLocalizedString("No Text", comment: "Message when no text content is available"))
                 .italic()
                 .foregroundColor(.gray)
         } else if hasLinks(in: text) {

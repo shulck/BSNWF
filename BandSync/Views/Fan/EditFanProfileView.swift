@@ -92,25 +92,25 @@ struct EditFanProfileView: View {
             .onChange(of: selectedAvatar) { oldValue, newValue in
                 loadSelectedImage()
             }
-            .alert("Error", isPresented: $showError) {
-                Button("OK") {}
+            .alert(NSLocalizedString("Error", comment: "Error alert title"), isPresented: $showError) {
+                Button(NSLocalizedString("OK", comment: "OK button")) {}
             } message: {
                 Text(errorMessage)
             }
-            .alert("Profile Updated", isPresented: $showSuccessAlert) {
-                Button("OK") {
+            .alert(NSLocalizedString("Profile Updated", comment: "Profile updated alert title"), isPresented: $showSuccessAlert) {
+                Button(NSLocalizedString("OK", comment: "OK button")) {
                     dismiss()
                 }
             } message: {
-                Text("Your fan profile has been successfully updated! Your address is saved privately and only visible to you.")
+                Text(NSLocalizedString("Your fan profile has been successfully updated! Your address is saved privately and only visible to you.", comment: "Profile updated success message"))
             }
-            .alert("Delete Account", isPresented: $showDeleteAccountAlert) {
-                Button("Cancel", role: .cancel) {}
-                Button("Delete Forever", role: .destructive) {
+            .alert(NSLocalizedString("Delete Account", comment: "Delete account alert title"), isPresented: $showDeleteAccountAlert) {
+                Button(NSLocalizedString("Cancel", comment: "Cancel button"), role: .cancel) {}
+                Button(NSLocalizedString("Delete Forever", comment: "Delete forever button"), role: .destructive) {
                     deleteAccount()
                 }
             } message: {
-                Text("This action cannot be undone. Your fan profile, achievements, and all data will be permanently deleted.")
+                Text(NSLocalizedString("This action cannot be undone. Your fan profile, achievements, and all data will be permanently deleted.", comment: "Delete account warning message"))
             }
         }
     }
@@ -132,7 +132,7 @@ struct EditFanProfileView: View {
     private var headerSection: some View {
         VStack(spacing: 16) {
             HStack {
-                Button("Cancel") {
+                Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
                     dismiss()
                 }
                 .font(.body)
@@ -141,19 +141,19 @@ struct EditFanProfileView: View {
                 Spacer()
                 
                 VStack(spacing: 4) {
-                    Text("Edit Profile")
+                    Text(NSLocalizedString("Edit Profile", comment: "Edit profile title"))
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
                     
-                    Text("Update your fan information")
+                    Text(NSLocalizedString("Update your fan information", comment: "Update fan information subtitle"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 
                 Spacer()
                 
-                Button("Save") {
+                Button(NSLocalizedString("Save", comment: "Save button")) {
                     saveProfile()
                 }
                 .font(.body)
@@ -166,7 +166,7 @@ struct EditFanProfileView: View {
                 HStack(spacing: 8) {
                     ProgressView()
                         .scaleEffect(0.8)
-                    Text("Updating profile...")
+                    Text(NSLocalizedString("Updating profile...", comment: "Updating profile message"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -233,7 +233,7 @@ struct EditFanProfileView: View {
                 .frame(width: 96, height: 96)
             }
             
-            Text("Tap to change avatar")
+            Text(NSLocalizedString("Tap to change avatar", comment: "Avatar change instruction"))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -248,38 +248,38 @@ struct EditFanProfileView: View {
     // MARK: - Personal Information Section
     private var personalInfoSection: some View {
         VStack(spacing: 0) {
-            sectionHeader(title: "Personal Information", icon: "person.fill", color: .blue)
+            sectionHeader(title: NSLocalizedString("Personal Information", comment: "Personal information section title"), icon: "person.fill", color: .blue)
             
             VStack(spacing: 16) {
                 HStack(spacing: 12) {
                     editField(
-                        title: "First Name",
+                        title: NSLocalizedString("First Name", comment: "First name field label"),
                         text: $firstName,
-                        placeholder: "Enter your first name",
+                        placeholder: NSLocalizedString("Enter your first name", comment: "First name placeholder"),
                         field: .firstName
                     )
                     
                     editField(
-                        title: "Last Name",
+                        title: NSLocalizedString("Last Name", comment: "Last name field label"),
                         text: $lastName,
-                        placeholder: "Enter your last name",
+                        placeholder: NSLocalizedString("Enter your last name", comment: "Last name placeholder"),
                         field: .lastName
                     )
                 }
                 
                 editField(
-                    title: "Email",
+                    title: NSLocalizedString("Email", comment: "Email field label"),
                     text: $email,
-                    placeholder: "Enter your email",
+                    placeholder: NSLocalizedString("Enter your email", comment: "Email placeholder"),
                     field: .email,
                     keyboardType: .emailAddress,
                     isDisabled: true
                 )
                 
                 editField(
-                    title: "Phone",
+                    title: NSLocalizedString("Phone", comment: "Phone field label"),
                     text: $phone,
-                    placeholder: "Enter your phone number",
+                    placeholder: NSLocalizedString("Enter your phone number", comment: "Phone placeholder"),
                     field: .phone,
                     keyboardType: .phonePad
                 )
@@ -295,7 +295,7 @@ struct EditFanProfileView: View {
     private var deleteAccountSection: some View {
         VStack(spacing: 0) {
             HStack {
-                sectionHeader(title: "Danger Zone", icon: "exclamationmark.triangle.fill", color: .red)
+                sectionHeader(title: NSLocalizedString("Danger Zone", comment: "Danger zone section title"), icon: "exclamationmark.triangle.fill", color: .red)
                 Spacer()
             }
             .padding(.horizontal, 20)
@@ -308,7 +308,7 @@ struct EditFanProfileView: View {
                     Image(systemName: "exclamationmark.circle")
                         .foregroundColor(.red)
                         .font(.caption)
-                    Text("Deleting your account is permanent and cannot be undone")
+                    Text(NSLocalizedString("Deleting your account is permanent and cannot be undone", comment: "Account deletion warning"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Spacer()
@@ -329,7 +329,7 @@ struct EditFanProfileView: View {
                                 .font(.system(size: 16, weight: .semibold))
                         }
                         
-                        Text(isDeleting ? "Deleting Account..." : "Delete Account")
+                        Text(isDeleting ? NSLocalizedString("Deleting Account...", comment: "Deleting account progress") : NSLocalizedString("Delete Account", comment: "Delete account button"))
                             .font(.subheadline)
                             .fontWeight(.semibold)
                     }
@@ -353,27 +353,27 @@ struct EditFanProfileView: View {
     // MARK: - Fan Profile Section
     private var fanProfileSection: some View {
         VStack(spacing: 0) {
-            sectionHeader(title: "Fan Profile", icon: "star.fill", color: .purple)
+            sectionHeader(title: NSLocalizedString("Fan Profile", comment: "Fan profile section title"), icon: "star.fill", color: .purple)
             
             VStack(spacing: 16) {
                 editField(
-                    title: "Nickname",
+                    title: NSLocalizedString("Nickname", comment: "Nickname field label"),
                     text: $nickname,
-                    placeholder: "Your fan nickname",
+                    placeholder: NSLocalizedString("Your fan nickname", comment: "Nickname placeholder"),
                     field: .nickname
                 )
                 
                 editField(
-                    title: "Location",
+                    title: NSLocalizedString("Location", comment: "Location field label"),
                     text: $location,
-                    placeholder: "City, Country",
+                    placeholder: NSLocalizedString("City, Country", comment: "Location placeholder"),
                     field: .location
                 )
                 
                 editField(
-                    title: "Favorite Song",
+                    title: NSLocalizedString("Favorite Song", comment: "Favorite song field label"),
                     text: $favoriteSong,
-                    placeholder: "Your favorite song",
+                    placeholder: NSLocalizedString("Your favorite song", comment: "Favorite song placeholder"),
                     field: .favoriteSong
                 )
             }
@@ -388,7 +388,7 @@ struct EditFanProfileView: View {
     private var addressSection: some View {
         VStack(spacing: 0) {
             HStack {
-                sectionHeader(title: "Shipping Address", icon: "location.fill", color: .green)
+                sectionHeader(title: NSLocalizedString("Shipping Address", comment: "Shipping address section title"), icon: "location.fill", color: .green)
                 
                 Spacer()
                 
@@ -396,7 +396,7 @@ struct EditFanProfileView: View {
                 HStack(spacing: 4) {
                     Image(systemName: "lock.fill")
                         .font(.caption)
-                    Text("Private")
+                    Text(NSLocalizedString("Private", comment: "Private label"))
                         .font(.caption)
                 }
                 .foregroundColor(.secondary)
@@ -415,7 +415,7 @@ struct EditFanProfileView: View {
                     Image(systemName: "info.circle")
                         .foregroundColor(.blue)
                         .font(.caption)
-                    Text("This information is private and only visible to you")
+                    Text(NSLocalizedString("This information is private and only visible to you", comment: "Private information notice"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Spacer()
@@ -424,7 +424,7 @@ struct EditFanProfileView: View {
                 
                 // Country Picker
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Country")
+                    Text(NSLocalizedString("Country", comment: "Country field label"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.primary)
@@ -833,7 +833,7 @@ struct EditFanProfileView: View {
             } catch {
                 await MainActor.run {
                     self.isDeleting = false
-                    self.errorMessage = "Failed to delete account: \(error.localizedDescription)"
+                    self.errorMessage = NSLocalizedString("Failed to delete account", comment: "Delete account error") + ": \(error.localizedDescription)"
                     self.showError = true
                 }
             }

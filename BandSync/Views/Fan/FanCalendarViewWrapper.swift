@@ -24,12 +24,12 @@ struct FanCalendarViewWrapper: View {
                             }
                             
                             VStack(spacing: 12) {
-                                Text("Event Not Found")
+                                Text(NSLocalizedString("Event Not Found", comment: "Error message when event cannot be found"))
                                     .font(.title2)
                                     .fontWeight(.bold)
                                     .foregroundColor(.primary)
                                 
-                                Text("This event may have been deleted or you don't have permission to view it.")
+                                Text(NSLocalizedString("This event may have been deleted or you don't have permission to view it.", comment: "Explanation when event is not accessible"))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                     .multilineTextAlignment(.center)
@@ -83,7 +83,7 @@ struct FanCalendarView: View {
                     Spacer()
                     
                     // Today button
-                    Button("Today") {
+                    Button(NSLocalizedString("Today", comment: "Button to go to today's date in calendar")) {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             selectedDate = Date()
                         }
@@ -135,7 +135,7 @@ struct FanCalendarView: View {
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         } else {
-                            Text("No events")
+                            Text(NSLocalizedString("No events", comment: "Text shown when there are no events on selected date"))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -177,7 +177,7 @@ struct FanCalendarView: View {
                             .scaleEffect(1.2)
                             .progressViewStyle(CircularProgressViewStyle(tint: .blue))
                         
-                        Text("Loading events...")
+                        Text(NSLocalizedString("Loading events...", comment: "Text shown while events are being loaded"))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
@@ -203,12 +203,12 @@ struct FanCalendarView: View {
                         }
                         
                         VStack(spacing: 12) {
-                            Text("No Events Yet")
+                            Text(NSLocalizedString("No Events Yet", comment: "Title shown when there are no events"))
                                 .font(.title2)
                                 .fontWeight(.bold)
                                 .foregroundColor(.primary)
                             
-                            Text("Check back later for upcoming concerts and events!")
+                            Text(NSLocalizedString("Check back later for upcoming concerts and events!", comment: "Message encouraging users to check for events later"))
                                 .font(.body)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.center)
@@ -247,7 +247,7 @@ struct FanCalendarView: View {
             )
             .ignoresSafeArea()
         )
-        .navigationTitle("Events") // Заголовок для фанатов
+        .navigationTitle(NSLocalizedString("Events", comment: "Navigation title for events calendar screen")) // Заголовок для фанатов
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             // ✅ ГЛАВНОЕ ИЗМЕНЕНИЕ: Сбрасываем дату на текущую при появлении вкладки
@@ -298,11 +298,11 @@ struct FanCalendarView: View {
         let mod10 = count % 10
         let mod100 = count % 100
         if mod10 == 1 && mod100 != 11 {
-            return "event"
+            return NSLocalizedString("event", comment: "Singular form of event")
         } else if mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20) {
-            return "events"
+            return NSLocalizedString("events", comment: "Plural form of events")
         } else {
-            return "events"
+            return NSLocalizedString("events", comment: "Plural form of events")
         }
     }
     
@@ -382,7 +382,7 @@ struct ModernFanEventRowView: View {
                         HStack(spacing: 4) {
                             Text("🎉")
                                 .font(.caption)
-                            Text("Congratulate".localized)
+                            Text(NSLocalizedString("Congratulate", comment: "Action button text for birthday events"))
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.pink)

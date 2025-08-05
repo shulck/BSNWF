@@ -4,165 +4,165 @@ struct PrivacyPolicyView: View {
     var body: some View {
         List {
             Section {
-                Text("Your privacy is important to us. This policy explains how BandSync collects, uses, and protects your information to provide the best possible service.".localized)
+                Text(NSLocalizedString("Your privacy is important to us. This policy explains how BandSync collects, uses, and protects your information to provide the best possible service.", comment: "Privacy policy - our commitment description"))
                     .font(.body)
                     .foregroundColor(.secondary)
                     .padding(.vertical, 4)
             } header: {
-                Text("Our Commitment".localized)
+                Text(NSLocalizedString("Our Commitment", comment: "Privacy policy - our commitment section header"))
             }
             
             Section {
-                PolicyRow(title: "Account Information".localized, description: "Name, email, and profile details for authentication and personalization".localized)
-                PolicyRow(title: "Band Data".localized, description: "Group information, member details, and organizational structure".localized)
-                PolicyRow(title: "Events & Scheduling".localized, description: "Calendar data, event details, and attendance information".localized)
-                PolicyRow(title: "Communication Data".localized, description: "Messages and coordination information within your band".localized)
-                PolicyRow(title: "Financial Information".localized, description: "Expense tracking and transaction records (no payment details stored)".localized)
-                PolicyRow(title: "Document Storage".localized, description: "Files and documents shared through Google Drive integration".localized)
-                PolicyRow(title: "Usage Analytics".localized, description: "App performance data and feature usage statistics for improvement".localized)
+                PolicyRow(title: NSLocalizedString("Account Information", comment: "Privacy policy - account information data type"), description: NSLocalizedString("Name, email, and profile details for authentication and personalization", comment: "Privacy policy - account information description"))
+                PolicyRow(title: NSLocalizedString("Band Data", comment: "Privacy policy - band data type"), description: NSLocalizedString("Group information, member details, and organizational structure", comment: "Privacy policy - band data description"))
+                PolicyRow(title: NSLocalizedString("Events & Scheduling", comment: "Privacy policy - events and scheduling data type"), description: NSLocalizedString("Calendar data, event details, and attendance information", comment: "Privacy policy - events and scheduling description"))
+                PolicyRow(title: NSLocalizedString("Communication Data", comment: "Privacy policy - communication data type"), description: NSLocalizedString("Messages and coordination information within your band", comment: "Privacy policy - communication data description"))
+                PolicyRow(title: NSLocalizedString("Financial Information", comment: "Privacy policy - financial information data type"), description: NSLocalizedString("Expense tracking and transaction records (no payment details stored)", comment: "Privacy policy - financial information description"))
+                PolicyRow(title: NSLocalizedString("Document Storage", comment: "Privacy policy - document storage data type"), description: NSLocalizedString("Files and documents shared through Google Drive integration", comment: "Privacy policy - document storage description"))
+                PolicyRow(title: NSLocalizedString("Usage Analytics", comment: "Privacy policy - usage analytics data type"), description: NSLocalizedString("App performance data and feature usage statistics for improvement", comment: "Privacy policy - usage analytics description"))
             } header: {
-                Text("Information We Collect".localized)
+                Text(NSLocalizedString("Information We Collect", comment: "Privacy policy - information we collect section header"))
             }
             
             Section {
-                PolicyRow(title: "Service Delivery".localized, description: "Provide band management tools and collaboration features".localized)
-                PolicyRow(title: "Synchronization".localized, description: "Keep your data updated across all your devices".localized)
-                PolicyRow(title: "Notifications".localized, description: "Send relevant updates about events and band activities".localized)
-                PolicyRow(title: "Security".localized, description: "Protect your account and prevent unauthorized access".localized)
-                PolicyRow(title: "Improvement".localized, description: "Enhance app performance and develop new features".localized)
-                PolicyRow(title: "Customer Support".localized, description: "Provide assistance and resolve technical issues".localized)
+                PolicyRow(title: NSLocalizedString("Service Delivery", comment: "Privacy policy - service delivery usage purpose"), description: NSLocalizedString("Provide band management tools and collaboration features", comment: "Privacy policy - service delivery description"))
+                PolicyRow(title: NSLocalizedString("Synchronization", comment: "Privacy policy - synchronization usage purpose"), description: NSLocalizedString("Keep your data updated across all your devices", comment: "Privacy policy - synchronization description"))
+                PolicyRow(title: NSLocalizedString("Notifications", comment: "Privacy policy - notifications usage purpose"), description: NSLocalizedString("Send relevant updates about events and band activities", comment: "Privacy policy - notifications description"))
+                PolicyRow(title: NSLocalizedString("Security", comment: "Privacy policy - security usage purpose"), description: NSLocalizedString("Protect your account and prevent unauthorized access", comment: "Privacy policy - security description"))
+                PolicyRow(title: NSLocalizedString("Improvement", comment: "Privacy policy - improvement usage purpose"), description: NSLocalizedString("Enhance app performance and develop new features", comment: "Privacy policy - improvement description"))
+                PolicyRow(title: NSLocalizedString("Customer Support", comment: "Privacy policy - customer support usage purpose"), description: NSLocalizedString("Provide assistance and resolve technical issues", comment: "Privacy policy - customer support description"))
             } header: {
-                Text("How We Use Your Information".localized)
+                Text(NSLocalizedString("How We Use Your Information", comment: "Privacy policy - how we use information section header"))
             }
             
             Section {
-                PolicyRow(title: "No Data Sales".localized, description: "We never sell your personal information to third parties".localized)
-                PolicyRow(title: "Service Providers".localized, description: "Trusted partners like Firebase and Google Drive under strict agreements".localized)
-                PolicyRow(title: "Legal Requirements".localized, description: "Only when required by law or to protect user safety".localized)
-                PolicyRow(title: "Your Consent".localized, description: "With your explicit permission for specific purposes".localized)
-                PolicyRow(title: "Business Transfers".localized, description: "In the event of a merger or acquisition, with user notification".localized)
+                PolicyRow(title: NSLocalizedString("No Data Sales", comment: "Privacy policy - no data sales sharing policy"), description: NSLocalizedString("We never sell your personal information to third parties", comment: "Privacy policy - no data sales description"))
+                PolicyRow(title: NSLocalizedString("Service Providers", comment: "Privacy policy - service providers sharing policy"), description: NSLocalizedString("Trusted partners like Firebase and Google Drive under strict agreements", comment: "Privacy policy - service providers description"))
+                PolicyRow(title: NSLocalizedString("Legal Requirements", comment: "Privacy policy - legal requirements sharing policy"), description: NSLocalizedString("Only when required by law or to protect user safety", comment: "Privacy policy - legal requirements description"))
+                PolicyRow(title: NSLocalizedString("Your Consent", comment: "Privacy policy - user consent sharing policy"), description: NSLocalizedString("With your explicit permission for specific purposes", comment: "Privacy policy - user consent description"))
+                PolicyRow(title: NSLocalizedString("Business Transfers", comment: "Privacy policy - business transfers sharing policy"), description: NSLocalizedString("In the event of a merger or acquisition, with user notification", comment: "Privacy policy - business transfers description"))
             } header: {
-                Text("Information Sharing".localized)
+                Text(NSLocalizedString("Information Sharing", comment: "Privacy policy - information sharing section header"))
             }
             
             Section {
-                PolicyRow(title: "Data Encryption".localized, description: "All data is encrypted during transmission and storage".localized)
-                PolicyRow(title: "Secure Authentication".localized, description: "Strong password requirements and optional biometric security".localized)
-                PolicyRow(title: "Access Controls".localized, description: "Role-based permissions and data access limitations".localized)
-                PolicyRow(title: "Regular Security Reviews".localized, description: "Ongoing security assessments and updates".localized)
-                PolicyRow(title: "Incident Response".localized, description: "Prompt notification and response to any security issues".localized)
+                PolicyRow(title: NSLocalizedString("Data Encryption", comment: "Privacy policy - data encryption security measure"), description: NSLocalizedString("All data is encrypted during transmission and storage", comment: "Privacy policy - data encryption description"))
+                PolicyRow(title: NSLocalizedString("Secure Authentication", comment: "Privacy policy - secure authentication security measure"), description: NSLocalizedString("Strong password requirements and optional biometric security", comment: "Privacy policy - secure authentication description"))
+                PolicyRow(title: NSLocalizedString("Access Controls", comment: "Privacy policy - access controls security measure"), description: NSLocalizedString("Role-based permissions and data access limitations", comment: "Privacy policy - access controls description"))
+                PolicyRow(title: NSLocalizedString("Regular Security Reviews", comment: "Privacy policy - regular security reviews measure"), description: NSLocalizedString("Ongoing security assessments and updates", comment: "Privacy policy - regular security reviews description"))
+                PolicyRow(title: NSLocalizedString("Incident Response", comment: "Privacy policy - incident response security measure"), description: NSLocalizedString("Prompt notification and response to any security issues", comment: "Privacy policy - incident response description"))
             } header: {
-                Text("Security Measures".localized)
+                Text(NSLocalizedString("Security Measures", comment: "Privacy policy - security measures section header"))
             }
             
             Section {
-                PolicyRow(title: "Access Your Data".localized, description: "View and download your personal information anytime".localized)
-                PolicyRow(title: "Correct Information".localized, description: "Update or correct any inaccurate data through the app".localized)
-                PolicyRow(title: "Delete Your Data".localized, description: "Remove your account and associated data permanently".localized)
-                PolicyRow(title: "Data Portability".localized, description: "Export your data in standard, portable formats".localized)
-                PolicyRow(title: "Control Communications".localized, description: "Manage notification preferences and marketing communications".localized)
-                PolicyRow(title: "Withdraw Consent".localized, description: "Revoke previously given permissions at any time".localized)
+                PolicyRow(title: NSLocalizedString("Access Your Data", comment: "Privacy policy - access your data privacy right"), description: NSLocalizedString("View and download your personal information anytime", comment: "Privacy policy - access your data description"))
+                PolicyRow(title: NSLocalizedString("Correct Information", comment: "Privacy policy - correct information privacy right"), description: NSLocalizedString("Update or correct any inaccurate data through the app", comment: "Privacy policy - correct information description"))
+                PolicyRow(title: NSLocalizedString("Delete Your Data", comment: "Privacy policy - delete your data privacy right"), description: NSLocalizedString("Remove your account and associated data permanently", comment: "Privacy policy - delete your data description"))
+                PolicyRow(title: NSLocalizedString("Data Portability", comment: "Privacy policy - data portability privacy right"), description: NSLocalizedString("Export your data in standard, portable formats", comment: "Privacy policy - data portability description"))
+                PolicyRow(title: NSLocalizedString("Control Communications", comment: "Privacy policy - control communications privacy right"), description: NSLocalizedString("Manage notification preferences and marketing communications", comment: "Privacy policy - control communications description"))
+                PolicyRow(title: NSLocalizedString("Withdraw Consent", comment: "Privacy policy - withdraw consent privacy right"), description: NSLocalizedString("Revoke previously given permissions at any time", comment: "Privacy policy - withdraw consent description"))
             } header: {
-                Text("Your Privacy Rights".localized)
+                Text(NSLocalizedString("Your Privacy Rights", comment: "Privacy policy - your privacy rights section header"))
             }
             
             Section {
-                PolicyRow(title: "No Payment Storage".localized, description: "We do not store credit card or banking information".localized)
-                PolicyRow(title: "App Store Processing".localized, description: "All payments are securely processed by Apple".localized)
-                PolicyRow(title: "Purchase Verification".localized, description: "We may verify purchases through Apple's secure servers".localized)
-                PolicyRow(title: "Subscription Management".localized, description: "Billing history is maintained by Apple, not BandSync".localized)
+                PolicyRow(title: NSLocalizedString("No Payment Storage", comment: "Privacy policy - no payment storage policy"), description: NSLocalizedString("We do not store credit card or banking information", comment: "Privacy policy - no payment storage description"))
+                PolicyRow(title: NSLocalizedString("App Store Processing", comment: "Privacy policy - app store processing policy"), description: NSLocalizedString("All payments are securely processed by Apple", comment: "Privacy policy - app store processing description"))
+                PolicyRow(title: NSLocalizedString("Purchase Verification", comment: "Privacy policy - purchase verification policy"), description: NSLocalizedString("We may verify purchases through Apple's secure servers", comment: "Privacy policy - purchase verification description"))
+                PolicyRow(title: NSLocalizedString("Subscription Management", comment: "Privacy policy - subscription management policy"), description: NSLocalizedString("Billing history is maintained by Apple, not BandSync", comment: "Privacy policy - subscription management description"))
             } header: {
-                Text("Payment Information".localized)
-            }
-            
-            Section {
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Age Requirements".localized)
-                        .font(.body)
-                        .fontWeight(.bold)
-                    
-                    Text("BandSync is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13.".localized)
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                    
-                    Text("Parental Responsibility".localized)
-                        .font(.body)
-                        .fontWeight(.bold)
-                    
-                    Text("If you believe a child under 13 has provided us with personal information, please contact us immediately so we can delete it.".localized)
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                }
-            } header: {
-                Text("Children's Privacy".localized)
+                Text(NSLocalizedString("Payment Information", comment: "Privacy policy - payment information section header"))
             }
             
             Section {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Policy Updates".localized)
+                    Text(NSLocalizedString("Age Requirements", comment: "Privacy policy - age requirements title"))
                         .font(.body)
                         .fontWeight(.bold)
                     
-                    Text("We may update this privacy policy periodically to reflect changes in our practices or legal requirements. We will notify users of significant changes through the app.".localized)
+                    Text(NSLocalizedString("BandSync is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13.", comment: "Privacy policy - age requirements description"))
                         .font(.body)
                         .foregroundColor(.secondary)
                     
-                    Text("Continued Use".localized)
+                    Text(NSLocalizedString("Parental Responsibility", comment: "Privacy policy - parental responsibility title"))
                         .font(.body)
                         .fontWeight(.bold)
                     
-                    Text("Your continued use of BandSync after policy updates constitutes acceptance of the revised terms.".localized)
+                    Text(NSLocalizedString("If you believe a child under 13 has provided us with personal information, please contact us immediately so we can delete it.", comment: "Privacy policy - parental responsibility description"))
                         .font(.body)
                         .foregroundColor(.secondary)
                 }
             } header: {
-                Text("Policy Changes".localized)
+                Text(NSLocalizedString("Children's Privacy", comment: "Privacy policy - children's privacy section header"))
             }
             
             Section {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Best Efforts Commitment".localized)
+                    Text(NSLocalizedString("Policy Updates", comment: "Privacy policy - policy updates title"))
                         .font(.body)
                         .fontWeight(.bold)
                     
-                    Text("We are committed to protecting your privacy and implement industry-standard security measures. However, no system is completely secure, and we cannot guarantee absolute security.".localized)
+                    Text(NSLocalizedString("We may update this privacy policy periodically to reflect changes in our practices or legal requirements. We will notify users of significant changes through the app.", comment: "Privacy policy - policy updates description"))
                         .font(.body)
                         .foregroundColor(.secondary)
                     
-                    Text("Data Backup Recommendation".localized)
+                    Text(NSLocalizedString("Continued Use", comment: "Privacy policy - continued use title"))
                         .font(.body)
                         .fontWeight(.bold)
                     
-                    Text("We recommend maintaining your own backups of important data. While we strive to protect and preserve your information, technical issues can occasionally occur.".localized)
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                    
-                    Text("Third-Party Services".localized)
-                        .font(.body)
-                        .fontWeight(.bold)
-                    
-                    Text("While we carefully select trusted partners, we cannot control the privacy practices of third-party services. Please review their privacy policies as well.".localized)
+                    Text(NSLocalizedString("Your continued use of BandSync after policy updates constitutes acceptance of the revised terms.", comment: "Privacy policy - continued use description"))
                         .font(.body)
                         .foregroundColor(.secondary)
                 }
             } header: {
-                Text("Important Notices".localized)
+                Text(NSLocalizedString("Policy Changes", comment: "Privacy policy - policy changes section header"))
+            }
+            
+            Section {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(NSLocalizedString("Best Efforts Commitment", comment: "Privacy policy - best efforts commitment title"))
+                        .font(.body)
+                        .fontWeight(.bold)
+                    
+                    Text(NSLocalizedString("We are committed to protecting your privacy and implement industry-standard security measures. However, no system is completely secure, and we cannot guarantee absolute security.", comment: "Privacy policy - best efforts commitment description"))
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                    
+                    Text(NSLocalizedString("Data Backup Recommendation", comment: "Privacy policy - data backup recommendation title"))
+                        .font(.body)
+                        .fontWeight(.bold)
+                    
+                    Text(NSLocalizedString("We recommend maintaining your own backups of important data. While we strive to protect and preserve your information, technical issues can occasionally occur.", comment: "Privacy policy - data backup recommendation description"))
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                    
+                    Text(NSLocalizedString("Third-Party Services", comment: "Privacy policy - third-party services title"))
+                        .font(.body)
+                        .fontWeight(.bold)
+                    
+                    Text(NSLocalizedString("While we carefully select trusted partners, we cannot control the privacy practices of third-party services. Please review their privacy policies as well.", comment: "Privacy policy - third-party services description"))
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                }
+            } header: {
+                Text(NSLocalizedString("Important Notices", comment: "Privacy policy - important notices section header"))
             } footer: {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Last updated: January 2025".localized)
+                    Text(NSLocalizedString("Last updated: January 2025", comment: "Privacy policy - last updated footer"))
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text("For privacy-related questions, please contact our support team through the app.".localized)
+                    Text(NSLocalizedString("For privacy-related questions, please contact our support team through the app.", comment: "Privacy policy - contact support footer"))
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text("We are committed to transparency and protecting your personal information.".localized)
+                    Text(NSLocalizedString("We are committed to transparency and protecting your personal information.", comment: "Privacy policy - commitment footer"))
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
                 .padding(.top, 8)
             }
         }
-        .navigationTitle("Privacy Policy".localized)
+        .navigationTitle(NSLocalizedString("Privacy Policy", comment: "Navigation title for privacy policy view"))
         .navigationBarTitleDisplayMode(.large)
     }
 }

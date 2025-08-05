@@ -11,7 +11,7 @@ struct CalendarViewWrapper: View {
                     if let event = EventService.shared.events.first(where: { $0.id == eventId }) {
                         EventDetailView(event: event)
                     } else {
-                        Text("Event not found".localized)
+                        Text(NSLocalizedString("Event not found", comment: "Event not found message"))
                             .foregroundColor(.secondary)
                     }
                 }
@@ -94,7 +94,7 @@ struct CalendarView: View {
             // Events List
             if eventsForSelectedDate().isEmpty {
                 Spacer()
-                Text("No events for selected date".localized)
+                Text(NSLocalizedString("No events for selected date", comment: "No events for selected date message"))
                     .foregroundColor(.secondary)
                     .padding()
                     .background(Color(UIColor.secondarySystemBackground))
@@ -127,7 +127,7 @@ struct CalendarView: View {
             }
         }
         .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
-        .navigationTitle("Calendar".localized)
+        .navigationTitle(NSLocalizedString("Calendar", comment: "Calendar navigation title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -172,11 +172,11 @@ struct CalendarView: View {
         let mod10 = count % 10
         let mod100 = count % 100
         if mod10 == 1 && mod100 != 11 {
-            return "event".localized
+            return NSLocalizedString("event", comment: "Single event label")
         } else if mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20) {
-            return "events".localized
+            return NSLocalizedString("events", comment: "Multiple events label")
         } else {
-            return "events".localized
+            return NSLocalizedString("events", comment: "Multiple events label")
         }
     }
 }

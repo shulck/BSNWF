@@ -27,12 +27,12 @@ struct PhoneVerificationView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 20) {
-                Text("Phone Verification".localized)
+                Text(NSLocalizedString("Phone Verification", comment: ""))
                     .font(.title.bold())
                     .foregroundColor(.white)
                     .padding(.top)
 
-                TextField("Phone number".localized, text: $phoneNumber)
+                TextField(NSLocalizedString("Phone number", comment: ""), text: $phoneNumber)
                     .keyboardType(.phonePad)
                     .padding()
                     .background(Color.white.opacity(0.1))
@@ -47,7 +47,7 @@ struct PhoneVerificationView: View {
                 Button(action: sendCode) {
                     HStack {
                         Image(systemName: "paperplane.fill")
-                        Text("Send Code".localized)
+                        Text(NSLocalizedString("Send Code", comment: ""))
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -58,7 +58,7 @@ struct PhoneVerificationView: View {
                 }
 
                 if verificationID != nil {
-                    TextField("SMS code".localized, text: $verificationCode)
+                    TextField(NSLocalizedString("SMS code", comment: ""), text: $verificationCode)
                         .keyboardType(.numberPad)
                         .padding()
                         .background(Color.white.opacity(0.1))
@@ -73,7 +73,7 @@ struct PhoneVerificationView: View {
                     Button(action: verifyCode) {
                         HStack {
                             Image(systemName: "checkmark.circle.fill")
-                            Text("Verify".localized)
+                            Text(NSLocalizedString("Verify", comment: ""))
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -93,7 +93,7 @@ struct PhoneVerificationView: View {
                 }
 
                 if isVerified {
-                    Text("Phone verified ✅".localized)
+                    Text(NSLocalizedString("Phone verified ✅", comment: ""))
                         .foregroundColor(.green)
                         .fontWeight(.medium)
                         .padding(.top, 8)

@@ -19,7 +19,7 @@ struct ForgotPasswordView: View {
                 Spacer()
 
                 VStack(spacing: 20) {
-                    Text("Password Reset".localized)
+                    Text(NSLocalizedString("Password Reset", comment: ""))
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -31,12 +31,12 @@ struct ForgotPasswordView: View {
                             .frame(width: 60, height: 60)
                             .foregroundColor(.green)
 
-                        Text("Password Reset Email Sent".localized)
+                        Text(NSLocalizedString("Password Reset Email Sent", comment: ""))
                             .font(.title3)
                             .fontWeight(.semibold)
                             .foregroundColor(.green)
 
-                        Text("You can now reset your password using the email sent to:".localized)
+                        Text(NSLocalizedString("You can now reset your password using the email sent to:", comment: ""))
                             .font(.subheadline)
                             .multilineTextAlignment(.center)
                             .foregroundColor(.white.opacity(0.8))
@@ -47,19 +47,19 @@ struct ForgotPasswordView: View {
                             .multilineTextAlignment(.center)
                             .foregroundColor(.white)
 
-                        Text("After resetting your password, log in again using your new credentials.".localized)
+                        Text(NSLocalizedString("After resetting your password, log in again using your new credentials.", comment: ""))
                             .font(.body)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 20)
                             .foregroundColor(.white.opacity(0.8))
 
                     } else {
-                        Text("Enter your email to receive password reset instructions.".localized)
+                        Text(NSLocalizedString("Enter your email to receive password reset instructions.", comment: ""))
                             .font(.subheadline)
                             .multilineTextAlignment(.center)
                             .foregroundColor(.white.opacity(0.8))
 
-                        TextField("Email".localized, text: $viewModel.email)
+                        TextField(NSLocalizedString("Email", comment: ""), text: $viewModel.email)
                             .onChange(of: viewModel.email) {
                                 viewModel.errorMessage = nil
                             }
@@ -86,7 +86,7 @@ struct ForgotPasswordView: View {
                         }) {
                             HStack {
                                 Image(systemName: "key.fill")
-                                Text("Reset Password".localized)
+                                Text(NSLocalizedString("Reset Password", comment: ""))
                             }
                             .frame(maxWidth: .infinity)
                             .padding()
@@ -112,7 +112,7 @@ struct ForgotPasswordView: View {
                     }) {
                         HStack {
                             Image(systemName: "arrow.left")
-                            Text("Back to Login".localized)
+                            Text(NSLocalizedString("Back to Login", comment: ""))
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -145,11 +145,11 @@ struct ForgotPasswordView: View {
 
     private func validateEmail() -> Bool {
         if viewModel.email.isEmpty {
-            viewModel.errorMessage = "Email cannot be empty.".localized
+            viewModel.errorMessage = NSLocalizedString("Email cannot be empty.", comment: "")
             return false
         }
         if !isValidEmail(viewModel.email) {
-            viewModel.errorMessage = "Invalid email format.".localized
+            viewModel.errorMessage = NSLocalizedString("Invalid email format.", comment: "")
             return false
         }
         viewModel.errorMessage = nil

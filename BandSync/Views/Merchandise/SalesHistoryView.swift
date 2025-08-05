@@ -17,7 +17,7 @@ struct SalesHistoryView: View {
                             Image(systemName: "bag")
                                 .font(.system(size: 64))
                                 .foregroundColor(.gray)
-                            Text("No Sales History".localized)
+                            Text(NSLocalizedString("No Sales History", comment: "Message when no sales history"))
                                 .foregroundColor(.gray)
                         }
                         Spacer()
@@ -36,12 +36,12 @@ struct SalesHistoryView: View {
                                         .foregroundColor(.primary)
 
                                     if item.category == .clothing {
-                                        Text(String.localizedStringWithFormat("Size: %@".localized, sale.size))
+                                        Text(String.localizedStringWithFormat(NSLocalizedString("Size: %@", comment: "Size label with value"), sale.size))
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
                                     }
 
-                                    Text(String.localizedStringWithFormat("Channel: %@".localized, sale.channel.rawValue.localized))
+                                    Text(String.localizedStringWithFormat(NSLocalizedString("Channel: %@", comment: "Channel label with value"), sale.channel.localizedName))
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
@@ -49,7 +49,7 @@ struct SalesHistoryView: View {
                                 Spacer()
 
                                 VStack(alignment: .trailing, spacing: 4) {
-                                    Text(String.localizedStringWithFormat("%d pcs.".localized, sale.quantity))
+                                    Text(String.localizedStringWithFormat(NSLocalizedString("%d pcs.", comment: "Quantity in pieces"), sale.quantity))
                                         .font(.headline)
 
                                     Text("\(saleAmount(sale), specifier: "%.2f") EUR")
@@ -61,11 +61,11 @@ struct SalesHistoryView: View {
                     }
                 }
             }
-            .navigationTitle("Sales History".localized)
+            .navigationTitle(NSLocalizedString("Sales History", comment: "Sales history navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Close".localized) {
+                    Button(NSLocalizedString("Close", comment: "Close button")) {
                         dismiss()
                     }
                 }

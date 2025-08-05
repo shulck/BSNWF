@@ -48,7 +48,7 @@ struct EditMerchView: View {
         NavigationView {
             Form {
                 // Item images
-                Section(header: Text("Images".localized)) {
+                Section(header: Text(NSLocalizedString("Images", comment: "Header for merchandise images section"))) {
                     // Show existing images
                     if !existingImageUrls.isEmpty || !merchImages.isEmpty {
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -116,7 +116,7 @@ struct EditMerchView: View {
                                 .font(.system(size: 16))
                                 .foregroundColor(.blue)
                             
-                            Text("Add more images".localized)
+                            Text(NSLocalizedString("Add more images", comment: "Button to add more merchandise images"))
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.blue)
                         }
@@ -131,12 +131,12 @@ struct EditMerchView: View {
                 }
 
                 // Basic information
-                Section(header: Text("Item Information".localized)) {
-                    TextField("Name".localized, text: $name)
+                Section(header: Text(NSLocalizedString("Item Information", comment: "Header for basic merchandise item information section"))) {
+                    TextField(NSLocalizedString("Name", comment: "Placeholder for merchandise item name field"), text: $name)
                     
                     ZStack(alignment: .topLeading) {
                         if description.isEmpty {
-                            Text("Description".localized)
+                            Text(NSLocalizedString("Description", comment: "Placeholder for merchandise item description field"))
                                 .foregroundColor(.gray.opacity(0.8))
                                 .padding(.top, 8)
                                 .padding(.leading, 4)
@@ -146,10 +146,10 @@ struct EditMerchView: View {
                             .frame(minHeight: 80)
                     }
                     
-                    TextField("Price (EUR)".localized, text: $price)
+                    TextField(NSLocalizedString("Price (EUR)", comment: "Placeholder for merchandise item price field in EUR"), text: $price)
                         .keyboardType(.decimalPad)
                     
-                    TextField("Cost (EUR, optional)".localized, text: $cost)
+                    TextField(NSLocalizedString("Cost (EUR, optional)", comment: "Placeholder for merchandise item cost field in EUR (optional)"), text: $cost)
                         .keyboardType(.decimalPad)
                     
                     if !cost.isEmpty && Double(cost) != nil && Double(price) != nil {
@@ -160,7 +160,7 @@ struct EditMerchView: View {
                             let margin = ((priceValue - costValue) / priceValue) * 100
                             
                             HStack {
-                                Text("Profit Margin".localized)
+                                Text(NSLocalizedString("Profit Margin", comment: "Label for calculated profit margin percentage"))
                                 Spacer()
                                 Text("\(margin, specifier: "%.1f")%")
                                     .foregroundColor(margin > 50 ? .green : .primary)
@@ -169,15 +169,15 @@ struct EditMerchView: View {
                         }
                     }
                     
-                    TextField("Low stock threshold".localized, text: $lowStockThreshold)
+                    TextField(NSLocalizedString("Low stock threshold", comment: "Placeholder for merchandise low stock threshold field"), text: $lowStockThreshold)
                         .keyboardType(.numberPad)
                 }
 
                 // Category and subcategory
-                Section(header: Text("Category".localized)) {
-                    Picker("Category".localized, selection: $category) {
+                Section(header: Text(NSLocalizedString("Category", comment: "Header for merchandise category section"))) {
+                    Picker(NSLocalizedString("Category", comment: "Label for merchandise category picker"), selection: $category) {
                         ForEach(MerchCategory.allCases) {
-                            Text($0.rawValue.localized).tag($0)
+                            Text($0.localizedName).tag($0)
                         }
                     }
                     .onChange(of: category) {
@@ -189,25 +189,25 @@ struct EditMerchView: View {
                         }
                     }
 
-                    Picker("Subcategory".localized, selection: $subcategory) {
-                        Text("Not Selected".localized).tag(Optional<MerchSubcategory>.none)
+                    Picker(NSLocalizedString("Subcategory", comment: "Label for merchandise subcategory picker"), selection: $subcategory) {
+                        Text(NSLocalizedString("Not Selected", comment: "Option for no subcategory selected")).tag(Optional<MerchSubcategory>.none)
                         ForEach(MerchSubcategory.subcategories(for: category), id: \.self) {
-                            Text($0.rawValue.localized).tag(Optional<MerchSubcategory>.some($0))
+                            Text($0.localizedName).tag(Optional<MerchSubcategory>.some($0))
                         }
                     }
                 }
                 
                 // Inventory
-                Section(header: Text("Inventory".localized)) {
+                Section(header: Text(NSLocalizedString("Inventory", comment: "Header for merchandise inventory section"))) {
                     HStack {
-                        TextField("SKU".localized, text: $sku)
+                        TextField(NSLocalizedString("SKU", comment: "Placeholder for merchandise SKU field"), text: $sku)
                         
                         Button(action: {
                             // Generate an SKU if not specified
                             let tempItem = createUpdatedItem()
                             sku = tempItem.generateSKU()
                         }) {
-                            Text("Generate".localized)
+                            Text(NSLocalizedString("Generate", comment: "Button to generate SKU automatically"))
                                 .font(.caption)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
@@ -218,15 +218,15 @@ struct EditMerchView: View {
                 }
 
                 // Stock by sizes or quantity
-                Section(header: Text(category == .clothing ? "Stock by sizes".localized : "Item quantity".localized)) {
+                Section(header: Text(category == .clothing ? NSLocalizedString("Stock by sizes", comment: "Header for clothing stock by sizes") : NSLocalizedString("Item quantity", comment: "Header for general item quantity"))) {
                     if category == .clothing {
-                        Stepper(String.localizedStringWithFormat("S: %d".localized, stock.S), value: $stock.S, in: 0...999)
-                        Stepper(String.localizedStringWithFormat("M: %d".localized, stock.M), value: $stock.M, in: 0...999)
-                        Stepper(String.localizedStringWithFormat("L: %d".localized, stock.L), value: $stock.L, in: 0...999)
-                        Stepper(String.localizedStringWithFormat("XL: %d".localized, stock.XL), value: $stock.XL, in: 0...999)
-                        Stepper(String.localizedStringWithFormat("XXL: %d".localized, stock.XXL), value: $stock.XXL, in: 0...999)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("S: %d", comment: "Small size stock counter with quantity"), stock.S), value: $stock.S, in: 0...999)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("M: %d", comment: "Medium size stock counter with quantity"), stock.M), value: $stock.M, in: 0...999)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("L: %d", comment: "Large size stock counter with quantity"), stock.L), value: $stock.L, in: 0...999)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("XL: %d", comment: "Extra Large size stock counter with quantity"), stock.XL), value: $stock.XL, in: 0...999)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("XXL: %d", comment: "Double Extra Large size stock counter with quantity"), stock.XXL), value: $stock.XXL, in: 0...999)
                     } else {
-                        Stepper(String.localizedStringWithFormat("Quantity: %d".localized, stock.S), value: $stock.S, in: 0...999)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("Quantity: %d", comment: "General item quantity counter"), stock.S), value: $stock.S, in: 0...999)
                     }
                 }
                 
@@ -237,24 +237,24 @@ struct EditMerchView: View {
                     } label: {
                         HStack {
                             Spacer()
-                            Text("Delete Item".localized)
+                            Text(NSLocalizedString("Delete Item", comment: "Button to delete merchandise item"))
                             Spacer()
                         }
                     }
                 }
             }
-            .navigationTitle("Edit Item".localized)
+            .navigationTitle(NSLocalizedString("Edit Item", comment: "Navigation title for edit merchandise item screen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save".localized) {
+                    Button(NSLocalizedString("Save", comment: "Button to save merchandise item changes")) {
                         saveChanges()
                     }
                     .disabled(isUploading || !isFormValid)
                 }
 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized, role: .cancel) {
+                    Button(NSLocalizedString("Cancel", comment: "Button to cancel merchandise item editing"), role: .cancel) {
                         dismiss()
                     }
                 }
@@ -262,7 +262,7 @@ struct EditMerchView: View {
             .overlay(
                 Group {
                     if isUploading {
-                        ProgressView("Saving...".localized)
+                        ProgressView(NSLocalizedString("Saving...", comment: "Progress indicator when saving merchandise item"))
                             .progressViewStyle(CircularProgressViewStyle())
                             .padding()
                             .background(Color.white.opacity(0.8))
@@ -272,18 +272,18 @@ struct EditMerchView: View {
             )
             .alert(isPresented: $showError) {
                 Alert(
-                    title: Text("Error".localized),
-                    message: Text(errorMessage ?? "An unknown error occurred".localized),
-                    dismissButton: .default(Text("OK".localized))
+                    title: Text(NSLocalizedString("Error", comment: "Error alert title")),
+                    message: Text(errorMessage ?? NSLocalizedString("An unknown error occurred", comment: "Generic error message when error is unknown")),
+                    dismissButton: .default(Text(NSLocalizedString("OK", comment: "OK button in alert")))
                 )
             }
-            .alert("Delete Item".localized, isPresented: $showDeleteAlert) {
-                Button("Cancel".localized, role: .cancel) { }
-                Button("Delete".localized, role: .destructive) {
+            .alert(NSLocalizedString("Delete Item", comment: "Alert title for deleting merchandise item"), isPresented: $showDeleteAlert) {
+                Button(NSLocalizedString("Cancel", comment: "Cancel button in delete confirmation alert"), role: .cancel) { }
+                Button(NSLocalizedString("Delete", comment: "Delete button in delete confirmation alert"), role: .destructive) {
                     deleteItem()
                 }
             } message: {
-                Text("Are you sure you want to delete this item? This action cannot be undone.".localized)
+                Text(NSLocalizedString("Are you sure you want to delete this item? This action cannot be undone.", comment: "Confirmation message for deleting merchandise item"))
             }
         }
         .onAppear {
@@ -392,7 +392,7 @@ struct EditMerchView: View {
                                 if success {
                                     self.dismiss()
                                 } else {
-                                    self.errorMessage = "Failed to save changes".localized
+                                    self.errorMessage = NSLocalizedString("Failed to save changes", comment: "Error message when saving merchandise item fails")
                                     self.showError = true
                                 }
                             }
@@ -400,7 +400,7 @@ struct EditMerchView: View {
                         
                     case .failure(let error):
                         self.isUploading = false
-                        self.errorMessage = "Error uploading images: \(error.localizedDescription)".localized
+                        self.errorMessage = NSLocalizedString("Error uploading images: \(error.localizedDescription)", comment: "Error message when image upload fails")
                         self.showError = true
                     }
                 }
@@ -418,7 +418,7 @@ struct EditMerchView: View {
                     if success {
                         self.dismiss()
                     } else {
-                        self.errorMessage = "Failed to save changes".localized
+                        self.errorMessage = NSLocalizedString("Failed to save changes", comment: "Error message when saving merchandise item fails")
                         self.showError = true
                     }
                 }
@@ -436,7 +436,7 @@ struct EditMerchView: View {
                 if success {
                     self.dismiss()
                 } else {
-                    self.errorMessage = "Failed to delete item".localized
+                    self.errorMessage = NSLocalizedString("Failed to delete item", comment: "Error message when deleting merchandise item fails")
                     self.showError = true
                 }
             }

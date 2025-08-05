@@ -55,7 +55,7 @@ struct SetlistView: View {
                 setlistsGridView
             }
         }
-        .navigationTitle("Setlists".localized)
+        .navigationTitle(NSLocalizedString("Setlists", comment: "Navigation title for setlists screen"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -94,12 +94,12 @@ struct SetlistView: View {
             }
             
             VStack(spacing: 12) {
-                Text("Your stage awaits".localized)
+                Text(NSLocalizedString("Your stage awaits", comment: "Empty state message for setlists"))
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 
-                Text("Create first setlist".localized)
+                Text(NSLocalizedString("Create first setlist", comment: "Instruction to create first setlist"))
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -109,7 +109,7 @@ struct SetlistView: View {
             Button(action: { showAdd = true }) {
                 HStack(spacing: 8) {
                     Image(systemName: "plus.circle.fill")
-                    Text("Create Setlist".localized)
+                    Text(NSLocalizedString("Create Setlist", comment: "Button to create new setlist"))
                 }
                 .font(.headline)
                 .foregroundColor(.white)
@@ -131,7 +131,7 @@ struct SetlistView: View {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.secondary)
             
-            TextField("Search setlists...".localized, text: $searchText)
+            TextField(NSLocalizedString("Search setlists...", comment: "Placeholder for setlist search field"), text: $searchText)
                 .textFieldStyle(PlainTextFieldStyle())
         }
         .padding(.horizontal, 16)
@@ -238,7 +238,7 @@ struct SetlistCardView: View {
                         }
                         
                         if setlist.songs.count > 2 {
-                            Text(String(format: "Plus more".localized, setlist.songs.count - 2))
+                            Text(String(format: NSLocalizedString("Plus more", comment: "Text showing additional songs count"), setlist.songs.count - 2))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.leading, 10)
@@ -261,13 +261,13 @@ struct SetlistCardView: View {
         .background(Color(.systemBackground))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
-        .alert("Delete Setlist".localized, isPresented: $showDeleteAlert) {
-            Button("Cancel".localized, role: .cancel) { }
-            Button("Delete".localized, role: .destructive) {
+        .alert(NSLocalizedString("Delete Setlist", comment: "Alert title for deleting setlist"), isPresented: $showDeleteAlert) {
+            Button(NSLocalizedString("Cancel", comment: "Cancel button in delete setlist alert"), role: .cancel) { }
+            Button(NSLocalizedString("Delete", comment: "Delete button in delete setlist alert"), role: .destructive) {
                 onDelete()
             }
         } message: {
-            Text("Are you sure you want to delete this setlist? This action cannot be undone.".localized)
+            Text(NSLocalizedString("Are you sure you want to delete this setlist? This action cannot be undone.", comment: "Confirmation message for deleting setlist"))
         }
     }
 }

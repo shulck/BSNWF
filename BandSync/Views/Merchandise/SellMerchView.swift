@@ -23,38 +23,38 @@ struct SellMerchView: View {
             Form {
                 // Show sizes only for clothing
                 if item.category == .clothing {
-                    Section("Size".localized) {
-                        Picker("Size".localized, selection: $size) {
+                    Section(NSLocalizedString("Size", comment: "Section header for merchandise size selection")) {
+                        Picker(NSLocalizedString("Size", comment: "Picker label for merchandise size selection"), selection: $size) {
                             // Show only sizes that are in stock
                             if item.stock.S > 0 {
-                                Text(String.localizedStringWithFormat("S (%d available)".localized, item.stock.S)).tag("S")
+                                Text(String.localizedStringWithFormat(NSLocalizedString("S (%d available)", comment: "Size S with available quantity"), item.stock.S)).tag("S")
                             }
                             if item.stock.M > 0 {
-                                Text(String.localizedStringWithFormat("M (%d available)".localized, item.stock.M)).tag("M")
+                                Text(String.localizedStringWithFormat(NSLocalizedString("M (%d available)", comment: "Size M with available quantity"), item.stock.M)).tag("M")
                             }
                             if item.stock.L > 0 {
-                                Text(String.localizedStringWithFormat("L (%d available)".localized, item.stock.L)).tag("L")
+                                Text(String.localizedStringWithFormat(NSLocalizedString("L (%d available)", comment: "Size L with available quantity"), item.stock.L)).tag("L")
                             }
                             if item.stock.XL > 0 {
-                                Text(String.localizedStringWithFormat("XL (%d available)".localized, item.stock.XL)).tag("XL")
+                                Text(String.localizedStringWithFormat(NSLocalizedString("XL (%d available)", comment: "Size XL with available quantity"), item.stock.XL)).tag("XL")
                             }
                             if item.stock.XXL > 0 {
-                                Text(String.localizedStringWithFormat("XXL (%d available)".localized, item.stock.XXL)).tag("XXL")
+                                Text(String.localizedStringWithFormat(NSLocalizedString("XXL (%d available)", comment: "Size XXL with available quantity"), item.stock.XXL)).tag("XXL")
                             }
                         }
                         .pickerStyle(SegmentedPickerStyle())
                         
                         if !hasAvailableSizes {
-                            Text("No Sizes Available".localized)
+                            Text(NSLocalizedString("No Sizes Available", comment: "Message when no sizes are available for clothing"))
                                 .foregroundColor(.red)
                                 .font(.caption)
                         }
                     }
                 } else {
                     // For non-clothing show available quantity
-                    Section("Stock".localized) {
+                    Section(NSLocalizedString("Stock", comment: "Section header for merchandise stock information")) {
                         HStack {
-                            Text("Available quantity:".localized)
+                            Text(NSLocalizedString("Available quantity:", comment: "Label for available quantity"))
                             Spacer()
                             Text("\(item.totalStock)")
                                 .foregroundColor(item.totalStock > 0 ? .green : .red)
@@ -62,36 +62,36 @@ struct SellMerchView: View {
                         }
                         
                         if item.totalStock == 0 {
-                            Text("Item Out Of Stock".localized)
+                            Text(NSLocalizedString("Item Out Of Stock", comment: "Message when item is out of stock"))
                                 .foregroundColor(.red)
                                 .font(.caption)
                         }
                     }
                 }
 
-                Section("Quantity".localized) {
+                Section(NSLocalizedString("Quantity", comment: "Section header for merchandise quantity selection")) {
                     // FIXED: Safe range for Stepper
                     let safeRange = maxAvailableQuantity > 0 ? 1...maxAvailableQuantity : 0...0
                     
                     if maxAvailableQuantity > 0 {
-                        Stepper(String.localizedStringWithFormat("Quantity: %d".localized, quantity), value: $quantity, in: safeRange)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("Quantity: %d", comment: "Stepper label for quantity with count"), quantity), value: $quantity, in: safeRange)
                         
-                        Text(String.localizedStringWithFormat("Maximum available: %d".localized, maxAvailableQuantity))
+                        Text(String.localizedStringWithFormat(NSLocalizedString("Maximum available: %d", comment: "Information about maximum available quantity"), maxAvailableQuantity))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
                         HStack {
-                            Text(String.localizedStringWithFormat("Quantity: %d".localized, quantity))
+                            Text(String.localizedStringWithFormat(NSLocalizedString("Quantity: %d", comment: "Quantity label with count"), quantity))
                             Spacer()
-                            Text("Out Of Stock".localized)
+                            Text(NSLocalizedString("Out Of Stock", comment: "Out of stock message"))
                                 .foregroundColor(.red)
                                 .font(.caption)
                         }
                     }
                 }
 
-                Section("Sale Type".localized) {
-                    Toggle("This is a gift".localized, isOn: $isGift)
+                Section(NSLocalizedString("Sale Type", comment: "Section header for sale type selection")) {
+                    Toggle(NSLocalizedString("This is a gift", comment: "Toggle label to mark sale as gift"), isOn: $isGift)
                         .disabled(maxAvailableQuantity == 0) // Disable if no stock
                         .onChange(of: isGift) { oldValue, newValue in
                             if newValue {
@@ -102,9 +102,9 @@ struct SellMerchView: View {
                         }
 
                     if !isGift {
-                        Picker("Sales channel".localized, selection: $channel) {
+                        Picker(NSLocalizedString("Sales channel", comment: "Picker label for sales channel selection"), selection: $channel) {
                             ForEach(MerchSaleChannel.allCases.filter { $0 != .gift }, id: \.self) { channel in
-                                Text(channel.rawValue.localized).tag(channel)
+                                Text(channel.localizedName).tag(channel)
                             }
                         }
                         .disabled(maxAvailableQuantity == 0) // Disable if no stock
@@ -112,36 +112,36 @@ struct SellMerchView: View {
                 }
                 
                 // Show sale total information
-                Section("Total".localized) {
+                Section(NSLocalizedString("Total", comment: "Section header for sale total")) {
                     if !isGift {
                         HStack {
-                            Text("Total".localized)
+                            Text(NSLocalizedString("Total", comment: "Label for total amount"))
                             Spacer()
                             Text("\(Double(quantity) * item.price, specifier: "%.2f") EUR")
                                 .bold()
                         }
                     } else {
                         HStack {
-                            Text("Total".localized)
+                            Text(NSLocalizedString("Total", comment: "Label for total amount"))
                             Spacer()
-                            Text("Gift".localized)
+                            Text(NSLocalizedString("Gift", comment: "Gift label for total"))
                                 .bold()
                                 .foregroundColor(.green)
                         }
                     }
                 }
             }
-            .navigationTitle(isGift ? "Gift item".localized : "Sale".localized)
+            .navigationTitle(isGift ? NSLocalizedString("Gift item", comment: "Navigation title when gifting item") : NSLocalizedString("Sale", comment: "Navigation title for sale screen"))
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(isGift ? "Gift".localized : "Confirm".localized) {
+                    Button(isGift ? NSLocalizedString("Gift", comment: "Button to confirm gift") : NSLocalizedString("Confirm", comment: "Button to confirm sale")) {
                         recordSale()
                     }
                     .disabled(!canSell)
                 }
 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized, role: .cancel) {
+                    Button(NSLocalizedString("Cancel", comment: "Button to cancel sale"), role: .cancel) {
                         dismiss()
                     }
                 }

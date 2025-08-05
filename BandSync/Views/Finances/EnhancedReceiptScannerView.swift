@@ -73,11 +73,11 @@ struct EnhancedReceiptScannerView: View {
                     processingOverlay
                 }
             }
-            .navigationTitle("Scan Receipt".localized)
+            .navigationTitle(NSLocalizedString("Scan Receipt", comment: "Scan receipt navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
                         dismiss()
                     }
                     .disabled(isUploadingToFirebase)
@@ -101,7 +101,7 @@ struct EnhancedReceiptScannerView: View {
 
     private var uploadingView: some View {
         VStack(spacing: 12) {
-            Text("Uploading to cloud storage".localized)
+            Text(NSLocalizedString("Uploading to cloud storage", comment: "Uploading to cloud storage message"))
                 .font(.headline)
                 .foregroundColor(.blue)
             
@@ -122,36 +122,36 @@ struct EnhancedReceiptScannerView: View {
 
     private func resultsView(amount: Double) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Extracted Results".localized)
+            Text(NSLocalizedString("Extracted Results", comment: "Extracted results title"))
                 .font(.headline)
                 .foregroundColor(.green)
             
-            Text(String(format: "amount: €%.2f".localized, amount))
+            Text(String(format: NSLocalizedString("amount: €%.2f", comment: "Amount result format"), amount))
             
             if let merchant = extractedMerchant {
-                Text(String(format: "merchant: %@".localized, merchant))
+                Text(String(format: NSLocalizedString("merchant: %@", comment: "Merchant result format"), merchant))
             }
             
             if let category = extractedCategory {
-                Text(String(format: "category: %@".localized, category))
+                Text(String(format: NSLocalizedString("category: %@", comment: "Category result format"), category))
             }
             
             if isUploadingToFirebase {
-                Text("Uploading receipt to cloud storage".localized)
+                Text(NSLocalizedString("Uploading receipt to cloud storage", comment: "Uploading receipt message"))
                     .font(.caption)
                     .foregroundColor(.blue)
                     .padding(.top, 8)
             } else {
-                Text("Scanner will close automatically".localized)
+                Text(NSLocalizedString("Scanner will close automatically", comment: "Scanner auto-close message"))
                     .font(.caption)
                     .foregroundColor(.blue)
                     .padding(.top, 8)
                 
-                Text("Or use manual save".localized)
+                Text(NSLocalizedString("Or use manual save", comment: "Manual save option message"))
                     .font(.caption)
                     .foregroundColor(.orange)
                 
-                Button("Manual Save".localized) {
+                Button(NSLocalizedString("Manual Save", comment: "Manual save button")) {
                     forceSaveTransaction()
                 }
                 .padding()
@@ -177,7 +177,7 @@ struct EnhancedReceiptScannerView: View {
                     .scaleEffect(1.5)
                     .progressViewStyle(CircularProgressViewStyle(tint: .blue))
                 
-                Text("Analyzing receipt".localized)
+                Text(NSLocalizedString("Analyzing receipt", comment: "Analyzing receipt progress message"))
                     .font(.headline)
                     .foregroundColor(.primary)
             }
@@ -197,7 +197,7 @@ struct EnhancedReceiptScannerView: View {
             }) {
                 HStack {
                     Image(systemName: "camera")
-                    Text("Scan with Camera".localized)
+                    Text(NSLocalizedString("Scan with Camera", comment: "Scan with camera button"))
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
@@ -212,7 +212,7 @@ struct EnhancedReceiptScannerView: View {
             }) {
                 HStack {
                     Image(systemName: "photo")
-                    Text("Choose from Gallery".localized)
+                    Text(NSLocalizedString("Choose from Gallery", comment: "Choose from gallery button"))
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
@@ -276,7 +276,7 @@ struct EnhancedReceiptScannerView: View {
                     uploadReceiptImageToFirebase(recordId: recordId, detailsText: detailsText, receiptData: receiptData)
                 } else {
                     isProcessing = false
-                    errorMessage = "Failed to extract amount or groupId".localized
+                    errorMessage = NSLocalizedString("Failed to extract amount or groupId", comment: "Failed to extract amount or groupId error")
                 }
             }
         }
@@ -432,7 +432,7 @@ struct EnhancedReceiptScannerView: View {
                 if success {
                     dismiss()
                 } else {
-                    errorMessage = "Failed to save transaction".localized
+                    errorMessage = NSLocalizedString("Failed to save transaction", comment: "Failed to save transaction error")
                 }
             }
         }

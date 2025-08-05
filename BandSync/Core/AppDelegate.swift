@@ -53,6 +53,34 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
             options: [.customDismissAction]
         )
         
+        // Fan Chat Categories
+        let fanChatAction = UNNotificationAction(
+            identifier: "FAN_REPLY_ACTION",
+            title: "Reply",
+            options: [.foreground]
+        )
+        
+        let fanAnnouncementCategory = UNNotificationCategory(
+            identifier: "FAN_ANNOUNCEMENT",
+            actions: [markReadAction],
+            intentIdentifiers: [],
+            options: [.customDismissAction]
+        )
+        
+        let fanChatCategory = UNNotificationCategory(
+            identifier: "FAN_CHAT_MESSAGE",
+            actions: [fanChatAction, markReadAction],
+            intentIdentifiers: [],
+            options: [.customDismissAction]
+        )
+        
+        let mixedChatCategory = UNNotificationCategory(
+            identifier: "MIXED_CHAT_MESSAGE",
+            actions: [fanChatAction, markReadAction],
+            intentIdentifiers: [],
+            options: [.customDismissAction]
+        )
+        
         let taskCompleteAction = UNNotificationAction(
             identifier: "COMPLETE_TASK_ACTION",
             title: "Complete",
@@ -89,7 +117,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
             chatCategory,
             mentionCategory,
             taskCategory,
-            eventCategory
+            eventCategory,
+            fanAnnouncementCategory,
+            fanChatCategory,
+            mixedChatCategory
         ])
     }
     
@@ -159,6 +190,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         switch actionIdentifier {
         case "REPLY_ACTION":
             handleReplyAction(userInfo: userInfo)
+        case "FAN_REPLY_ACTION":
+            handleFanReplyAction(userInfo: userInfo)
         case "MARK_READ_ACTION":
             handleMarkReadAction(userInfo: userInfo)
         case "COMPLETE_TASK_ACTION":
@@ -247,6 +280,24 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         return GIDSignIn.sharedInstance.handle(url)
+    }
+    
+    // MARK: - Fan Chat Notification Handlers
+    
+    private func handleFanReplyAction(userInfo: [AnyHashable: Any]) {
+        guard let chatId = userInfo["fanChatId"] as? String,
+              let chatType = userInfo["fanChatType"] as? String else {
+            return
+        }
+        
+        // Navigate to fan chat
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(
+                name: NSNotification.Name("NavigateToFanChat"),
+                object: nil,
+                userInfo: ["chatId": chatId, "chatType": chatType]
+            )
+        }
     }
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {

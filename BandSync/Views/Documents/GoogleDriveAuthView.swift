@@ -16,11 +16,11 @@ struct GoogleDriveAuthView: View {
                         .foregroundColor(.blue)
                     
                     VStack(spacing: 8) {
-                        Text("connectGoogleDrive".localized)
+                        Text(NSLocalizedString("connectGoogleDrive", comment: "Connect Google Drive title"))
                             .font(.title)
                             .fontWeight(.bold)
                         
-                        Text("connectYourGoogleDriveAccountToSecurelyStore".localized)
+                        Text(NSLocalizedString("connectYourGoogleDriveAccountToSecurelyStore", comment: "Google Drive connection description"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -29,10 +29,10 @@ struct GoogleDriveAuthView: View {
                 
                 // Benefits
                 VStack(alignment: .leading, spacing: 12) {
-                    GoogleDriveFeatureRow(icon: "lock.shield", title: "secureStorage".localized, description: "yourDocumentsAreEncryptedAndSafelyStored".localized)
-                    GoogleDriveFeatureRow(icon: "person.2", title: "teamCollaboration".localized, description: "shareDocumentsWithBandMembers".localized)
-                    GoogleDriveFeatureRow(icon: "folder.badge.plus", title: "autoOrganization".localized, description: "automaticFoldersForEventsAndCategories".localized)
-                    GoogleDriveFeatureRow(icon: "iphone.and.arrow.forward", title: "accessAnywhere".localized, description: "viewDocumentsOnAnyDevice".localized)
+                    GoogleDriveFeatureRow(icon: "lock.shield", title: NSLocalizedString("secureStorage", comment: "Secure storage feature title"), description: NSLocalizedString("yourDocumentsAreEncryptedAndSafelyStored", comment: "Secure storage description"))
+                    GoogleDriveFeatureRow(icon: "person.2", title: NSLocalizedString("teamCollaboration", comment: "Team collaboration feature title"), description: NSLocalizedString("shareDocumentsWithBandMembers", comment: "Team collaboration description"))
+                    GoogleDriveFeatureRow(icon: "folder.badge.plus", title: NSLocalizedString("autoOrganization", comment: "Auto organization feature title"), description: NSLocalizedString("automaticFoldersForEventsAndCategories", comment: "Auto organization description"))
+                    GoogleDriveFeatureRow(icon: "iphone.and.arrow.forward", title: NSLocalizedString("accessAnywhere", comment: "Access anywhere feature title"), description: NSLocalizedString("viewDocumentsOnAnyDevice", comment: "Access anywhere description"))
                 }
                 .padding()
                 .background(Color(.systemGray6))
@@ -43,12 +43,12 @@ struct GoogleDriveAuthView: View {
                     HStack {
                         Image(systemName: "info.circle")
                             .foregroundColor(.blue)
-                        Text("afterConnection".localized)
+                        Text(NSLocalizedString("afterConnection", comment: "After connection info title"))
                             .font(.subheadline)
                             .fontWeight(.medium)
                     }
                     
-                    Text("youllSeeYourGoogleAccountEmailInTheDocumentsView".localized)
+                    Text(NSLocalizedString("youllSeeYourGoogleAccountEmailInTheDocumentsView", comment: "Google account email info"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -70,7 +70,7 @@ struct GoogleDriveAuthView: View {
                                 Image(systemName: "icloud")
                             }
                             
-                            Text(isAuthenticating ? "connecting".localized : "connectGoogleDrive".localized)
+                            Text(isAuthenticating ? NSLocalizedString("connecting", comment: "Connecting status") : NSLocalizedString("connectGoogleDrive", comment: "Connect Google Drive button"))
                                 .fontWeight(.medium)
                         }
                         .frame(maxWidth: .infinity)
@@ -81,28 +81,28 @@ struct GoogleDriveAuthView: View {
                     }
                     .disabled(isAuthenticating)
                     
-                    Button("maybeLater".localized) {
+                    Button(NSLocalizedString("maybeLater", comment: "Maybe later button")) {
                         dismiss()
                     }
                     .foregroundColor(.secondary)
                 }
             }
             .padding()
-            .navigationTitle("Google Drive".localized)
+            .navigationTitle(NSLocalizedString("Google Drive", comment: "Google Drive navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
                         dismiss()
                     }
                 }
             }
-            .alert("authenticationError".localized, isPresented: .constant(authError != nil)) {
-                Button("OK".localized) {
+            .alert(NSLocalizedString("authenticationError", comment: "Authentication error alert title"), isPresented: .constant(authError != nil)) {
+                Button(NSLocalizedString("OK", comment: "OK button")) {
                     authError = nil
                 }
             } message: {
-                Text(authError?.localizedDescription ?? "failedToConnectToGoogleDrive".localized)
+                Text(authError?.localizedDescription ?? NSLocalizedString("failedToConnectToGoogleDrive", comment: "Failed to connect error message"))
             }
         }
     }

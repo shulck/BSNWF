@@ -26,15 +26,15 @@ struct RegisterView: View {
 
                 VStack(spacing: 24) {
                     if !viewModel.isEmailVerificationSent && !emailVerified {
-                        Text("Create Account".localized)
+                        Text(NSLocalizedString("Create Account", comment: ""))
                             .font(.system(size: 28, weight: .bold))
                             .foregroundColor(.white)
 
                         Group {
-                            customStyledTextField("Full Name".localized, text: $viewModel.name)
-                            customStyledTextField("Email".localized, text: $viewModel.email, keyboardType: .emailAddress)
-                            customStyledSecureField("Password".localized, text: $viewModel.password)
-                            customStyledTextField("Phone Number".localized, text: $viewModel.phone, keyboardType: .phonePad)
+                            customStyledTextField(NSLocalizedString("Full Name", comment: ""), text: $viewModel.name)
+                            customStyledTextField(NSLocalizedString("Email", comment: ""), text: $viewModel.email, keyboardType: .emailAddress)
+                            customStyledSecureField(NSLocalizedString("Password", comment: ""), text: $viewModel.password)
+                            customStyledTextField(NSLocalizedString("Phone Number", comment: ""), text: $viewModel.phone, keyboardType: .phonePad)
                         }
 
                         Button(action: {
@@ -48,7 +48,7 @@ struct RegisterView: View {
                                         .progressViewStyle(CircularProgressViewStyle(tint: .black))
                                 } else {
                                     Image(systemName: "person.badge.plus")
-                                    Text("Register".localized)
+                                    Text(NSLocalizedString("Register", comment: ""))
                                 }
                             }
                             .foregroundColor(.black)
@@ -61,7 +61,7 @@ struct RegisterView: View {
                         .disabled(!isFormValid || showLoadingIndicator)
 
                         if showLoadingIndicator {
-                            ProgressView("Sending verification email…".localized)
+                            ProgressView(NSLocalizedString("Sending verification email…", comment: ""))
                                 .progressViewStyle(CircularProgressViewStyle())
                                 .foregroundColor(.white)
                                 .padding()
@@ -75,12 +75,12 @@ struct RegisterView: View {
                             .frame(width: 60, height: 60)
                             .foregroundColor(.green)
 
-                        Text("Verification email sent".localized)
+                        Text(NSLocalizedString("Verification email sent", comment: ""))
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(.green)
 
-                        Text("Verification email sent to".localized)
+                        Text(NSLocalizedString("Verification email sent to", comment: ""))
                             .font(.subheadline)
                             .foregroundColor(.white.opacity(0.8))
 
@@ -90,7 +90,7 @@ struct RegisterView: View {
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
 
-                        Text("After verifying email".localized)
+                        Text(NSLocalizedString("After verifying email", comment: ""))
                             .font(.body)
                             .multilineTextAlignment(.center)
                             .foregroundColor(.white.opacity(0.8))
@@ -101,7 +101,7 @@ struct RegisterView: View {
                         }) {
                             HStack {
                                 Image(systemName: "arrow.right.circle.fill")
-                                Text("Login".localized)
+                                Text(NSLocalizedString("Login", comment: ""))
                             }
                             .frame(maxWidth: .infinity)
                             .padding()
@@ -135,7 +135,7 @@ struct RegisterView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        Text("Already have account".localized)
+                        Text(NSLocalizedString("Already have account", comment: ""))
                             .font(.footnote)
                             .foregroundColor(.white.opacity(0.7))
                             .padding(.top, 10)
@@ -196,10 +196,10 @@ struct RegisterView: View {
     }
 
     func validateFields() -> Bool {
-        nameError = viewModel.name.count >= 3 ? "" : "Name must be at least 3 characters".localized
-        emailError = isValidEmail(viewModel.email) ? "" : "Invalid email address".localized
-        passwordError = viewModel.password.count >= 6 ? "" : "Password must be at least 6 characters".localized
-        phoneError = viewModel.phone.count >= 8 ? "" : "Enter a valid phone number".localized
+        nameError = viewModel.name.count >= 3 ? "" : NSLocalizedString("Name must be at least 3 characters", comment: "")
+        emailError = isValidEmail(viewModel.email) ? "" : NSLocalizedString("Invalid email address", comment: "")
+        passwordError = viewModel.password.count >= 6 ? "" : NSLocalizedString("Password must be at least 6 characters", comment: "")
+        phoneError = viewModel.phone.count >= 8 ? "" : NSLocalizedString("Enter a valid phone number", comment: "")
         return [nameError, emailError, passwordError, phoneError].allSatisfy { $0.isEmpty }
     }
 

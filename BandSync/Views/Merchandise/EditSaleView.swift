@@ -24,9 +24,9 @@ struct EditSaleView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Item information".localized)) {
+                Section(header: Text(NSLocalizedString("Item information", comment: "Header for merchandise item information section"))) {
                     HStack {
-                        Text("Item".localized)
+                        Text(NSLocalizedString("Item", comment: "Label for merchandise item name"))
                         Spacer()
                         Text(item.name)
                             .foregroundColor(.secondary)
@@ -34,48 +34,48 @@ struct EditSaleView: View {
 
                     if let subcategory = item.subcategory {
                         HStack {
-                            Text("Category".localized)
+                            Text(NSLocalizedString("Category", comment: "Label for merchandise category"))
                             Spacer()
-                            Text("\(item.category.rawValue.localized) • \(subcategory.rawValue.localized)")
+                            Text("\(item.category.localizedName) • \(subcategory.localizedName)")
                                 .foregroundColor(.secondary)
                         }
                     } else {
                         HStack {
-                            Text("Category".localized)
+                            Text(NSLocalizedString("Category", comment: "Label for merchandise category"))
                             Spacer()
-                            Text(item.category.rawValue.localized)
+                            Text(item.category.localizedName)
                                 .foregroundColor(.secondary)
                         }
                     }
 
                     HStack {
-                        Text("Price".localized)
+                        Text(NSLocalizedString("Price", comment: "Label for merchandise item price"))
                         Spacer()
                         Text("\(Int(item.price)) EUR")
                             .foregroundColor(.secondary)
                     }
 
                     HStack {
-                        Text("Sale date".localized)
+                        Text(NSLocalizedString("Sale date", comment: "Label for merchandise sale date"))
                         Spacer()
                         Text(formattedDate)
                             .foregroundColor(.secondary)
                     }
                 }
 
-                Section(header: Text("Sale details".localized)) {
+                Section(header: Text(NSLocalizedString("Sale details", comment: "Header for merchandise sale details section"))) {
                     // Only show size picker for clothing items
                     if item.category == .clothing {
-                        Picker("Size".localized, selection: $size) {
+                        Picker(NSLocalizedString("Size", comment: "Label for merchandise size picker"), selection: $size) {
                             ForEach(["S", "M", "L", "XL", "XXL"], id: \.self) { size in
                                 Text(size)
                             }
                         }
                     }
 
-                    Stepper(String.localizedStringWithFormat("Quantity: %d".localized, quantity), value: $quantity, in: 1...999)
+                    Stepper(String.localizedStringWithFormat(NSLocalizedString("Quantity: %d", comment: "Stepper label for merchandise quantity with count"), quantity), value: $quantity, in: 1...999)
 
-                    Toggle("This is a gift".localized, isOn: $isGift)
+                    Toggle(NSLocalizedString("This is a gift", comment: "Toggle label to mark sale as gift"), isOn: $isGift)
                         .onChange(of: isGift) {
                             if isGift {
                                 channel = .gift
@@ -85,18 +85,18 @@ struct EditSaleView: View {
                         }
 
                     if !isGift {
-                        Picker("Sales channel".localized, selection: $channel) {
+                        Picker(NSLocalizedString("Sales channel", comment: "Label for merchandise sales channel picker"), selection: $channel) {
                             ForEach(MerchSaleChannel.allCases.filter { $0 != .gift }) {
-                                Text($0.rawValue.localized).tag($0)
+                                Text($0.localizedName).tag($0)
                             }
                         }
                     }
 
                     HStack {
-                        Text("Total".localized)
+                        Text(NSLocalizedString("Total", comment: "Label for merchandise sale total amount"))
                         Spacer()
                         if isGift {
-                            Text("Gift".localized)
+                            Text(NSLocalizedString("Gift", comment: "Label indicating item is a gift"))
                                 .bold()
                                 .foregroundColor(.green)
                         } else {
@@ -112,30 +112,30 @@ struct EditSaleView: View {
                     } label: {
                         HStack {
                             Spacer()
-                            Text("Delete sale".localized)
+                            Text(NSLocalizedString("Delete sale", comment: "Button to delete merchandise sale"))
                             Spacer()
                         }
                     }
                 }
             }
-            .alert("Delete sale?".localized, isPresented: $showDeleteConfirmation) {
-                Button("Cancel".localized, role: .cancel) {}
-                Button("Delete".localized, role: .destructive) {
+            .alert(NSLocalizedString("Delete sale?", comment: "Alert title for deleting merchandise sale"), isPresented: $showDeleteConfirmation) {
+                Button(NSLocalizedString("Cancel", comment: "Cancel button in delete confirmation alert"), role: .cancel) {}
+                Button(NSLocalizedString("Delete", comment: "Delete button in delete confirmation alert"), role: .destructive) {
                     deleteSale()
                 }
             }
-            .navigationTitle("Edit sale".localized)
+            .navigationTitle(NSLocalizedString("Edit sale", comment: "Navigation title for edit merchandise sale screen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save".localized) {
+                    Button(NSLocalizedString("Save", comment: "Button to save merchandise sale changes")) {
                         updateSale()
                     }
                     .disabled(isUpdating || !isChanged)
                 }
 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized, role: .cancel) {
+                    Button(NSLocalizedString("Cancel", comment: "Button to cancel merchandise sale editing"), role: .cancel) {
                         dismiss()
                     }
                 }
@@ -143,7 +143,7 @@ struct EditSaleView: View {
             .overlay(
                 Group {
                     if isUpdating {
-                        ProgressView("Updating...".localized)
+                        ProgressView(NSLocalizedString("Updating...", comment: "Progress indicator when updating merchandise sale"))
                             .progressViewStyle(CircularProgressViewStyle())
                             .padding()
                             .background(Color.white.opacity(0.8))

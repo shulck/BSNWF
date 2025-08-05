@@ -4,6 +4,7 @@ struct FanTabView: View {
     @EnvironmentObject private var appState: AppState
     @State private var selectedTab: FanTab = .home
     @State private var hasInitialized = false
+    @State private var fanChatInitialized = false
     
     enum FanTab: String, CaseIterable {
         case home = "Home"
@@ -11,6 +12,7 @@ struct FanTabView: View {
         case merchandise = "Merch"
         case chat = "Chat"
         case profile = "Profile"
+        case about = "About"
         
         var icon: String {
             switch self {
@@ -19,16 +21,18 @@ struct FanTabView: View {
             case .merchandise: return "bag.fill"
             case .chat: return "message.fill"
             case .profile: return "person.fill"
+            case .about: return "info.circle.fill"
             }
         }
         
         var title: String {
             switch self {
-            case .home: return "Home"
-            case .events: return "Events"
-            case .merchandise: return "Merchandise"
-            case .chat: return "Chat"
-            case .profile: return "Profile"
+            case .home: return NSLocalizedString("Home", comment: "Home tab title")
+            case .events: return NSLocalizedString("Events", comment: "Events tab title")
+            case .merchandise: return NSLocalizedString("Merchandise", comment: "Merchandise tab title")
+            case .chat: return NSLocalizedString("Chat", comment: "Chat tab title")
+            case .profile: return NSLocalizedString("Profile", comment: "Profile tab title")
+            case .about: return NSLocalizedString("Band", comment: "Band tab title")
             }
         }
     }
@@ -40,7 +44,7 @@ struct FanTabView: View {
             FanHomeView(selectedTab: $selectedTab)
                 .tabItem {
                     Image(systemName: FanTab.home.icon)
-                    Text(NSLocalizedString(FanTab.home.title, comment: ""))
+                    Text(FanTab.home.title)
                 }
                 .tag(FanTab.home)
             
@@ -48,7 +52,7 @@ struct FanTabView: View {
             FanCalendarViewWrapper()
                 .tabItem {
                     Image(systemName: FanTab.events.icon)
-                    Text(NSLocalizedString(FanTab.events.title, comment: ""))
+                    Text(FanTab.events.title)
                 }
                 .tag(FanTab.events)
             
@@ -56,7 +60,7 @@ struct FanTabView: View {
             FanMerchandiseView()
                 .tabItem {
                     Image(systemName: FanTab.merchandise.icon)
-                    Text(NSLocalizedString(FanTab.merchandise.title, comment: ""))
+                    Text(FanTab.merchandise.title)
                 }
                 .tag(FanTab.merchandise)
             
@@ -64,7 +68,7 @@ struct FanTabView: View {
             FanChatView()
                 .tabItem {
                     Image(systemName: FanTab.chat.icon)
-                    Text(NSLocalizedString(FanTab.chat.title, comment: ""))
+                    Text(FanTab.chat.title)
                 }
                 .tag(FanTab.chat)
             
@@ -72,10 +76,19 @@ struct FanTabView: View {
             FanProfileView()
                 .tabItem {
                     Image(systemName: FanTab.profile.icon)
-                    Text(NSLocalizedString(FanTab.profile.title, comment: ""))
+                    Text(FanTab.profile.title)
                 }
                 .tag(FanTab.profile)
+            
+            // Band Tab
+            GroupInfoView()
+                .tabItem {
+                    Image(systemName: FanTab.about.icon)
+                    Text(FanTab.about.title)
+                }
+                .tag(FanTab.about)
         }
+        .tabViewStyle(DefaultTabViewStyle())
         .onChange(of: selectedTab) { newTab in
             if newTab == .events {
                 NotificationCenter.default.post(name: NSNotification.Name("FanCalendarTabSelected"), object: nil)
@@ -85,12 +98,35 @@ struct FanTabView: View {
             if !hasInitialized {
                 initializeView()
             }
+            if !fanChatInitialized {
+                setupFanChat()
+                fanChatInitialized = true
+            }
         }
     }
     
     private func initializeView() {
         hasInitialized = true
         setupTabBarAppearance()
+    }
+    
+    private func setupFanChat() {
+        guard let user = appState.user,
+              user.userType == .fan,
+              let groupId = user.fanGroupId else {
+            print("❌ Cannot setup fan chat: invalid user or missing fanGroupId")
+            return
+        }
+        
+        print("🚀 Setting up fan chat for user \(user.id) in group \(groupId)")
+        
+        // Load chat rules first
+        let fanChatService = FanChatService.shared
+        fanChatService.loadChatRules(for: groupId)
+        
+        // Start listening to chats (temporarily skip rules check for testing)
+        print("✅ Starting to listen to fan chats (skipping rules check for testing)")
+        fanChatService.startListeningToFanChats(for: groupId)
     }
     
     private func setupTabBarAppearance() {
@@ -184,7 +220,7 @@ struct FanHomeView: View {
                             .fontWeight(.heavy)
                             .foregroundColor(.primary)
                     } else {
-                        Text("Fan")
+                        Text(NSLocalizedString("Fan", comment: "Default fan username when profile not loaded"))
                             .font(.largeTitle)
                             .fontWeight(.heavy)
                             .foregroundColor(.primary)
@@ -249,7 +285,7 @@ struct FanHomeView: View {
                             .foregroundColor(.blue)
                     }
                     
-                    Text("Upcoming Events")
+                    Text(NSLocalizedString("Upcoming Events", comment: "Upcoming events section title"))
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
@@ -258,7 +294,7 @@ struct FanHomeView: View {
                 Spacer()
                 
                 if !upcomingEvents.isEmpty {
-                    Button("See all") {
+                    Button(NSLocalizedString("See all", comment: "See all events button")) {
                         selectedTab = .events
                     }
                     .font(.subheadline)
@@ -279,7 +315,7 @@ struct FanHomeView: View {
                         .scaleEffect(1.2)
                         .progressViewStyle(CircularProgressViewStyle(tint: .blue))
                     
-                    Text("Loading events...")
+                    Text(NSLocalizedString("Loading events...", comment: "Loading events message"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
@@ -315,12 +351,12 @@ struct FanHomeView: View {
                     }
                     
                     VStack(spacing: 8) {
-                        Text("No upcoming events")
+                        Text(NSLocalizedString("No upcoming events", comment: "No upcoming events title"))
                             .font(.headline)
                             .fontWeight(.semibold)
                             .foregroundColor(.primary)
                         
-                        Text("Check back later for new concerts and events!")
+                        Text(NSLocalizedString("Check back later for new concerts and events!", comment: "No upcoming events description"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -374,7 +410,7 @@ struct FanHomeView: View {
                             .foregroundColor(.orange)
                     }
                     
-                    Text("Quick Actions")
+                    Text(NSLocalizedString("Quick Actions", comment: "Quick actions section title"))
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
@@ -389,16 +425,16 @@ struct FanHomeView: View {
                 GridItem(.flexible())
             ], spacing: 16) {
                 QuickActionCard(
-                    title: "Merchandise",
-                    subtitle: "Browse & buy",
+                    title: NSLocalizedString("Merchandise", comment: "Merchandise quick action title"),
+                    subtitle: NSLocalizedString("Browse & buy", comment: "Merchandise quick action subtitle"),
                     icon: "bag.fill",
                     color: .green,
                     action: { selectedTab = .merchandise }
                 )
                 
                 QuickActionCard(
-                    title: "Fan Chat",
-                    subtitle: "Connect with fans",
+                    title: NSLocalizedString("Fan Chat", comment: "Fan chat quick action title"),
+                    subtitle: NSLocalizedString("Connect with fans", comment: "Fan chat quick action subtitle"),
                     icon: "message.fill",
                     color: .blue,
                     action: { selectedTab = .chat }
@@ -411,11 +447,11 @@ struct FanHomeView: View {
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
         case 0..<12:
-            return "Good morning"
+            return NSLocalizedString("Good morning", comment: "Morning greeting")
         case 12..<17:
-            return "Good afternoon"
+            return NSLocalizedString("Good afternoon", comment: "Afternoon greeting")
         default:
-            return "Good evening"
+            return NSLocalizedString("Good evening", comment: "Evening greeting")
         }
     }
     
@@ -508,7 +544,7 @@ struct ModernUpcomingEventCard: View {
                     HStack(spacing: 4) {
                         Text("🎉")
                             .font(.caption)
-                        Text("Send gift")
+                        Text(NSLocalizedString("Send gift", comment: "Send gift action for birthday events"))
                             .font(.caption)
                             .fontWeight(.semibold)
                             .foregroundColor(.pink)
@@ -642,12 +678,12 @@ struct FanMerchandiseView: View {
                     }
                     
                     VStack(spacing: 16) {
-                        Text("Merchandise Store")
+                        Text(NSLocalizedString("Merchandise Store", comment: "Merchandise store title"))
                             .font(.largeTitle)
                             .fontWeight(.heavy)
                             .foregroundColor(.primary)
                         
-                        Text("Browse and buy exclusive band merchandise right here! Coming soon with amazing deals and limited edition items.")
+                        Text(NSLocalizedString("Browse and buy exclusive band merchandise right here! Coming soon with amazing deals and limited edition items.", comment: "Merchandise store description"))
                             .font(.body)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -669,21 +705,79 @@ struct FanMerchandiseView: View {
                 )
                 .ignoresSafeArea()
             )
-            .navigationTitle("Merchandise")
+            .navigationTitle(NSLocalizedString("Merchandise", comment: "Merchandise navigation title"))
             .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
 
+// MARK: - FAN CHAT VIEW (MAIN INTERFACE)
+
 struct FanChatView: View {
+    @StateObject private var fanChatService = FanChatService.shared
+    @EnvironmentObject private var appState: AppState
+    @State private var showingRulesSheet = false
+    @State private var navigationPath = NavigationPath()
     @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
-        NavigationView {
-            VStack(spacing: 40) {
-                Spacer()
-                
-                VStack(spacing: 32) {
+        NavigationStack(path: $navigationPath) {
+            Group {
+                if !fanChatService.hasAcceptedRules {
+                    // Show rules acceptance screen
+                    FanChatRulesView()
+                } else if fanChatService.isLoading {
+                    // Loading state
+                    FanChatLoadingView()
+                } else {
+                    // Main chat list
+                    FanChatsListView()
+                }
+            }
+            .navigationTitle(NSLocalizedString("Fan Community", comment: "Fan community navigation title"))
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: FanChatNotificationView()) {
+                        Image(systemName: "bell.fill")
+                            .foregroundColor(.blue)
+                    }
+                    
+                    Button(action: {
+                        showingRulesSheet = true
+                    }) {
+                        Image(systemName: "info.circle.fill")
+                            .foregroundColor(.blue)
+                    }
+                }
+            }
+            .navigationDestination(for: FanChat.self) { chat in
+                FanChatDetailView(chat: chat)
+            }
+            .onAppear {
+                // Setup is now handled by FanTabView
+            }
+            .sheet(isPresented: $showingRulesSheet) {
+                FanChatRulesView()
+            }
+        }
+    }
+}
+
+// MARK: - FAN CHAT RULES VIEW
+
+struct FanChatRulesView: View {
+    @StateObject private var fanChatService = FanChatService.shared
+    @EnvironmentObject private var appState: AppState
+    @State private var hasScrolledToBottom = false
+    @State private var isAccepting = false
+    @Environment(\.colorScheme) private var colorScheme
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 24) {
+                // Header
+                VStack(spacing: 16) {
                     ZStack {
                         Circle()
                             .fill(
@@ -693,45 +787,444 @@ struct FanChatView: View {
                                     endPoint: .bottomTrailing
                                 )
                             )
-                            .frame(width: 120, height: 120)
-                            .shadow(color: .blue.opacity(0.3), radius: 20, x: 0, y: 10)
+                            .frame(width: 80, height: 80)
+                            .shadow(color: .blue.opacity(0.3), radius: 12, x: 0, y: 6)
                         
-                        Image(systemName: "message.fill")
-                            .font(.system(size: 40, weight: .bold))
+                        Image(systemName: "hand.raised.fill")
+                            .font(.system(size: 32, weight: .bold))
                             .foregroundColor(.white)
                     }
                     
-                    VStack(spacing: 16) {
-                        Text("Fan Community")
-                            .font(.largeTitle)
-                            .fontWeight(.heavy)
+                    VStack(spacing: 8) {
+                        Text(NSLocalizedString("Welcome to Fan Community!", comment: "Fan community welcome title"))
+                            .font(.title)
+                            .fontWeight(.bold)
                             .foregroundColor(.primary)
                         
-                        Text("Connect with other fans and participate in exclusive discussions! Share your love for the music and make new friends.")
+                        Text(NSLocalizedString("Before joining our fan community, please read and accept these chat rules.", comment: "Fan community rules description"))
                             .font(.body)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
-                            .lineLimit(nil)
                     }
                 }
-                .padding(.horizontal, 40)
+                .padding(.horizontal)
                 
-                Spacer()
+                // Rules List
+                if let rules = fanChatService.chatRules {
+                    LazyVStack(spacing: 16) {
+                        ForEach(rules.rules) { rule in
+                            FanChatRuleCard(rule: rule)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                
+                // Bottom spacing for scroll detection
+                Rectangle()
+                    .fill(Color.clear)
+                    .frame(height: 100)
+                    .onAppear {
+                        hasScrolledToBottom = true
+                    }
             }
-            .background(
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color.blue.opacity(0.02),
-                        Color.purple.opacity(0.02)
-                    ]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
-            )
-            .navigationTitle("Fan Chat")
-            .navigationBarTitleDisplayMode(.inline)
+            .padding(.vertical)
         }
+        .safeAreaInset(edge: .bottom) {
+            // Accept Button
+            VStack(spacing: 12) {
+                if hasScrolledToBottom {
+                    Button(action: acceptRules) {
+                        HStack {
+                            if isAccepting {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .scaleEffect(0.8)
+                            } else {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.title3)
+                            }
+                            
+                            Text(isAccepting ? NSLocalizedString("Accepting...", comment: "Accepting rules loading text") : NSLocalizedString("I Accept These Rules", comment: "Accept rules button text"))
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                        }
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(
+                            LinearGradient(
+                                gradient: Gradient(colors: [.blue, .purple]),
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .shadow(color: .blue.opacity(0.3), radius: 8, x: 0, y: 4)
+                    }
+                    .disabled(isAccepting)
+                } else {
+                    Text(NSLocalizedString("Scroll down to read all rules", comment: "Scroll to read rules instruction"))
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding()
+                        .background(Color.secondary.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+            }
+            .padding()
+            .background(
+                Rectangle()
+                    .fill(colorScheme == .dark ? Color.black : Color.white)
+                    .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: -2)
+            )
+        }
+    }
+    
+    private func acceptRules() {
+        guard let user = appState.user,
+              let groupId = user.fanGroupId else { return }
+        
+        isAccepting = true
+        fanChatService.acceptChatRules(for: groupId)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            isAccepting = false
+        }
+    }
+}
+
+// MARK: - FAN CHAT RULE CARD
+
+struct FanChatRuleCard: View {
+    let rule: FanChatRules.ChatRule
+    @Environment(\.colorScheme) private var colorScheme
+    
+    var severityColor: Color {
+        switch rule.severity {
+        case .info: return .blue
+        case .warning: return .orange
+        case .serious: return .red
+        }
+    }
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            // Icon
+            ZStack {
+                Circle()
+                    .fill(severityColor.opacity(0.15))
+                    .frame(width: 48, height: 48)
+                
+                Image(systemName: rule.icon)
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundColor(severityColor)
+            }
+            
+            // Content
+            VStack(alignment: .leading, spacing: 6) {
+                HStack {
+                    Text(rule.title)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                    
+                    Spacer()
+                    
+                    Text(NSLocalizedString(rule.severity.rawValue.capitalized, comment: "Rule severity level"))
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundColor(severityColor)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(severityColor.opacity(0.1))
+                        .clipShape(Capsule())
+                }
+                
+                Text(rule.description)
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .lineLimit(nil)
+            }
+        }
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(colorScheme == .dark ?
+                      Color(UIColor.secondarySystemGroupedBackground) :
+                      Color.white)
+                .shadow(
+                    color: colorScheme == .dark ?
+                        Color.clear :
+                        Color.black.opacity(0.06),
+                    radius: 8,
+                    x: 0,
+                    y: 2
+                )
+        )
+    }
+}
+
+// MARK: - FAN CHATS LIST VIEW
+
+struct FanChatsListView: View {
+    @StateObject private var fanChatService = FanChatService.shared
+    @EnvironmentObject private var appState: AppState
+    @State private var searchText = ""
+    @State private var showingNewChatSheet = false
+    @Environment(\.colorScheme) private var colorScheme
+    
+    private var filteredChats: [FanChat] {
+        let allChats = fanChatService.fanChats
+        
+        if searchText.isEmpty {
+            return allChats
+        } else {
+            let filtered = allChats.filter { chat in
+                chat.displayName.localizedCaseInsensitiveContains(searchText) ||
+                (chat.description?.localizedCaseInsensitiveContains(searchText) ?? false)
+            }
+            return filtered
+        }
+    }
+    
+    var body: some View {
+        VStack {
+            // Debug info
+            if !fanChatService.fanChats.isEmpty {
+                Text(String(format: NSLocalizedString("Debug: %d chats loaded", comment: "Debug message showing number of loaded chats"), fanChatService.fanChats.count))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.top, 4)
+            }
+            
+            if filteredChats.isEmpty {
+                // Empty state
+                FanChatsEmptyView()
+            } else {
+                List {
+                    ForEach(filteredChats, id: \.id) { chat in
+                        NavigationLink(value: chat) {
+                            FanChatRowView(chat: chat)
+                        }
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                    }
+                }
+                .listStyle(PlainListStyle())
+                .searchable(text: $searchText, prompt: NSLocalizedString("Search chats...", comment: "Search chats placeholder"))
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showingNewChatSheet = true
+                } label: {
+                    Image(systemName: "plus.message.fill")
+                        .foregroundColor(.blue)
+                }
+            }
+        }
+        .sheet(isPresented: $showingNewChatSheet) {
+            FanNewChatView()
+        }
+        .onAppear {
+            // Initial setup completed
+        }
+    }
+}
+
+// MARK: - FAN CHAT ROW VIEW
+
+struct FanChatRowView: View {
+    let chat: FanChat
+    @Environment(\.colorScheme) private var colorScheme
+    
+    private var chatIcon: String {
+        switch chat.type {
+        case .general: return "person.3.fill"
+        case .privateChat: return "person.2.fill"
+        case .themed: return "tag.fill"
+        case .announcement: return "megaphone.fill"
+        case .mixed: return "person.2.badge.gearshape.fill"
+        }
+    }
+    
+    private var chatIconColor: Color {
+        switch chat.type {
+        case .general: return .blue
+        case .privateChat: return .green
+        case .themed: return .purple
+        case .announcement: return .orange
+        case .mixed: return .red
+        }
+    }
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            // Chat Icon or Avatar
+            if chat.type == .privateChat, let avatarURL = chat.otherUserAvatarURL, !avatarURL.isEmpty {
+                AsyncImage(url: URL(string: avatarURL)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    ZStack {
+                        Circle()
+                            .fill(chatIconColor.opacity(0.15))
+                            .frame(width: 48, height: 48)
+                        
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(chatIconColor)
+                    }
+                }
+                .frame(width: 48, height: 48)
+                .clipShape(Circle())
+            } else {
+                // Default chat icon
+                ZStack {
+                    Circle()
+                        .fill(chatIconColor.opacity(0.15))
+                        .frame(width: 48, height: 48)
+                    
+                    Image(systemName: chatIcon)
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(chatIconColor)
+                }
+            }
+            
+            // Chat Info
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Text(chat.displayName)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                        .lineLimit(1)
+                    
+                    Spacer()
+                    
+                    if let lastMessage = chat.lastMessage {
+                        Text(formatTime(lastMessage.timestamp))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                
+                if let lastMessage = chat.lastMessage {
+                    Text(lastMessage.content)
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                        .lineLimit(2)
+                } else {
+                    // Show nothing when no messages
+                    Text("")
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                        .italic()
+                }
+                
+                // Chat type indicator
+                HStack(spacing: 8) {
+                    Text(NSLocalizedString(chat.type.rawValue.capitalized, comment: "Chat type label"))
+                        .font(.caption2)
+                        .fontWeight(.medium)
+                        .foregroundColor(chatIconColor)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(chatIconColor.opacity(0.1))
+                        .clipShape(Capsule())
+                    
+                    if chat.isReadOnlyForFans {
+                        Text(NSLocalizedString("Read Only", comment: "Read only chat indicator"))
+                            .font(.caption2)
+                            .fontWeight(.medium)
+                            .foregroundColor(.orange)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.orange.opacity(0.1))
+                            .clipShape(Capsule())
+                    }
+                    
+                    Spacer()
+                }
+            }
+        }
+        .padding(.vertical, 8)
+    }
+    
+    private func formatTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        let calendar = Calendar.current
+        
+        if calendar.isDate(date, inSameDayAs: Date()) {
+            formatter.timeStyle = .short
+        } else if calendar.isDate(date, inSameDayAs: Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()) {
+            return NSLocalizedString("Yesterday", comment: "Yesterday date label")
+        } else {
+            formatter.dateStyle = .short
+        }
+        
+        return formatter.string(from: date)
+    }
+}
+
+// MARK: - FAN CHATS EMPTY VIEW
+
+struct FanChatsEmptyView: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
+    var body: some View {
+        VStack(spacing: 32) {
+            Spacer()
+            
+            VStack(spacing: 24) {
+                ZStack {
+                    Circle()
+                        .fill(Color.blue.opacity(0.1))
+                        .frame(width: 100, height: 100)
+                    
+                    Image(systemName: "message.circle")
+                        .font(.system(size: 40, weight: .medium))
+                        .foregroundColor(.blue.opacity(0.6))
+                }
+                
+                VStack(spacing: 12) {
+                    Text(NSLocalizedString("No Chats Yet", comment: "No chats title"))
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
+                    
+                    Text(NSLocalizedString("Start connecting with other fans by joining the general chat or creating a private conversation!", comment: "No chats description"))
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(nil)
+                }
+            }
+            .padding(.horizontal, 40)
+            
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+// MARK: - FAN CHAT LOADING VIEW
+
+struct FanChatLoadingView: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            ProgressView()
+                .scaleEffect(1.2)
+                .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+            
+            Text(NSLocalizedString("Loading chats...", comment: "Loading chats message"))
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

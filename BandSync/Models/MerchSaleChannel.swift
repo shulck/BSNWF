@@ -15,6 +15,16 @@ enum MerchSaleChannel: String, Codable, CaseIterable, Identifiable {
     case other = "Other"
 
     var id: String { rawValue }
+    
+    var localizedName: String {
+        switch self {
+        case .concert: return NSLocalizedString("Concert", comment: "Concert sales channel")
+        case .online: return NSLocalizedString("Online", comment: "Online sales channel")
+        case .store: return NSLocalizedString("Store", comment: "Store sales channel")
+        case .gift: return NSLocalizedString("Gift", comment: "Gift sales channel")
+        case .other: return NSLocalizedString("Other", comment: "Other sales channel")
+        }
+    }
 }
 
 struct MerchSale: Identifiable, Codable {

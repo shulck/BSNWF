@@ -56,7 +56,7 @@ struct EditSongView: View {
                     .padding(.top, 20)
                 }
             }
-            .navigationTitle("Edit Song".localized)
+            .navigationTitle(NSLocalizedString("Edit Song", comment: "Navigation title for edit song screen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -90,7 +90,7 @@ struct EditSongView: View {
                     .foregroundColor(.white)
             }
             
-            Text("Edit your song".localized)
+            Text(NSLocalizedString("Edit your song", comment: "Header text for edit song screen"))
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
@@ -106,7 +106,7 @@ struct EditSongView: View {
                     .foregroundColor(.blue)
                     .font(.title3)
                 
-                Text("Song information".localized)
+                Text(NSLocalizedString("Song information", comment: "Section title for song information"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -123,12 +123,12 @@ struct EditSongView: View {
             VStack(spacing: 16) {
                 // Название песни
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Song title".localized)
+                    Text(NSLocalizedString("Song title", comment: "Label for song title field"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
                     
-                    TextField("Enter song name", text: $editedTitle)
+                    TextField(NSLocalizedString("Enter song name", comment: "Placeholder text for song name input"), text: $editedTitle)
                         .font(.body)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
@@ -138,14 +138,14 @@ struct EditSongView: View {
                 
                 // Продолжительность
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Duration".localized)
+                    Text(NSLocalizedString("Duration", comment: "Label for song duration section"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
                     
                     HStack(spacing: 12) {
                         VStack(spacing: 4) {
-                            Text("Minutes".localized)
+                            Text(NSLocalizedString("Minutes", comment: "Label for minutes input field"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
@@ -166,7 +166,7 @@ struct EditSongView: View {
                             .padding(.top, 16)
                         
                         VStack(spacing: 4) {
-                            Text("Seconds".localized)
+                            Text(NSLocalizedString("Seconds", comment: "Label for seconds input field"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
@@ -182,7 +182,7 @@ struct EditSongView: View {
                         
                         Spacer()
                         
-                        Button("Done") {
+                        Button(NSLocalizedString("Done", comment: "Button to finish keyboard input")) {
                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
                                                            to: nil,
                                                            from: nil,
@@ -216,7 +216,7 @@ struct EditSongView: View {
                     .foregroundColor(.purple)
                     .font(.title3)
                 
-                Text("Music parameters".localized)
+                Text(NSLocalizedString("Music parameters", comment: "Section title for music parameters"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -234,7 +234,7 @@ struct EditSongView: View {
                 // BPM
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text("BPM (Beats per minute)".localized)
+                        Text(NSLocalizedString("BPM (Beats per minute)", comment: "Label for BPM input field"))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
@@ -247,7 +247,7 @@ struct EditSongView: View {
                             .foregroundColor(.purple)
                     }
                     
-                    TextField("120", value: $editedBpm, formatter: NumberFormatter())
+                    TextField(NSLocalizedString("120", comment: "Placeholder for BPM input field"), value: $editedBpm, formatter: NumberFormatter())
                         .keyboardType(.numberPad)
                         .font(.body)
                         .padding(.horizontal, 16)
@@ -258,12 +258,12 @@ struct EditSongView: View {
                 
                 // Key
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Musical key".localized)
+                    Text(NSLocalizedString("Musical key", comment: "Label for musical key input field"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
                     
-                    TextField("C, Am, F#, etc.", text: $editedKey)
+                    TextField(NSLocalizedString("C, Am, F#, etc.", comment: "Placeholder for musical key input field"), text: $editedKey)
                         .font(.body)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
@@ -281,7 +281,7 @@ struct EditSongView: View {
     
     // MARK: - Buttons
     private var cancelButton: some View {
-        Button("Cancel") {
+        Button(NSLocalizedString("Cancel", comment: "Cancel button in edit song screen")) {
             dismiss()
         }
         .font(.body)
@@ -289,7 +289,7 @@ struct EditSongView: View {
     }
     
     private var saveButton: some View {
-        Button("Save") {
+        Button(NSLocalizedString("Save", comment: "Save button in edit song screen")) {
             saveSong()
         }
         .font(.headline)

@@ -21,12 +21,12 @@ struct LoginView: View {
                     Spacer()
 
                     VStack(spacing: 20) {
-                        Text("Welcome Back 👋".localized)
+                        Text(NSLocalizedString("Welcome Back 👋", comment: ""))
                             .font(.system(size: 28, weight: .bold))
                             .foregroundColor(.white)
 
                         Group {
-                            TextField("Email".localized, text: $viewModel.email)
+                            TextField(NSLocalizedString("Email", comment: ""), text: $viewModel.email)
                                 .onChange(of: viewModel.email) {
                                     viewModel.errorMessage = nil
                                 }
@@ -40,7 +40,7 @@ struct LoginView: View {
                                 .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.white, lineWidth: 1))
                                 .foregroundColor(.white)
 
-                            SecureField("Password".localized, text: $viewModel.password)
+                            SecureField(NSLocalizedString("Password", comment: ""), text: $viewModel.password)
                                 .onChange(of: viewModel.password) {
                                     viewModel.errorMessage = nil
                                 }
@@ -64,7 +64,7 @@ struct LoginView: View {
                                         .progressViewStyle(CircularProgressViewStyle(tint: .black))
                                 } else {
                                     Image(systemName: "arrow.right.circle.fill")
-                                    Text("Login".localized)
+                                    Text(NSLocalizedString("Login", comment: ""))
                                 }
                             }
                             .foregroundColor(.black)
@@ -81,7 +81,7 @@ struct LoginView: View {
                         }) {
                             HStack {
                                 Image(systemName: "faceid")
-                                Text("Sign In with Face ID".localized)
+                                Text(NSLocalizedString("Sign In with Face ID", comment: ""))
                             }
                             .foregroundColor(.white)
                         }
@@ -93,7 +93,7 @@ struct LoginView: View {
                                 .stroke(Color.white.opacity(0.4), lineWidth: 1)
                         )
 
-                        Button("Forgot Password?".localized) {
+                        Button(NSLocalizedString("Forgot Password?", comment: "")) {
                             showForgotPassword = true
                         }
                         .font(.footnote)
@@ -116,7 +116,7 @@ struct LoginView: View {
                     Spacer()
 
                     NavigationLink(destination: RegisterView()) {
-                        Text("Don't have account".localized)
+                        Text(NSLocalizedString("Don't have account", comment: ""))
                             .font(.footnote)
                             .foregroundColor(.white.opacity(0.7))
                     }
@@ -147,14 +147,14 @@ struct LoginView: View {
             var error: NSError?
 
             if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-                context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Login with Face ID".localized) { success, authenticationError in
+                context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: NSLocalizedString("Login with Face ID", comment: "")) { success, authenticationError in
                     DispatchQueue.main.async {
                         if success {
                             let keychain = KeychainSwift()
                             guard keychain.get("faceIDEnabled") == "true",
                                   let email = keychain.get("savedEmail"),
                                   let password = keychain.get("savedPassword") else {
-                                viewModel.errorMessage = "No credentials stored. Please login manually first. You must log in at least once to enable Face ID.".localized
+                                viewModel.errorMessage = NSLocalizedString("No credentials stored. Please login manually first. You must log in at least once to enable Face ID.", comment: "")
                                 return
                             }
 
@@ -162,12 +162,12 @@ struct LoginView: View {
                             viewModel.password = password
                             viewModel.login()
                         } else {
-                            viewModel.errorMessage = "Face ID authentication failed.".localized
+                            viewModel.errorMessage = NSLocalizedString("Face ID authentication failed.", comment: "")
                         }
                     }
                 }
             } else {
-                viewModel.errorMessage = "Face ID not available on this device.".localized
+                viewModel.errorMessage = NSLocalizedString("Face ID not available on this device.", comment: "")
             }
         }
 
@@ -177,15 +177,15 @@ struct LoginView: View {
 
     private func validateFields() -> Bool {
         if viewModel.email.isEmpty {
-            viewModel.errorMessage = "Email cannot be empty.".localized
+            viewModel.errorMessage = NSLocalizedString("Email cannot be empty.", comment: "")
             return false
         }
         if viewModel.password.isEmpty {
-            viewModel.errorMessage = "Password cannot be empty.".localized
+            viewModel.errorMessage = NSLocalizedString("Password cannot be empty.", comment: "")
             return false
         }
         if !isValidEmail(viewModel.email) {
-            viewModel.errorMessage = "Invalid email format.".localized
+            viewModel.errorMessage = NSLocalizedString("Invalid email format.", comment: "")
             return false
         }
         viewModel.errorMessage = nil

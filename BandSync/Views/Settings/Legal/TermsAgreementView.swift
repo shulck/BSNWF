@@ -25,11 +25,11 @@ struct TermsAgreementView: View {
                                 .frame(width: 70, height: 70)
                                 .clipShape(RoundedRectangle(cornerRadius: 16))
                             
-                            Text("Welcome to BandSync".localized)
+                            Text(NSLocalizedString("Welcome to BandSync", comment: "Welcome title for terms agreement"))
                                 .font(.title)
                                 .fontWeight(.bold)
                             
-                            Text("Before you start, please review and accept our terms and privacy policy.".localized)
+                            Text(NSLocalizedString("Before you start, please review and accept our terms and privacy policy.", comment: "Description for terms agreement requirement"))
                                 .font(.callout)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.center)
@@ -43,8 +43,8 @@ struct TermsAgreementView: View {
                                 // Terms of Service Agreement
                                 AgreementRow(
                                     isChecked: hasAgreedToTerms,
-                                    title: "Terms of Service".localized,
-                                    description: "I agree to the Terms of Service".localized,
+                                    title: NSLocalizedString("Terms of Service", comment: "Title for Terms of Service"),
+                                    description: NSLocalizedString("I agree to the Terms of Service", comment: "Checkbox description for Terms of Service agreement"),
                                     onToggle: { hasAgreedToTerms.toggle() },
                                     onViewDocument: { showTermsSheet = true }
                                 )
@@ -52,8 +52,8 @@ struct TermsAgreementView: View {
                                 // Privacy Policy Agreement
                                 AgreementRow(
                                     isChecked: hasAgreedToPrivacy,
-                                    title: "Privacy Policy".localized,
-                                    description: "I agree to the Privacy Policy".localized,
+                                    title: NSLocalizedString("Privacy Policy", comment: "Title for Privacy Policy"),
+                                    description: NSLocalizedString("I agree to the Privacy Policy", comment: "Checkbox description for Privacy Policy agreement"),
                                     onToggle: { hasAgreedToPrivacy.toggle() },
                                     onViewDocument: { showPrivacySheet = true }
                                 )
@@ -62,49 +62,49 @@ struct TermsAgreementView: View {
                             
                             // Information Notice
                             VStack(spacing: 12) {
-                                Text("Important Information".localized)
+                                Text(NSLocalizedString("Important Information", comment: "Section title for important information"))
                                     .font(.subheadline)
                                     .fontWeight(.bold)
                                     .foregroundColor(.primary)
                                 
                                 VStack(alignment: .leading, spacing: 8) {
-                                    InfoRow(icon: "shield.checkered", text: "Your data is protected with industry-standard security".localized)
-                                    InfoRow(icon: "person.crop.circle.badge.checkmark", text: "You maintain full control over your information".localized)
-                                    InfoRow(icon: "arrow.down.circle", text: "You can export your data anytime".localized)
-                                    InfoRow(icon: "trash.circle", text: "Delete your account and data whenever you choose".localized)
-                                    InfoRow(icon: "envelope.circle", text: "Contact support for any questions or concerns".localized)
+                                    InfoRow(icon: "shield.checkered", text: NSLocalizedString("Your data is protected with industry-standard security", comment: "Information about data security"))
+                                    InfoRow(icon: "person.crop.circle.badge.checkmark", text: NSLocalizedString("You maintain full control over your information", comment: "Information about data control"))
+                                    InfoRow(icon: "arrow.down.circle", text: NSLocalizedString("You can export your data anytime", comment: "Information about data export"))
+                                    InfoRow(icon: "trash.circle", text: NSLocalizedString("Delete your account and data whenever you choose", comment: "Information about data deletion"))
+                                    InfoRow(icon: "envelope.circle", text: NSLocalizedString("Contact support for any questions or concerns", comment: "Information about support contact"))
                                 }
                                 
-                                Text("Service Features".localized)
+                                Text(NSLocalizedString("Service Features", comment: "Section title for service features"))
                                     .font(.subheadline)
                                     .fontWeight(.bold)
                                     .foregroundColor(.primary)
                                     .padding(.top, 8)
                                 
                                 VStack(alignment: .leading, spacing: 6) {
-                                    ServiceRow(text: "• Secure band collaboration and coordination".localized)
-                                    ServiceRow(text: "• Event scheduling and attendance tracking".localized)
-                                    ServiceRow(text: "• Financial expense management".localized)
-                                    ServiceRow(text: "• Document sharing via Google Drive".localized)
-                                    ServiceRow(text: "• Cross-device synchronization".localized)
-                                    ServiceRow(text: "• Regular feature updates and improvements".localized)
+                                    ServiceRow(text: NSLocalizedString("• Secure band collaboration and coordination", comment: "Service feature 1"))
+                                    ServiceRow(text: NSLocalizedString("• Event scheduling and attendance tracking", comment: "Service feature 2"))
+                                    ServiceRow(text: NSLocalizedString("• Financial expense management", comment: "Service feature 3"))
+                                    ServiceRow(text: NSLocalizedString("• Document sharing via Google Drive", comment: "Service feature 4"))
+                                    ServiceRow(text: NSLocalizedString("• Cross-device synchronization", comment: "Service feature 5"))
+                                    ServiceRow(text: NSLocalizedString("• Regular feature updates and improvements", comment: "Service feature 6"))
                                 }
                                 
-                                Text("Your Rights".localized)
+                                Text(NSLocalizedString("Your Rights", comment: "Section title for user rights"))
                                     .font(.subheadline)
                                     .fontWeight(.bold)
                                     .foregroundColor(.primary)
                                     .padding(.top, 8)
                                 
                                 VStack(alignment: .leading, spacing: 6) {
-                                    RightRow(text: "• Access and download your personal data".localized)
-                                    RightRow(text: "• Correct any inaccurate information".localized)
-                                    RightRow(text: "• Request deletion of your account".localized)
-                                    RightRow(text: "• Control notification preferences".localized)
-                                    RightRow(text: "• Contact support for assistance".localized)
+                                    RightRow(text: NSLocalizedString("• Access and download your personal data", comment: "User right 1"))
+                                    RightRow(text: NSLocalizedString("• Correct any inaccurate information", comment: "User right 2"))
+                                    RightRow(text: NSLocalizedString("• Request deletion of your account", comment: "User right 3"))
+                                    RightRow(text: NSLocalizedString("• Control notification preferences", comment: "User right 4"))
+                                    RightRow(text: NSLocalizedString("• Contact support for assistance", comment: "User right 5"))
                                 }
                                 
-                                Text("By continuing, you acknowledge that you have read and understood our terms and privacy policy. You can review these documents anytime in the app settings.".localized)
+                                Text(NSLocalizedString("By continuing, you acknowledge that you have read and understood our terms and privacy policy. You can review these documents anytime in the app settings.", comment: "Acknowledgment text for terms agreement"))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                     .multilineTextAlignment(.center)
@@ -122,7 +122,7 @@ struct TermsAgreementView: View {
                             }
                         }) {
                             HStack {
-                                Text("Get Started".localized)
+                                Text(NSLocalizedString("Get Started", comment: "Button text to get started with the app"))
                                     .font(.headline)
                                     .fontWeight(.medium)
                                 
@@ -156,7 +156,7 @@ struct TermsAgreementView: View {
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done".localized) {
+                            Button(NSLocalizedString("Done", comment: "Button to dismiss terms view")) {
                                 showTermsSheet = false
                             }
                         }
@@ -169,7 +169,7 @@ struct TermsAgreementView: View {
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done".localized) {
+                            Button(NSLocalizedString("Done", comment: "Button to dismiss privacy policy view")) {
                                 showPrivacySheet = false
                             }
                         }
@@ -194,7 +194,7 @@ struct AgreementRow: View {
                     .font(.subheadline)
                     .fontWeight(.medium)
                 Spacer()
-                Button("Read".localized) {
+                Button(NSLocalizedString("Read", comment: "Button to read document")) {
                     onViewDocument()
                 }
                 .font(.caption)

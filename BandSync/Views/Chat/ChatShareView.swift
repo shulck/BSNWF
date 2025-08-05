@@ -41,11 +41,11 @@ struct ChatShareView: View {
                             .font(.system(size: 48))
                             .foregroundColor(.gray)
                         
-                        Text("No available chats".localized)
+                        Text(NSLocalizedString("No available chats", comment: "No available chats message"))
                             .font(.headline)
                             .foregroundColor(.secondary)
                         
-                        Text("Create other chats to share messages".localized)
+                        Text(NSLocalizedString("Create other chats to share messages", comment: "Instruction to create chats for sharing"))
                             .font(.caption)
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.center)
@@ -64,24 +64,24 @@ struct ChatShareView: View {
                     }
                 }
             }
-            .navigationTitle("Share".localized)
+            .navigationTitle(NSLocalizedString("Share", comment: "Share navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel share button")) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Share".localized) {
+                    Button(NSLocalizedString("Share", comment: "Share button")) {
                         shareToSelectedChats()
                     }
                     .disabled(selectedChats.isEmpty || isSharing)
                 }
             }
-            .alert("Error".localized, isPresented: $showingError) {
-                Button("OK".localized) { }
+            .alert(NSLocalizedString("Error", comment: "Error alert title"), isPresented: $showingError) {
+                Button(NSLocalizedString("OK", comment: "OK button")) { }
             } message: {
                 Text(errorMessage)
             }
@@ -95,14 +95,14 @@ struct ChatShareView: View {
     @ViewBuilder
     private func MessagePreviewSection() -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Message to send:".localized)
+            Text(NSLocalizedString("Message to send:", comment: "Message to send label"))
                 .font(.caption)
                 .foregroundColor(.secondary)
             
             VStack(alignment: .leading, spacing: 8) {
                 // Source information
                 HStack {
-                    Text("From chat:".localized)
+                    Text(NSLocalizedString("From chat:", comment: "From chat label"))
                         .font(.caption)
                         .foregroundColor(.blue)
                     
@@ -154,11 +154,11 @@ struct ChatShareView: View {
     @ViewBuilder
     private func AdditionalMessageSection() -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Additional message (optional):".localized)
+            Text(NSLocalizedString("Additional message (optional):", comment: "Additional message label"))
                 .font(.caption)
                 .foregroundColor(.secondary)
             
-            TextField("Add comment...".localized, text: $shareMessage, axis: .vertical)
+            TextField(NSLocalizedString("Add comment...", comment: "Add comment text field placeholder"), text: $shareMessage, axis: .vertical)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .lineLimit(1...3)
         }
@@ -168,7 +168,7 @@ struct ChatShareView: View {
     @ViewBuilder
     private func ChatSelectionSection() -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Select chats:".localized)
+            Text(NSLocalizedString("Select chats:", comment: "Select chats label"))
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .padding(.horizontal)
@@ -220,7 +220,7 @@ struct ChatShareView: View {
             self.isSharing = false
             
             if hasError {
-                self.errorMessage = "Failed to send message to some chats".localized
+                self.errorMessage = NSLocalizedString("Failed to send message to some chats", comment: "Error message for failed sharing")
                 self.showingError = true
             } else {
                 self.dismiss()
@@ -237,7 +237,7 @@ struct ChatShareView: View {
         }
         
         // Add forwarding information
-        content += String(format: "Forwarded from chat".localized, sourceChat.displayName)
+        content += String(format: NSLocalizedString("Forwarded from chat: %@", comment: "Forwarded from chat message format"), sourceChat.displayName)
         
         if !message.content.isEmpty {
             content += "\n\(message.content)"
@@ -325,11 +325,11 @@ struct ChatSelectionRow: View {
                     .fontWeight(.medium)
                 
                 if chat.type == .direct {
-                    Text("Private chat".localized)
+                    Text(NSLocalizedString("Private chat", comment: "Private chat label"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 } else {
-                    Text("\(chat.participants.count) \("participants".localized)")
+                    Text(String(format: NSLocalizedString("%d participants", comment: "Participants count format"), chat.participants.count))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

@@ -35,14 +35,14 @@ struct MerchView: View {
         
         var localizedName: String {
             switch self {
-            case .name: return "Name".localized
-            case .nameDesc: return "Name (Z-A)".localized
-            case .price: return "Price (Low to High)".localized
-            case .priceDesc: return "Price (High to Low)".localized
-            case .stock: return "Stock (Low to High)".localized
-            case .stockDesc: return "Stock (High to Low)".localized
-            case .newest: return "Newest First".localized
-            case .oldest: return "Oldest First".localized
+            case .name: return NSLocalizedString("Name", comment: "Sort option by name A-Z")
+            case .nameDesc: return NSLocalizedString("Name (Z-A)", comment: "Sort option by name Z-A")
+            case .price: return NSLocalizedString("Price (Low to High)", comment: "Sort option by price low to high")
+            case .priceDesc: return NSLocalizedString("Price (High to Low)", comment: "Sort option by price high to low")
+            case .stock: return NSLocalizedString("Stock (Low to High)", comment: "Sort option by stock low to high")
+            case .stockDesc: return NSLocalizedString("Stock (High to Low)", comment: "Sort option by stock high to low")
+            case .newest: return NSLocalizedString("Newest First", comment: "Sort option by newest first")
+            case .oldest: return NSLocalizedString("Oldest First", comment: "Sort option by oldest first")
             }
         }
     }
@@ -149,11 +149,11 @@ struct MerchView: View {
                     // Профессиональная горизонтальная прокрутка категорий
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 12) {
-                            categoryButton(title: "All".localized, icon: "tshirt.fill", category: nil)
+                            categoryButton(title: NSLocalizedString("All", comment: "Category filter for all merchandise"), icon: "tshirt.fill", category: nil)
 
                             ForEach(MerchCategory.allCases) { category in
                                 categoryButton(
-                                    title: category.rawValue.localized,
+                                    title: category.localizedName,
                                     icon: category.icon,
                                     category: category
                                 )
@@ -171,7 +171,7 @@ struct MerchView: View {
                     // Item counter and controls
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("ITEMS".localized)
+                            Text(NSLocalizedString("ITEMS", comment: "Header label for items count"))
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.secondary)
@@ -225,13 +225,13 @@ struct MerchView: View {
                                             .fill(Color.blue.opacity(0.1))
                                     )
                             }
-                            .confirmationDialog("Sort By".localized, isPresented: $showingSortOptions) {
+                            .confirmationDialog(NSLocalizedString("Sort By", comment: "Title for sort options dialog"), isPresented: $showingSortOptions) {
                                 ForEach(SortOption.allCases, id: \.self) { option in
                                     Button(option.localizedName) {
                                         sortOption = option
                                     }
                                 }
-                                Button("Cancel".localized, role: .cancel) {}
+                                Button(NSLocalizedString("Cancel", comment: "Cancel button in sort dialog"), role: .cancel) {}
                             }
                             
                             // Grid/List toggle
@@ -265,7 +265,7 @@ struct MerchView: View {
                                 .scaleEffect(1.5)
                                 .padding()
                             
-                            Text("Loading merchandise items...".localized)
+                            Text(NSLocalizedString("Loading merchandise items...", comment: "Loading message for merchandise items"))
                                 .font(.headline)
                                 .foregroundColor(.secondary)
                         }
@@ -288,8 +288,8 @@ struct MerchView: View {
                             }
                             
                             Text(searchText.isEmpty
-                                ? "No items in selected category".localized
-                                : "No items matching '\(searchText)'".localized)
+                                ? NSLocalizedString("No items in selected category", comment: "Message when no items in selected category")
+                                : NSLocalizedString("No items matching '\(searchText)'", comment: "Message when no items match search"))
                                 .font(.headline)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.center)
@@ -303,7 +303,7 @@ struct MerchView: View {
                                 }) {
                                     HStack {
                                         Image(systemName: "plus")
-                                        Text("Add New Item".localized)
+                                        Text(NSLocalizedString("Add New Item", comment: "Button to add new merchandise item"))
                                     }
                                     .font(.headline)
                                     .fontWeight(.bold)
@@ -388,9 +388,9 @@ struct MerchView: View {
                     }
                 }
             }
-            .navigationTitle("Merch".localized)
+            .navigationTitle(NSLocalizedString("Merch", comment: "Navigation title for merchandise screen"))
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $searchText, prompt: "Search items".localized)
+            .searchable(text: $searchText, prompt: NSLocalizedString("Search items", comment: "Search placeholder for merchandise items"))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
@@ -398,34 +398,34 @@ struct MerchView: View {
                             Button {
                                 showAdd = true
                             } label: {
-                                Label("Add item".localized, systemImage: "plus")
+                                Label(NSLocalizedString("Add item", comment: "Menu item to add merchandise"), systemImage: "plus")
                             }
                             
                             Button {
                                 showDrafts = true
                             } label: {
-                                Label("Saved drafts".localized, systemImage: "tray.and.arrow.down")
+                                Label(NSLocalizedString("Saved drafts", comment: "Menu item to view saved drafts"), systemImage: "tray.and.arrow.down")
                             }
                         }
 
                         Button {
                             showAnalytics = true
                         } label: {
-                            Label("Sales analytics".localized, systemImage: "chart.bar")
+                            Label(NSLocalizedString("Sales analytics", comment: "Menu item to view sales analytics"), systemImage: "chart.bar")
                         }
 
                         if !merchService.lowStockItems.isEmpty {
                             Button {
                                 showLowStockItems()
                             } label: {
-                                Label("Show low stock items".localized, systemImage: "exclamationmark.triangle")
+                                Label(NSLocalizedString("Show low stock items", comment: "Menu item to show low stock items"), systemImage: "exclamationmark.triangle")
                             }
                         }
                         
                         Button {
                             showingExportOptions = true
                         } label: {
-                            Label("Export".localized, systemImage: "square.and.arrow.up")
+                            Label(NSLocalizedString("Export", comment: "Menu item to export data"), systemImage: "square.and.arrow.up")
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
@@ -454,21 +454,21 @@ struct MerchView: View {
             .sheet(isPresented: $showDrafts) {
                 DraftsView()
             }
-            .alert("Low stock items".localized, isPresented: $showLowStockAlert) {
-                Button("OK".localized, role: .cancel) {}
+            .alert(NSLocalizedString("Low stock items", comment: "Title for low stock alert"), isPresented: $showLowStockAlert) {
+                Button(NSLocalizedString("OK", comment: "OK button"), role: .cancel) {}
             } message: {
-                Text("There are \(merchService.lowStockItems.count) items with stock below threshold.".localized)
+                Text(NSLocalizedString("There are %d items with stock below threshold.", comment: "Low stock alert message with count").replacingOccurrences(of: "%d", with: "\(merchService.lowStockItems.count)"))
             }
-            .confirmationDialog("Export Options".localized, isPresented: $showingExportOptions) {
-                Button("Export Inventory".localized) {
+            .confirmationDialog(NSLocalizedString("Export Options", comment: "Title for export options dialog"), isPresented: $showingExportOptions) {
+                Button(NSLocalizedString("Export Inventory", comment: "Button to export inventory")) {
                     exportInventory()
                 }
                 
-                Button("Export Sales".localized) {
+                Button(NSLocalizedString("Export Sales", comment: "Button to export sales")) {
                     exportSales()
                 }
                 
-                Button("Cancel".localized, role: .cancel) {}
+                Button(NSLocalizedString("Cancel", comment: "Cancel button"), role: .cancel) {}
             }
             .sheet(isPresented: $showingShareSheet) {
                 if let exportedData = exportedData {
@@ -645,7 +645,7 @@ struct MerchItemGridCell: View {
                     Spacer()
                     
                     HStack(spacing: 4) {
-                        Text("Stock:".localized)
+                        Text(NSLocalizedString("Stock:", comment: "Label for stock information"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .lineLimit(1)
@@ -664,7 +664,7 @@ struct MerchItemGridCell: View {
                     )
                 }
                 
-                Text(item.category.rawValue.localized)
+                Text(item.category.localizedName)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(1)
@@ -747,7 +747,7 @@ struct MerchItemRow: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.9)
 
-                Text("\(item.category.rawValue.localized) \(item.subcategory != nil ? "• \(item.subcategory!.rawValue.localized)" : "")")
+                Text("\(item.category.localizedName) \(item.subcategory != nil ? "• \(item.subcategory!.localizedName)" : "")")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(1)
@@ -757,7 +757,7 @@ struct MerchItemRow: View {
                 if item.category == .clothing {
                     // For clothing show sizes
                     HStack(spacing: 5) {
-                        Text("Sizes:".localized)
+                        Text(NSLocalizedString("Sizes:", comment: "Label for sizes information"))
                             .font(.caption2)
                             .foregroundColor(.secondary)
                             .lineLimit(1)
@@ -771,7 +771,7 @@ struct MerchItemRow: View {
                 } else {
                     // For other categories show total quantity
                     HStack(spacing: 5) {
-                        Text("Quantity:".localized)
+                        Text(NSLocalizedString("Quantity:", comment: "Label for quantity information"))
                             .font(.caption2)
                             .foregroundColor(.secondary)
                             .lineLimit(1)
@@ -807,7 +807,7 @@ struct MerchItemRow: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.9)
 
-                Text(String.localizedStringWithFormat("Total: %d".localized, item.totalStock))
+                Text(String.localizedStringWithFormat(NSLocalizedString("Total: %d", comment: "Total stock count"), item.totalStock))
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(1)
@@ -891,14 +891,14 @@ struct DraftsView: View {
                                     .foregroundColor(.gray)
                             }
                             
-                            Text("No Saved Drafts".localized)
+                            Text(NSLocalizedString("No Saved Drafts", comment: "Message when no drafts are saved"))
                                 .font(.title2)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.primary)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.9)
                             
-                            Text("Drafts you save while creating new merchandise will appear here".localized)
+                            Text(NSLocalizedString("Drafts you save while creating new merchandise will appear here", comment: "Information message about drafts"))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.center)
@@ -935,7 +935,7 @@ struct DraftsView: View {
                                                 .minimumScaleFactor(0.9)
                                             
                                             HStack {
-                                                Text(draft.category.rawValue.localized)
+                                                Text(draft.category.localizedName)
                                                     .font(.caption)
                                                     .foregroundColor(.secondary)
                                                     .lineLimit(1)
@@ -953,7 +953,7 @@ struct DraftsView: View {
                                             }
                                             
                                             if draft.totalStock > 0 {
-                                                Text(String.localizedStringWithFormat("Stock: %d".localized, draft.totalStock))
+                                                Text(String.localizedStringWithFormat(NSLocalizedString("Stock: %d", comment: "Stock count in draft"), draft.totalStock))
                                                     .font(.caption)
                                                     .foregroundColor(.secondary)
                                                     .lineLimit(1)
@@ -979,7 +979,7 @@ struct DraftsView: View {
                                     Button(role: .destructive) {
                                         deleteDraft(at: index)
                                     } label: {
-                                        Label("Delete".localized, systemImage: "trash")
+                                        Label(NSLocalizedString("Delete", comment: "Delete button"), systemImage: "trash")
                                     }
                                 }
                             }
@@ -988,18 +988,18 @@ struct DraftsView: View {
                     }
                 }
             }
-            .navigationTitle("Saved Drafts".localized)
+            .navigationTitle(NSLocalizedString("Saved Drafts", comment: "Navigation title for saved drafts"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done".localized) {
+                    Button(NSLocalizedString("Done", comment: "Done button")) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarLeading) {
                     if !drafts.isEmpty {
-                        Button("Clear All".localized) {
+                        Button(NSLocalizedString("Clear All", comment: "Clear all button")) {
                             UserDefaults.standard.removeObject(forKey: "merch_item_drafts")
                             drafts = []
                         }
@@ -1009,19 +1009,19 @@ struct DraftsView: View {
             .onAppear {
                 loadDrafts()
             }
-            .alert("Load Draft?".localized, isPresented: $showConfirmation) {
-                Button("Edit".localized) {
+            .alert(NSLocalizedString("Load Draft?", comment: "Alert title for loading draft"), isPresented: $showConfirmation) {
+                Button(NSLocalizedString("Edit", comment: "Edit button")) {
                     // Load draft functionality can be implemented here
                     showConfirmation = false
                     showAddView = true
                 }
                 
-                Button("Cancel".localized, role: .cancel) {
+                Button(NSLocalizedString("Cancel", comment: "Cancel button"), role: .cancel) {
                     selectedDraft = nil
                     showConfirmation = false
                 }
             } message: {
-                Text("Do you want to load and edit this draft?".localized)
+                Text(NSLocalizedString("Do you want to load and edit this draft?", comment: "Confirmation message for loading draft"))
             }
     }
     

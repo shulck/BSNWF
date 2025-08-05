@@ -31,14 +31,14 @@ struct EventRowView: View {
                 }
                 
                 HStack {
-                    Text(event.type.rawValue.localized)
+                    Text(NSLocalizedString(event.type.rawValue, comment: "Event type in row view"))
                         .font(.caption)
                         .padding(3)
                         .padding(.horizontal, 3)
                         .background(Color(hex: event.type.colorHex).opacity(0.2))
                         .cornerRadius(4)
                     
-                    Text(event.status.rawValue.localized)
+                    Text(NSLocalizedString(event.status.rawValue, comment: "Event status in row view"))
                         .font(.caption)
                         .foregroundColor(.gray)
                     

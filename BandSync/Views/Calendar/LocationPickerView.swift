@@ -38,17 +38,17 @@ struct LocationPickerView: View {
                     mapView
                 }
             }
-            .navigationTitle("Select Location".localized)
+            .navigationTitle(NSLocalizedString("Select Location", comment: "Navigation title for location picker"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button in location picker")) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done".localized) {
+                    Button(NSLocalizedString("Done", comment: "Done button in location picker")) {
                         dismiss()
                     }
                     .disabled(selectedLocation == nil)
@@ -67,7 +67,7 @@ struct LocationPickerView: View {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.gray)
             
-            TextField("Search for a place".localized, text: $searchText)
+            TextField(NSLocalizedString("Search for a place", comment: "Search placeholder in location picker"), text: $searchText)
                 .textFieldStyle(PlainTextFieldStyle())
                 .onChange(of: searchText) { _, newValue in
                     searchLocations(query: newValue)
@@ -94,7 +94,7 @@ struct LocationPickerView: View {
     private var loadingView: some View {
         VStack {
             ProgressView()
-            Text("searching".localized)
+            Text(NSLocalizedString("searching", comment: "Searching progress text"))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -174,7 +174,7 @@ struct LocationPickerView: View {
                 
                 Spacer()
                 
-                Button("Clear".localized) {
+                Button(NSLocalizedString("Clear", comment: "Clear selected location button")) {
                     selectedLocation = nil
                 }
                 .foregroundColor(.red)
@@ -189,7 +189,7 @@ struct LocationPickerView: View {
     
     private var mapInstructions: some View {
         VStack(spacing: 8) {
-            Text("Search for a location above".localized)
+            Text(NSLocalizedString("Search for a location above", comment: "Map instructions text"))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -364,7 +364,7 @@ struct LocationPickerView: View {
             addressComponents.append(country)
         }
         
-        return addressComponents.isEmpty ? "Unknown address".localized : addressComponents.joined(separator: ", ")
+        return addressComponents.isEmpty ? NSLocalizedString("Unknown address", comment: "Unknown address fallback text") : addressComponents.joined(separator: ", ")
     }
 }
 

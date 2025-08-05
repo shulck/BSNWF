@@ -271,21 +271,21 @@ struct GroupAvatarView: View {
         HStack(spacing: 15) {
             AvatarView(
                 avatarURL: nil,
-                name: "John Doe",
+                name: NSLocalizedString("previewUserJohnDoe", comment: "Preview user John Doe"),
                 size: 50,
                 role: .admin
             )
             
             AvatarView(
                 avatarURL: nil,
-                name: "Jane Smith",
+                name: NSLocalizedString("previewUserJaneSmith", comment: "Preview user Jane Smith"),
                 size: 50,
                 role: .musician
             )
             
             AvatarView(
                 avatarURL: nil,
-                name: "Bob Wilson",
+                name: NSLocalizedString("previewUserBobWilson", comment: "Preview user Bob Wilson"),
                 size: 50,
                 role: .member
             )
@@ -294,13 +294,13 @@ struct GroupAvatarView: View {
         HStack(spacing: 15) {
             GroupAvatarView(
                 logoURL: nil,
-                name: "Rock Band",
+                name: NSLocalizedString("previewGroupRockBand", comment: "Preview group Rock Band"),
                 size: 60
             )
             
             GroupAvatarView(
                 logoURL: nil,
-                name: "Jazz Ensemble",
+                name: NSLocalizedString("previewGroupJazzEnsemble", comment: "Preview group Jazz Ensemble"),
                 size: 60
             )
         }

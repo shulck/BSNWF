@@ -7,7 +7,7 @@ struct AddContactView: View {
     @State private var name = ""
     @State private var email = ""
     @State private var phone = ""
-    @State private var role = "Musicians"
+    @State private var role = NSLocalizedString("roleMusicians", comment: "Musicians role")
     @State private var company = ""
     @State private var contactSource = ""
     @State private var description = ""
@@ -16,62 +16,62 @@ struct AddContactView: View {
     
     // Extended role list for band manager
     private let roles = [
-        "Musicians",
-        "Manager",
-        "Band Members",
-        "Producers",
-        "Sound Engineers",
-        "Recording Engineers",
-        "Mixing Engineers",
-        "Mastering Engineers",
-        "Venue Owners",
-        "Venue Managers",
-        "Booking Agents",
-        "Event Organizers",
-        "Festival Coordinators",
-        "Promoters",
-        "Music Directors",
-        "A&R Representatives",
-        "Record Label Contacts",
-        "Music Publishers",
-        "Radio DJs",
-        "Music Journalists",
-        "Photographers",
-        "Videographers",
-        "Graphic Designers",
-        "Web Developers",
-        "Social Media Managers",
-        "PR Specialists",
-        "Music Lawyers",
-        "Business Managers",
-        "Accountants",
-        "Tour Managers",
-        "Roadies",
-        "Instrument Technicians",
-        "Lighting Technicians",
-        "Merchandise Vendors",
-        "Distribution Partners",
-        "Streaming Platform Contacts",
-        "Music Store Owners",
-        "Equipment Suppliers",
-        "Transportation Services",
-        "Accommodation Contacts",
-        "Fans & Supporters",
-        "Industry Contacts",
-        "Others"
+        NSLocalizedString("roleMusicians", comment: "Musicians role"),
+        NSLocalizedString("roleManager", comment: "Manager role"),
+        NSLocalizedString("roleBandMembers", comment: "Band Members role"),
+        NSLocalizedString("roleProducers", comment: "Producers role"),
+        NSLocalizedString("roleSoundEngineers", comment: "Sound Engineers role"),
+        NSLocalizedString("roleRecordingEngineers", comment: "Recording Engineers role"),
+        NSLocalizedString("roleMixingEngineers", comment: "Mixing Engineers role"),
+        NSLocalizedString("roleMasteringEngineers", comment: "Mastering Engineers role"),
+        NSLocalizedString("roleVenueOwners", comment: "Venue Owners role"),
+        NSLocalizedString("roleVenueManagers", comment: "Venue Managers role"),
+        NSLocalizedString("roleBookingAgents", comment: "Booking Agents role"),
+        NSLocalizedString("roleEventOrganizers", comment: "Event Organizers role"),
+        NSLocalizedString("roleFestivalCoordinators", comment: "Festival Coordinators role"),
+        NSLocalizedString("rolePromoters", comment: "Promoters role"),
+        NSLocalizedString("roleMusicDirectors", comment: "Music Directors role"),
+        NSLocalizedString("roleARRepresentatives", comment: "A&R Representatives role"),
+        NSLocalizedString("roleRecordLabelContacts", comment: "Record Label Contacts role"),
+        NSLocalizedString("roleMusicPublishers", comment: "Music Publishers role"),
+        NSLocalizedString("roleRadioDJs", comment: "Radio DJs role"),
+        NSLocalizedString("roleMusicJournalists", comment: "Music Journalists role"),
+        NSLocalizedString("rolePhotographers", comment: "Photographers role"),
+        NSLocalizedString("roleVideographers", comment: "Videographers role"),
+        NSLocalizedString("roleGraphicDesigners", comment: "Graphic Designers role"),
+        NSLocalizedString("roleWebDevelopers", comment: "Web Developers role"),
+        NSLocalizedString("roleSocialMediaManagers", comment: "Social Media Managers role"),
+        NSLocalizedString("rolePRSpecialists", comment: "PR Specialists role"),
+        NSLocalizedString("roleMusicLawyers", comment: "Music Lawyers role"),
+        NSLocalizedString("roleBusinessManagers", comment: "Business Managers role"),
+        NSLocalizedString("roleAccountants", comment: "Accountants role"),
+        NSLocalizedString("roleTourManagers", comment: "Tour Managers role"),
+        NSLocalizedString("roleRoadies", comment: "Roadies role"),
+        NSLocalizedString("roleInstrumentTechnicians", comment: "Instrument Technicians role"),
+        NSLocalizedString("roleLightingTechnicians", comment: "Lighting Technicians role"),
+        NSLocalizedString("roleMerchandiseVendors", comment: "Merchandise Vendors role"),
+        NSLocalizedString("roleDistributionPartners", comment: "Distribution Partners role"),
+        NSLocalizedString("roleStreamingPlatformContacts", comment: "Streaming Platform Contacts role"),
+        NSLocalizedString("roleMusicStoreOwners", comment: "Music Store Owners role"),
+        NSLocalizedString("roleEquipmentSuppliers", comment: "Equipment Suppliers role"),
+        NSLocalizedString("roleTransportationServices", comment: "Transportation Services role"),
+        NSLocalizedString("roleAccommodationContacts", comment: "Accommodation Contacts role"),
+        NSLocalizedString("roleFansAndSupporters", comment: "Fans & Supporters role"),
+        NSLocalizedString("roleIndustryContacts", comment: "Industry Contacts role"),
+        NSLocalizedString("roleOthers", comment: "Others role")
     ]
     
     var body: some View {
         NavigationStack {
             Form {
                 // Basic information
-                Section("Contact Information".localized) {
+                Section(NSLocalizedString("contactInformation", comment: "Contact Information section")) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Full Name".localized)
+                        Text(NSLocalizedString("fullName", comment: "Full Name label"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
-                        TextField("Enter full name".localized, text: $name)
+                        TextField(NSLocalizedString("enterFullName", comment: "Enter full name placeholder"), text: $name)
                             .textContentType(.name)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 10)
@@ -80,11 +80,11 @@ struct AddContactView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Email Address".localized)
+                        Text(NSLocalizedString("emailAddress", comment: "Email Address label"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
-                        TextField("Enter email address".localized, text: $email)
+                        TextField(NSLocalizedString("enterEmailAddress", comment: "Enter email address placeholder"), text: $email)
                             .keyboardType(.emailAddress)
                             .textContentType(.emailAddress)
                             .autocapitalization(.none)
@@ -95,11 +95,11 @@ struct AddContactView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Phone Number".localized)
+                        Text(NSLocalizedString("phoneNumber", comment: "Phone Number label"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
-                        TextField("Enter phone number".localized, text: $phone)
+                        TextField(NSLocalizedString("enterPhoneNumber", comment: "Enter phone number placeholder"), text: $phone)
                             .keyboardType(.phonePad)
                             .textContentType(.telephoneNumber)
                             .padding(.horizontal, 12)
@@ -110,20 +110,20 @@ struct AddContactView: View {
                 }
                 
                 // Professional information
-                Section("Professional Details".localized) {
-                    Picker("Role/Position".localized, selection: $role) {
+                Section(NSLocalizedString("professionalDetails", comment: "Professional Details section")) {
+                    Picker(NSLocalizedString("rolePosition", comment: "Role/Position picker label"), selection: $role) {
                         ForEach(roles, id: \.self) { role in
-                            Text(role.localized).tag(role)
+                            Text(role).tag(role)
                         }
                     }
                     .pickerStyle(.navigationLink)
                     
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Company/Organization".localized)
+                        Text(NSLocalizedString("companyOrganization", comment: "Company/Organization label"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
-                        TextField("Enter company name".localized, text: $company)
+                        TextField(NSLocalizedString("enterCompanyName", comment: "Enter company name placeholder"), text: $company)
                             .textContentType(.organizationName)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 10)
@@ -132,11 +132,11 @@ struct AddContactView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("How did you meet/Source".localized)
+                        Text(NSLocalizedString("howDidYouMeetSource", comment: "How did you meet/Source label"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
-                        TextField("Contact source placeholder".localized, text: $contactSource)
+                        TextField(NSLocalizedString("contactSourcePlaceholder", comment: "Contact source placeholder"), text: $contactSource)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 10)
                             .background(Color(.systemGray6))
@@ -145,13 +145,13 @@ struct AddContactView: View {
                 }
                 
                 // Description and notes
-                Section("Notes & Description".localized) {
+                Section(NSLocalizedString("notesDescription", comment: "Notes & Description section")) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Description/Notes".localized)
+                        Text(NSLocalizedString("descriptionNotes", comment: "Description/Notes label"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
-                        TextField("Contact notes placeholder".localized, text: $description, axis: .vertical)
+                        TextField(NSLocalizedString("contactNotesPlaceholder", comment: "Contact notes placeholder"), text: $description, axis: .vertical)
                             .lineLimit(3...6)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 10)
@@ -169,18 +169,18 @@ struct AddContactView: View {
                     }
                 }
             }
-            .navigationTitle("Add Contact".localized)
+            .navigationTitle(NSLocalizedString("addContact", comment: "Add Contact title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("cancel", comment: "Cancel button")) {
                         isPresented = false
                     }
                     .foregroundColor(.secondary)
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save".localized) {
+                    Button(NSLocalizedString("save", comment: "Save button")) {
                         saveContact()
                     }
                     .font(.headline)
@@ -195,7 +195,7 @@ struct AddContactView: View {
                         ProgressView()
                             .scaleEffect(1.2)
                         
-                        Text("Saving contact...".localized)
+                        Text(NSLocalizedString("savingContact", comment: "Saving contact progress message"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -213,17 +213,17 @@ struct AddContactView: View {
     
     private func saveContact() {
         guard let groupId = AppState.shared.user?.groupId else {
-            errorMessage = "Could not determine group".localized
+            errorMessage = NSLocalizedString("couldNotDetermineGroup", comment: "Could not determine group error")
             return
         }
         
         guard !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            errorMessage = "Name is required".localized
+            errorMessage = NSLocalizedString("nameIsRequired", comment: "Name is required error")
             return
         }
         
         if !email.isEmpty && !isValidEmail(email) {
-            errorMessage = "Please enter a valid email address".localized
+            errorMessage = NSLocalizedString("pleaseEnterValidEmail", comment: "Please enter a valid email address error")
             return
         }
         
@@ -248,7 +248,7 @@ struct AddContactView: View {
                 if success {
                     isPresented = false
                 } else {
-                    errorMessage = "Failed to save contact. Please try again.".localized
+                    errorMessage = NSLocalizedString("failedToSaveContact", comment: "Failed to save contact error")
                 }
             }
         }

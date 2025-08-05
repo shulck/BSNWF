@@ -64,20 +64,20 @@ struct TimingEditorView: View {
                     .padding(.top, 20)
                 }
             }
-            .navigationTitle("Edit Timing".localized)
+            .navigationTitle(NSLocalizedString("Edit Timing", comment: "Navigation title for timing editor"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     doneButton
                 }
             }
-            .alert("Add Breaks".localized, isPresented: $showAlertForBreaks) {
-                Button("5 min between songs".localized) { addBreaks(5) }
-                Button("10 min between songs".localized) { addBreaks(10) }
-                Button("15 min between songs".localized) { addBreaks(15) }
-                Button("Cancel".localized, role: .cancel) {}
+            .alert(NSLocalizedString("Add Breaks", comment: "Alert title for adding breaks"), isPresented: $showAlertForBreaks) {
+                Button(NSLocalizedString("5 min between songs", comment: "Option to add 5 minute breaks")) { addBreaks(5) }
+                Button(NSLocalizedString("10 min between songs", comment: "Option to add 10 minute breaks")) { addBreaks(10) }
+                Button(NSLocalizedString("15 min between songs", comment: "Option to add 15 minute breaks")) { addBreaks(15) }
+                Button(NSLocalizedString("Cancel", comment: "Cancel button"), role: .cancel) {}
             } message: {
-                Text("Select The Duration Of Breaks Between Songs".localized)
+                Text(NSLocalizedString("Select The Duration Of Breaks Between Songs", comment: "Alert message for selecting break duration"))
             }
         }
     }
@@ -103,12 +103,12 @@ struct TimingEditorView: View {
             }
             
             VStack(spacing: 8) {
-                Text("Timing Editor".localized)
+                Text(NSLocalizedString("Timing Editor", comment: "Header for timing editor"))
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 
-                Text("Adjust Your Concert Schedule".localized)
+                Text(NSLocalizedString("Adjust Your Concert Schedule", comment: "Description for timing editor"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -125,7 +125,7 @@ struct TimingEditorView: View {
                     .foregroundColor(.blue)
                     .font(.title3)
                 
-                Text("Concert Parameters".localized)
+                Text(NSLocalizedString("Concert Parameters", comment: "Section header for concert parameters"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -141,7 +141,7 @@ struct TimingEditorView: View {
             VStack(spacing: 16) {
                 // Concert Start
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Concert Start".localized)
+                    Text(NSLocalizedString("Concert Start", comment: "Label for concert start time"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
@@ -160,12 +160,12 @@ struct TimingEditorView: View {
                 // Fix End Time Toggle
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Fixed End Time".localized)
+                        Text(NSLocalizedString("Fixed End Time", comment: "Toggle label for fixed end time"))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.primary)
                         
-                        Text("Set A Specific End Time For The Concert".localized)
+                        Text(NSLocalizedString("Set A Specific End Time For The Concert", comment: "Description for fixed end time toggle"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -186,7 +186,7 @@ struct TimingEditorView: View {
                 // Concert End (if enabled)
                 if hasEndTime {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Concert End".localized)
+                        Text(NSLocalizedString("Concert End", comment: "Label for concert end time"))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
@@ -203,7 +203,7 @@ struct TimingEditorView: View {
                     }
                     
                     // Add Breaks Button
-                    Button("Add Breaks Between Songs".localized) {
+                    Button(NSLocalizedString("Add Breaks Between Songs", comment: "Button to add breaks between songs")) {
                         showAlertForBreaks = true
                     }
                     .font(.subheadline)
@@ -239,7 +239,7 @@ struct TimingEditorView: View {
                     .foregroundColor(.purple)
                     .font(.title3)
                 
-                Text("Setlist Timing".localized)
+                Text(NSLocalizedString("Setlist Timing", comment: "Section header for setlist timing"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 

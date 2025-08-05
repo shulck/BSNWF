@@ -74,18 +74,18 @@ struct AddEventView: View {
                 ScheduleSection
                 ErrorSection
             }
-            .navigationTitle("New event".localized)
+            .navigationTitle(NSLocalizedString("New event", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save".localized) {
+                    Button(NSLocalizedString("Save", comment: "")) {
                         saveEvent()
                     }
                     .disabled(event.title.isEmpty || isLoading)
                 }
 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized, role: .cancel) {
+                    Button(NSLocalizedString("Cancel", comment: ""), role: .cancel) {
                         dismiss()
                     }
                 }
@@ -137,15 +137,15 @@ struct AddEventView: View {
     // MARK: - Sections
     
     private var BasicInfoSection: some View {
-        Section(header: Text("basic".localized)) {
-            TextField("Title".localized, text: $event.title)
+        Section(header: Text(NSLocalizedString("basic", comment: ""))) {
+            TextField(NSLocalizedString("Title", comment: ""), text: $event.title)
             
-            DatePicker("Date".localized, selection: $event.date)
+            DatePicker(NSLocalizedString("Date", comment: ""), selection: $event.date)
             
-            Toggle("Recurring Event".localized, isOn: $isRecurring)
+            Toggle(NSLocalizedString("Recurring Event", comment: ""), isOn: $isRecurring)
             
             if isRecurring {
-                DatePicker("End Date".localized, selection: $endDate, in: event.date..., displayedComponents: .date)
+                DatePicker(NSLocalizedString("End Date", comment: ""), selection: $endDate, in: event.date..., displayedComponents: .date)
                     .onChange(of: event.date) { oldValue, newValue in
                         if endDate < newValue {
                             endDate = newValue
@@ -153,15 +153,15 @@ struct AddEventView: View {
                     }
             }
             
-            Picker("Type".localized, selection: $event.type) {
+            Picker(NSLocalizedString("Type", comment: ""), selection: $event.type) {
                 ForEach(EventType.allCases, id: \.self) {
-                    Text($0.rawValue.localized).tag($0)
+                    Text(NSLocalizedString($0.rawValue, comment: "")).tag($0)
                 }
             }
             
-            Picker("Status".localized, selection: $event.status) {
+            Picker(NSLocalizedString("Status", comment: ""), selection: $event.status) {
                 ForEach(EventStatus.allCases, id: \.self) {
-                    Text($0.rawValue.localized).tag($0)
+                    Text(NSLocalizedString($0.rawValue, comment: "")).tag($0)
                 }
             }
             
@@ -170,7 +170,7 @@ struct AddEventView: View {
                     showingSetlistSelector = true
                 } label: {
                     HStack {
-                        Text("setlist".localized)
+                        Text(NSLocalizedString("setlist", comment: ""))
                         Spacer()
                         Text(getSetlistName())
                             .foregroundColor(.gray)
@@ -183,8 +183,8 @@ struct AddEventView: View {
     }
     
     private var PrivacySection: some View {
-        Section(header: Text("privacy".localized)) {
-            Toggle("Personal Event".localized, isOn: $event.isPersonal)
+        Section(header: Text(NSLocalizedString("privacy", comment: ""))) {
+            Toggle(NSLocalizedString("Personal Event", comment: ""), isOn: $event.isPersonal)
                 .onChange(of: event.isPersonal) { oldValue, newValue in
                     if newValue {
                         event.createdBy = AppState.shared.user?.id
@@ -192,7 +192,7 @@ struct AddEventView: View {
                 }
             
             if event.isPersonal {
-                Text("Event visible only to you".localized)
+                Text(NSLocalizedString("Event visible only to you", comment: ""))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -202,17 +202,17 @@ struct AddEventView: View {
     private var RecurringEventsSection: some View {
         Group {
             if isRecurring {
-                Section(header: Text("Recurring Events".localized)) {
+                Section(header: Text(NSLocalizedString("Recurring Events", comment: ""))) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text(String(format: "Will create events".localized, calculateNumberOfEvents()))
+                        Text(String(format: NSLocalizedString("Will create %d events", comment: ""), calculateNumberOfEvents()))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
-                        Text(formatDate(event.date) + " " + "to".localized + " " + formatDate(endDate))
+                        Text(formatDate(event.date) + " " + NSLocalizedString("to", comment: "") + " " + formatDate(endDate))
                             .font(.headline)
                         
                         if calculateNumberOfEvents() > 7 {
-                            Text("Warning many events".localized)
+                            Text(NSLocalizedString("Warning: This will create many events", comment: ""))
                                 .font(.caption)
                                 .foregroundColor(.orange)
                         }
@@ -224,14 +224,14 @@ struct AddEventView: View {
     }
     
     private var LocationSection: some View {
-        Section(header: Text("location".localized)) {
+        Section(header: Text(NSLocalizedString("location", comment: ""))) {
             Button(action: {
                 showingLocationPicker = true
             }) {
                 HStack {
                     Image(systemName: "map")
                         .foregroundColor(.blue)
-                    Text("Select on map".localized)
+                    Text(NSLocalizedString("Select on map", comment: ""))
                 }
             }
             
@@ -245,13 +245,13 @@ struct AddEventView: View {
                 }
                 .padding(.vertical, 4)
                 
-                Button("Clear location".localized) {
+                Button(NSLocalizedString("Clear location", comment: "")) {
                     selectedLocation = nil
                     event.location = nil
                 }
                 .foregroundColor(.red)
             } else {
-                TextField("Venue".localized, text: Binding(
+                TextField(NSLocalizedString("Venue", comment: ""), text: Binding(
                     get: { event.location ?? "" },
                     set: { event.location = $0.isEmpty ? nil : $0 }
                 ))
@@ -262,15 +262,15 @@ struct AddEventView: View {
     private var FeeSection: some View {
         Group {
             if [.concert, .festival].contains(event.type) {
-                Section(header: Text("Fee".localized)) {
+                Section(header: Text(NSLocalizedString("Fee", comment: "Fee section title"))) {
                     HStack {
-                        TextField("Amount".localized, value: Binding(
+                        TextField(NSLocalizedString("Amount", comment: "Amount placeholder"), value: Binding(
                             get: { event.fee ?? 0 },
                             set: { event.fee = $0 > 0 ? $0 : nil }
                         ), formatter: NumberFormatter())
                         .keyboardType(.decimalPad)
                         
-                        TextField("Currency".localized, text: Binding(
+                        TextField(NSLocalizedString("Currency", comment: "Currency placeholder"), text: Binding(
                             get: { event.currency ?? "EUR" },
                             set: { event.currency = $0.isEmpty ? "EUR" : $0 }
                         ))
@@ -284,8 +284,8 @@ struct AddEventView: View {
     private var TicketSection: some View {
         Group {
             if [.concert, .festival].contains(event.type) {
-                Section(header: Text("Ticket Information".localized)) {
-                    Toggle("Paid Event".localized, isOn: Binding(
+                Section(header: Text(NSLocalizedString("Ticket Information", comment: "Ticket information section title"))) {
+                    Toggle(NSLocalizedString("Paid Event", comment: "Paid event toggle"), isOn: Binding(
                         get: { event.isPaidEvent ?? false },
                         set: { newValue in
                             event.isPaidEvent = newValue
@@ -296,7 +296,7 @@ struct AddEventView: View {
                     ))
                     
                     if event.isPaidEvent ?? false {
-                        TextField("Ticket Purchase URL".localized, text: Binding(
+                        TextField(NSLocalizedString("Ticket Purchase URL", comment: "Ticket purchase URL placeholder"), text: Binding(
                             get: { event.ticketPurchaseUrl ?? "" },
                             set: { event.ticketPurchaseUrl = $0.isEmpty ? nil : $0 }
                         ))
@@ -304,11 +304,11 @@ struct AddEventView: View {
                         .autocapitalization(.none)
                         .textContentType(.URL)
                         
-                        Text("Buy Tickets".localized)
+                        Text(NSLocalizedString("Buy Tickets", comment: "Buy tickets text"))
                             .font(.caption)
                             .foregroundColor(.orange)
                     } else {
-                        Text("Event is free".localized)
+                        Text(NSLocalizedString("Event is free", comment: "Event is free text"))
                             .font(.caption)
                             .foregroundColor(.green)
                     }
@@ -320,20 +320,20 @@ struct AddEventView: View {
     private var OrganizerSection: some View {
         Group {
             if [.concert, .festival].contains(event.type) {
-                Section(header: Text("organizer".localized)) {
-                    TextField("Name".localized, text: Binding(
+                Section(header: Text(NSLocalizedString("organizer", comment: "Organizer section title"))) {
+                    TextField(NSLocalizedString("Name", comment: "Name placeholder"), text: Binding(
                         get: { event.organizerName ?? "" },
                         set: { event.organizerName = $0.isEmpty ? nil : $0 }
                     ))
                     
-                    TextField("Email".localized, text: Binding(
+                    TextField(NSLocalizedString("Email", comment: "Email placeholder"), text: Binding(
                         get: { event.organizerEmail ?? "" },
                         set: { event.organizerEmail = $0.isEmpty ? nil : $0 }
                     ))
                     .keyboardType(.emailAddress)
                     .autocapitalization(.none)
                     
-                    TextField("Phone".localized, text: Binding(
+                    TextField(NSLocalizedString("Phone", comment: "Phone placeholder"), text: Binding(
                         get: { event.organizerPhone ?? "" },
                         set: { event.organizerPhone = $0.isEmpty ? nil : $0 }
                     ))
@@ -346,20 +346,20 @@ struct AddEventView: View {
     private var CoordinatorSection: some View {
         Group {
             if [.concert, .festival].contains(event.type) {
-                Section(header: Text("coordinator".localized)) {
-                    TextField("Name".localized, text: Binding(
+                Section(header: Text(NSLocalizedString("coordinator", comment: "Coordinator section title"))) {
+                    TextField(NSLocalizedString("Name", comment: "Name placeholder"), text: Binding(
                         get: { event.coordinatorName ?? "" },
                         set: { event.coordinatorName = $0.isEmpty ? nil : $0 }
                     ))
                     
-                    TextField("Email".localized, text: Binding(
+                    TextField(NSLocalizedString("Email", comment: "Email placeholder"), text: Binding(
                         get: { event.coordinatorEmail ?? "" },
                         set: { event.coordinatorEmail = $0.isEmpty ? nil : $0 }
                     ))
                     .keyboardType(.emailAddress)
                     .autocapitalization(.none)
                     
-                    TextField("Phone".localized, text: Binding(
+                    TextField(NSLocalizedString("Phone", comment: "Phone placeholder"), text: Binding(
                         get: { event.coordinatorPhone ?? "" },
                         set: { event.coordinatorPhone = $0.isEmpty ? nil : $0 }
                     ))
@@ -373,7 +373,7 @@ struct AddEventView: View {
         Group {
             if [.concert, .festival].contains(event.type) {
                 Section(header: HStack {
-                    Text("Additional Contacts".localized)
+                    Text(NSLocalizedString("Additional Contacts", comment: "Additional contacts section title"))
                     Spacer()
                     Button(action: {
                         editingContactIndex = nil
@@ -384,7 +384,7 @@ struct AddEventView: View {
                     }
                 }) {
                     if additionalContacts.isEmpty {
-                        Text("No additional contacts added".localized)
+                        Text(NSLocalizedString("No additional contacts added", comment: "No additional contacts message"))
                             .foregroundColor(.gray)
                             .italic()
                     } else {
@@ -424,26 +424,26 @@ struct AddEventView: View {
     private var AccommodationSection: some View {
         Group {
             if [.concert, .festival, .photoshoot].contains(event.type) {
-                Section(header: Text("accommodation".localized)) {
-                    TextField("Hotel name".localized, text: Binding(
+                Section(header: Text(NSLocalizedString("accommodation", comment: "Accommodation section title"))) {
+                    TextField(NSLocalizedString("Hotel name", comment: "Hotel name placeholder"), text: Binding(
                         get: { event.hotelName ?? "" },
                         set: { event.hotelName = $0.isEmpty ? nil : $0 }
                     ))
                     .autocapitalization(.words)
 
-                    TextField("Hotel address".localized, text: Binding(
+                    TextField(NSLocalizedString("Hotel address", comment: "Hotel address placeholder"), text: Binding(
                         get: { event.hotelAddress ?? "" },
                         set: { event.hotelAddress = $0.isEmpty ? nil : $0 }
                     ))
                     .autocapitalization(.words)
 
                     if let hotelName = event.hotelName, !hotelName.isEmpty {
-                        DatePicker("Check-in".localized, selection: Binding(
+                        DatePicker(NSLocalizedString("Check-in", comment: "Check-in date picker"), selection: Binding(
                             get: { event.hotelCheckIn ?? event.date },
                             set: { event.hotelCheckIn = $0 }
                         ), displayedComponents: [.date, .hourAndMinute])
                         
-                        DatePicker("Check-out".localized, selection: Binding(
+                        DatePicker(NSLocalizedString("Check-out", comment: "Check-out date picker"), selection: Binding(
                             get: { event.hotelCheckOut ?? Calendar.current.date(byAdding: .day, value: 1, to: event.date)! },
                             set: { event.hotelCheckOut = $0 }
                         ), displayedComponents: [.date, .hourAndMinute])
@@ -453,7 +453,7 @@ struct AddEventView: View {
                                 .foregroundColor(event.hotelBreakfastIncluded == true ? .green : .gray)
                                 .font(.title3)
                                 
-                            Text("Breakfast included".localized)
+                            Text(NSLocalizedString("Breakfast included", comment: "Breakfast included text"))
                                 .font(.body)
                             
                             Spacer()
@@ -473,7 +473,7 @@ struct AddEventView: View {
                             Button {
                                 checkRouteToHotel(address)
                             } label: {
-                                Label("Check route".localized, systemImage: "map")
+                                Label(NSLocalizedString("Check route", comment: "Check route button"), systemImage: "map")
                                     .foregroundColor(.blue)
                             }
                         }
@@ -484,7 +484,7 @@ struct AddEventView: View {
     }
     
     private var NotesSection: some View {
-        Section(header: Text("notes".localized)) {
+        Section(header: Text(NSLocalizedString("notes", comment: "Notes section title"))) {
             TextEditor(text: Binding(
                 get: { event.notes ?? "" },
                 set: { event.notes = $0.isEmpty ? nil : $0 }
@@ -494,18 +494,18 @@ struct AddEventView: View {
     }
     
     private var ScheduleSection: some View {
-        Section(header: Text("Daily Schedule".localized)) {
+        Section(header: Text(NSLocalizedString("Daily Schedule", comment: "Daily schedule section title"))) {
             Button {
                 showingScheduleEditor = true
             } label: {
                 HStack {
-                    Text("schedule".localized)
+                    Text(NSLocalizedString("schedule", comment: "Schedule text"))
                     Spacer()
                     if let schedule = event.schedule, !schedule.isEmpty {
-                        Text("\(schedule.count) " + "items".localized)
+                        Text("\(schedule.count) " + NSLocalizedString("items", comment: "Items count text"))
                             .foregroundColor(.gray)
                     } else {
-                        Text("Add schedule".localized)
+                        Text(NSLocalizedString("Add schedule", comment: "Add schedule button"))
                             .foregroundColor(.blue)
                     }
                     Image(systemName: "chevron.right")
@@ -522,7 +522,7 @@ struct AddEventView: View {
                     }
                     
                     if schedule.count > 3 {
-                        Text(String(format: "And more".localized, schedule.count - 3))
+                        Text(String(format: NSLocalizedString("And more", comment: "And more items format"), schedule.count - 3))
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
@@ -572,22 +572,22 @@ struct AddEventView: View {
            let setlist = setlistService.setlists.first(where: { $0.id == setlistId }) {
             return setlist.name
         }
-        return "Not selected".localized
+        return NSLocalizedString("Not selected", comment: "Not selected text")
     }
     
     private func checkRouteToHotel(_ address: String) {
-        NavigationService.shared.navigateToAddress(address, name: event.hotelName ?? "Hotel".localized)
+        NavigationService.shared.navigateToAddress(address, name: event.hotelName ?? NSLocalizedString("Hotel", comment: "Hotel name fallback"))
     }
     
     private func saveEvent() {
         guard let groupId = AppState.shared.user?.groupId else {
-            errorMessage = "Could not determine group".localized
+            errorMessage = NSLocalizedString("Could not determine group", comment: "Could not determine group error")
             return
         }
         
         if (event.isPaidEvent ?? false), let urlString = event.ticketPurchaseUrl, !urlString.isEmpty {
             if !isValidURL(urlString) {
-                errorMessage = "Please enter a valid ticket purchase URL"
+                errorMessage = NSLocalizedString("Please enter a valid ticket purchase URL", comment: "Invalid ticket URL error")
                 return
             }
         }
@@ -673,7 +673,7 @@ struct AddEventView: View {
             isLoading = false
             
             if anyFailed {
-                errorMessage = "Some events failed to save".localized
+                errorMessage = NSLocalizedString("Some events failed to save", comment: "Some events failed to save error")
             } else {
                 dismiss()
             }
@@ -707,7 +707,7 @@ struct AddEventView: View {
                     
                     dismiss()
                 } else {
-                    errorMessage = "Failed to save event".localized
+                    errorMessage = NSLocalizedString("Failed to save event", comment: "Failed to save event error")
                 }
             }
         }
@@ -734,7 +734,7 @@ struct AddEventView: View {
                 name: event.organizerName ?? "",
                 email: event.organizerEmail ?? "",
                 phone: event.organizerPhone ?? "",
-                role: "Organizers".localized,
+                role: NSLocalizedString("Organizers", comment: "Organizers role"),
                 groupId: event.groupId,
                 eventTag: event.title,
                 eventType: event.type.rawValue
@@ -751,7 +751,7 @@ struct AddEventView: View {
                 name: event.coordinatorName ?? "",
                 email: event.coordinatorEmail ?? "",
                 phone: event.coordinatorPhone ?? "",
-                role: "Coordinators".localized,
+                role: NSLocalizedString("Coordinators", comment: "Coordinators role"),
                 groupId: event.groupId,
                 eventTag: event.title,
                 eventType: event.type.rawValue

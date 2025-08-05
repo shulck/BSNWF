@@ -18,7 +18,7 @@ struct PermissionsView: View {
                             ProgressView()
                                 .scaleEffect(0.8)
                             
-                            Text("Loading permissions...".localized)
+                            Text(NSLocalizedString("Loading permissions...", comment: ""))
                                 .font(.body)
                                 .foregroundColor(.secondary)
                             
@@ -33,12 +33,12 @@ struct PermissionsView: View {
                                 permissionsIcon(icon: "arrow.clockwise", color: .blue)
                                 
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Retry Loading".localized)
+                                    Text(NSLocalizedString("Retry Loading", comment: ""))
                                         .font(.body)
                                         .fontWeight(.medium)
                                         .foregroundColor(.primary)
                                     
-                                    Text("Try to load permissions again".localized)
+                                    Text(NSLocalizedString("Try to load permissions again", comment: ""))
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                 }
@@ -71,7 +71,7 @@ struct PermissionsView: View {
                         HStack(spacing: 12) {
                             permissionsIcon(icon: "info.circle.fill", color: .blue)
                             
-                            Text("Here you can configure which roles have access to different application modules.".localized)
+                            Text(NSLocalizedString("Here you can configure which roles have access to different application modules.", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                             
@@ -79,7 +79,7 @@ struct PermissionsView: View {
                         }
                         .padding(.vertical, 4)
                     } header: {
-                        Text("Access Management".localized)
+                        Text(NSLocalizedString("Access Management", comment: ""))
                     }
                     
                     // Modules Section
@@ -110,7 +110,7 @@ struct PermissionsView: View {
                             .buttonStyle(PlainButtonStyle())
                         }
                     } header: {
-                        Text("Module Permissions".localized)
+                        Text(NSLocalizedString("Module Permissions", comment: ""))
                     }
                     
                     // Reset Settings Section
@@ -122,12 +122,12 @@ struct PermissionsView: View {
                                 permissionsIcon(icon: "arrow.counterclockwise", color: .red)
                                 
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Reset to Default".localized)
+                                    Text(NSLocalizedString("Reset to Default", comment: ""))
                                         .font(.body)
                                         .fontWeight(.medium)
                                         .foregroundColor(.red)
                                     
-                                    Text("Restore default permission settings".localized)
+                                    Text(NSLocalizedString("Restore default permission settings", comment: ""))
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                 }
@@ -146,7 +146,7 @@ struct PermissionsView: View {
                                 ProgressView()
                                     .scaleEffect(0.8)
                                 
-                                Text("Updating permissions...".localized)
+                                Text(NSLocalizedString("Updating permissions...", comment: ""))
                                     .font(.body)
                                     .foregroundColor(.secondary)
                                 
@@ -174,20 +174,20 @@ struct PermissionsView: View {
                 }
             }
         }
-        .navigationTitle("Permissions".localized)
+        .navigationTitle(NSLocalizedString("Permissions", comment: ""))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showModuleEditor) {
             if let module = selectedModule {
                 ModulePermissionEditorView(module: module)
             }
         }
-        .alert("Reset permissions?".localized, isPresented: $showResetConfirmation) {
-            Button("Cancel".localized, role: .cancel) {}
-            Button("Reset".localized, role: .destructive) {
+        .alert(NSLocalizedString("Reset permissions?", comment: ""), isPresented: $showResetConfirmation) {
+            Button(NSLocalizedString("Cancel", comment: ""), role: .cancel) {}
+            Button(NSLocalizedString("Reset", comment: ""), role: .destructive) {
                 permissionService.resetToDefaults()
             }
         } message: {
-            Text("This action will reset all permission settings to default values. Are you sure?".localized)
+            Text(NSLocalizedString("This action will reset all permission settings to default values. Are you sure?", comment: ""))
         }
         .onAppear {
             if !hasAppeared {
@@ -239,7 +239,7 @@ struct PermissionsView: View {
         let roles = permissionService.getRolesWithAccess(to: module)
         
         if roles.isEmpty {
-            return "No access configured".localized
+            return NSLocalizedString("No access configured", comment: "")
         }
         
         return roles.map { getLocalizedRoleName(for: $0) }.joined(separator: ", ")
@@ -247,10 +247,10 @@ struct PermissionsView: View {
     
     private func getLocalizedRoleName(for role: UserModel.UserRole) -> String {
         switch role {
-        case .admin: return "Admin".localized
-        case .manager: return "Manager".localized
-        case .musician: return "Musician".localized
-        case .member: return "Member".localized
+        case .admin: return NSLocalizedString("Admin", comment: "")
+        case .manager: return NSLocalizedString("Manager", comment: "")
+        case .musician: return NSLocalizedString("Musician", comment: "")
+        case .member: return NSLocalizedString("Member", comment: "")
         }
     }
     

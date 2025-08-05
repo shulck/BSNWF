@@ -39,7 +39,7 @@ struct ContactEditorSheet: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Contact Information".localized)) {
+                Section(header: Text(NSLocalizedString("contact_information", comment: "Header for contact information section"))) {
                     TextField("Name", text: $contact.name)
                     
                     TextField("Email", text: $contact.email)
@@ -61,7 +61,7 @@ struct ContactEditorSheet: View {
                     }
                 }
             }
-            .navigationTitle("Contact Details".localized)
+            .navigationTitle(NSLocalizedString("contact_details", comment: "Navigation title for contact details screen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

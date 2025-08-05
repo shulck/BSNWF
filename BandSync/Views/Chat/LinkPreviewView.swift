@@ -73,8 +73,8 @@ struct LinkPreviewView: View {
 #Preview {
     LinkPreviewView(preview: LinkPreviewService.LinkPreview(
         url: "https://example.com",
-        title: "Example Website",
-        description: "This is an example website with some description text that might be longer",
+        title: NSLocalizedString("exampleWebsite", comment: "Example website title for link preview"),
+        description: NSLocalizedString("exampleWebsiteDescription", comment: "Example website description for link preview"),
         imageURL: nil,
         siteName: "example.com"
     ))

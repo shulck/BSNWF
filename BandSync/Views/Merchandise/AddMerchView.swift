@@ -27,7 +27,7 @@ struct AddMerchView: View {
         NavigationView {
             Form {
                 // Item image
-                Section(header: Text("Images".localized)) {
+                Section(header: Text(NSLocalizedString("Images", comment: "Section header for product images"))) {
                     if !merchImages.isEmpty {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 10) {
@@ -58,7 +58,7 @@ struct AddMerchView: View {
                     }
                     
                     PhotosPicker(selection: $selectedImages, maxSelectionCount: 5, matching: .images) {
-                        Label(merchImages.isEmpty ? "Select images".localized : "Add more images".localized, systemImage: "photo.on.rectangle")
+                        Label(merchImages.isEmpty ? NSLocalizedString("Select images", comment: "Button text to select product images") : NSLocalizedString("Add more images", comment: "Button text to add more product images"), systemImage: "photo.on.rectangle")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.blue.opacity(0.1))
@@ -70,12 +70,12 @@ struct AddMerchView: View {
                 }
 
                 // Basic information
-                Section(header: Text("Item Information".localized)) {
-                    TextField("Name".localized, text: $name)
+                Section(header: Text(NSLocalizedString("Item Information", comment: "Section header for product basic information"))) {
+                    TextField(NSLocalizedString("Name", comment: "Product name input field"), text: $name)
                     
                     ZStack(alignment: .topLeading) {
                         if description.isEmpty {
-                            Text("Description".localized)
+                            Text(NSLocalizedString("Description", comment: "Product description placeholder"))
                                 .foregroundColor(.gray.opacity(0.8))
                                 .padding(.top, 8)
                                 .padding(.leading, 4)
@@ -85,29 +85,29 @@ struct AddMerchView: View {
                             .frame(minHeight: 80)
                     }
                     
-                    TextField("Price (EUR)".localized, text: $price)
+                    TextField(NSLocalizedString("Price (EUR)", comment: "Product price input field"), text: $price)
                         .keyboardType(.decimalPad)
                     
-                    TextField("Cost (EUR, optional)".localized, text: $cost)
+                    TextField(NSLocalizedString("Cost (EUR, optional)", comment: "Product cost input field"), text: $cost)
                         .keyboardType(.decimalPad)
                     
                     HStack {
-                        TextField("Low stock threshold".localized, text: $lowStockThreshold)
+                        TextField(NSLocalizedString("Low stock threshold", comment: "Low stock threshold input field"), text: $lowStockThreshold)
                             .keyboardType(.numberPad)
                         
                         Spacer()
                         
-                        Text(String.localizedStringWithFormat("%d items".localized, stock.total))
+                        Text(String.localizedStringWithFormat(NSLocalizedString("%d items", comment: "Items count format"), stock.total))
                             .foregroundColor(.secondary)
                             .font(.caption)
                     }
                 }
 
                 // Category and subcategory
-                Section(header: Text("Category".localized)) {
-                    Picker("Category".localized, selection: $category) {
+                Section(header: Text(NSLocalizedString("Category", comment: "Section header for product category"))) {
+                    Picker(NSLocalizedString("Category", comment: "Category picker label"), selection: $category) {
                         ForEach(MerchCategory.allCases) {
-                            Text($0.rawValue.localized).tag($0)
+                            Text($0.localizedName).tag($0)
                         }
                     }
                     .onChange(of: category) {
@@ -119,25 +119,25 @@ struct AddMerchView: View {
                     }
 
                     // Dynamic subcategory selection
-                    Picker("Subcategory".localized, selection: $subcategory) {
-                        Text("Not Selected".localized).tag(Optional<MerchSubcategory>.none)
+                    Picker(NSLocalizedString("Subcategory", comment: "Subcategory picker label"), selection: $subcategory) {
+                        Text(NSLocalizedString("Not Selected", comment: "Option for no subcategory selected")).tag(Optional<MerchSubcategory>.none)
                         ForEach(MerchSubcategory.subcategories(for: category), id: \.self) {
-                            Text($0.rawValue.localized).tag(Optional<MerchSubcategory>.some($0))
+                            Text($0.localizedName).tag(Optional<MerchSubcategory>.some($0))
                         }
                     }
                 }
                 
                 // Inventory
-                Section(header: Text("Inventory".localized)) {
+                Section(header: Text(NSLocalizedString("Inventory", comment: "Section header for inventory management"))) {
                     HStack {
-                        TextField("SKU (optional)".localized, text: $sku)
+                        TextField(NSLocalizedString("SKU (optional)", comment: "SKU input field"), text: $sku)
                         
                         Button(action: {
                             // Generate an SKU if not specified
                             let item = createItem()
                             sku = item.generateSKU()
                         }) {
-                            Text("Generate".localized)
+                            Text(NSLocalizedString("Generate", comment: "Button to generate SKU"))
                                 .font(.caption)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
@@ -148,23 +148,23 @@ struct AddMerchView: View {
                 }
 
                 // Stock section
-                Section(header: Text(category == .clothing ? "Stock by sizes".localized : "Item quantity".localized)) {
+                Section(header: Text(category == .clothing ? NSLocalizedString("Stock by sizes", comment: "Section header for clothing stock by sizes") : NSLocalizedString("Item quantity", comment: "Section header for item quantity"))) {
                     if category == .clothing {
-                        Stepper(String.localizedStringWithFormat("S: %d".localized, stock.S), value: $stock.S, in: 0...999)
-                        Stepper(String.localizedStringWithFormat("M: %d".localized, stock.M), value: $stock.M, in: 0...999)
-                        Stepper(String.localizedStringWithFormat("L: %d".localized, stock.L), value: $stock.L, in: 0...999)
-                        Stepper(String.localizedStringWithFormat("XL: %d".localized, stock.XL), value: $stock.XL, in: 0...999)
-                        Stepper(String.localizedStringWithFormat("XXL: %d".localized, stock.XXL), value: $stock.XXL, in: 0...999)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("S: %d", comment: "Size S stock format"), stock.S), value: $stock.S, in: 0...999)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("M: %d", comment: "Size M stock format"), stock.M), value: $stock.M, in: 0...999)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("L: %d", comment: "Size L stock format"), stock.L), value: $stock.L, in: 0...999)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("XL: %d", comment: "Size XL stock format"), stock.XL), value: $stock.XL, in: 0...999)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("XXL: %d", comment: "Size XXL stock format"), stock.XXL), value: $stock.XXL, in: 0...999)
                     } else {
-                        Stepper(String.localizedStringWithFormat("Quantity: %d".localized, stock.S), value: $stock.S, in: 0...999)
+                        Stepper(String.localizedStringWithFormat(NSLocalizedString("Quantity: %d", comment: "General quantity format"), stock.S), value: $stock.S, in: 0...999)
                     }
                 }
             }
-            .navigationTitle("Add Item".localized)
+            .navigationTitle(NSLocalizedString("Add Item", comment: "Navigation title for add merchandise item screen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel".localized, role: .cancel) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button in add item screen"), role: .cancel) {
                         dismiss()
                     }
                 }
@@ -174,23 +174,23 @@ struct AddMerchView: View {
                         Button {
                             saveItem()
                         } label: {
-                            Label("Save".localized, systemImage: "checkmark")
+                            Label(NSLocalizedString("Save", comment: "Save button in add item menu"), systemImage: "checkmark")
                         }
                         .disabled(isUploading || !isFormValid)
                         
                         Button {
                             showImportCSV = true
                         } label: {
-                            Label("Import from CSV".localized, systemImage: "doc.text")
+                            Label(NSLocalizedString("Import from CSV", comment: "Import from CSV button"), systemImage: "doc.text")
                         }
                         
                         Button {
                             saveDraft()
                         } label: {
-                            Label("Save as Draft".localized, systemImage: "tray.and.arrow.down")
+                            Label(NSLocalizedString("Save as Draft", comment: "Save as draft button"), systemImage: "tray.and.arrow.down")
                         }
                     } label: {
-                        Text("Save".localized)
+                        Text(NSLocalizedString("Save", comment: "Save menu button"))
                     }
                     .disabled(isUploading || !isMinimallyValid)
                 }
@@ -198,7 +198,7 @@ struct AddMerchView: View {
             .overlay(
                 Group {
                     if isUploading {
-                        ProgressView("Uploading...".localized)
+                        ProgressView(NSLocalizedString("Uploading...", comment: "Progress message while uploading item"))
                             .progressViewStyle(CircularProgressViewStyle())
                             .padding()
                             .background(Color.white.opacity(0.8))
@@ -208,9 +208,9 @@ struct AddMerchView: View {
             )
             .alert(isPresented: $showError) {
                 Alert(
-                    title: Text("Error".localized),
-                    message: Text(errorMessage ?? "An unknown error occurred".localized),
-                    dismissButton: .default(Text("OK".localized))
+                    title: Text(NSLocalizedString("Error", comment: "Error alert title")),
+                    message: Text(errorMessage ?? NSLocalizedString("An unknown error occurred", comment: "Generic error message")),
+                    dismissButton: .default(Text(NSLocalizedString("OK", comment: "OK button in error alert")))
                 )
             }
             .sheet(isPresented: $showImportCSV) {
@@ -290,7 +290,7 @@ struct AddMerchView: View {
                 } catch {
                     DispatchQueue.main.async {
                         loadErrors += 1
-                        errorMessage = "Error loading images: \(error.localizedDescription)".localized
+                        errorMessage = String(format: NSLocalizedString("Error loading images: %@", comment: "Error message when image loading fails"), error.localizedDescription)
                         showError = true
                     }
                     logger.error("Error loading image: \(error.localizedDescription)")
@@ -302,7 +302,7 @@ struct AddMerchView: View {
         
         dispatchGroup.notify(queue: .main) {
             if loadErrors > 0 {
-                errorMessage = String.localizedStringWithFormat("Failed to load %d image(s)".localized, loadErrors)
+                errorMessage = String.localizedStringWithFormat(NSLocalizedString("Failed to load %d image(s)", comment: "Error message for failed image loading with count"), loadErrors)
                 showError = true
             }
         }
@@ -338,7 +338,7 @@ struct AddMerchView: View {
     // Save item
     private func saveItem() {
         guard AppState.shared.user?.groupId != nil else {
-            errorMessage = "User group not found".localized
+            errorMessage = NSLocalizedString("User group not found", comment: "Error message when user group is not found")
             showError = true
             return
         }
@@ -367,13 +367,13 @@ struct AddMerchView: View {
                             if success {
                                 self.dismiss()
                             } else {
-                                self.errorMessage = "Failed to save item".localized
+                                self.errorMessage = NSLocalizedString("Failed to save item", comment: "Error message when item saving fails")
                                 self.showError = true
                             }
                         }
                     case .failure(let error):
                         self.isUploading = false
-                        self.errorMessage = "Error uploading images: \(error.localizedDescription)".localized
+                        self.errorMessage = String(format: NSLocalizedString("Error uploading images: %@", comment: "Error message when image upload fails"), error.localizedDescription)
                         self.showError = true
                     }
                 }
@@ -385,7 +385,7 @@ struct AddMerchView: View {
                 if success {
                     self.dismiss()
                 } else {
-                    self.errorMessage = "Failed to save item".localized
+                    self.errorMessage = NSLocalizedString("Failed to save item", comment: "Error message when item saving fails")
                     self.showError = true
                 }
             }
@@ -407,7 +407,7 @@ struct AddMerchView: View {
             
             dismiss()
         } catch {
-            errorMessage = "Failed to save draft: \(error.localizedDescription)".localized
+            errorMessage = String(format: NSLocalizedString("Failed to save draft: %@", comment: "Error message when draft saving fails"), error.localizedDescription)
             showError = true
             logger.error("Failed to save draft: \(error.localizedDescription)")
         }
@@ -424,10 +424,10 @@ struct CSVImportView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("CSV Data".localized)) {
+                Section(header: Text(NSLocalizedString("CSV Data", comment: "Section header for CSV data input"))) {
                     ZStack(alignment: .topLeading) {
                         if csvText.isEmpty {
-                            Text("Paste CSV Data Here".localized)
+                            Text(NSLocalizedString("Paste CSV Data Here", comment: "Placeholder text for CSV input"))
                                 .foregroundColor(.gray.opacity(0.8))
                                 .padding(.top, 8)
                                 .padding(.leading, 4)
@@ -437,30 +437,30 @@ struct CSVImportView: View {
                             .frame(minHeight: 200)
                     }
                     
-                    Button("Import from file".localized) {
+                    Button(NSLocalizedString("Import from file", comment: "Button to import CSV from file")) {
                         showFilePicker = true
                     }
                 }
                 
                 Section {
-                    Button("Import CSV".localized) {
+                    Button(NSLocalizedString("Import CSV", comment: "Button to import CSV data")) {
                         onImport(csvText)
                     }
                     .disabled(csvText.isEmpty)
                     .frame(maxWidth: .infinity)
                 }
                 
-                Section(header: Text("Sample Format".localized)) {
-                    Text("Name,Description,Price,Category,Subcategory,S,M,L,XL,XXL\nT-Shirt,Band logo t-shirt,25,Clothing,T-shirt,10,15,20,10,5\nVinyl,Limited edition vinyl,30,Music,Vinyl Record,50,0,0,0,0".localized)
+                Section(header: Text(NSLocalizedString("Sample Format", comment: "Section header for CSV sample format"))) {
+                    Text(NSLocalizedString("Name,Description,Price,Category,Subcategory,S,M,L,XL,XXL\nT-Shirt,Band logo t-shirt,25,Clothing,T-shirt,10,15,20,10,5\nVinyl,Limited edition vinyl,30,Music,Vinyl Record,50,0,0,0,0", comment: "Sample CSV format text"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
-            .navigationTitle("Import From CSV".localized)
+            .navigationTitle(NSLocalizedString("Import From CSV", comment: "Navigation title for CSV import screen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button in CSV import screen")) {
                         dismiss()
                     }
                 }

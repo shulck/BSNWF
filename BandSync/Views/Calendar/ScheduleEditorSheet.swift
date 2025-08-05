@@ -47,7 +47,7 @@ struct ScheduleEditorSheet: View {
                     editingItem = ScheduleItem(time: "09:00", description: "")
                     showingItemEditor = true
                 }) {
-                    Label("Add Schedule Item".localized, systemImage: "plus")
+                    Label(NSLocalizedString("Add Schedule Item", comment: "Button to add new schedule item"), systemImage: "plus")
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.blue)
@@ -57,15 +57,15 @@ struct ScheduleEditorSheet: View {
                 .padding(.horizontal)
                 .padding(.bottom)
             }
-            .navigationTitle("Daily Schedule".localized)
+            .navigationTitle(NSLocalizedString("Daily Schedule", comment: "Navigation title for schedule editor"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) { dismiss() }
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button in schedule editor")) { dismiss() }
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save".localized) {
+                    Button(NSLocalizedString("Save", comment: "Save button in schedule editor")) {
                         // Sort items by time before saving
                         let sortedItems = items.sorted { 
                             let hour1 = getHour(from: $0.time)
@@ -98,7 +98,7 @@ struct ScheduleEditorSheet: View {
     private var scheduleList: some View {
         List {
             if items.isEmpty {
-                Text("No schedule items".localized)
+                Text(NSLocalizedString("No schedule items", comment: "Message when no schedule items exist"))
                     .font(.callout)
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -167,9 +167,9 @@ struct ScheduleEditorSheet: View {
     private func scheduleItemEditor(item: ScheduleItem) -> some View {
         NavigationView {
             Form {
-                Section(header: Text("time".localized)) {
+                Section(header: Text(NSLocalizedString("time", comment: "Time section header in schedule editor"))) {
                     HStack {
-                        Picker("Hour".localized, selection: Binding(
+                        Picker(NSLocalizedString("Hour", comment: "Hour picker label"), selection: Binding(
                             get: { self.getHour(from: item.time) },
                             set: { hour in
                                 let minute = self.getMinute(from: item.time)
@@ -192,7 +192,7 @@ struct ScheduleEditorSheet: View {
                             .font(.title2)
                             .fontWeight(.bold)
                         
-                        Picker("Minute".localized, selection: Binding(
+                        Picker(NSLocalizedString("Minute", comment: "Minute picker label"), selection: Binding(
                             get: { self.getMinuteString(from: item.time) },
                             set: { newMinute in
                                 let hour = self.getHour(from: item.time)
@@ -215,7 +215,7 @@ struct ScheduleEditorSheet: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
                 
-                Section(header: Text("description".localized)) {
+                Section(header: Text(NSLocalizedString("description", comment: "Description section header in schedule editor"))) {
                     TextEditor(text: Binding(
                         get: { self.editingItem?.description ?? "" },
                         set: { newValue in
@@ -228,17 +228,17 @@ struct ScheduleEditorSheet: View {
                     .padding(.vertical, 8)
                 }
             }
-            .navigationTitle("Edit Schedule Item".localized)
+            .navigationTitle(NSLocalizedString("Edit Schedule Item", comment: "Navigation title for schedule item editor"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button in schedule item editor")) {
                         showingItemEditor = false
                     }
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done".localized) {
+                    Button(NSLocalizedString("Done", comment: "Done button in schedule item editor")) {
                         if let updatedItem = editingItem {
                             // Find and update the item in the main array
                             if let index = items.firstIndex(where: { $0.id == updatedItem.id }) {

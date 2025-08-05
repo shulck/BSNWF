@@ -47,7 +47,7 @@ struct MerchDetailView: View {
                 recentSalesSection
                 
                 // Sales history button
-                Button("Sales history".localized) {
+                Button(NSLocalizedString("Sales history", comment: "Button to view merchandise sales history")) {
                     showSalesHistory = true
                 }
                 .frame(maxWidth: .infinity)
@@ -69,19 +69,19 @@ struct MerchDetailView: View {
                             Button {
                                 showEditSheet = true
                             } label: {
-                                Label("Edit".localized, systemImage: "pencil")
+                                Label(NSLocalizedString("Edit", comment: "Menu item to edit merchandise"), systemImage: "pencil")
                             }
                             
                             Button {
                                 showingExportOptions = true
                             } label: {
-                                Label("Export".localized, systemImage: "square.and.arrow.up")
+                                Label(NSLocalizedString("Export", comment: "Menu item to export merchandise data"), systemImage: "square.and.arrow.up")
                             }
 
                             Button(role: .destructive) {
                                 showDeleteConfirmation = true
                             } label: {
-                                Label("Delete".localized, systemImage: "trash")
+                                Label(NSLocalizedString("Delete", comment: "Menu item to delete merchandise"), systemImage: "trash")
                             }
                         } label: {
                             Image(systemName: "ellipsis")
@@ -105,22 +105,22 @@ struct MerchDetailView: View {
         .sheet(isPresented: $showAllImages) {
             MerchImageGalleryView(item: item)
         }
-        .alert("Delete item?".localized, isPresented: $showDeleteConfirmation) {
-            Button("Cancel".localized, role: .cancel) {}
-            Button("Delete".localized, role: .destructive) {
+        .alert(NSLocalizedString("Delete item?", comment: "Alert title for deleting merchandise item"), isPresented: $showDeleteConfirmation) {
+            Button(NSLocalizedString("Cancel", comment: "Cancel button in delete confirmation alert"), role: .cancel) {}
+            Button(NSLocalizedString("Delete", comment: "Delete button in delete confirmation alert"), role: .destructive) {
                 deleteItem()
             }
         } message: {
-            Text("Are you sure you want to delete item '\(item.name)'? This action cannot be undone.".localized)
+            Text(NSLocalizedString("Are you sure you want to delete item '\(item.name)'? This action cannot be undone.", comment: "Confirmation message for deleting merchandise item"))
         }
-        .confirmationDialog("Export Options".localized, isPresented: $showingExportOptions) {
-            Button("Export as PDF".localized) {
+        .confirmationDialog(NSLocalizedString("Export Options", comment: "Title for export options dialog"), isPresented: $showingExportOptions) {
+            Button(NSLocalizedString("Export as PDF", comment: "Option to export merchandise as PDF")) {
                 exportAsPDF()
             }
-            Button("Export Sales History".localized) {
+            Button(NSLocalizedString("Export Sales History", comment: "Option to export merchandise sales history")) {
                 exportSalesHistory()
             }
-            Button("Cancel".localized, role: .cancel) {}
+            Button(NSLocalizedString("Cancel", comment: "Cancel button in export options dialog"), role: .cancel) {}
         }
         .sheet(isPresented: $showingShareSheet) {
             if let exportedData = exportedData {
@@ -150,21 +150,21 @@ struct MerchDetailView: View {
                 .font(.body)
 
             HStack {
-                Text("Category:".localized)
+                Text(NSLocalizedString("Category:", comment: "Label for merchandise category"))
                 Spacer()
-                Text(item.category.rawValue.localized)
+                Text(item.category.localizedName)
             }
 
             if let subcategory = item.subcategory {
                 HStack {
-                    Text("Subcategory:".localized)
+                    Text(NSLocalizedString("Subcategory:", comment: "Label for merchandise subcategory"))
                     Spacer()
-                    Text(subcategory.rawValue.localized)
+                    Text(subcategory.localizedName)
                 }
             }
 
             HStack {
-                Text("Price:".localized)
+                Text(NSLocalizedString("Price:", comment: "Label for merchandise price"))
                 Spacer()
                 Text("\(Int(item.price)) EUR")
                     .bold()
@@ -176,41 +176,41 @@ struct MerchDetailView: View {
     private var stockSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             if item.category == .clothing {
-                Text("Stock By Sizes".localized)
+                Text(NSLocalizedString("Stock By Sizes", comment: "Header for clothing stock by sizes"))
                     .font(.headline)
 
                 HStack {
-                    Text("S:".localized)
+                    Text(NSLocalizedString("S:", comment: "Size S label"))
                     Spacer()
                     Text("\(item.stock.S)")
                         .foregroundColor(getStockColor(quantity: item.stock.S))
                 }
                 HStack {
-                    Text("M:".localized)
+                    Text(NSLocalizedString("M:", comment: "Size M label"))
                     Spacer()
                     Text("\(item.stock.M)")
                         .foregroundColor(getStockColor(quantity: item.stock.M))
                 }
                 HStack {
-                    Text("L:".localized)
+                    Text(NSLocalizedString("L:", comment: "Size L label"))
                     Spacer()
                     Text("\(item.stock.L)")
                         .foregroundColor(getStockColor(quantity: item.stock.L))
                 }
                 HStack {
-                    Text("XL:".localized)
+                    Text(NSLocalizedString("XL:", comment: "Size XL label"))
                     Spacer()
                     Text("\(item.stock.XL)")
                         .foregroundColor(getStockColor(quantity: item.stock.XL))
                 }
                 HStack {
-                    Text("XXL:".localized)
+                    Text(NSLocalizedString("XXL:", comment: "Size XXL label"))
                     Spacer()
                     Text("\(item.stock.XXL)")
                         .foregroundColor(getStockColor(quantity: item.stock.XXL))
                 }
             } else {
-                Text("Quantity:".localized)
+                Text(NSLocalizedString("Quantity:", comment: "Label for item quantity"))
                     .font(.headline)
                 Text("\(item.totalStock)")
                     .font(.title3)
@@ -227,7 +227,7 @@ struct MerchDetailView: View {
                 HStack {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundColor(.orange)
-                    Text("Low stock! Threshold: \(item.lowStockThreshold) pcs.".localized)
+                    Text(NSLocalizedString("Low stock! Threshold: \(item.lowStockThreshold) pcs.", comment: "Warning message for low stock with threshold"))
                         .foregroundColor(.orange)
                 }
                 .padding(.top, 5)
@@ -243,22 +243,22 @@ struct MerchDetailView: View {
         return Group {
             if salesCount > 0 {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Recent Sales".localized)
+                    Text(NSLocalizedString("Recent Sales", comment: "Header for recent sales statistics"))
                         .font(.headline)
                     
                     HStack {
                         VStack(alignment: .leading) {
-                            Text("Last 30 days:".localized)
+                            Text(NSLocalizedString("Last 30 days:", comment: "Label for last 30 days period"))
                                 .font(.caption)
                                 .foregroundColor(.gray)
-                            Text(String.localizedStringWithFormat("%d pcs.".localized, salesCount))
+                            Text(String.localizedStringWithFormat(NSLocalizedString("%d pcs.", comment: "Format for pieces count"), salesCount))
                                 .font(.title3)
                         }
                         
                         Spacer()
                         
                         VStack(alignment: .trailing) {
-                            Text("Revenue:".localized)
+                            Text(NSLocalizedString("Revenue:", comment: "Label for sales revenue"))
                                 .font(.caption)
                                 .foregroundColor(.gray)
                             Text("\(salesRevenue, specifier: "%.2f") EUR")
@@ -272,7 +272,7 @@ struct MerchDetailView: View {
 
     // Sell button
     private var sellButton: some View {
-        Button("Sell item".localized) {
+        Button(NSLocalizedString("Sell item", comment: "Button to sell merchandise item")) {
             showSell = true
         }
         .frame(maxWidth: .infinity)
@@ -411,8 +411,8 @@ struct MerchDetailView: View {
             ]
             
             let details = """
-            Category: \(item.category.rawValue.localized)
-            \(item.subcategory != nil ? "Subcategory: \(item.subcategory!.rawValue.localized)" : "")
+            Category: \(item.category.localizedName)
+            \(item.subcategory != nil ? "Subcategory: \(item.subcategory!.localizedName)" : "")
             Price: \(Int(item.price)) EUR
             Stock: \(item.totalStock) pcs.
             Description: \(item.description)
@@ -433,7 +433,7 @@ struct MerchDetailView: View {
             dateFormatter.dateStyle = .medium
             dateFormatter.timeStyle = .short
             
-            let footer = "Generated on \(dateFormatter.string(from: Date()))".localized
+            let footer = NSLocalizedString("Generated on \(dateFormatter.string(from: Date()))", comment: "Footer text for PDF with generation date")
             let footerSize = (footer as NSString).size(withAttributes: footerAttributes)
             
             (footer as NSString).draw(
@@ -454,9 +454,9 @@ struct MerchDetailView: View {
         
         for sale in sales {
             let dateString = dateFormatter.string(from: sale.date)
-            let amount = sale.channel == .gift ? "Gift".localized : "\(Double(sale.quantity) * item.price)"
+            let amount = sale.channel == .gift ? NSLocalizedString("Gift", comment: "Gift label in CSV export") : "\(Double(sale.quantity) * item.price)"
             
-            let line = "\(dateString),\(sale.size),\(sale.quantity),\(sale.channel.rawValue.localized),\(amount)\n"
+            let line = "\(dateString),\(sale.size),\(sale.quantity),\(sale.channel.localizedName),\(amount)\n"
             csvString.append(line)
         }
         
@@ -500,11 +500,11 @@ struct MerchImageGalleryView: View {
                 .tabViewStyle(PageTabViewStyle())
                 .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
             }
-            .navigationTitle("Item Gallery".localized)
+            .navigationTitle(NSLocalizedString("Item Gallery", comment: "Navigation title for merchandise image gallery"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done".localized) {
+                    Button(NSLocalizedString("Done", comment: "Button to close image gallery")) {
                         dismiss()
                     }
                 }

@@ -23,7 +23,7 @@ struct FanEventRowView: View {
                         HStack(spacing: 4) {
                             Text("🎉")
                                 .font(.caption)
-                            Text("Congratulate".localized)
+                            Text(NSLocalizedString("Congratulate", comment: "Action text for birthday events"))
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .foregroundColor(.pink)

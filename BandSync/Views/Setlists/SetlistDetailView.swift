@@ -121,7 +121,7 @@ struct SetlistDetailView: View {
                 loadingView
             }
         }
-        .navigationTitle(viewModel.isEditing ? "Edit" : "Setlist")
+        .navigationTitle(viewModel.isEditing ? NSLocalizedString("Edit", comment: "Navigation title for editing mode") : NSLocalizedString("Setlist", comment: "Navigation title for setlist"))
         .navigationBarTitleDisplayMode(.inline)
         // НОВОЕ: Скрываем стандартную кнопку Back в режиме редактирования
         .navigationBarBackButtonHidden(viewModel.isEditing)
@@ -129,24 +129,24 @@ struct SetlistDetailView: View {
             improvedToolbarContent
         }
         // Подтверждение удаления
-        .alert("Delete setlist?".localized, isPresented: $viewModel.showDeleteConfirmation) {
-            Button("Cancel".localized, role: .cancel) {}
-            Button("Delete".localized, role: .destructive) {
+        .alert(NSLocalizedString("Delete setlist?", comment: "Alert title for deleting setlist"), isPresented: $viewModel.showDeleteConfirmation) {
+            Button(NSLocalizedString("Cancel", comment: "Cancel button"), role: .cancel) {}
+            Button(NSLocalizedString("Delete", comment: "Delete button"), role: .destructive) {
                 viewModel.deleteSetlist {
                     dismiss()
                 }
             }
         } message: {
-            Text("Are you sure you want to delete this setlist? This action cannot be undone.".localized)
+            Text(NSLocalizedString("Are you sure you want to delete this setlist? This action cannot be undone.", comment: "Delete setlist confirmation message"))
         }
         // НОВОЕ: Подтверждение отмены изменений
-        .alert("Discard Changes".localized, isPresented: $showingCancelConfirmation) {
-            Button("Keep Editing".localized, role: .cancel) {}
-            Button("Discard".localized, role: .destructive) {
+        .alert(NSLocalizedString("Discard Changes", comment: "Alert title for discarding changes"), isPresented: $showingCancelConfirmation) {
+            Button(NSLocalizedString("Keep Editing", comment: "Button to keep editing"), role: .cancel) {}
+            Button(NSLocalizedString("Discard", comment: "Button to discard changes"), role: .destructive) {
                 viewModel.cancelEditing()
             }
         } message: {
-            Text("Your changes will be lost if you go back without saving.".localized)
+            Text(NSLocalizedString("Your changes will be lost if you go back without saving.", comment: "Message about losing changes"))
         }
         .sheet(isPresented: $viewModel.showAddSong) {
             AddSongView(setlist: $viewModel.setlist, onSave: {
@@ -206,7 +206,7 @@ struct SetlistDetailView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     // Название сетлиста
                     if viewModel.isEditing {
-                        TextField("Setlist Name", text: $viewModel.editName)
+                        TextField(NSLocalizedString("Setlist Name", comment: "Placeholder for setlist name field"), text: $viewModel.editName)
                             .font(.title3)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
@@ -246,7 +246,7 @@ struct SetlistDetailView: View {
                                 Image(systemName: "calendar")
                                     .foregroundColor(.blue)
                                     .font(.caption)
-                                Text("Timed".localized)
+                                Text(NSLocalizedString("Timed", comment: "Label indicating setlist has timing"))
                                     .font(.subheadline)
                                     .fontWeight(.medium)
                             }
@@ -281,19 +281,19 @@ struct SetlistDetailView: View {
             }
             
             VStack(spacing: 8) {
-                Text("No Songs Yet".localized)
+                Text(NSLocalizedString("No Songs Yet", comment: "Empty state title when no songs"))
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 
-                Text("Add some songs to get started".localized)
+                Text(NSLocalizedString("Add some songs to get started", comment: "Empty state description"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
             
             if AppState.shared.hasEditPermission(for: .setlists) {
                 VStack(spacing: 12) {
-                    Button("Add First Song") {
+                    Button(NSLocalizedString("Add First Song", comment: "Button to add first song")) {
                         viewModel.showAddSong = true
                     }
                     .font(.subheadline)
@@ -311,7 +311,7 @@ struct SetlistDetailView: View {
                     .cornerRadius(20)
                     .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 2)
                     
-                    Button("Import from Other Setlists") {
+                    Button(NSLocalizedString("Import from Other Setlists", comment: "Button to import from other setlists")) {
                         viewModel.showImportSongs = true
                     }
                     .font(.subheadline)
@@ -338,7 +338,7 @@ struct SetlistDetailView: View {
                     .foregroundColor(.blue)
                     .font(.title3)
                 
-                Text("View Timing".localized)
+                Text(NSLocalizedString("View Timing", comment: "Button to view timing"))
                     .font(.headline)
                     .fontWeight(.medium)
                 
@@ -382,7 +382,7 @@ struct SetlistDetailView: View {
             ProgressView()
                 .scaleEffect(1.2)
             
-            Text("Saving changes...".localized)
+            Text(NSLocalizedString("Saving changes...", comment: "Loading message while saving"))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }
@@ -404,7 +404,7 @@ struct SetlistDetailView: View {
                 }) {
                     HStack {
                         Image(systemName: "chevron.left")
-                        Text("Back".localized)
+                        Text(NSLocalizedString("Back", comment: "Back button"))
                     }
                     .foregroundColor(.blue)
                 }
@@ -419,7 +419,7 @@ struct SetlistDetailView: View {
                     Button {
                         viewModel.saveChanges()
                     } label: {
-                        Label("Save Changes", systemImage: "checkmark")
+                        Label(NSLocalizedString("Save Changes", comment: "Menu item to save changes"), systemImage: "checkmark")
                     }
                     
                     Divider()
@@ -427,13 +427,13 @@ struct SetlistDetailView: View {
                     Button {
                         viewModel.showAddSong = true
                     } label: {
-                        Label("Add Song", systemImage: "music.note.plus")
+                        Label(NSLocalizedString("Add Song", comment: "Menu item to add song"), systemImage: "music.note.plus")
                     }
                     
                     Button {
                         viewModel.showImportSongs = true
                     } label: {
-                        Label("Import Songs".localized, systemImage: "square.and.arrow.down")
+                        Label(NSLocalizedString("Import Songs", comment: "Menu item to import songs"), systemImage: "square.and.arrow.down")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -447,7 +447,7 @@ struct SetlistDetailView: View {
                         Button {
                             viewModel.startEditing()
                         } label: {
-                            Label("Edit", systemImage: "pencil")
+                            Label(NSLocalizedString("Edit", comment: "Menu item to edit"), systemImage: "pencil")
                         }
                         
                         Divider()
@@ -455,7 +455,7 @@ struct SetlistDetailView: View {
                         Button(role: .destructive) {
                             viewModel.showDeleteConfirmation = true
                         } label: {
-                            Label("Delete Setlist", systemImage: "trash")
+                            Label(NSLocalizedString("Delete Setlist", comment: "Menu item to delete setlist"), systemImage: "trash")
                         }
                     }
                     
@@ -464,7 +464,7 @@ struct SetlistDetailView: View {
                     Button {
                         viewModel.showExportView = true
                     } label: {
-                        Label("Export to PDF", systemImage: "arrow.up.doc")
+                        Label(NSLocalizedString("Export to PDF", comment: "Menu item to export to PDF"), systemImage: "arrow.up.doc")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -561,22 +561,22 @@ struct SongRowView: View {
         .buttonStyle(PlainButtonStyle())
         .contextMenu(menuItems: {
             if isEditing {
-                Button("Edit") {
+                Button(NSLocalizedString("Edit", comment: "Context menu edit option")) {
                     onEdit()
                 }
                 
-                Button("Delete", role: .destructive) {
+                Button(NSLocalizedString("Delete", comment: "Context menu delete option"), role: .destructive) {
                     showDeleteAlert = true
                 }
             }
         })
-        .alert("Delete Song", isPresented: $showDeleteAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Delete", role: .destructive) {
+        .alert(NSLocalizedString("Delete Song", comment: "Alert title for deleting song"), isPresented: $showDeleteAlert) {
+            Button(NSLocalizedString("Cancel", comment: "Cancel button"), role: .cancel) {}
+            Button(NSLocalizedString("Delete", comment: "Delete button"), role: .destructive) {
                 onDelete()
             }
         } message: {
-            Text("Are you sure you want to delete \"\(song.title)\"?")
+            Text(NSLocalizedString("Are you sure you want to delete \"%@\"?", comment: "Delete song confirmation message").replacingOccurrences(of: "%@", with: "\"\(song.title)\""))
         }
     }
 }
@@ -596,34 +596,34 @@ struct AddSongView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Song Information") {
-                    TextField("Song Title", text: $title)
+                Section(NSLocalizedString("Song Information", comment: "Section header for song information")) {
+                    TextField(NSLocalizedString("Song Title", comment: "Placeholder for song title field"), text: $title)
                     
                     HStack {
-                        TextField("Minutes", text: $minutes)
+                        TextField(NSLocalizedString("Minutes", comment: "Placeholder for minutes field"), text: $minutes)
                             .keyboardType(.numberPad)
                         Text(":")
-                        TextField("Seconds", text: $seconds)
+                        TextField(NSLocalizedString("Seconds", comment: "Placeholder for seconds field"), text: $seconds)
                             .keyboardType(.numberPad)
                     }
                     
-                    TextField("BPM", text: $bpm)
+                    TextField(NSLocalizedString("BPM", comment: "Placeholder for BPM field"), text: $bpm)
                         .keyboardType(.numberPad)
                     
-                    TextField("Key (Optional)", text: $key)
+                    TextField(NSLocalizedString("Key (Optional)", comment: "Placeholder for key field"), text: $key)
                 }
             }
-            .navigationTitle("Add Song".localized)
+            .navigationTitle(NSLocalizedString("Add Song", comment: "Navigation title for adding song"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Add") {
+                    Button(NSLocalizedString("Add", comment: "Add button")) {
                         addSong()
                     }
                     .disabled(title.isEmpty || (minutes.isEmpty && seconds.isEmpty) || bpm.isEmpty)

@@ -44,32 +44,32 @@ struct DocumentDetailView: View {
                         Button {
                             openInGoogleDrive()
                         } label: {
-                            Label("Open in Google Drive".localized, systemImage: "arrow.up.right.square")
+                            Label(NSLocalizedString("Open in Google Drive", comment: "Button to open document in Google Drive"), systemImage: "arrow.up.right.square")
                         }
                         
                         Button {
                             downloadDocument()
                         } label: {
-                            Label("Download Preview".localized, systemImage: "arrow.down.circle")
+                            Label(NSLocalizedString("Download Preview", comment: "Button to download document preview"), systemImage: "arrow.down.circle")
                         }
                     }
                     
                     Button {
                         shareDocument()
                     } label: {
-                        Label("Share".localized, systemImage: "square.and.arrow.up")
+                        Label(NSLocalizedString("Share", comment: "Button to share document"), systemImage: "square.and.arrow.up")
                     }
                     
                     Button {
                         showingEditSheet = true
                     } label: {
-                        Label("Edit Info".localized, systemImage: "pencil")
+                        Label(NSLocalizedString("Edit Info", comment: "Button to edit document info"), systemImage: "pencil")
                     }
                     
                     Button(role: .destructive) {
                         showingDeleteConfirmation = true
                     } label: {
-                        Label("Delete".localized, systemImage: "trash")
+                        Label(NSLocalizedString("Delete", comment: "Button to delete document"), systemImage: "trash")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -84,18 +84,18 @@ struct DocumentDetailView: View {
         .sheet(isPresented: $showingEditSheet) {
             EditDocumentView(document: document)
         }
-        .alert("Error".localized, isPresented: $showingError) {
-            Button("OK".localized) { }
+        .alert(NSLocalizedString("Error", comment: "Error alert title"), isPresented: $showingError) {
+            Button(NSLocalizedString("OK", comment: "OK button")) { }
         } message: {
-            Text(errorMessage ?? "Unknown error occurred".localized)
+            Text(errorMessage ?? NSLocalizedString("Unknown error occurred", comment: "Default error message"))
         }
-        .alert("Delete Document".localized, isPresented: $showingDeleteConfirmation) {
-            Button("Cancel".localized, role: .cancel) { }
-            Button("Delete".localized, role: .destructive) {
+        .alert(NSLocalizedString("Delete Document", comment: "Delete document alert title"), isPresented: $showingDeleteConfirmation) {
+            Button(NSLocalizedString("Cancel", comment: "Cancel button"), role: .cancel) { }
+            Button(NSLocalizedString("Delete", comment: "Delete button"), role: .destructive) {
                 deleteDocument()
             }
         } message: {
-            Text("Are you sure you want to delete this document?".localized.replacingOccurrences(of: "{name}", with: document.name))
+            Text(NSLocalizedString("Are you sure you want to delete this document?", comment: "Delete document confirmation message").replacingOccurrences(of: "{name}", with: document.name))
         }
     }
     
@@ -106,7 +106,7 @@ struct DocumentDetailView: View {
             ProgressView()
                 .scaleEffect(1.2)
             
-            Text("Loading Document".localized)
+            Text(NSLocalizedString("Loading Document", comment: "Loading document message"))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }
@@ -148,25 +148,25 @@ struct DocumentDetailView: View {
                 
                 // Document properties
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Properties".localized)
+                    Text(NSLocalizedString("Properties", comment: "Document properties section title"))
                         .font(.headline)
                     
                     VStack(spacing: 12) {
                         PropertyRow(
-                            title: "Created".localized,
+                            title: NSLocalizedString("Created", comment: "Document created date label"),
                             value: formatDate(document.createdAt),
                             icon: "calendar"
                         )
                         
                         PropertyRow(
-                            title: "Updated".localized,
+                            title: NSLocalizedString("Updated", comment: "Document updated date label"),
                             value: formatDate(document.updatedAt),
                             icon: "clock"
                         )
                         
                         if document.fileSize != nil {
                             PropertyRow(
-                                title: "Size".localized,
+                                title: NSLocalizedString("Size", comment: "Document size label"),
                                 value: document.formattedFileSize,
                                 icon: "doc"
                             )
@@ -174,8 +174,8 @@ struct DocumentDetailView: View {
                         
                         if document.isGoogleDriveDocument {
                             PropertyRow(
-                                title: "Storage".localized,
-                                value: "Google Drive".localized,
+                                title: NSLocalizedString("Storage", comment: "Document storage location label"),
+                                value: NSLocalizedString("Google Drive", comment: "Google Drive storage location"),
                                 icon: "icloud"
                             )
                         }
@@ -191,7 +191,7 @@ struct DocumentDetailView: View {
                         Button {
                             openInGoogleDrive()
                         } label: {
-                            Label("Open in Google Drive".localized, systemImage: "arrow.up.right.square")
+                            Label(NSLocalizedString("Open in Google Drive", comment: "Button to open document in Google Drive"), systemImage: "arrow.up.right.square")
                                 .frame(maxWidth: .infinity)
                                 .padding()
                                 .background(Color.blue)
@@ -202,7 +202,7 @@ struct DocumentDetailView: View {
                         Button {
                             downloadDocument()
                         } label: {
-                            Label("Download Preview".localized, systemImage: "arrow.down.circle")
+                            Label(NSLocalizedString("Download Preview", comment: "Button to download document preview"), systemImage: "arrow.down.circle")
                                 .frame(maxWidth: .infinity)
                                 .padding()
                                 .background(Color.green)
@@ -214,7 +214,7 @@ struct DocumentDetailView: View {
                     Button {
                         shareDocument()
                     } label: {
-                        Label("Share Document".localized, systemImage: "square.and.arrow.up")
+                        Label(NSLocalizedString("Share Document", comment: "Button to share document"), systemImage: "square.and.arrow.up")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.orange)
@@ -353,7 +353,7 @@ struct DocumentDetailView: View {
                     self.documentData = data
                 case .failure(let error):
                     print("❌ Download failed: \(error.localizedDescription)")
-                    self.errorMessage = "Failed to download document".localized + ": \(error.localizedDescription)"
+                    self.errorMessage = NSLocalizedString("Failed to download document", comment: "Download error message") + ": \(error.localizedDescription)"
                     self.showingError = true
                 }
             }
@@ -381,7 +381,7 @@ struct DocumentDetailView: View {
                     dismiss()
                 case .failure(let error):
                     print("❌ Delete document error: \(error.localizedDescription)")
-                    errorMessage = "Failed to delete document".localized + ": \(error.localizedDescription)"
+                    errorMessage = NSLocalizedString("Failed to delete document", comment: "Delete error message") + ": \(error.localizedDescription)"
                     showingError = true
                 }
             }
@@ -407,7 +407,7 @@ struct DocumentDetailView: View {
         }
         
         if itemsToShare.isEmpty {
-            errorMessage = "No shareable content available for this document".localized
+            errorMessage = NSLocalizedString("No shareable content available for this document", comment: "No shareable content error message")
             showingError = true
             return
         }
@@ -417,7 +417,7 @@ struct DocumentDetailView: View {
             .first,
               let window = windowScene.windows.first,
               let rootViewController = window.rootViewController else {
-            errorMessage = "Unable to present share sheet".localized
+            errorMessage = NSLocalizedString("Unable to present share sheet", comment: "Share sheet error message")
             showingError = true
             return
         }
@@ -869,23 +869,23 @@ struct EditDocumentView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section("Document Information".localized) {
-                    TextField("Name".localized, text: $name)
-                    TextField("Description".localized, text: $description, axis: .vertical)
+                Section(NSLocalizedString("Document Information", comment: "Document information section title")) {
+                    TextField(NSLocalizedString("Name", comment: "Document name field"), text: $name)
+                    TextField(NSLocalizedString("Description", comment: "Document description field"), text: $description, axis: .vertical)
                         .lineLimit(3...6)
                 }
             }
-            .navigationTitle("Edit Document".localized)
+            .navigationTitle(NSLocalizedString("Edit Document", comment: "Edit document screen title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save".localized) {
+                    Button(NSLocalizedString("Save", comment: "Save button")) {
                         updateDocument()
                     }
                     .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isUpdating)
@@ -893,7 +893,7 @@ struct EditDocumentView: View {
             }
             .overlay {
                 if isUpdating {
-                    ProgressView("Updating".localized)
+                    ProgressView(NSLocalizedString("Updating", comment: "Updating progress message"))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(.regularMaterial)
                 }

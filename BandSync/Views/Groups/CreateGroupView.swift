@@ -15,13 +15,13 @@ struct CreateGroupView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Group information".localized)) {
-                    TextField("Group Name".localized, text: $viewModel.groupName)
+                Section(header: Text(NSLocalizedString("Group information", comment: "Group information section header"))) {
+                    TextField(NSLocalizedString("Group Name", comment: "Group name text field placeholder"), text: $viewModel.groupName)
                         .autocapitalization(.words)
                 }
                 
                 Section {
-                    Button("Create Group".localized) {
+                    Button(NSLocalizedString("Create Group", comment: "Create group button label")) {
                         createGroup()
                     }
                     .disabled(viewModel.groupName.isEmpty || viewModel.isLoading)
@@ -49,11 +49,11 @@ struct CreateGroupView: View {
                     }
                 }
             }
-            .navigationTitle("Create Group".localized)
+            .navigationTitle(NSLocalizedString("Create Group", comment: "Create group navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button label")) {
                         dismiss()
                     }
                 }

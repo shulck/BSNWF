@@ -24,7 +24,7 @@ struct PrivateAddressSection: View {
                     .foregroundColor(.blue)
                     .font(.title3)
                 
-                Text("Contact Information")
+                Text(NSLocalizedString("Contact Information", comment: "Contact information section title"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -34,7 +34,7 @@ struct PrivateAddressSection: View {
                 HStack(spacing: 4) {
                     Image(systemName: "lock.fill")
                         .font(.caption)
-                    Text("Private")
+                    Text(NSLocalizedString("Private", comment: "Private label"))
                         .font(.caption)
                 }
                 .foregroundColor(.secondary)
@@ -49,7 +49,7 @@ struct PrivateAddressSection: View {
                 HStack {
                     ProgressView()
                         .scaleEffect(0.8)
-                    Text("Loading contact information...")
+                    Text(NSLocalizedString("Loading contact information...", comment: "Loading contact information message"))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -68,7 +68,7 @@ struct PrivateAddressSection: View {
                                 Image(systemName: "person.fill")
                                     .foregroundColor(.purple)
                                     .font(.caption)
-                                Text("Personal Details")
+                                Text(NSLocalizedString("Personal Details", comment: "Personal details section title"))
                                     .font(.subheadline)
                                     .fontWeight(.semibold)
                                     .foregroundColor(.primary)
@@ -78,7 +78,7 @@ struct PrivateAddressSection: View {
                                 if !user.name.isEmpty {
                                     ContactInfoRow(
                                         icon: "person.fill",
-                                        title: "Full Name",
+                                        title: NSLocalizedString("Full Name", comment: "Full name label"),
                                         value: user.name
                                     )
                                 }
@@ -86,7 +86,7 @@ struct PrivateAddressSection: View {
                                 if !user.email.isEmpty {
                                     ContactInfoRow(
                                         icon: "envelope.fill",
-                                        title: "Email",
+                                        title: NSLocalizedString("Email", comment: "Email label"),
                                         value: user.email
                                     )
                                 }
@@ -94,7 +94,7 @@ struct PrivateAddressSection: View {
                                 if !user.phone.isEmpty {
                                     ContactInfoRow(
                                         icon: "phone.fill",
-                                        title: "Phone",
+                                        title: NSLocalizedString("Phone", comment: "Phone label"),
                                         value: user.phone
                                     )
                                 }
@@ -112,7 +112,7 @@ struct PrivateAddressSection: View {
                             Image(systemName: "location.fill")
                                 .foregroundColor(.green)
                                 .font(.caption)
-                            Text("Shipping Address")
+                            Text(NSLocalizedString("Shipping Address", comment: "Shipping address section title"))
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.primary)
@@ -123,7 +123,7 @@ struct PrivateAddressSection: View {
                                 if !address.addressLine1.isEmpty {
                                     ContactInfoRow(
                                         icon: "house.fill",
-                                        title: "Street Address",
+                                        title: NSLocalizedString("Street Address", comment: "Street address label"),
                                         value: address.fullAddress
                                     )
                                 }
@@ -131,7 +131,7 @@ struct PrivateAddressSection: View {
                                 if !address.city.isEmpty {
                                     ContactInfoRow(
                                         icon: "building.2.fill",
-                                        title: "Location",
+                                        title: NSLocalizedString("Location", comment: "Location label"),
                                         value: address.cityStateCountry
                                     )
                                 }
@@ -139,7 +139,7 @@ struct PrivateAddressSection: View {
                                 if !address.zipCode.isEmpty {
                                     ContactInfoRow(
                                         icon: "number",
-                                        title: "Postal Code",
+                                        title: NSLocalizedString("Postal Code", comment: "Postal code label"),
                                         value: address.zipCode
                                     )
                                 }
@@ -150,7 +150,7 @@ struct PrivateAddressSection: View {
                                         .foregroundColor(address.isComplete ? .green : .orange)
                                         .font(.caption)
                                     
-                                    Text(address.isComplete ? "Address complete" : "Incomplete address")
+                                    Text(address.isComplete ? NSLocalizedString("Address complete", comment: "Address complete status") : NSLocalizedString("Incomplete address", comment: "Incomplete address status"))
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
@@ -164,12 +164,12 @@ struct PrivateAddressSection: View {
                                         .foregroundColor(.orange)
                                         .font(.caption)
                                     
-                                    Text("No shipping address")
+                                    Text(NSLocalizedString("No shipping address", comment: "No shipping address message"))
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                 }
                                 
-                                Text("Add your address in profile settings for merchandise orders")
+                                Text(NSLocalizedString("Add your address in profile settings for merchandise orders", comment: "Add address instruction"))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                     .multilineTextAlignment(.leading)
@@ -187,7 +187,7 @@ struct PrivateAddressSection: View {
                             .foregroundColor(.blue)
                             .font(.caption)
                         
-                        Text("This information is private and only visible to you")
+                        Text(NSLocalizedString("This information is private and only visible to you", comment: "Privacy notice"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                         

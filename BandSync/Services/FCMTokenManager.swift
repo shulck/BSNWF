@@ -28,6 +28,9 @@ class FCMTokenManager: NSObject {
         performOneTimeCleanup(for: userId)
         updateCurrentToken(for: userId)
         
+        // Setup fan chat notification topics
+        setupFanChatTopics(for: userId)
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.isSetupInProgress = false
         }
@@ -146,6 +149,79 @@ class FCMTokenManager: NSObject {
     
     func resetForUser(_ userId: String) {
         setupCompletedForUsers.remove(userId)
+    }
+    
+    // MARK: - Fan Chat Notifications
+    
+    /// Setup notification topics for fan chat
+    private func setupFanChatTopics(for userId: String) {
+        // Subscribe to general fan notifications topic
+        if let user = AppState.shared.user,
+           let groupId = user.userType == .fan ? user.fanGroupId : user.groupId {
+            let fanTopic = "fan_chat_\(groupId)"
+            Messaging.messaging().subscribe(toTopic: fanTopic) { error in
+                if let error = error {
+                    print("Error subscribing to fan chat topic: \(error)")
+                } else {
+                    print("Subscribed to fan chat topic: \(fanTopic)")
+                }
+            }
+            
+            // Subscribe to user-specific fan notifications
+            let userFanTopic = "fan_\(userId)_\(groupId)"
+            Messaging.messaging().subscribe(toTopic: userFanTopic) { error in
+                if let error = error {
+                    print("Error subscribing to user fan topic: \(error)")
+                } else {
+                    print("Subscribed to user fan topic: \(userFanTopic)")
+                }
+            }
+        }
+    }
+    
+    /// Subscribe to specific fan chat notifications
+    func subscribeToFanChat(chatId: String, userId: String) {
+        let topic = "fan_chat_messages_\(chatId)"
+        Messaging.messaging().subscribe(toTopic: topic) { error in
+            if let error = error {
+                print("Error subscribing to fan chat: \(error)")
+            } else {
+                print("Subscribed to fan chat: \(topic)")
+            }
+        }
+    }
+    
+    /// Unsubscribe from fan chat notifications
+    func unsubscribeFromFanChat(chatId: String) {
+        let topic = "fan_chat_messages_\(chatId)"
+        Messaging.messaging().unsubscribe(fromTopic: topic) { error in
+            if let error = error {
+                print("Error unsubscribing from fan chat: \(error)")
+            } else {
+                print("Unsubscribed from fan chat: \(topic)")
+            }
+        }
+    }
+    
+    /// Send fan chat notification
+    func sendFanChatNotification(
+        to userIds: [String],
+        chatName: String,
+        senderName: String,
+        message: String,
+        chatId: String,
+        isImportant: Bool = false
+    ) {
+        // This would be implemented on the server side
+        // For now, we'll use local notifications
+        DispatchQueue.main.async {
+            FanChatNotificationManager.shared.sendLocalNotification(
+                chatName: chatName,
+                senderName: senderName,
+                message: message,
+                chatType: .general
+            )
+        }
     }
 
 }

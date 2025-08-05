@@ -35,10 +35,10 @@ struct EventContactsView: View {
                         .font(.system(size: 60))
                         .foregroundColor(.gray)
                     
-                    Text("No contacts for this event".localized)
+                    Text(NSLocalizedString("noContactsForThisEvent", comment: "No contacts for this event"))
                         .font(.headline)
                     
-                    Text("No contacts are associated with this event.".localized)
+                    Text(NSLocalizedString("noContactsAssociatedWithEvent", comment: "No contacts are associated with this event."))
                         .font(.subheadline)
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.center)
@@ -68,7 +68,7 @@ struct EventContactsView: View {
                 .listStyle(PlainListStyle())
             }
         }
-        .navigationTitle("Event Contacts".localized)
+        .navigationTitle(NSLocalizedString("eventContacts", comment: "Event Contacts"))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             loadContacts()

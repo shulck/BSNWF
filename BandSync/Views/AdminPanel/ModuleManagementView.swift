@@ -15,7 +15,7 @@ struct ModuleManagementView: View {
                 HStack(spacing: 12) {
                     moduleIcon(icon: "info.circle.fill", color: .blue)
                     
-                    Text("Enable or disable modules that will be available to group members.".localized)
+                    Text(NSLocalizedString("Enable or disable modules that will be available to group members.", comment: ""))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     
@@ -23,7 +23,7 @@ struct ModuleManagementView: View {
                 }
                 .padding(.vertical, 4)
             } header: {
-                Text("Module Management".localized)
+                Text(NSLocalizedString("Module Management", comment: ""))
             }
             
             // Available Modules Section
@@ -39,11 +39,11 @@ struct ModuleManagementView: View {
                                 .foregroundColor(.primary)
                             
                             if module == .admin {
-                                Text("Always enabled for admins".localized)
+                                Text(NSLocalizedString("Always enabled for admins", comment: ""))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             } else {
-                                Text("Toggle module availability".localized)
+                                Text(NSLocalizedString("Toggle module availability", comment: ""))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
@@ -52,7 +52,7 @@ struct ModuleManagementView: View {
                         Spacer()
                         
                         if module == .admin {
-                            Text("Required".localized)
+                            Text(NSLocalizedString("Required", comment: ""))
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .foregroundColor(.secondary)
@@ -78,7 +78,7 @@ struct ModuleManagementView: View {
                     .padding(.vertical, 4)
                 }
             } header: {
-                Text("Available Modules".localized)
+                Text(NSLocalizedString("Available Modules", comment: ""))
             }
             
             // Save Changes Section
@@ -90,12 +90,12 @@ struct ModuleManagementView: View {
                         moduleIcon(icon: "checkmark.circle.fill", color: .green)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Save Changes".localized)
+                            Text(NSLocalizedString("Save Changes", comment: ""))
                                 .font(.body)
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary)
                             
-                            Text("Apply module settings".localized)
+                            Text(NSLocalizedString("Apply module settings", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -148,7 +148,7 @@ struct ModuleManagementView: View {
                         ProgressView()
                             .scaleEffect(0.8)
                         
-                        Text("Updating module settings...".localized)
+                        Text(NSLocalizedString("Updating module settings...", comment: ""))
                             .font(.body)
                             .foregroundColor(.secondary)
                         
@@ -158,7 +158,7 @@ struct ModuleManagementView: View {
                 }
             }
         }
-        .navigationTitle("Module Management".localized)
+        .navigationTitle(NSLocalizedString("Module Management", comment: ""))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             loadModuleSettings()
@@ -214,13 +214,13 @@ struct ModuleManagementView: View {
             }
         } else {
             isLoading = false
-            errorMessage = "Could not determine group".localized
+            errorMessage = NSLocalizedString("Could not determine group", comment: "")
         }
     }
     
     private func saveChanges() {
         guard (permissionService.permissions?.id) != nil else {
-            errorMessage = "Could not find permission settings".localized
+            errorMessage = NSLocalizedString("Could not find permission settings", comment: "")
             return
         }
         
@@ -274,7 +274,7 @@ struct ModuleManagementView: View {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             isLoading = false
-            successMessage = "Module settings successfully updated".localized
+            successMessage = NSLocalizedString("Module settings successfully updated", comment: "")
         }
     }
 }

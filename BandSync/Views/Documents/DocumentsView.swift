@@ -33,7 +33,7 @@ struct DocumentsView: View {
                 documentListView
             }
         }
-        .navigationTitle("Documents".localized)
+        .navigationTitle(NSLocalizedString("Documents", comment: "Documents screen title"))
         .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $searchText)
         .toolbar {
@@ -43,7 +43,7 @@ struct DocumentsView: View {
                         Button {
                             showingCreateDocument = true
                         } label: {
-                            Label("New Document".localized, systemImage: "doc.badge.plus")
+                            Label(NSLocalizedString("New Document", comment: "New document button"), systemImage: "doc.badge.plus")
                         }
                         
                         Divider()
@@ -53,20 +53,20 @@ struct DocumentsView: View {
                                 await viewModel.refreshDocuments()
                             }
                         } label: {
-                            Label("Refresh".localized, systemImage: "arrow.clockwise")
+                            Label(NSLocalizedString("Refresh", comment: "Refresh documents button"), systemImage: "arrow.clockwise")
                         }
                         
                         Button {
                             disconnectGoogleDrive()
                         } label: {
-                            Label("Disconnect Google Drive".localized, systemImage: "icloud.slash")
+                            Label(NSLocalizedString("Disconnect Google Drive", comment: "Disconnect Google Drive button"), systemImage: "icloud.slash")
                         }
                         .foregroundColor(.red)
                     } else {
                         Button {
                             showingGoogleDriveAuth = true
                         } label: {
-                            Label("Connect Google Drive".localized, systemImage: "icloud")
+                            Label(NSLocalizedString("Connect Google Drive", comment: "Connect Google Drive button"), systemImage: "icloud")
                         }
                     }
                 } label: {
@@ -103,18 +103,18 @@ struct DocumentsView: View {
                     .foregroundColor(.orange)
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Google Drive Not Connected".localized)
+                    Text(NSLocalizedString("Google Drive Not Connected", comment: "Google Drive not connected banner title"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                     
-                    Text("Connect to upload and manage documents".localized)
+                    Text(NSLocalizedString("Connect to upload and manage documents", comment: "Google Drive connection description"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 
                 Spacer()
                 
-                Button("Connect".localized) {
+                Button(NSLocalizedString("Connect", comment: "Connect button")) {
                     showingGoogleDriveAuth = true
                 }
                 .buttonStyle(.borderedProminent)
@@ -132,18 +132,18 @@ struct DocumentsView: View {
                     .foregroundColor(.green)
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Google Drive Connected".localized)
+                    Text(NSLocalizedString("Google Drive Connected", comment: "Google Drive connected banner title"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                     
-                    Text("Ready to upload and manage documents".localized)
+                    Text(NSLocalizedString("Ready to upload and manage documents", comment: "Google Drive ready description"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 
                 Spacer()
                 
-                Button("Disconnect".localized) {
+                Button(NSLocalizedString("Disconnect", comment: "Disconnect button")) {
                     disconnectGoogleDrive()
                 }
                 .buttonStyle(.bordered)
@@ -160,7 +160,7 @@ struct DocumentsView: View {
             ProgressView()
                 .scaleEffect(1.2)
             
-            Text("Loading Documents".localized)
+            Text(NSLocalizedString("Loading Documents", comment: "Loading documents message"))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }
@@ -174,11 +174,11 @@ struct DocumentsView: View {
                 .foregroundColor(.gray)
             
             VStack(spacing: 8) {
-                Text(searchText.isEmpty ? "No Documents Yet".localized : "No Results Found".localized)
+                Text(searchText.isEmpty ? NSLocalizedString("No Documents Yet", comment: "No documents message") : NSLocalizedString("No Results Found", comment: "No search results message"))
                     .font(.title2)
                     .fontWeight(.medium)
                 
-                Text(searchText.isEmpty ? "Create your first document to get started".localized : "Try adjusting your search terms".localized)
+                Text(searchText.isEmpty ? NSLocalizedString("Create your first document to get started", comment: "Create first document suggestion") : NSLocalizedString("Try adjusting your search terms", comment: "Search adjustment suggestion"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -189,7 +189,7 @@ struct DocumentsView: View {
                     Button {
                         showingCreateDocument = true
                     } label: {
-                        Label("Create Document".localized, systemImage: "doc.badge.plus")
+                        Label(NSLocalizedString("Create Document", comment: "Create document button"), systemImage: "doc.badge.plus")
                             .padding()
                             .background(Color.blue)
                             .foregroundColor(.white)
@@ -199,7 +199,7 @@ struct DocumentsView: View {
                     Button {
                         showingGoogleDriveAuth = true
                     } label: {
-                        Label("Connect Google Drive".localized, systemImage: "icloud")
+                        Label(NSLocalizedString("Connect Google Drive", comment: "Connect Google Drive button"), systemImage: "icloud")
                             .padding()
                             .background(Color.orange)
                             .foregroundColor(.white)
@@ -218,7 +218,7 @@ struct DocumentsView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
                         FilterChip(
-                            title: "All".localized,
+                            title: NSLocalizedString("All", comment: "All documents filter"),
                             isSelected: selectedDocumentType == nil,
                             count: viewModel.documents.count
                         ) {

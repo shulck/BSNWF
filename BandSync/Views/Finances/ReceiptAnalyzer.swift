@@ -58,8 +58,15 @@ class ReceiptAnalyzer {
     private static func extractDeutschePostTotalAmount(from lines: [String], fullText: String) -> Double? {
         // Keywords for total amounts in Deutsche Post
         let totalKeywords = [
-            "nettoumsatz", "bruttoumsatz", "girocard", "gesamt", "total",
-            "zu zahlen", "summe", "betrag", "endpreis"
+            NSLocalizedString("nettoumsatz", comment: "Net revenue keyword for receipt analysis"),
+            NSLocalizedString("bruttoumsatz", comment: "Gross revenue keyword for receipt analysis"), 
+            NSLocalizedString("girocard", comment: "Girocard payment keyword for receipt analysis"),
+            NSLocalizedString("gesamt", comment: "Total keyword for receipt analysis"),
+            NSLocalizedString("total", comment: "Total keyword for receipt analysis"),
+            NSLocalizedString("zu zahlen", comment: "Amount to pay keyword for receipt analysis"),
+            NSLocalizedString("summe", comment: "Sum keyword for receipt analysis"),
+            NSLocalizedString("betrag", comment: "Amount keyword for receipt analysis"),
+            NSLocalizedString("endpreis", comment: "Final price keyword for receipt analysis")
         ]
         
         var candidates: [(amount: Double, keyword: String, priority: Int)] = []
@@ -95,7 +102,7 @@ class ReceiptAnalyzer {
                         let nextLine = lines[nextLineIndex + 1]
                         if let amounts = extractAllAmountsFromLine(nextLine) {
                             for amount in amounts {
-                                candidates.append((amount: amount, keyword: keyword + " (next line)", priority: priority - 1))
+                                candidates.append((amount: amount, keyword: keyword + NSLocalizedString(" (next line)", comment: "Indicator that amount was found on next line"), priority: priority - 1))
                             }
                         }
                     }
@@ -139,9 +146,21 @@ class ReceiptAnalyzer {
     private static func extractTotalAmountGeneral(from lines: [String]) -> Double? {
         // Keywords for total amounts
         let totalKeywords = [
-            "total", "sum", "amount", "due", "balance", "pay",
-            "итого", "сумма", "к оплате", "betrag", "gesamt",
-            "netto", "brutto", "endpreis", "zu zahlen"
+            NSLocalizedString("total", comment: "Total keyword for receipt analysis"),
+            NSLocalizedString("sum", comment: "Sum keyword for receipt analysis"),
+            NSLocalizedString("amount", comment: "Amount keyword for receipt analysis"),
+            NSLocalizedString("due", comment: "Due keyword for receipt analysis"),
+            NSLocalizedString("balance", comment: "Balance keyword for receipt analysis"),
+            NSLocalizedString("pay", comment: "Pay keyword for receipt analysis"),
+            NSLocalizedString("итого", comment: "Total keyword in Russian for receipt analysis"),
+            NSLocalizedString("сумма", comment: "Sum keyword in Russian for receipt analysis"),
+            NSLocalizedString("к оплате", comment: "To pay keyword in Russian for receipt analysis"),
+            NSLocalizedString("betrag", comment: "Amount keyword in German for receipt analysis"),
+            NSLocalizedString("gesamt", comment: "Total keyword in German for receipt analysis"),
+            NSLocalizedString("netto", comment: "Net keyword in German for receipt analysis"),
+            NSLocalizedString("brutto", comment: "Gross keyword in German for receipt analysis"),
+            NSLocalizedString("endpreis", comment: "Final price keyword in German for receipt analysis"),
+            NSLocalizedString("zu zahlen", comment: "To pay keyword in German for receipt analysis")
         ]
         
         var candidates: [(amount: Double, priority: Int)] = []
@@ -227,11 +246,16 @@ class ReceiptAnalyzer {
         // Look for lines that may contain date
         let possibleDateLines = lines.filter { line in
             let lowercased = line.lowercased()
-            return lowercased.contains("date") ||
-                   lowercased.contains("time") ||
-                   lowercased.contains("receipt") ||
-                   lowercased.contains("transaction") ||
-                   lowercased.contains("purchase")
+            return lowercased.contains(NSLocalizedString("date", comment: "Date keyword for receipt analysis").lowercased()) ||
+                   lowercased.contains(NSLocalizedString("time", comment: "Time keyword for receipt analysis").lowercased()) ||
+                   lowercased.contains(NSLocalizedString("receipt", comment: "Receipt keyword for receipt analysis").lowercased()) ||
+                   lowercased.contains(NSLocalizedString("transaction", comment: "Transaction keyword for receipt analysis").lowercased()) ||
+                   lowercased.contains(NSLocalizedString("purchase", comment: "Purchase keyword for receipt analysis").lowercased()) ||
+                   lowercased.contains("datum") || // German
+                   lowercased.contains("zeit") || // German
+                   lowercased.contains("дата") || // Russian
+                   lowercased.contains("время") || // Russian
+                   lowercased.contains("покупка") // Russian
         }
         
         // Date formats that might be in the receipt
@@ -305,12 +329,16 @@ class ReceiptAnalyzer {
         let calendar = Calendar.current
         
         // If receipt contains "today"
-        if line.lowercased().contains("today") {
+        if line.lowercased().contains(NSLocalizedString("today", comment: "Today keyword for receipt analysis").lowercased()) ||
+           line.lowercased().contains("heute") || // German
+           line.lowercased().contains("сегодня") { // Russian
             return today
         }
         
         // If receipt contains "yesterday"
-        if line.lowercased().contains("yesterday") {
+        if line.lowercased().contains(NSLocalizedString("yesterday", comment: "Yesterday keyword for receipt analysis").lowercased()) ||
+           line.lowercased().contains("gestern") || // German
+           line.lowercased().contains("вчера") { // Russian
             return calendar.date(byAdding: .day, value: -1, to: today)
         }
         
@@ -327,10 +355,17 @@ class ReceiptAnalyzer {
             
             for line in topLines {
                 // Ignore lines that look like date or address
-                if line.contains("/") || line.contains("@") || line.contains("Tel:") ||
-                   line.contains("Phone:") || line.contains("Address:") || line.contains("ID:") ||
-                   line.lowercased().contains("receipt") ||
-                   line.contains("www.") || line.contains("http") {
+                if line.contains("/") || line.contains("@") || 
+                   line.contains(NSLocalizedString("Tel:", comment: "Telephone prefix for receipt analysis")) ||
+                   line.contains(NSLocalizedString("Phone:", comment: "Phone prefix for receipt analysis")) || 
+                   line.contains(NSLocalizedString("Address:", comment: "Address prefix for receipt analysis")) || 
+                   line.contains("ID:") ||
+                   line.lowercased().contains(NSLocalizedString("receipt", comment: "Receipt keyword for merchant name analysis").lowercased()) ||
+                   line.contains("www.") || line.contains("http") ||
+                   line.contains("Telefon:") || // German
+                   line.contains("Adresse:") || // German
+                   line.contains("Тел:") || // Russian
+                   line.contains("Адрес:") { // Russian
                     continue
                 }
                 
@@ -351,8 +386,29 @@ class ReceiptAnalyzer {
         var isItemSection = false
         
         // Markers for beginning and end of items section
-        let startMarkers = ["item", "description", "product", "quantity", "qty", "price"]
-        let endMarkers = ["total", "subtotal", "sub-total", "amount", "balance", "due", "sum", "tax", "vat"]
+        let startMarkers = [
+            NSLocalizedString("item", comment: "Item keyword for receipt analysis").lowercased(),
+            NSLocalizedString("description", comment: "Description keyword for receipt analysis").lowercased(),
+            NSLocalizedString("product", comment: "Product keyword for receipt analysis").lowercased(),
+            NSLocalizedString("quantity", comment: "Quantity keyword for receipt analysis").lowercased(),
+            NSLocalizedString("qty", comment: "Quantity abbreviation for receipt analysis").lowercased(),
+            NSLocalizedString("price", comment: "Price keyword for receipt analysis").lowercased(),
+            "artikel", "beschreibung", "produkt", "menge", "preis", // German
+            "товар", "описание", "продукт", "количество", "цена" // Russian
+        ]
+        let endMarkers = [
+            NSLocalizedString("total", comment: "Total keyword for items section end").lowercased(),
+            NSLocalizedString("subtotal", comment: "Subtotal keyword for items section end").lowercased(),
+            NSLocalizedString("sub-total", comment: "Sub-total keyword for items section end").lowercased(),
+            NSLocalizedString("amount", comment: "Amount keyword for items section end").lowercased(),
+            NSLocalizedString("balance", comment: "Balance keyword for items section end").lowercased(),
+            NSLocalizedString("due", comment: "Due keyword for items section end").lowercased(),
+            NSLocalizedString("sum", comment: "Sum keyword for items section end").lowercased(),
+            NSLocalizedString("tax", comment: "Tax keyword for items section end").lowercased(),
+            NSLocalizedString("vat", comment: "VAT keyword for items section end").lowercased(),
+            "gesamt", "zwischensumme", "betrag", "steuer", "mwst", // German
+            "итого", "промежуточная сумма", "сумма", "налог", "ндс" // Russian
+        ]
         
         for line in lines {
             let lowercasedLine = line.lowercased()
@@ -374,9 +430,15 @@ class ReceiptAnalyzer {
                 }
                 
                 // Ignore lines with quantity, price etc.
-                if lowercasedLine.contains("qty") || lowercasedLine.contains(" x ") ||
+                if lowercasedLine.contains(NSLocalizedString("qty", comment: "Quantity abbreviation for filtering").lowercased()) || 
+                   lowercasedLine.contains(" x ") ||
                    lowercasedLine.contains("$") || lowercasedLine.contains("€") ||
-                   (lowercasedLine.contains("quantity") && lowercasedLine.contains("price")) {
+                   (lowercasedLine.contains(NSLocalizedString("quantity", comment: "Quantity keyword for filtering").lowercased()) && 
+                    lowercasedLine.contains(NSLocalizedString("price", comment: "Price keyword for filtering").lowercased())) ||
+                   lowercasedLine.contains("menge") || // German
+                   lowercasedLine.contains("preis") || // German
+                   lowercasedLine.contains("количество") || // Russian
+                   lowercasedLine.contains("цена") { // Russian
                     continue
                 }
                 
@@ -390,9 +452,28 @@ class ReceiptAnalyzer {
         // If no items found through markers, try heuristic approach
         if items.isEmpty {
             // Look for lines that look like items (don't contain special words)
-            let blockedWords = ["receipt", "store", "date", "time", "total", "amount",
-                              "payment", "cashier", "thank", "you", "discount", "tax",
-                              "id", "address", "number", "phone", "welcome", "order"]
+            let blockedWords = [
+                NSLocalizedString("receipt", comment: "Receipt keyword for item filtering").lowercased(),
+                NSLocalizedString("store", comment: "Store keyword for item filtering").lowercased(),
+                NSLocalizedString("date", comment: "Date keyword for item filtering").lowercased(),
+                NSLocalizedString("time", comment: "Time keyword for item filtering").lowercased(),
+                NSLocalizedString("total", comment: "Total keyword for item filtering").lowercased(),
+                NSLocalizedString("amount", comment: "Amount keyword for item filtering").lowercased(),
+                NSLocalizedString("payment", comment: "Payment keyword for item filtering").lowercased(),
+                NSLocalizedString("cashier", comment: "Cashier keyword for item filtering").lowercased(),
+                NSLocalizedString("thank", comment: "Thank keyword for item filtering").lowercased(),
+                NSLocalizedString("you", comment: "You keyword for item filtering").lowercased(),
+                NSLocalizedString("discount", comment: "Discount keyword for item filtering").lowercased(),
+                NSLocalizedString("tax", comment: "Tax keyword for item filtering").lowercased(),
+                "id", "address", "number", "phone", "welcome", "order",
+                // German
+                "geschäft", "laden", "datum", "zeit", "gesamt", "betrag", 
+                "zahlung", "kassierer", "danke", "rabatt", "steuer",
+                "willkommen", "bestellung",
+                // Russian
+                "магазин", "дата", "время", "итого", "сумма", "платеж",
+                "кассир", "спасибо", "скидка", "налог", "добро пожаловать", "заказ"
+            ]
             
             for line in lines {
                 let lowercasedLine = line.lowercased()
@@ -410,56 +491,94 @@ class ReceiptAnalyzer {
     private static func determineCategory(items: [String], merchantName: String?) -> String? {
         // Map keywords to FinanceCategory values
         let categoryKeywords: [String: FinanceCategory] = [
-            "restaurant": .food,
-            "cafe": .food,
-            "pizza": .food,
-            "sushi": .food,
-            "food": .food,
-            "grocery": .food,
-            "supermarket": .food,
-            "bread": .food,
-            "milk": .food,
-            "coffee": .food,
-            "burger": .food,
+            // Food category
+            NSLocalizedString("restaurant", comment: "Restaurant keyword for category detection").lowercased(): .food,
+            NSLocalizedString("cafe", comment: "Cafe keyword for category detection").lowercased(): .food,
+            NSLocalizedString("pizza", comment: "Pizza keyword for category detection").lowercased(): .food,
+            NSLocalizedString("sushi", comment: "Sushi keyword for category detection").lowercased(): .food,
+            NSLocalizedString("food", comment: "Food keyword for category detection").lowercased(): .food,
+            NSLocalizedString("grocery", comment: "Grocery keyword for category detection").lowercased(): .food,
+            NSLocalizedString("supermarket", comment: "Supermarket keyword for category detection").lowercased(): .food,
+            NSLocalizedString("bread", comment: "Bread keyword for category detection").lowercased(): .food,
+            NSLocalizedString("milk", comment: "Milk keyword for category detection").lowercased(): .food,
+            NSLocalizedString("coffee", comment: "Coffee keyword for category detection").lowercased(): .food,
+            NSLocalizedString("burger", comment: "Burger keyword for category detection").lowercased(): .food,
+            // German food keywords
+            "restaurant": .food, "kaffee": .food, "bäckerei": .food, "supermarkt": .food,
+            "essen": .food, "getränk": .food, "brot": .food, "milch": .food,
+            // Russian food keywords
+            "ресторан": .food, "кафе": .food, "пицца": .food, "еда": .food,
+            "продукты": .food, "супермаркет": .food, "хлеб": .food, "молоко": .food,
+            "кофе": .food, "бургер": .food,
             
-            "taxi": .logistics,
-            "metro": .logistics,
-            "bus": .logistics,
-            "train": .logistics,
-            "subway": .logistics,
-            "ticket": .logistics,
-            "transit": .logistics,
-            "gas": .logistics,
-            "fuel": .logistics,
-            "parking": .logistics,
-            "uber": .logistics,
-            "post": .logistics, // Added for Deutsche Post
+            // Logistics category
+            NSLocalizedString("taxi", comment: "Taxi keyword for category detection").lowercased(): .logistics,
+            NSLocalizedString("metro", comment: "Metro keyword for category detection").lowercased(): .logistics,
+            NSLocalizedString("bus", comment: "Bus keyword for category detection").lowercased(): .logistics,
+            NSLocalizedString("train", comment: "Train keyword for category detection").lowercased(): .logistics,
+            NSLocalizedString("subway", comment: "Subway keyword for category detection").lowercased(): .logistics,
+            NSLocalizedString("ticket", comment: "Ticket keyword for category detection").lowercased(): .logistics,
+            NSLocalizedString("transit", comment: "Transit keyword for category detection").lowercased(): .logistics,
+            NSLocalizedString("gas", comment: "Gas keyword for category detection").lowercased(): .logistics,
+            NSLocalizedString("fuel", comment: "Fuel keyword for category detection").lowercased(): .logistics,
+            NSLocalizedString("parking", comment: "Parking keyword for category detection").lowercased(): .logistics,
+            NSLocalizedString("uber", comment: "Uber keyword for category detection").lowercased(): .logistics,
+            NSLocalizedString("post", comment: "Post keyword for category detection").lowercased(): .logistics,
+            // German logistics keywords
+            "taxi": .logistics, "u-bahn": .logistics, "bahn": .logistics, "zug": .logistics,
+            "ticket": .logistics, "benzin": .logistics, "tanken": .logistics, "parken": .logistics,
+            "post": .logistics, "transport": .logistics,
+            // Russian logistics keywords
+            "такси": .logistics, "метро": .logistics, "автобус": .logistics, "поезд": .logistics,
+            "билет": .logistics, "транспорт": .logistics, "бензин": .logistics, "топливо": .logistics,
+            "парковка": .logistics, "почта": .logistics,
             
-            "hotel": .accommodation,
-            "apartment": .accommodation,
-            "room": .accommodation,
-            "hostel": .accommodation,
-            "lodging": .accommodation,
-            "airbnb": .accommodation,
+            // Accommodation category
+            NSLocalizedString("hotel", comment: "Hotel keyword for category detection").lowercased(): .accommodation,
+            NSLocalizedString("apartment", comment: "Apartment keyword for category detection").lowercased(): .accommodation,
+            NSLocalizedString("room", comment: "Room keyword for category detection").lowercased(): .accommodation,
+            NSLocalizedString("hostel", comment: "Hostel keyword for category detection").lowercased(): .accommodation,
+            NSLocalizedString("lodging", comment: "Lodging keyword for category detection").lowercased(): .accommodation,
+            NSLocalizedString("airbnb", comment: "Airbnb keyword for category detection").lowercased(): .accommodation,
+            // German accommodation keywords
+            "hotel": .accommodation, "wohnung": .accommodation, "zimmer": .accommodation,
+            "unterkunft": .accommodation, "pension": .accommodation,
+            // Russian accommodation keywords
+            "отель": .accommodation, "гостиница": .accommodation, "квартира": .accommodation,
+            "комната": .accommodation, "хостел": .accommodation, "жилье": .accommodation,
             
-            "guitar": .gear,
-            "equipment": .gear,
-            "instrument": .gear,
-            "mic": .gear,
-            "microphone": .gear,
-            "speaker": .gear,
-            "amplifier": .gear,
-            "cable": .gear,
-            "strings": .gear,
+            // Equipment/Gear category
+            NSLocalizedString("guitar", comment: "Guitar keyword for category detection").lowercased(): .gear,
+            NSLocalizedString("equipment", comment: "Equipment keyword for category detection").lowercased(): .gear,
+            NSLocalizedString("instrument", comment: "Instrument keyword for category detection").lowercased(): .gear,
+            NSLocalizedString("mic", comment: "Mic keyword for category detection").lowercased(): .gear,
+            NSLocalizedString("microphone", comment: "Microphone keyword for category detection").lowercased(): .gear,
+            NSLocalizedString("speaker", comment: "Speaker keyword for category detection").lowercased(): .gear,
+            NSLocalizedString("amplifier", comment: "Amplifier keyword for category detection").lowercased(): .gear,
+            NSLocalizedString("cable", comment: "Cable keyword for category detection").lowercased(): .gear,
+            NSLocalizedString("strings", comment: "Strings keyword for category detection").lowercased(): .gear,
+            // German equipment keywords
+            "gitarre": .gear, "ausrüstung": .gear, "instrument": .gear, "mikrofon": .gear,
+            "lautsprecher": .gear, "verstärker": .gear, "kabel": .gear, "saiten": .gear,
+            // Russian equipment keywords
+            "гитара": .gear, "оборудование": .gear, "инструмент": .gear, "микрофон": .gear,
+            "динамик": .gear, "усилитель": .gear, "кабель": .gear, "струны": .gear,
             
-            "ad": .promo,
-            "promotion": .promo,
-            "marketing": .promo,
-            "flyer": .promo,
-            "poster": .promo,
-            "print": .promo,
-            "design": .promo,
-            "social": .promo
+            // Promotion category
+            NSLocalizedString("ad", comment: "Ad keyword for category detection").lowercased(): .promo,
+            NSLocalizedString("promotion", comment: "Promotion keyword for category detection").lowercased(): .promo,
+            NSLocalizedString("marketing", comment: "Marketing keyword for category detection").lowercased(): .promo,
+            NSLocalizedString("flyer", comment: "Flyer keyword for category detection").lowercased(): .promo,
+            NSLocalizedString("poster", comment: "Poster keyword for category detection").lowercased(): .promo,
+            NSLocalizedString("print", comment: "Print keyword for category detection").lowercased(): .promo,
+            NSLocalizedString("design", comment: "Design keyword for category detection").lowercased(): .promo,
+            NSLocalizedString("social", comment: "Social keyword for category detection").lowercased(): .promo,
+            // German promotion keywords
+            "werbung": .promo, "marketing": .promo, "flyer": .promo, "plakat": .promo,
+            "druck": .promo, "design": .promo, "sozial": .promo,
+            // Russian promotion keywords
+            "реклама": .promo, "маркетинг": .promo, "листовка": .promo, "плакат": .promo,
+            "печать": .promo, "дизайн": .promo, "социальный": .promo
         ]
         
         // Count matches for each category
@@ -486,6 +605,6 @@ class ReceiptAnalyzer {
         
         // Find best matching category
         let sortedCategories = categoryMatches.sorted { $0.value > $1.value }
-        return sortedCategories.first?.key.rawValue ?? "Other"
+        return sortedCategories.first?.key.rawValue ?? NSLocalizedString("Other", comment: "Default category when no match found in receipt analysis")
     }
 }

@@ -55,7 +55,7 @@ struct GroupInfoView: View {
                 )
                 .ignoresSafeArea()
             )
-            .navigationTitle("About Band")
+            .navigationTitle(NSLocalizedString("About Band", comment: "About band navigation title"))
             .navigationBarTitleDisplayMode(.large)
         }
         .onAppear {
@@ -132,29 +132,29 @@ struct GroupInfoView: View {
     
     private func basicInfoSection(groupInfo: GroupInfo) -> some View {
         VStack(spacing: 16) {
-            sectionHeader(title: "Band Information", icon: "info.circle.fill", color: .blue)
+            sectionHeader(title: NSLocalizedString("Band Information", comment: "Band information section title"), icon: "info.circle.fill", color: .blue)
             
             VStack(spacing: 12) {
                 if let foundedYear = groupInfo.foundedYear {
-                    InfoRow(
+                    GroupInfoRow(
                         icon: "calendar",
-                        title: "Founded",
+                        title: NSLocalizedString("Founded", comment: "Founded year label"),
                         value: "\(foundedYear)"
                     )
                 }
                 
                 if let genre = groupInfo.genre, !genre.isEmpty {
-                    InfoRow(
+                    GroupInfoRow(
                         icon: "music.note",
-                        title: "Genre",
+                        title: NSLocalizedString("Genre", comment: "Music genre label"),
                         value: genre
                     )
                 }
                 
                 if let location = groupInfo.location, !location.isEmpty {
-                    InfoRow(
+                    GroupInfoRow(
                         icon: "location.fill",
-                        title: "Location",
+                        title: NSLocalizedString("Location", comment: "Band location label"),
                         value: location
                     )
                 }
@@ -170,19 +170,19 @@ struct GroupInfoView: View {
     
     private func contactsSection(groupInfo: GroupInfo) -> some View {
         VStack(spacing: 16) {
-            sectionHeader(title: "Follow Us", icon: "link.circle.fill", color: .green)
+            sectionHeader(title: NSLocalizedString("Follow Us", comment: "Follow us section title"), icon: "link.circle.fill", color: .green)
             
             VStack(spacing: 12) {
                 if let website = groupInfo.website, !website.isEmpty {
                     SocialLinkRow(
                         icon: "globe",
-                        title: "Official Website",
+                        title: NSLocalizedString("Official Website", comment: "Official website label"),
                         url: website,
                         color: .blue
                     )
                 }
                 
-                if let instagram = socialMedia.instagram, !instagram.isEmpty {
+                if let instagram = groupInfo.socialMedia?.instagram, !instagram.isEmpty {
                     SocialLinkRow(
                         icon: "camera.fill",
                         title: "Instagram",
@@ -191,7 +191,7 @@ struct GroupInfoView: View {
                     )
                 }
                 
-                if let facebook = socialMedia.facebook, !facebook.isEmpty {
+                if let facebook = groupInfo.socialMedia?.facebook, !facebook.isEmpty {
                     SocialLinkRow(
                         icon: "person.2.fill",
                         title: "Facebook",
@@ -200,7 +200,7 @@ struct GroupInfoView: View {
                     )
                 }
                 
-                if let youtube = socialMedia.youtube, !youtube.isEmpty {
+                if let youtube = groupInfo.socialMedia?.youtube, !youtube.isEmpty {
                     SocialLinkRow(
                         icon: "play.rectangle.fill",
                         title: "YouTube",
@@ -209,7 +209,7 @@ struct GroupInfoView: View {
                     )
                 }
                 
-                if let spotify = socialMedia.spotify, !spotify.isEmpty {
+                if let spotify = groupInfo.socialMedia?.spotify, !spotify.isEmpty {
                     SocialLinkRow(
                         icon: "music.note.list",
                         title: "Spotify",
@@ -218,16 +218,16 @@ struct GroupInfoView: View {
                     )
                 }
                 
-                if let appleMusic = socialMedia.appleMusic, !appleMusic.isEmpty {
+                if let appleMusic = groupInfo.socialMedia?.appleMusic, !appleMusic.isEmpty {
                     SocialLinkRow(
                         icon: "music.note",
-                        title: "Apple Music",
+                        title: NSLocalizedString("Apple Music", comment: "Apple Music label"),
                         url: appleMusic,
                         color: .gray
                     )
                 }
                 
-                if let twitter = socialMedia.twitter, !twitter.isEmpty {
+                if let twitter = groupInfo.socialMedia?.twitter, !twitter.isEmpty {
                     SocialLinkRow(
                         icon: "bird.fill",
                         title: "Twitter/X",
@@ -236,7 +236,7 @@ struct GroupInfoView: View {
                     )
                 }
                 
-                if let tiktok = socialMedia.tiktok, !tiktok.isEmpty {
+                if let tiktok = groupInfo.socialMedia?.tiktok, !tiktok.isEmpty {
                     SocialLinkRow(
                         icon: "video.fill",
                         title: "TikTok",
@@ -245,7 +245,7 @@ struct GroupInfoView: View {
                     )
                 }
                 
-                if let soundcloud = socialMedia.soundcloud, !soundcloud.isEmpty {
+                if let soundcloud = groupInfo.socialMedia?.soundcloud, !soundcloud.isEmpty {
                     SocialLinkRow(
                         icon: "waveform",
                         title: "SoundCloud",
@@ -254,7 +254,7 @@ struct GroupInfoView: View {
                     )
                 }
                 
-                if let bandcamp = socialMedia.bandcamp, !bandcamp.isEmpty {
+                if let bandcamp = groupInfo.socialMedia?.bandcamp, !bandcamp.isEmpty {
                     SocialLinkRow(
                         icon: "music.quarternote.3",
                         title: "Bandcamp",
@@ -263,7 +263,7 @@ struct GroupInfoView: View {
                     )
                 }
                 
-                if let patreon = socialMedia.patreon, !patreon.isEmpty {
+                if let patreon = groupInfo.socialMedia?.patreon, !patreon.isEmpty {
                     SocialLinkRow(
                         icon: "heart.circle.fill",
                         title: "Patreon",
@@ -272,7 +272,7 @@ struct GroupInfoView: View {
                     )
                 }
                 
-                if let discord = socialMedia.discord, !discord.isEmpty {
+                if let discord = groupInfo.socialMedia?.discord, !discord.isEmpty {
                     SocialLinkRow(
                         icon: "message.circle.fill",
                         title: "Discord",
@@ -292,15 +292,15 @@ struct GroupInfoView: View {
     
     private func statsSection(groupInfo: GroupInfo) -> some View {
         VStack(spacing: 16) {
-            sectionHeader(title: "Fan Club Statistics", icon: "chart.bar.fill", color: .purple)
+            sectionHeader(title: NSLocalizedString("Fan Club Statistics", comment: "Fan club statistics section title"), icon: "chart.bar.fill", color: .purple)
             
             VStack(spacing: 16) {
                 HStack(spacing: 0) {
-                    StatCard(
+                    GroupInfoStatCard(
                         icon: "heart.fill",
-                        title: "Fans",
+                        title: NSLocalizedString("Fans", comment: "Fans count label"),
                         value: "\(fanCount)",
-                        subtitle: "Members",
+                        subtitle: NSLocalizedString("Members", comment: "Members subtitle"),
                         color: .red
                     )
                     
@@ -308,11 +308,11 @@ struct GroupInfoView: View {
                         .fill(Color.secondary.opacity(0.2))
                         .frame(width: 1, height: 50)
                     
-                    StatCard(
+                    GroupInfoStatCard(
                         icon: "calendar.badge.plus",
-                        title: "Since",
+                        title: NSLocalizedString("Since", comment: "Since date label"),
                         value: formatDate(groupInfo.fanClubCreatedAt),
-                        subtitle: "Active",
+                        subtitle: NSLocalizedString("Active", comment: "Active subtitle"),
                         color: .green
                     )
                 }
@@ -331,7 +331,7 @@ struct GroupInfoView: View {
                 .scaleEffect(1.5)
                 .tint(.blue)
             
-            Text("Loading band information...")
+            Text(NSLocalizedString("Loading band information...", comment: "Loading band information message"))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }
@@ -345,12 +345,12 @@ struct GroupInfoView: View {
                 .font(.system(size: 60))
                 .foregroundColor(.secondary)
             
-            Text("No Band Information")
+            Text(NSLocalizedString("No Band Information", comment: "No band information title"))
                 .font(.title2)
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
             
-            Text("Band information is not available at the moment")
+            Text(NSLocalizedString("Band information is not available at the moment", comment: "No band information description"))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -396,7 +396,7 @@ struct GroupInfoView: View {
         }
         
         // ✅ ОБНОВЛЕНО: Используем GroupService для загрузки данных
-        GroupService.shared.fetchGroup(by: fanGroupId) { [weak self] success in
+        GroupService.shared.fetchGroup(by: fanGroupId) { success in
             DispatchQueue.main.async {
                 if success, let group = GroupService.shared.group {
                     // ✅ Создаем GroupInfo из реальных данных Firebase
@@ -405,7 +405,7 @@ struct GroupInfoView: View {
                         name: group.name,
                         description: group.description,
                         logoURL: group.logoURL,
-                        foundedYear: self?.parseYearFromDate(group.establishedDate),
+                        foundedYear: self.parseYearFromDate(group.establishedDate),
                         genre: group.genre,
                         location: group.location,
                         website: group.socialMediaLinks?.website,
@@ -413,10 +413,10 @@ struct GroupInfoView: View {
                         fanClubCreatedAt: group.createdAt ?? Date()
                     )
                     
-                    self?.groupInfo = groupInfo
-                    self?.loadFanCount(groupId: fanGroupId)
+                    self.groupInfo = groupInfo
+                    self.loadFanCount(groupId: fanGroupId)
                 } else {
-                    self?.isLoading = false
+                    self.isLoading = false
                 }
             }
         }
@@ -459,7 +459,7 @@ struct GroupInfoView: View {
 
 // MARK: - Supporting Views
 
-struct InfoRow: View {
+struct GroupInfoRow: View {
     let icon: String
     let title: String
     let value: String
@@ -525,7 +525,7 @@ struct SocialLinkRow: View {
     }
 }
 
-struct StatCard: View {
+struct GroupInfoStatCard: View {
     let icon: String
     let title: String
     let value: String
@@ -571,14 +571,6 @@ struct GroupInfo {
     let website: String?
     let socialMedia: SocialMediaLinks?
     let fanClubCreatedAt: Date
-}
-
-struct SocialMediaLinks {
-    let instagram: String?
-    let facebook: String?
-    let twitter: String?
-    let youtube: String?
-    let tiktok: String?
 }
 
 // MARK: - Preview

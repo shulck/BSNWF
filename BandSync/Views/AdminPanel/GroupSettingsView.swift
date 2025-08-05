@@ -45,12 +45,12 @@ struct GroupSettingsView: View {
                             settingsIcon(icon: "photo.fill", color: .pink)
                             
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Group Logo".localized)
+                                Text(NSLocalizedString("Group Logo", comment: ""))
                                     .font(.body)
                                     .fontWeight(.medium)
                                     .foregroundColor(.primary)
                                 
-                                Text("Set or change group logo".localized)
+                                Text(NSLocalizedString("Set or change group logo", comment: ""))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
@@ -85,12 +85,12 @@ struct GroupSettingsView: View {
                     settingsIcon(icon: "music.mic", color: .blue)
                     
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Group Name".localized)
+                        Text(NSLocalizedString("Group Name", comment: ""))
                             .font(.body)
                             .fontWeight(.medium)
                             .foregroundColor(.primary)
                         
-                        TextField("Enter group name".localized, text: $newName)
+                        TextField(NSLocalizedString("Enter group name", comment: ""), text: $newName)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.words)
                     }
@@ -106,12 +106,12 @@ struct GroupSettingsView: View {
                         settingsIcon(icon: "checkmark.circle.fill", color: .green)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Update Group Info".localized)
+                            Text(NSLocalizedString("Update Group Info", comment: ""))
                                 .font(.body)
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary)
                             
-                            Text("Save basic group information".localized)
+                            Text(NSLocalizedString("Save basic group information", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -124,7 +124,7 @@ struct GroupSettingsView: View {
                 .disabled(newName.isEmpty || groupService.isLoading)
                 .opacity(newName.isEmpty || groupService.isLoading ? 0.5 : 1.0)
             } header: {
-                Text("Group Information".localized)
+                Text(NSLocalizedString("Group Information", comment: ""))
             }
             
             // ✅ НОВАЯ СЕКЦИЯ: Band Details
@@ -132,12 +132,12 @@ struct GroupSettingsView: View {
                 VStack(spacing: 16) {
                     // Description
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Description")
+                        Text(NSLocalizedString("Description", comment: ""))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.primary)
                         
-                        TextField("Brief description of your band", text: $groupDescription, axis: .vertical)
+                        TextField(NSLocalizedString("Tell fans about your band...", comment: ""), text: $groupDescription, axis: .vertical)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .lineLimit(2...4)
                     }
@@ -145,41 +145,41 @@ struct GroupSettingsView: View {
                     HStack(spacing: 12) {
                         // Established Date
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Established Date")
+                            Text(NSLocalizedString("Established Date", comment: ""))
                                 .font(.subheadline)
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary)
                             
-                            TextField("April 7, 2018", text: $establishedDate)
+                            TextField(NSLocalizedString("When was your band formed?", comment: ""), text: $establishedDate)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                         
                         // Genre
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Genre")
+                            Text(NSLocalizedString("Genre", comment: ""))
                                 .font(.subheadline)
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary)
                             
-                            TextField("Rock, Pop, Jazz...", text: $genre)
+                            TextField(NSLocalizedString("What genre do you play?", comment: ""), text: $genre)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                     }
                     
                     // Location
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Location")
+                        Text(NSLocalizedString("Location", comment: ""))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.primary)
                         
-                        TextField("City, Country", text: $location)
+                        TextField(NSLocalizedString("Where is your band based?", comment: ""), text: $location)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
                 }
                 .padding(.vertical, 8)
             } header: {
-                Text("Band Details")
+                Text(NSLocalizedString("Band Details", comment: ""))
             }
             
             // ✅ НОВАЯ СЕКЦИЯ: Main Social Media
@@ -188,7 +188,7 @@ struct GroupSettingsView: View {
                     // Website
                     socialMediaField(
                         icon: "globe",
-                        title: "Official Website",
+                        title: NSLocalizedString("Official Website", comment: ""),
                         placeholder: "https://your-band.com",
                         text: $website,
                         color: .blue
@@ -197,7 +197,7 @@ struct GroupSettingsView: View {
                     // Instagram
                     socialMediaField(
                         icon: "camera.fill",
-                        title: "Instagram",
+                        title: NSLocalizedString("Instagram", comment: ""),
                         placeholder: "https://instagram.com/yourband",
                         text: $instagram,
                         color: .pink
@@ -206,7 +206,7 @@ struct GroupSettingsView: View {
                     // Facebook
                     socialMediaField(
                         icon: "person.2.fill",
-                        title: "Facebook",
+                        title: NSLocalizedString("Facebook", comment: ""),
                         placeholder: "https://facebook.com/yourband",
                         text: $facebook,
                         color: .blue
@@ -215,7 +215,7 @@ struct GroupSettingsView: View {
                     // YouTube
                     socialMediaField(
                         icon: "play.rectangle.fill",
-                        title: "YouTube",
+                        title: NSLocalizedString("YouTube", comment: ""),
                         placeholder: "https://youtube.com/@yourband",
                         text: $youtube,
                         color: .red
@@ -223,7 +223,7 @@ struct GroupSettingsView: View {
                 }
                 .padding(.vertical, 8)
             } header: {
-                Text("Main Social Media")
+                Text(NSLocalizedString("Main Social Media", comment: ""))
             }
             
             // ✅ НОВАЯ СЕКЦИЯ: Music Platforms
@@ -232,7 +232,7 @@ struct GroupSettingsView: View {
                     // Spotify
                     socialMediaField(
                         icon: "music.note.list",
-                        title: "Spotify",
+                        title: NSLocalizedString("Spotify", comment: ""),
                         placeholder: "https://open.spotify.com/artist/...",
                         text: $spotify,
                         color: .green
@@ -241,7 +241,7 @@ struct GroupSettingsView: View {
                     // Apple Music
                     socialMediaField(
                         icon: "music.note",
-                        title: "Apple Music",
+                        title: NSLocalizedString("Apple Music", comment: ""),
                         placeholder: "https://music.apple.com/artist/...",
                         text: $appleMusic,
                         color: .gray
@@ -250,7 +250,7 @@ struct GroupSettingsView: View {
                     // SoundCloud
                     socialMediaField(
                         icon: "waveform",
-                        title: "SoundCloud",
+                        title: NSLocalizedString("SoundCloud", comment: ""),
                         placeholder: "https://soundcloud.com/yourband",
                         text: $soundcloud,
                         color: .orange
@@ -259,7 +259,7 @@ struct GroupSettingsView: View {
                     // Bandcamp
                     socialMediaField(
                         icon: "music.quarternote.3",
-                        title: "Bandcamp",
+                        title: NSLocalizedString("Bandcamp", comment: ""),
                         placeholder: "https://yourband.bandcamp.com",
                         text: $bandcamp,
                         color: .blue
@@ -267,7 +267,7 @@ struct GroupSettingsView: View {
                 }
                 .padding(.vertical, 8)
             } header: {
-                Text("Music Platforms")
+                Text(NSLocalizedString("Music Platforms", comment: ""))
             }
             
             // ✅ НОВАЯ СЕКЦИЯ: Additional Platforms
@@ -276,7 +276,7 @@ struct GroupSettingsView: View {
                     // Twitter
                     socialMediaField(
                         icon: "bird.fill",
-                        title: "Twitter/X",
+                        title: NSLocalizedString("Twitter/X", comment: ""),
                         placeholder: "https://twitter.com/yourband",
                         text: $twitter,
                         color: .black
@@ -285,7 +285,7 @@ struct GroupSettingsView: View {
                     // TikTok
                     socialMediaField(
                         icon: "video.fill",
-                        title: "TikTok",
+                        title: NSLocalizedString("TikTok", comment: ""),
                         placeholder: "https://tiktok.com/@yourband",
                         text: $tiktok,
                         color: .black
@@ -294,7 +294,7 @@ struct GroupSettingsView: View {
                     // Patreon
                     socialMediaField(
                         icon: "heart.circle.fill",
-                        title: "Patreon",
+                        title: NSLocalizedString("Patreon", comment: ""),
                         placeholder: "https://patreon.com/yourband",
                         text: $patreon,
                         color: .orange
@@ -303,7 +303,7 @@ struct GroupSettingsView: View {
                     // Discord
                     socialMediaField(
                         icon: "message.circle.fill",
-                        title: "Discord",
+                        title: NSLocalizedString("Discord", comment: ""),
                         placeholder: "https://discord.gg/yourserver",
                         text: $discord,
                         color: .purple
@@ -319,12 +319,12 @@ struct GroupSettingsView: View {
                         settingsIcon(icon: "checkmark.circle.fill", color: .green)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Save Band Details")
+                            Text(NSLocalizedString("Save Band Details", comment: ""))
                                 .font(.body)
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary)
                             
-                            Text("Update band information and social media")
+                            Text(NSLocalizedString("Update band information and social media", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -337,7 +337,7 @@ struct GroupSettingsView: View {
                 .disabled(groupService.isLoading)
                 .opacity(groupService.isLoading ? 0.5 : 1.0)
             } header: {
-                Text("Additional Platforms")
+                Text(NSLocalizedString("Additional Platforms", comment: ""))
             }
             
             // PayPal Settings Section
@@ -346,12 +346,12 @@ struct GroupSettingsView: View {
                     settingsIcon(icon: "creditcard.fill", color: .blue)
                     
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("PayPal Address for Gifts".localized)
+                        Text(NSLocalizedString("PayPal Address for Gifts", comment: ""))
                             .font(.body)
                             .fontWeight(.medium)
                             .foregroundColor(.primary)
                         
-                        TextField("Enter PayPal email address".localized, text: $paypalAddress)
+                        TextField(NSLocalizedString("Enter PayPal email address", comment: ""), text: $paypalAddress)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .keyboardType(.emailAddress)
                             .autocapitalization(.none)
@@ -369,12 +369,12 @@ struct GroupSettingsView: View {
                         settingsIcon(icon: "checkmark.circle.fill", color: .green)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Save PayPal Address".localized)
+                            Text(NSLocalizedString("Save PayPal Address", comment: ""))
                                 .font(.body)
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary)
                             
-                            Text("Save PayPal address for birthday gifts".localized)
+                            Text(NSLocalizedString("Save PayPal address for birthday gifts", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -387,7 +387,7 @@ struct GroupSettingsView: View {
                 .disabled(paypalAddress.isEmpty || groupService.isLoading)
                 .opacity(paypalAddress.isEmpty || groupService.isLoading ? 0.5 : 1.0)
             } header: {
-                Text("Gift Settings".localized)
+                Text(NSLocalizedString("Gift Settings", comment: ""))
             }
             
             // Invitation Code Section
@@ -397,7 +397,7 @@ struct GroupSettingsView: View {
                         settingsIcon(icon: "qrcode", color: .purple)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Invitation Code".localized)
+                            Text(NSLocalizedString("Invitation Code", comment: ""))
                                 .font(.body)
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary)
@@ -413,7 +413,7 @@ struct GroupSettingsView: View {
                         Button {
                             UIPasteboard.general.string = group.code
                         } label: {
-                            Text("Copy".localized)
+                            Text(NSLocalizedString("Copy", comment: ""))
                                 .font(.subheadline)
                                 .fontWeight(.medium)
                                 .foregroundColor(.purple)
@@ -435,12 +435,12 @@ struct GroupSettingsView: View {
                             settingsIcon(icon: "arrow.clockwise", color: .orange)
                             
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Generate New Code".localized)
+                                Text(NSLocalizedString("Generate New Code", comment: ""))
                                     .font(.body)
                                     .fontWeight(.medium)
                                     .foregroundColor(.primary)
                                 
-                                Text("Create a new invitation code".localized)
+                                Text(NSLocalizedString("Create a new invitation code", comment: ""))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
@@ -451,7 +451,7 @@ struct GroupSettingsView: View {
                     }
                     .buttonStyle(PlainButtonStyle())
                 } header: {
-                    Text("Invitation".localized)
+                    Text(NSLocalizedString("Invitation", comment: ""))
                 }
             }
             
@@ -462,12 +462,12 @@ struct GroupSettingsView: View {
                         settingsIcon(icon: "person.3.fill", color: .green)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Manage Members".localized)
+                            Text(NSLocalizedString("Manage Members", comment: ""))
                                 .font(.body)
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary)
                             
-                            Text("View and manage group members".localized)
+                            Text(NSLocalizedString("View and manage group members", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -488,7 +488,7 @@ struct GroupSettingsView: View {
                     .padding(.vertical, 4)
                 }
             } header: {
-                Text("Members".localized)
+                Text(NSLocalizedString("Members", comment: ""))
             }
             
             // Available Modules Section
@@ -497,12 +497,12 @@ struct GroupSettingsView: View {
                     settingsIcon(icon: "square.grid.2x2.fill", color: .gray)
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Module Management".localized)
+                        Text(NSLocalizedString("Module Management", comment: ""))
                             .font(.body)
                             .fontWeight(.medium)
                             .foregroundColor(.primary)
                         
-                        Text("Module management will be available in the next update.".localized)
+                        Text(NSLocalizedString("Module management will be available in the next update.", comment: ""))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -511,7 +511,7 @@ struct GroupSettingsView: View {
                 }
                 .padding(.vertical, 4)
             } header: {
-                Text("Available Modules".localized)
+                Text(NSLocalizedString("Available Modules", comment: ""))
             }
             
             // Error Messages Section
@@ -537,7 +537,7 @@ struct GroupSettingsView: View {
                         ProgressView()
                             .scaleEffect(0.8)
                         
-                        Text("Loading...".localized)
+                        Text(NSLocalizedString("Loading...", comment: ""))
                             .font(.body)
                             .foregroundColor(.secondary)
                         
@@ -547,7 +547,7 @@ struct GroupSettingsView: View {
                 }
             }
         }
-        .navigationTitle("Group Settings".localized)
+        .navigationTitle(NSLocalizedString("Group Settings", comment: ""))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             loadGroupData()
@@ -555,19 +555,19 @@ struct GroupSettingsView: View {
         .onChange(of: groupService.group) {
             loadGroupData()
         }
-        .alert("Generate new code?".localized, isPresented: $showConfirmation) {
-            Button("Cancel".localized, role: .cancel) {}
-            Button("Generate".localized) {
+        .alert(NSLocalizedString("Generate new code?", comment: ""), isPresented: $showConfirmation) {
+            Button(NSLocalizedString("Cancel", comment: ""), role: .cancel) {}
+            Button(NSLocalizedString("Generate", comment: "")) {
                 groupService.regenerateCode()
                 showSuccessAlert = true
             }
         } message: {
-            Text("The old code will no longer be valid. All members who haven't joined yet will need to use the new code.".localized)
+            Text(NSLocalizedString("The old code will no longer be valid. All members who haven't joined yet will need to use the new code.", comment: ""))
         }
-        .alert("Success".localized, isPresented: $showSuccessAlert) {
-            Button("OK".localized, role: .cancel) {}
+        .alert(NSLocalizedString("Success", comment: ""), isPresented: $showSuccessAlert) {
+            Button(NSLocalizedString("OK", comment: ""), role: .cancel) {}
         } message: {
-            Text("Changes saved successfully.".localized)
+            Text(NSLocalizedString("Changes saved successfully.", comment: ""))
         }
     }
     

@@ -22,6 +22,6 @@ struct SafariWebView: UIViewControllerRepresentable {
 
 struct SafariWebView_Previews: PreviewProvider {
     static var previews: some View {
-        SafariWebView(url: URL(string: "https://www.apple.com")!)
+        SafariWebView(url: URL(string: NSLocalizedString("previewWebsiteURL", comment: "Preview website URL for Safari view"))!)
     }
 }

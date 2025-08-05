@@ -30,7 +30,7 @@ struct AboutView: View {
                             .font(.body)
                             .fontWeight(.semibold)
                         
-                        Text(String(format: "Version %@".localized, getAppVersion()))
+                        Text(String(format: NSLocalizedString("Version %@", comment: "App version display format"), getAppVersion()))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -47,7 +47,7 @@ struct AboutView: View {
                 FeatureRow(icon: "person.3", title: "Team Coordination", description: "Organize and coordinate with band members", color: .orange)
                 FeatureRow(icon: "bag", title: "Merchandise", description: "Track inventory and sales", color: .brown)
             } header: {
-                Text("Key Features".localized)
+                Text(NSLocalizedString("Key Features", comment: "Section header for app features"))
             }
             
             Section {
@@ -65,7 +65,7 @@ struct AboutView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
             } header: {
-                Text("Support".localized)
+                Text(NSLocalizedString("Support", comment: "Section header for support options"))
             }
             
             Section {
@@ -89,14 +89,14 @@ struct AboutView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
             } header: {
-                Text("Legal".localized)
+                Text(NSLocalizedString("Legal", comment: "Section header for legal documents"))
             } footer: {
                 if let agreementDate = LegalConsentTracker.shared.getConsentDate() {
-                    Text(String(format: "Terms agreed: %@".localized, DateFormatter.localizedString(from: agreementDate, dateStyle: .medium, timeStyle: .none)))
+                    Text(String(format: NSLocalizedString("Terms agreed: %@", comment: "Shows when user agreed to terms"), DateFormatter.localizedString(from: agreementDate, dateStyle: .medium, timeStyle: .none)))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 } else {
-                    Text("Terms agreement required on next launch".localized)
+                    Text(NSLocalizedString("Terms agreement required on next launch", comment: "Warning that terms agreement is needed"))
                         .font(.caption)
                         .foregroundColor(.red)
                 }
@@ -104,32 +104,32 @@ struct AboutView: View {
             
             Section {
                 VStack(spacing: 6) {
-                    Text("Made by musicians for musicians".localized)
+                    Text(NSLocalizedString("Made by musicians for musicians", comment: "App tagline"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
-                    Text("© 2025 BandSync".localized)
+                    Text(NSLocalizedString("© 2025 BandSync", comment: "Copyright notice"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
-                    Text("All rights reserved.".localized)
+                    Text(NSLocalizedString("All rights reserved.", comment: "Rights statement"))
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 6)
             } header: {
-                Text("About".localized)
+                Text(NSLocalizedString("About", comment: "Section header for about information"))
             }
         }
-        .navigationTitle("About BandSync".localized)
+        .navigationTitle(NSLocalizedString("About BandSync", comment: "Navigation title for about screen"))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingPrivacyPolicy) {
             NavigationView {
                 PrivacyPolicyView()
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done".localized) {
+                            Button(NSLocalizedString("Done", comment: "Button to close sheet")) {
                                 showingPrivacyPolicy = false
                             }
                         }
@@ -141,7 +141,7 @@ struct AboutView: View {
                 TermsOfServiceView()
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done".localized) {
+                            Button(NSLocalizedString("Done", comment: "Button to close sheet")) {
                                 showingTermsOfService = false
                             }
                         }
@@ -153,7 +153,7 @@ struct AboutView: View {
                 CookiePolicyView()
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done".localized) {
+                            Button(NSLocalizedString("Done", comment: "Button to close sheet")) {
                                 showingCookiePolicy = false
                             }
                         }
@@ -165,7 +165,7 @@ struct AboutView: View {
                 GDPRComplianceView()
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done".localized) {
+                            Button(NSLocalizedString("Done", comment: "Button to close sheet")) {
                                 showingGDPRCompliance = false
                             }
                         }
@@ -189,11 +189,11 @@ struct FeatureRow: View {
                 .frame(width: 28)
             
             VStack(alignment: .leading, spacing: 2) {
-                Text(title.localized)
+                Text(NSLocalizedString(title, comment: "Feature title"))
                     .font(.body)
                     .fontWeight(.medium)
                 
-                Text(description.localized)
+                Text(NSLocalizedString(description, comment: "Feature description"))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -224,7 +224,7 @@ struct AboutRow: View {
                 .foregroundColor(color)
                 .frame(width: 28)
             
-            Text(title.localized)
+            Text(NSLocalizedString(title, comment: "About row title"))
                 .font(.body)
                 .foregroundColor(.primary)
             
@@ -248,7 +248,7 @@ struct HelpFAQView: View {
                 
                 FAQRow(question: "What permissions do I have?", answer: "Your access depends on your role set by the band leader. You may have permissions for Calendar, Setlists, Finances, Merchandise, Tasks, Contacts, Documents, or Admin functions.")
             } header: {
-                Text("Getting Started".localized)
+                Text(NSLocalizedString("Getting Started", comment: "FAQ section for getting started"))
             }
             
             Section {
@@ -256,7 +256,7 @@ struct HelpFAQView: View {
                 
                 FAQRow(question: "Can I attach setlists to events?", answer: "Yes! When creating events, you can select an existing setlist to associate with that performance or rehearsal.")
             } header: {
-                Text("Calendar & Events".localized)
+                Text(NSLocalizedString("Calendar & Events", comment: "FAQ section for calendar and events"))
             }
             
             Section {
@@ -268,7 +268,7 @@ struct HelpFAQView: View {
                 
                 FAQRow(question: "Can I reorder songs?", answer: "Yes! In edit mode, drag and drop songs to reorder. If using concert timing, all start times recalculate automatically.")
             } header: {
-                Text("Setlists & Music".localized)
+                Text(NSLocalizedString("Setlists & Music", comment: "FAQ section for setlists and music"))
             }
             
             Section {
@@ -276,7 +276,7 @@ struct HelpFAQView: View {
                 
                 FAQRow(question: "Can I create multiple project groups?", answer: "Yes! Create separate project groups for different topics - general coordination, business matters, or specific projects.")
             } header: {
-                Text("Communication".localized)
+                Text(NSLocalizedString("Communication", comment: "FAQ section for communication"))
             }
             
             Section {
@@ -286,7 +286,7 @@ struct HelpFAQView: View {
                 
                 FAQRow(question: "How do I manage merchandise?", answer: "Merch tab tracks inventory, prices, and sales across different channels (concerts, online, partners). Monitor low stock items and sales performance.")
             } header: {
-                Text("Finances & Business".localized)
+                Text(NSLocalizedString("Finances & Business", comment: "FAQ section for finances and business"))
             }
             
             Section {
@@ -294,7 +294,7 @@ struct HelpFAQView: View {
                 
                 FAQRow(question: "How do I manage contacts?", answer: "Contacts tab organizes musicians, venues, managers, producers, and other industry professionals. Import from device contacts or add manually with roles.")
             } header: {
-                Text("Tasks & Organization".localized)
+                Text(NSLocalizedString("Tasks & Organization", comment: "FAQ section for tasks and organization"))
             }
             
             Section {
@@ -302,7 +302,7 @@ struct HelpFAQView: View {
                 
                 FAQRow(question: "Do I need Google Drive?", answer: "Yes, Google Drive connection is required for the Documents feature. Without it, you can't create or store documents in the app.")
             } header: {
-                Text("Documents & Storage".localized)
+                Text(NSLocalizedString("Documents & Storage", comment: "FAQ section for documents and storage"))
             }
             
             Section {
@@ -312,7 +312,7 @@ struct HelpFAQView: View {
                 
                 FAQRow(question: "Is my data secure?", answer: "Yes! All data uses Firebase security with encryption. Optional Face ID/Touch ID authentication adds extra protection for sensitive information.")
             } header: {
-                Text("Data & Security".localized)
+                Text(NSLocalizedString("Data & Security", comment: "FAQ section for data and security"))
             }
             
             Section {
@@ -322,7 +322,7 @@ struct HelpFAQView: View {
                 
                 FAQRow(question: "How do I invite new members?", answer: "Band leaders can generate invitation codes in Settings > Account. Share this code with new members to join your group.")
             } header: {
-                Text("Troubleshooting".localized)
+                Text(NSLocalizedString("Troubleshooting", comment: "FAQ section for troubleshooting"))
             }
             
             Section {
@@ -330,7 +330,7 @@ struct HelpFAQView: View {
                     HStack {
                         Image(systemName: "envelope.fill")
                             .foregroundColor(.blue)
-                        Text("Contact Support".localized)
+                        Text(NSLocalizedString("Contact Support", comment: "Contact support button"))
                         Spacer()
                         Image(systemName: "arrow.up.right")
                             .font(.caption)
@@ -339,10 +339,10 @@ struct HelpFAQView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
             } header: {
-                Text("Need More Help?".localized)
+                Text(NSLocalizedString("Need More Help?", comment: "FAQ section for additional help"))
             }
         }
-        .navigationTitle("Help & FAQ".localized)
+        .navigationTitle(NSLocalizedString("Help & FAQ", comment: "Navigation title for help and FAQ"))
         .navigationBarTitleDisplayMode(.inline)
     }
 }
@@ -360,7 +360,7 @@ struct FAQRow: View {
                 }
             }) {
                 HStack {
-                    Text(question.localized)
+                    Text(NSLocalizedString(question, comment: "FAQ question"))
                         .font(.body)
                         .fontWeight(.medium)
                         .foregroundColor(.primary)
@@ -377,7 +377,7 @@ struct FAQRow: View {
             .buttonStyle(PlainButtonStyle())
             
             if isExpanded {
-                Text(answer.localized)
+                Text(NSLocalizedString(answer, comment: "FAQ answer"))
                     .font(.body)
                     .foregroundColor(.secondary)
                     .padding(.bottom, 8)

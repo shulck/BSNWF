@@ -45,15 +45,15 @@ struct TaskDetailView: View {
                 hideKeyboard()
             }
         }
-        .navigationTitle(isEditing ? "Edit Task".localized : "Task Details".localized)
+        .navigationTitle(isEditing ? NSLocalizedString("edit_task", comment: "Navigation title for editing task") : NSLocalizedString("task_details", comment: "Navigation title for task details"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             toolbarContent
         }
-        .alert("Delete Task".localized, isPresented: $showDeleteAlert) {
+        .alert(NSLocalizedString("delete_task", comment: "Alert title for deleting task"), isPresented: $showDeleteAlert) {
             deleteAlert
         } message: {
-            Text("Are you sure you want to delete this task? This action cannot be undone.".localized)
+            Text(NSLocalizedString("delete_task_confirmation", comment: "Confirmation message for deleting task"))
         }
         .background(Color(.systemGroupedBackground))
         .onAppear {
@@ -97,7 +97,7 @@ struct TaskDetailView: View {
             HStack(alignment: .top, spacing: 12) {
                 VStack(alignment: .leading, spacing: 12) {
                     if isEditing {
-                        TextField("Task title".localized, text: $editedTask.title)
+                        TextField(NSLocalizedString("task_title", comment: "Placeholder for task title field"), text: $editedTask.title)
                             .font(.title3)
                             .fontWeight(.bold)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -152,14 +152,14 @@ struct TaskDetailView: View {
     
     private var editingTimeSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Schedule".localized)
+            Text(NSLocalizedString("schedule", comment: "Header for schedule section"))
                 .font(.footnote)
                 .fontWeight(.semibold)
                 .foregroundColor(.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             HStack {
-                Text("Include Time".localized)
+                Text(NSLocalizedString("include_time", comment: "Toggle to include time in task"))
                     .font(.body)
                 Spacer()
                 Toggle("", isOn: $editHasTime)
@@ -172,7 +172,7 @@ struct TaskDetailView: View {
             }
             
             HStack {
-                Text("Multi-day Task".localized)
+                Text(NSLocalizedString("multi_day_task", comment: "Toggle for multi-day task"))
                     .font(.body)
                 Spacer()
                 Toggle("", isOn: $editIsMultiDay)
@@ -184,7 +184,7 @@ struct TaskDetailView: View {
             }
             
             VStack(alignment: .leading, spacing: 8) {
-                Text(editHasTime ? "Start Date & Time".localized : "Start Date".localized)
+                Text(editHasTime ? NSLocalizedString("start_date_time", comment: "Label for start date and time") : NSLocalizedString("start_date", comment: "Label for start date"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
@@ -215,7 +215,7 @@ struct TaskDetailView: View {
             
             if editIsMultiDay {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(editHasTime ? "End Date & Time".localized : "End Date".localized)
+                    Text(editHasTime ? NSLocalizedString("end_date_time", comment: "Label for end date and time") : NSLocalizedString("end_date", comment: "Label for end date"))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     
@@ -233,7 +233,7 @@ struct TaskDetailView: View {
     
     private var displayTimeSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Schedule".localized)
+            Text(NSLocalizedString("schedule", comment: "Header for schedule section"))
                 .font(.footnote)
                 .fontWeight(.semibold)
                 .foregroundColor(.secondary)
@@ -248,10 +248,10 @@ struct TaskDetailView: View {
                     
                     VStack(alignment: .leading, spacing: 4) {
                         if currentTask.isMultiDay {
-                            Text("From:".localized + " \(formatDateTime(currentTask.startDate, includeTime: currentTask.hasTime))")
+                            Text(NSLocalizedString("From:", comment: "Task start date label") + " \(formatDateTime(currentTask.startDate, includeTime: currentTask.hasTime))")
                                 .font(.body)
                                 .lineLimit(nil)
-                            Text("To:".localized + " \(formatDateTime(currentTask.endDate, includeTime: currentTask.hasTime))")
+                            Text(NSLocalizedString("To:", comment: "Task end date label") + " \(formatDateTime(currentTask.endDate, includeTime: currentTask.hasTime))")
                                 .font(.body)
                                 .lineLimit(nil)
                         } else {
@@ -271,7 +271,7 @@ struct TaskDetailView: View {
                             .font(.body)
                             .frame(width: 20, alignment: .center)
                         
-                        Text("Timed Event".localized)
+                        Text(NSLocalizedString("Timed Event", comment: "Task with specific time label"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
@@ -286,7 +286,7 @@ struct TaskDetailView: View {
                             .font(.body)
                             .frame(width: 20, alignment: .center)
                         
-                        Text("Duration:".localized + " \(formatDuration(from: currentTask.startDate, to: currentTask.endDate))")
+                        Text(NSLocalizedString("Duration:", comment: "Task duration label") + " \(formatDuration(from: currentTask.startDate, to: currentTask.endDate))")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .lineLimit(nil)
@@ -342,22 +342,22 @@ struct TaskDetailView: View {
     
     private var statusText: String {
         if currentTask.completed {
-            return "Completed".localized
+            return NSLocalizedString("Completed", comment: "Task completed status")
         } else if currentTask.isOverdue {
-            return "Overdue".localized
+            return NSLocalizedString("Overdue", comment: "Task overdue status")
         } else if currentTask.isToday {
-            return "Today".localized
+            return NSLocalizedString("Today", comment: "Task due today status")
         } else if currentTask.isTomorrow {
-            return "Tomorrow".localized
+            return NSLocalizedString("Tomorrow", comment: "Task due tomorrow status")
         } else {
-            return "Upcoming".localized
+            return NSLocalizedString("Upcoming", comment: "Task upcoming status")
         }
     }
     
     private var taskInfoCompact: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("by".localized + " \(getCreatedByName())")
+                Text(NSLocalizedString("by", comment: "Task creator label") + " \(getCreatedByName())")
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer()
@@ -380,7 +380,7 @@ struct TaskDetailView: View {
     private var taskDescriptionCard: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("Description".localized)
+                Text(NSLocalizedString("Description", comment: "Task description header"))
                     .font(.footnote)
                     .fontWeight(.semibold)
                     .foregroundColor(.secondary)
@@ -400,7 +400,7 @@ struct TaskDetailView: View {
                     }
             } else {
                 if currentTask.description.isEmpty {
-                    Text("No Description".localized)
+                    Text(NSLocalizedString("No Description", comment: "Empty task description placeholder"))
                         .font(.body)
                         .foregroundColor(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -435,7 +435,7 @@ struct TaskDetailView: View {
                 HStack(spacing: 8) {
                     Image(systemName: currentTask.completed ? "arrow.counterclockwise" : "checkmark")
                         .font(.body)
-                    Text(currentTask.completed ? "Mark as Incomplete".localized : "Mark as Complete".localized)
+                    Text(currentTask.completed ? NSLocalizedString("Mark as Incomplete", comment: "Button to mark task as incomplete") : NSLocalizedString("Mark as Complete", comment: "Button to mark task as complete"))
                         .font(.body)
                         .fontWeight(.semibold)
                 }
@@ -451,7 +451,7 @@ struct TaskDetailView: View {
             if permissionService.currentUserCanWrite(to: .tasks) {
                 if isEditing {
                     VStack(spacing: 8) {
-                        Button("Save".localized) {
+                        Button(NSLocalizedString("Save", comment: "Save button")) {
                             saveTask()
                         }
                         .frame(maxWidth: .infinity)
@@ -464,7 +464,7 @@ struct TaskDetailView: View {
                         .font(.body)
                         .fontWeight(.semibold)
                         
-                        Button("Cancel".localized) {
+                        Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
                             cancelEditing()
                         }
                         .frame(maxWidth: .infinity)
@@ -478,7 +478,7 @@ struct TaskDetailView: View {
                         .fontWeight(.semibold)
                     }
                 } else {
-                    Button("Edit Task".localized) {
+                    Button(NSLocalizedString("Edit Task", comment: "Edit task button")) {
                         startEditing()
                     }
                     .frame(maxWidth: .infinity)
@@ -506,7 +506,7 @@ struct TaskDetailView: View {
         HStack(spacing: 6) {
             Image(systemName: currentTask.priority.iconName)
                 .font(.caption)
-            Text(currentTask.priority.displayName.localized)
+            Text(NSLocalizedString(currentTask.priority.displayName, comment: "Task priority display name"))
                 .font(.caption)
         }
         .fontWeight(.medium)
@@ -523,7 +523,7 @@ struct TaskDetailView: View {
         HStack(spacing: 6) {
             Image(systemName: currentTask.category.iconName)
                 .font(.caption)
-            Text(currentTask.category.displayName.localized)
+            Text(NSLocalizedString(currentTask.category.displayName, comment: "Task category display name"))
                 .font(.caption)
         }
         .fontWeight(.medium)
@@ -554,7 +554,7 @@ struct TaskDetailView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if permissionService.currentUserCanDelete(from: .tasks) && !isEditing {
                     Menu {
-                        Button("Delete".localized, systemImage: "trash", role: .destructive) {
+                        Button(NSLocalizedString("Delete", comment: "Delete button"), systemImage: "trash", role: .destructive) {
                             showDeleteAlert = true
                         }
                     } label: {
@@ -643,7 +643,7 @@ struct TaskDetailView: View {
         }
         
         if names.isEmpty {
-            return "Unassigned".localized
+            return NSLocalizedString("Unassigned", comment: "Task unassigned status")
         } else if names.count <= 2 {
             return names.joined(separator: ", ")
         } else {
@@ -655,7 +655,7 @@ struct TaskDetailView: View {
         if let creator = groupService.groupMembers.first(where: { $0.id == currentTask.createdBy }) {
             return creator.name
         }
-        return "Unknown".localized
+        return NSLocalizedString("Unknown", comment: "Unknown user")
     }
     
     private func formatDateTime(_ date: Date, includeTime: Bool) -> String {
@@ -666,19 +666,19 @@ struct TaskDetailView: View {
             if includeTime {
                 formatter.dateFormat = "'Today at' HH:mm"
             } else {
-                return "Today".localized
+                return NSLocalizedString("Today", comment: "Today date label")
             }
         } else if calendar.isDateInTomorrow(date) {
             if includeTime {
                 formatter.dateFormat = "'Tomorrow at' HH:mm"
             } else {
-                return "Tomorrow".localized
+                return NSLocalizedString("Tomorrow", comment: "Tomorrow date label")
             }
         } else if calendar.isDateInYesterday(date) {
             if includeTime {
                 formatter.dateFormat = "'Yesterday at' HH:mm"
             } else {
-                return "Yesterday".localized
+                return NSLocalizedString("Yesterday", comment: "Yesterday date label")
             }
         } else {
             if includeTime {
@@ -709,7 +709,7 @@ struct TaskDetailView: View {
             components.append("\(minutes) \(pluralizeMinutes(minutes))")
         }
         
-        return components.isEmpty ? "0 minutes".localized : components.joined(separator: ", ")
+        return components.isEmpty ? NSLocalizedString("0 minutes", comment: "Zero duration") : components.joined(separator: ", ")
     }
     
     private func pluralizeDays(_ count: Int) -> String {
@@ -727,7 +727,7 @@ struct TaskDetailView: View {
                 return "днів"
             }
         } else {
-            return count == 1 ? "day".localized : "days".localized
+            return count == 1 ? NSLocalizedString("day", comment: "Day singular") : NSLocalizedString("days", comment: "Days plural")
         }
     }
     
@@ -746,7 +746,7 @@ struct TaskDetailView: View {
                 return "годин"
             }
         } else {
-            return count == 1 ? "hour".localized : "hours".localized
+            return count == 1 ? NSLocalizedString("hour", comment: "Hour singular") : NSLocalizedString("hours", comment: "Hours plural")
         }
     }
     
@@ -765,7 +765,7 @@ struct TaskDetailView: View {
                 return "хвилин"
             }
         } else {
-            return count == 1 ? "minute".localized : "minutes".localized
+            return count == 1 ? NSLocalizedString("minute", comment: "Minute singular") : NSLocalizedString("minutes", comment: "Minutes plural")
         }
     }
 }

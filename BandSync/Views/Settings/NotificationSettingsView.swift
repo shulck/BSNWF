@@ -10,7 +10,7 @@ struct NotificationSettingsView: View {
     var body: some View {
         Form {
             Section {
-                Toggle("Enable Notifications".localized, isOn: $settings.notificationsEnabled)
+                Toggle(NSLocalizedString("Enable Notifications", comment: "Notification settings - enable notifications toggle"), isOn: $settings.notificationsEnabled)
                     .onChange(of: settings.notificationsEnabled) {
                         if settings.notificationsEnabled {
                             requestPermissions()
@@ -23,7 +23,7 @@ struct NotificationSettingsView: View {
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.green)
-                        Text("Notifications are enabled".localized)
+                        Text(NSLocalizedString("Notifications are enabled", comment: "Notification settings - notifications enabled status"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -31,86 +31,86 @@ struct NotificationSettingsView: View {
             }
             
             if settings.notificationsEnabled {
-                Section("Notification Types".localized) {
-                    Toggle("Events".localized, isOn: $settings.eventNotificationsEnabled)
+                Section(NSLocalizedString("Notification Types", comment: "Section header for notification types")) {
+                    Toggle(NSLocalizedString("Events", comment: "Toggle for event notifications"), isOn: $settings.eventNotificationsEnabled)
                         .onChange(of: settings.eventNotificationsEnabled) {
                             saveSettings()
                         }
-                    Toggle("Tasks".localized, isOn: $settings.taskNotificationsEnabled)
+                    Toggle(NSLocalizedString("Tasks", comment: "Toggle for task notifications"), isOn: $settings.taskNotificationsEnabled)
                         .onChange(of: settings.taskNotificationsEnabled) {
                             saveSettings()
                         }
-                    Toggle("Chats".localized, isOn: $settings.chatNotificationsEnabled)
+                    Toggle(NSLocalizedString("Chats", comment: "Toggle for chat notifications"), isOn: $settings.chatNotificationsEnabled)
                         .onChange(of: settings.chatNotificationsEnabled) {
                             saveSettings()
                         }
-                    Toggle("System".localized, isOn: $settings.systemNotificationsEnabled)
+                    Toggle(NSLocalizedString("System", comment: "Toggle for system notifications"), isOn: $settings.systemNotificationsEnabled)
                         .onChange(of: settings.systemNotificationsEnabled) {
                             saveSettings()
                         }
                 }
                 
-                Section("Reminder Times".localized) {
-                    Picker("Event Reminders".localized, selection: $settings.eventReminderHours) {
-                        Text("30 minutes before".localized).tag(0)
-                        Text("1 hour before".localized).tag(1)
-                        Text("2 hours before".localized).tag(2)
-                        Text("1 day before".localized).tag(24)
-                        Text("2 days before".localized).tag(48)
-                        Text("1 week before".localized).tag(168)
+                Section(NSLocalizedString("Reminder Times", comment: "Section header for reminder time settings")) {
+                    Picker(NSLocalizedString("Event Reminders", comment: "Picker for event reminder timing"), selection: $settings.eventReminderHours) {
+                        Text(NSLocalizedString("30 minutes before", comment: "Event reminder option")).tag(0)
+                        Text(NSLocalizedString("1 hour before", comment: "Event reminder option")).tag(1)
+                        Text(NSLocalizedString("2 hours before", comment: "Event reminder option")).tag(2)
+                        Text(NSLocalizedString("1 day before", comment: "Event reminder option")).tag(24)
+                        Text(NSLocalizedString("2 days before", comment: "Event reminder option")).tag(48)
+                        Text(NSLocalizedString("1 week before", comment: "Event reminder option")).tag(168)
                     }
                     .onChange(of: settings.eventReminderHours) {
                         saveSettings()
                     }
                     
-                    Picker("Task Reminders".localized, selection: $settings.taskReminderHours) {
-                        Text("1 hour before".localized).tag(1)
-                        Text("2 hours before".localized).tag(2)
-                        Text("1 day before".localized).tag(24)
-                        Text("2 days before".localized).tag(48)
-                        Text("1 week before".localized).tag(168)
+                    Picker(NSLocalizedString("Task Reminders", comment: "Picker for task reminder timing"), selection: $settings.taskReminderHours) {
+                        Text(NSLocalizedString("1 hour before", comment: "Task reminder option")).tag(1)
+                        Text(NSLocalizedString("2 hours before", comment: "Task reminder option")).tag(2)
+                        Text(NSLocalizedString("1 day before", comment: "Task reminder option")).tag(24)
+                        Text(NSLocalizedString("2 days before", comment: "Task reminder option")).tag(48)
+                        Text(NSLocalizedString("1 week before", comment: "Task reminder option")).tag(168)
                     }
                     .onChange(of: settings.taskReminderHours) {
                         saveSettings()
                     }
                 }
                 
-                Section("Chat Notifications".localized) {
-                    Toggle("Mentions".localized, isOn: $settings.mentionNotificationsEnabled)
+                Section(NSLocalizedString("Chat Notifications", comment: "Section header for chat notification settings")) {
+                    Toggle(NSLocalizedString("Mentions", comment: "Toggle for mention notifications"), isOn: $settings.mentionNotificationsEnabled)
                         .onChange(of: settings.mentionNotificationsEnabled) {
                             saveSettings()
                         }
                     
-                    Toggle("Direct Messages".localized, isOn: $settings.directMessageNotificationsEnabled)
+                    Toggle(NSLocalizedString("Direct Messages", comment: "Toggle for direct message notifications"), isOn: $settings.directMessageNotificationsEnabled)
                         .onChange(of: settings.directMessageNotificationsEnabled) {
                             saveSettings()
                         }
                     
-                    Toggle("Group Messages".localized, isOn: $settings.groupMessageNotificationsEnabled)
+                    Toggle(NSLocalizedString("Group Messages", comment: "Toggle for group message notifications"), isOn: $settings.groupMessageNotificationsEnabled)
                         .onChange(of: settings.groupMessageNotificationsEnabled) {
                             saveSettings()
                         }
                 }
                 
-                Section("Sound & Badge".localized) {
-                    Toggle("Sound".localized, isOn: $settings.soundEnabled)
+                Section(NSLocalizedString("Sound & Badge", comment: "Section header for sound and badge settings")) {
+                    Toggle(NSLocalizedString("Sound", comment: "Toggle for notification sounds"), isOn: $settings.soundEnabled)
                         .onChange(of: settings.soundEnabled) {
                             saveSettings()
                         }
-                    Toggle("Badge".localized, isOn: $settings.badgeEnabled)
+                    Toggle(NSLocalizedString("Badge", comment: "Toggle for notification badges"), isOn: $settings.badgeEnabled)
                         .onChange(of: settings.badgeEnabled) {
                             saveSettings()
                         }
                 }
                 
-                Section("Quiet Hours".localized) {
-                    Toggle("Enable Quiet Hours".localized, isOn: $settings.quietHoursEnabled)
+                Section(NSLocalizedString("Quiet Hours", comment: "Section header for quiet hours settings")) {
+                    Toggle(NSLocalizedString("Enable Quiet Hours", comment: "Toggle for quiet hours"), isOn: $settings.quietHoursEnabled)
                         .onChange(of: settings.quietHoursEnabled) {
                             saveSettings()
                         }
                     
                     if settings.quietHoursEnabled {
-                        Picker("Start Time".localized, selection: $settings.quietHoursStart) {
+                        Picker(NSLocalizedString("Start Time", comment: "Picker for quiet hours start time"), selection: $settings.quietHoursStart) {
                             ForEach(0..<24, id: \.self) { hour in
                                 Text(formatHour(hour)).tag(hour)
                             }
@@ -119,7 +119,7 @@ struct NotificationSettingsView: View {
                             saveSettings()
                         }
                         
-                        Picker("End Time".localized, selection: $settings.quietHoursEnd) {
+                        Picker(NSLocalizedString("End Time", comment: "Picker for quiet hours end time"), selection: $settings.quietHoursEnd) {
                             ForEach(0..<24, id: \.self) { hour in
                                 Text(formatHour(hour)).tag(hour)
                             }
@@ -131,21 +131,21 @@ struct NotificationSettingsView: View {
                 }
             }
         }
-        .navigationTitle("Notifications".localized)
+        .navigationTitle(NSLocalizedString("Notifications", comment: "Navigation title for notifications settings"))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             loadCurrentSettings()
             checkCurrentPermissions()
         }
-        .alert("Permission Required".localized, isPresented: $showPermissionAlert) {
-            Button("Settings".localized) {
+        .alert(NSLocalizedString("Permission Required", comment: "Alert title for notification permission"), isPresented: $showPermissionAlert) {
+            Button(NSLocalizedString("Settings", comment: "Button to open settings")) {
                 openSettings()
             }
-            Button("Cancel".localized) {
+            Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
                 settings.notificationsEnabled = false
             }
         } message: {
-            Text("Please enable notifications in Settings to receive alerts.".localized)
+            Text(NSLocalizedString("Please enable notifications in Settings to receive alerts.", comment: "Alert message for notification permission"))
         }
     }
     

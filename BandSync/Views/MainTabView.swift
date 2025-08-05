@@ -14,7 +14,7 @@ struct MainTabView: View {
                 CalendarViewWrapper()
                 .tabItem {
                     Image(systemName: "calendar")
-                    Text("Calendar".localized)
+                    Text(NSLocalizedString("calendar", comment: "Calendar tab title"))
                 }
                 .tag(NavigationManager.TabSelection.calendar)
             }
@@ -23,7 +23,7 @@ struct MainTabView: View {
                 SetlistViewWrapper()
                 .tabItem {
                     Image(systemName: "music.note.list")
-                    Text("Setlists".localized)
+                    Text(NSLocalizedString("setlists", comment: "Setlists tab title"))
                 }
                 .tag(NavigationManager.TabSelection.setlists)
             }
@@ -32,7 +32,7 @@ struct MainTabView: View {
                 TasksViewWrapper()
                 .tabItem {
                     Image(systemName: "checklist")
-                    Text("Tasks".localized)
+                    Text(NSLocalizedString("tasks", comment: "Tasks tab title"))
                 }
                 .badge(badgeManager.unreadTasksCount > 0 ? Text("\(badgeManager.unreadTasksCount)") : nil)
                 .tag(NavigationManager.TabSelection.tasks)
@@ -42,7 +42,7 @@ struct MainTabView: View {
                 ChatsListViewWrapper()
                 .tabItem {
                     Image(systemName: "message")
-                    Text("Chats".localized)
+                    Text(NSLocalizedString("chats", comment: "Chats tab title"))
                 }
                 .badge(badgeManager.unreadChatsCount > 0 ? Text("\(badgeManager.unreadChatsCount)") : nil)
                 .tag(NavigationManager.TabSelection.chats)
@@ -51,7 +51,7 @@ struct MainTabView: View {
             MoreMenuViewWrapper()
             .tabItem {
                 Image(systemName: "ellipsis")
-                Text("More".localized)
+                Text(NSLocalizedString("more", comment: "More tab title"))
             }
             .tag(NavigationManager.TabSelection.more)
         }
@@ -245,7 +245,7 @@ struct MoreMenuView: View {
                 if permissionService.currentUserHasAccess(to: .merchandise) {
                     NavigationLink(destination: MerchView()) {
                         moreRow(
-                            title: "Merch".localized,
+                            title: NSLocalizedString("merch", comment: "Merchandise menu item"),
                             icon: "tshirt.fill",
                             color: .orange
                         )
@@ -255,7 +255,7 @@ struct MoreMenuView: View {
                 if permissionService.currentUserHasAccess(to: .contacts) {
                     NavigationLink(destination: ContactsView()) {
                         moreRow(
-                            title: "Contacts".localized,
+                            title: NSLocalizedString("contacts", comment: "Contacts menu item"),
                             icon: "person.crop.circle.fill",
                             color: .teal
                         )
@@ -265,7 +265,7 @@ struct MoreMenuView: View {
                 if permissionService.currentUserHasAccess(to: .finances) {
                     NavigationLink(destination: FinancesView()) {
                         moreRow(
-                            title: "Finances".localized,
+                            title: NSLocalizedString("finances", comment: "Finances menu item"),
                             icon: "chart.line.uptrend.xyaxis",
                             color: .green
                         )
@@ -275,21 +275,21 @@ struct MoreMenuView: View {
                 if permissionService.currentUserHasAccess(to: .documents) {
                     NavigationLink(destination: DocumentsView()) {
                         moreRow(
-                            title: "Documents".localized,
+                            title: NSLocalizedString("documents", comment: "Documents menu item"),
                             icon: "folder.fill",
                             color: .blue
                         )
                     }
                 }
             } header: {
-                Text("Additional features".localized)
+                Text(NSLocalizedString("additional_features", comment: "Header for additional features section"))
             }
             
             Section {
                 if permissionService.currentUserHasAccess(to: .admin) {
                     NavigationLink(destination: AdminPanelView()) {
                         moreRow(
-                            title: "Admin Panel".localized,
+                            title: NSLocalizedString("admin_panel", comment: "Admin panel menu item"),
                             icon: "person.3.fill",
                             color: .red
                         )
@@ -298,16 +298,16 @@ struct MoreMenuView: View {
                 
                 NavigationLink(destination: SettingsView()) {
                     moreRow(
-                        title: "Settings".localized,
+                        title: NSLocalizedString("settings", comment: "Settings menu item"),
                         icon: "gear",
                         color: .gray
                     )
                 }
             } header: {
-                Text("Settings".localized)
+                Text(NSLocalizedString("settings", comment: "Header for settings section"))
             }
         }
-        .navigationTitle("More".localized)
+        .navigationTitle(NSLocalizedString("more", comment: "Navigation title for more menu"))
         .navigationBarTitleDisplayMode(.inline)
     }
     

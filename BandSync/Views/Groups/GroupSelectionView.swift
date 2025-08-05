@@ -25,12 +25,12 @@ struct GroupSelectionView: View {
                 .padding(.bottom, 10)
             
             VStack(spacing: 8) {
-                Text("Welcome to BandSync".localized)
+                Text(NSLocalizedString("Welcome to BandSync", comment: "Welcome message title"))
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 
-                Text("Get started instruction".localized)
+                Text(NSLocalizedString("Get started instruction", comment: "Get started instruction subtitle"))
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
@@ -40,7 +40,7 @@ struct GroupSelectionView: View {
             VStack(spacing: 20) {
                 // For Musicians Section
                 VStack(spacing: 12) {
-                    Text("For Musicians".localized)
+                    Text(NSLocalizedString("For Musicians", comment: "Musicians section title"))
                         .font(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
@@ -48,13 +48,13 @@ struct GroupSelectionView: View {
                     VStack(spacing: 12) {
                         CardButton(
                             icon: "plus.circle",
-                            text: "Create New Group".localized,
+                            text: NSLocalizedString("Create New Group", comment: "Create new group button text"),
                             action: { showCreateGroup = true }
                         )
                         
                         CardButton(
                             icon: "person.badge.plus",
-                            text: "Join a Group".localized,
+                            text: NSLocalizedString("Join a Group", comment: "Join a group button text"),
                             action: { showJoinGroup = true }
                         )
                     }
@@ -63,7 +63,7 @@ struct GroupSelectionView: View {
                 // "or" Divider
                 HStack {
                     VStack { Divider() }
-                    Text("or".localized)
+                    Text(NSLocalizedString("or", comment: "Or divider text"))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .padding(.horizontal, 16)
@@ -73,15 +73,15 @@ struct GroupSelectionView: View {
                 
                 // For Fans Section
                 VStack(spacing: 12) {
-                    Text("For Fans".localized)
+                    Text(NSLocalizedString("For Fans", comment: "Fans section title"))
                         .font(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                     
                     FanCardButton(
                         icon: "heart.fill",
-                        text: "I'm a Fan!".localized,
-                        subtitle: "Join your favorite band's fan club".localized,
+                        text: NSLocalizedString("I'm a Fan!", comment: "Fan registration button text"),
+                        subtitle: NSLocalizedString("Join your favorite band's fan club", comment: "Fan registration subtitle"),
                         action: { showFanRegistration = true }
                     )
                 }
@@ -94,7 +94,7 @@ struct GroupSelectionView: View {
             Button(action: {
                 appState.logout()
             }) {
-                Text("Log out".localized)
+                Text(NSLocalizedString("Log out", comment: "Log out button text"))
                     .font(.footnote)
                     .foregroundColor(.red)
             }

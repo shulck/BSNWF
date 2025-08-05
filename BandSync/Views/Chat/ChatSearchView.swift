@@ -33,7 +33,7 @@ struct ChatSearchView: View {
                     // Loading indicator
                     VStack {
                         ProgressView()
-                        Text("Searching...".localized)
+                        Text(NSLocalizedString("Searching...", comment: "Searching progress text"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -45,11 +45,11 @@ struct ChatSearchView: View {
                             .font(.system(size: 48))
                             .foregroundColor(.gray)
                         
-                        Text("Nothing found".localized)
+                        Text(NSLocalizedString("Nothing found", comment: "No search results message"))
                             .font(.headline)
                             .foregroundColor(.secondary)
                         
-                        Text("Try changing your search query".localized)
+                        Text(NSLocalizedString("Try changing your search query", comment: "Search suggestion text"))
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
@@ -71,22 +71,22 @@ struct ChatSearchView: View {
                             .font(.system(size: 48))
                             .foregroundColor(.gray)
                         
-                        Text("Search messages".localized)
+                        Text(NSLocalizedString("Search messages", comment: "Initial search state title"))
                             .font(.headline)
                             .foregroundColor(.secondary)
                         
-                        Text("Enter text to search in this chat".localized)
+                        Text(NSLocalizedString("Enter text to search in this chat", comment: "Search instruction text"))
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-            .navigationTitle("Search in chat".localized)
+            .navigationTitle(NSLocalizedString("Search in chat", comment: "Search in chat navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel search button")) {
                         dismiss()
                     }
                 }
@@ -130,7 +130,7 @@ struct SearchResultRow: View {
     
     private var senderName: String {
         if isCurrentUser {
-            return "You".localized
+            return NSLocalizedString("You", comment: "You label for current user in search results")
         }
         return message.senderName
     }
@@ -159,7 +159,7 @@ struct SearchResultRow: View {
                 HStack {
                     Image(systemName: "photo")
                         .foregroundColor(.blue)
-                    Text("Image".localized)
+                    Text(NSLocalizedString("Image", comment: "Image label in search results"))
                         .font(.caption)
                         .foregroundColor(.blue)
                 }
@@ -180,7 +180,7 @@ struct SearchResultRow: View {
             formatter.timeStyle = .short
             return formatter.string(from: date)
         } else if calendar.isDateInYesterday(date) {
-            return "Yesterday".localized
+            return NSLocalizedString("Yesterday", comment: "Yesterday date label")
         } else {
             formatter.dateStyle = .short
             return formatter.string(from: date)
@@ -229,18 +229,18 @@ struct MessageDetailView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     // Message information
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Information".localized)
+                        Text(NSLocalizedString("Information", comment: "Information section title in message detail"))
                             .font(.headline)
                         
                         HStack {
-                            Text("From:".localized)
+                            Text(NSLocalizedString("From:", comment: "From label in message detail"))
                             Spacer()
                             Text(message.senderName)
                                 .foregroundColor(.secondary)
                         }
                         
                         HStack {
-                            Text("Time:".localized)
+                            Text(NSLocalizedString("Time:", comment: "Time label in message detail"))
                             Spacer()
                             Text(formatFullDate(message.timestamp))
                                 .foregroundColor(.secondary)
@@ -248,9 +248,9 @@ struct MessageDetailView: View {
                         
                         if message.isEdited {
                             HStack {
-                                Text("Edited:".localized)
+                                Text(NSLocalizedString("Edited:", comment: "Edited label in message detail"))
                                 Spacer()
-                                Text(message.editedAt != nil ? formatFullDate(message.editedAt!) : "Yes".localized)
+                                Text(message.editedAt != nil ? formatFullDate(message.editedAt!) : NSLocalizedString("Yes", comment: "Yes text for edited message"))
                                     .foregroundColor(.secondary)
                             }
                         }
@@ -260,7 +260,7 @@ struct MessageDetailView: View {
                     
                     // Message content
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Content".localized)
+                        Text(NSLocalizedString("Content", comment: "Content section title in message detail"))
                             .font(.headline)
                         
                         if !message.content.isEmpty {
@@ -288,11 +288,11 @@ struct MessageDetailView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Message".localized)
+            .navigationTitle(NSLocalizedString("Message", comment: "Message detail navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Close".localized) {
+                    Button(NSLocalizedString("Close", comment: "Close button in message detail")) {
                         dismiss()
                     }
                 }
@@ -315,7 +315,7 @@ struct SearchBar: UIViewRepresentable {
     func makeUIView(context: Context) -> UISearchBar {
         let searchBar = UISearchBar()
         searchBar.delegate = context.coordinator
-        searchBar.placeholder = "Search messages...".localized
+        searchBar.placeholder = NSLocalizedString("Search messages...", comment: "Search bar placeholder")
         searchBar.searchBarStyle = .minimal
         return searchBar
     }

@@ -10,7 +10,7 @@ import SwiftUI
 struct CacheSettingsView: View {
     @State private var selectedCacheSize = 50
     @State private var autoCleanupPeriod = 7
-    @State private var currentCacheSize = "Calculating..."
+    @State private var currentCacheSize = NSLocalizedString("calculating", comment: "Text shown while calculating cache size")
     @State private var showClearConfirmation = false
     @State private var isClearing = false
     
@@ -25,7 +25,7 @@ struct CacheSettingsView: View {
                         .foregroundColor(.blue)
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Current Cache Size".localized)
+                        Text(NSLocalizedString("current_cache_size", comment: "Label for current cache size display"))
                             .font(.body)
                             .fontWeight(.medium)
                         
@@ -36,7 +36,7 @@ struct CacheSettingsView: View {
                     
                     Spacer()
                     
-                    Button("Clear Now".localized) {
+                    Button(NSLocalizedString("clear_now", comment: "Button to clear cache immediately")) {
                         showClearConfirmation = true
                     }
                     .font(.subheadline)
@@ -45,11 +45,11 @@ struct CacheSettingsView: View {
                 }
                 .padding(.vertical, 4)
             } header: {
-                Text("Cache Status".localized)
+                Text(NSLocalizedString("cache_status", comment: "Header for cache status section"))
             }
             
             Section {
-                Picker("Maximum Cache Size".localized, selection: $selectedCacheSize) {
+                Picker(NSLocalizedString("maximum_cache_size", comment: "Picker label for maximum cache size setting"), selection: $selectedCacheSize) {
                     ForEach(cacheSizeOptions, id: \.self) { size in
                         Text("\(size) MB").tag(size)
                     }
@@ -59,20 +59,20 @@ struct CacheSettingsView: View {
                     saveCacheSettings()
                 }
             } header: {
-                Text("Storage Limit".localized)
+                Text(NSLocalizedString("storage_limit", comment: "Header for storage limit section"))
             } footer: {
-                Text("When cache exceeds this limit, oldest data will be automatically removed.".localized)
+                Text(NSLocalizedString("cache_limit_description", comment: "Description of cache limit behavior"))
             }
             
             Section {
-                Picker("Auto Cleanup Period".localized, selection: $autoCleanupPeriod) {
+                Picker(NSLocalizedString("auto_cleanup_period", comment: "Picker label for automatic cleanup period"), selection: $autoCleanupPeriod) {
                     ForEach(cleanupPeriodOptions, id: \.self) { days in
                         if days == 7 {
-                            Text("Weekly".localized).tag(days)
+                            Text(NSLocalizedString("weekly", comment: "Weekly cleanup period option")).tag(days)
                         } else if days == 14 {
-                            Text("Every 2 weeks".localized).tag(days)
+                            Text(NSLocalizedString("every_2_weeks", comment: "Every 2 weeks cleanup period option")).tag(days)
                         } else {
-                            Text("Monthly".localized).tag(days)
+                            Text(NSLocalizedString("monthly", comment: "Monthly cleanup period option")).tag(days)
                         }
                     }
                 }
@@ -81,39 +81,39 @@ struct CacheSettingsView: View {
                     saveCacheSettings()
                 }
             } header: {
-                Text("Automatic Cleanup".localized)
+                Text(NSLocalizedString("automatic_cleanup", comment: "Header for automatic cleanup section"))
             } footer: {
-                Text(String(format: "Old cached data will be automatically removed every %@.".localized, autoCleanupPeriod == 7 ? "week".localized : autoCleanupPeriod == 14 ? "2 weeks".localized : "month".localized))
+                Text(String(format: NSLocalizedString("cleanup_description", comment: "Description of automatic cleanup with placeholder for period"), autoCleanupPeriod == 7 ? NSLocalizedString("week", comment: "Week period") : autoCleanupPeriod == 14 ? NSLocalizedString("2_weeks", comment: "2 weeks period") : NSLocalizedString("month", comment: "Month period")))
             }
             
             Section {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("What is cached?".localized)
+                    Text(NSLocalizedString("what_is_cached", comment: "Title asking what data is cached"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                     
-                    Text("• Merchandise items and sales data\n• Event and setlist information\n• Contact details\n• Financial records\n• Task assignments".localized)
+                    Text(NSLocalizedString("cached_data_list", comment: "List of data types that are cached"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 .padding(.vertical, 4)
             } header: {
-                Text("About Cache".localized)
+                Text(NSLocalizedString("about_cache", comment: "Header for about cache section"))
             }
         }
-        .navigationTitle("Cache & Storage".localized)
+        .navigationTitle(NSLocalizedString("cache_storage", comment: "Navigation title for cache and storage settings"))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             loadCacheSettings()
             calculateCacheSize()
         }
-        .alert("Clear Cache".localized, isPresented: $showClearConfirmation) {
-            Button("Cancel".localized, role: .cancel) { }
-            Button("Clear".localized, role: .destructive) {
+        .alert(NSLocalizedString("clear_cache", comment: "Alert title for clearing cache"), isPresented: $showClearConfirmation) {
+            Button(NSLocalizedString("cancel", comment: "Cancel button"), role: .cancel) { }
+            Button(NSLocalizedString("clear", comment: "Clear button"), role: .destructive) {
                 clearCache()
             }
         } message: {
-            Text("This will remove all cached data. You may experience slower loading times until data is re-cached.".localized)
+            Text(NSLocalizedString("clear_cache_warning", comment: "Warning message when clearing cache"))
         }
     }
     

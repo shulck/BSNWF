@@ -17,7 +17,7 @@ struct ChatsListViewWrapper: View {
                                 ChatService.shared.startListeningToMessages(for: chatData.chatId)
                             }
                     } else {
-                        Text("Loading chat...".localized)
+                        Text(NSLocalizedString("Loading chat...", comment: "Loading chat message"))
                             .onAppear {
                                 ChatService.shared.startListeningToChats()
                             }
@@ -143,7 +143,7 @@ struct ChatsListView: View {
                         .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             if chat.canUserDelete(currentUserId) {
-                                Button("Delete".localized, role: .destructive) {
+                                Button(NSLocalizedString("Delete", comment: "Delete chat button"), role: .destructive) {
                                     chatToDelete = chat
                                     showingDeleteConfirmation = true
                                 }
@@ -152,10 +152,10 @@ struct ChatsListView: View {
                     }
                 }
                 .listStyle(PlainListStyle())
-                .searchable(text: $searchText, prompt: "Search chats...".localized)
+                .searchable(text: $searchText, prompt: NSLocalizedString("Search chats...", comment: "Search chats placeholder"))
             }
         }
-        .navigationTitle("Chats".localized)
+        .navigationTitle(NSLocalizedString("Chats", comment: "Chats navigation title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -165,8 +165,8 @@ struct ChatsListView: View {
                     Image(systemName: "square.and.pencil")
                         .foregroundColor(.blue)
                 }
-                .accessibilityLabel("New chat".localized)
-                .accessibilityHint("Double tap to start a new chat".localized)
+                .accessibilityLabel(NSLocalizedString("New chat", comment: "New chat accessibility label"))
+                .accessibilityHint(NSLocalizedString("Double tap to start a new chat", comment: "New chat accessibility hint"))
             }
         }
         .sheet(isPresented: $showingNewChatView) {
@@ -191,11 +191,11 @@ struct ChatsListView: View {
         .onDisappear {
             
         }
-        .alert("Delete Chat?".localized, isPresented: $showingDeleteConfirmation) {
-            Button("Cancel".localized, role: .cancel) {
+        .alert(NSLocalizedString("Delete Chat?", comment: "Delete chat confirmation title"), isPresented: $showingDeleteConfirmation) {
+            Button(NSLocalizedString("Cancel", comment: "Cancel delete chat button"), role: .cancel) {
                 chatToDelete = nil
             }
-            Button("Delete".localized, role: .destructive) {
+            Button(NSLocalizedString("Delete", comment: "Delete chat confirmation button"), role: .destructive) {
                 if let chat = chatToDelete {
                     deleteChat(chat)
                 }
@@ -203,11 +203,11 @@ struct ChatsListView: View {
             }
         } message: {
             if let chat = chatToDelete {
-                Text(String(format: "Delete Chat With Name Confirmation".localized, chat.displayName))
+                Text(String(format: NSLocalizedString("Are you sure you want to delete the chat with %@?", comment: "Delete chat confirmation message"), chat.displayName))
             }
         }
-        .alert("Error".localized, isPresented: $showingErrorAlert) {
-            Button("OK".localized, role: .cancel) { }
+        .alert(NSLocalizedString("Error", comment: "Error alert title"), isPresented: $showingErrorAlert) {
+            Button(NSLocalizedString("OK", comment: "OK button"), role: .cancel) { }
         } message: {
             Text(errorMessage)
         }
@@ -223,7 +223,7 @@ struct ChatsListView: View {
                     badgeManager.forceRefreshBadgeCounts()
                 }
             case .failure(let error):
-                self.errorMessage = "Failed to delete chat: \(error.localizedDescription)"
+                self.errorMessage = String(format: NSLocalizedString("Failed to delete chat: %@", comment: "Delete chat error message"), error.localizedDescription)
                 self.showingErrorAlert = true
             }
         }
@@ -252,11 +252,11 @@ struct ChatRowView: View {
             if let otherUser = userService.users.first(where: { $0.id == otherUserId }) {
                 return otherUser.name
             }
-            return String(format: "User %@".localized, String(otherUserId.prefix(8)))
+            return String(format: NSLocalizedString("User %@", comment: "Unknown user format"), String(otherUserId.prefix(8)))
         case .group:
-            return chat.name ?? "Group Chat".localized
+            return chat.name ?? NSLocalizedString("Group Chat", comment: "Default group chat name")
         case .bandWide:
-            return chat.name ?? "Band Announcement".localized
+            return chat.name ?? NSLocalizedString("Band Announcement", comment: "Default band announcement name")
         }
     }
     
@@ -289,7 +289,7 @@ struct ChatRowView: View {
                             .foregroundColor(.secondary)
                             .lineLimit(2)
                     } else {
-                        Text("No messages yet".localized)
+                        Text(NSLocalizedString("No messages yet", comment: "No messages yet text"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .italic()
@@ -314,8 +314,8 @@ struct ChatRowView: View {
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint("Double tap to open chat".localized)
-        .accessibilityValue(unreadCount > 0 ? "\(unreadCount) unread messages".localized : "")
+        .accessibilityHint(NSLocalizedString("Double tap to open chat", comment: "Open chat accessibility hint"))
+        .accessibilityValue(unreadCount > 0 ? String(format: NSLocalizedString("%d unread messages", comment: "Unread messages count"), unreadCount) : "")
         .onAppear {
             loadLastMessageIfNeeded()
             calculateUnreadCount()
@@ -349,8 +349,8 @@ struct ChatRowView: View {
     
     private var accessibilityLabel: String {
         let time = lastMessage != nil ? formatMessageTime(lastMessage!.timestamp) : ""
-        let lastMsg = lastMessage != nil ? formatLastMessage(lastMessage!) : "No messages yet".localized
-        return String(format: "Chat with %@. Last message: %@. %@".localized, chatDisplayName, lastMsg, time)
+        let lastMsg = lastMessage != nil ? formatLastMessage(lastMessage!) : NSLocalizedString("No messages yet", comment: "No messages yet text")
+        return String(format: NSLocalizedString("Chat with %@. Last message: %@. %@", comment: "Chat accessibility label format"), chatDisplayName, lastMsg, time)
     }
     
     private func loadLastMessageIfNeeded() {
@@ -434,15 +434,15 @@ struct ChatRowView: View {
     
     private func formatLastMessage(_ message: Message) -> String {
         let isCurrentUser = message.senderID == currentUserId
-        let senderName = isCurrentUser ? "You".localized : getSenderName(message.senderID)
-        let prefix = chat.type == .direct ? (isCurrentUser ? "You: ".localized : "") : "\(senderName): "
+        let senderName = isCurrentUser ? NSLocalizedString("You", comment: "You label") : getSenderName(message.senderID)
+        let prefix = chat.type == .direct ? (isCurrentUser ? NSLocalizedString("You: ", comment: "You prefix in direct chat") : "") : "\(senderName): "
         
         if !message.content.isEmpty {
             return prefix + message.content
         } else if message.imageURL != nil {
-            return prefix + "📷 Photo".localized
+            return prefix + NSLocalizedString("📷 Photo", comment: "Photo message indicator")
         } else {
-            return prefix + "Message".localized
+            return prefix + NSLocalizedString("Message", comment: "Generic message indicator")
         }
     }
     
@@ -461,7 +461,7 @@ struct ChatRowView: View {
             formatter.timeStyle = .short
             return formatter.string(from: timestamp)
         } else if calendar.isDate(timestamp, inSameDayAs: Date().addingTimeInterval(-86400)) {
-            return "Yesterday".localized
+            return NSLocalizedString("Yesterday", comment: "Yesterday date label")
         } else {
             formatter.dateStyle = .short
             return formatter.string(from: timestamp)
@@ -558,12 +558,12 @@ struct EmptyChatsView: View {
                 .font(.system(size: 60))
                 .foregroundColor(.gray)
             
-            Text("No Chats".localized)
+            Text(NSLocalizedString("No Chats", comment: "No chats title"))
                 .font(.title2)
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
             
-            Text("Create a new chat to start communicating with band members".localized)
+            Text(NSLocalizedString("Create a new chat to start communicating with band members", comment: "No chats instruction"))
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -579,7 +579,7 @@ struct LoadingView: View {
             ProgressView()
                 .scaleEffect(1.5)
             
-            Text("Loading chats...".localized)
+            Text(NSLocalizedString("Loading chats...", comment: "Loading chats message"))
                 .font(.body)
                 .foregroundColor(.secondary)
         }

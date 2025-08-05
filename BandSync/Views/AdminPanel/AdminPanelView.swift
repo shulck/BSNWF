@@ -63,26 +63,26 @@ struct AdminPanelView: View {
             }
             
             // Fan Club Management Section
-            Section(header: Text("Fan Club")) {
+            Section(header: Text(NSLocalizedString("Fan Club", comment: ""))) {
                 NavigationLink {
                     FanManagementView()
                 } label: {
                     adminRow(
-                        title: "Fan Management",
-                        subtitle: "Manage your fan club and invite codes",
+                        title: NSLocalizedString("Fan Management", comment: ""),
+                        subtitle: NSLocalizedString("Manage your fan club and invite codes", comment: ""),
                         icon: "heart.fill",
                         color: .purple
                     )
                 }
                 
                 NavigationLink {
-                    FanStatisticsView()
+                    FanChatAdminView()
                 } label: {
                     adminRow(
-                        title: "Fan Analytics",
-                        subtitle: "View fan engagement and statistics",
-                        icon: "chart.bar.fill",
-                        color: .pink
+                        title: NSLocalizedString("Fan Chat Management", comment: ""),
+                        subtitle: NSLocalizedString("Moderate fan chats and manage reports", comment: ""),
+                        icon: "bubble.left.and.bubble.right.fill",
+                        color: .orange
                     )
                 }
             }
@@ -98,7 +98,7 @@ struct AdminPanelView: View {
                                 .font(.body)
                                 .fontWeight(.medium)
                             
-                            Text("Group Code: \(group.code)")
+                            Text(String(format: NSLocalizedString("Group Code: %@", comment: ""), group.code))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -189,34 +189,5 @@ struct AdminPanelView: View {
                 .font(.system(size: 14, weight: .medium))
                 .foregroundColor(.white)
         }
-    }
-}
-
-// MARK: - FanStatisticsView (заглушка)
-struct FanStatisticsView: View {
-    var body: some View {
-        List {
-            Section {
-                VStack(spacing: 20) {
-                    Image(systemName: "chart.bar.xaxis")
-                        .font(.system(size: 60))
-                        .foregroundColor(.purple)
-                    
-                    Text("Fan Analytics Coming Soon!")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                    
-                    Text("Here you'll see detailed analytics about your fan club engagement, growth trends, and fan activity.")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 40)
-            }
-        }
-        .navigationTitle("Fan Analytics")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }

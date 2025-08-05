@@ -42,7 +42,7 @@ struct FanEventDetailView: View {
             }
         }
         .background(Color(UIColor.systemGroupedBackground))
-        .navigationTitle("Event")
+        .navigationTitle(NSLocalizedString("Event", comment: "Navigation title for event detail screen"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -221,7 +221,7 @@ struct FanEventDetailView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Event Location")
+                        Text(NSLocalizedString("Event Location", comment: "Title for event location section"))
                             .font(.title3)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
@@ -232,7 +232,7 @@ struct FanEventDetailView: View {
                                 .foregroundColor(.secondary)
                                 .lineLimit(2)
                         } else {
-                            Text("Location not specified")
+                            Text(NSLocalizedString("Location not specified", comment: "Message when event location is not specified"))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                                 .italic()
@@ -264,7 +264,7 @@ struct FanEventDetailView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
                                 .font(.system(size: 16, weight: .semibold))
-                            Text("Directions")
+                            Text(NSLocalizedString("Directions", comment: "Button to get directions to event location"))
                                 .fontWeight(.semibold)
                         }
                         .foregroundColor(.white)
@@ -288,7 +288,7 @@ struct FanEventDetailView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "map.fill")
                                 .font(.system(size: 16, weight: .semibold))
-                            Text("View Map")
+                            Text(NSLocalizedString("View Map", comment: "Button to view event location on map"))
                                 .fontWeight(.semibold)
                         }
                         .foregroundColor(.blue)
@@ -325,12 +325,12 @@ struct FanEventDetailView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Ticket Information")
+                        Text(NSLocalizedString("Ticket Information", comment: "Title for ticket information section"))
                             .font(.title3)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
                         
-                        Text((fanEvent.isPaidEvent ?? false) ? "Paid Event" : "Free Event")
+                        Text((fanEvent.isPaidEvent ?? false) ? NSLocalizedString("Paid Event", comment: "Label for paid event") : NSLocalizedString("Free Event", comment: "Label for free event"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -362,7 +362,7 @@ struct FanEventDetailView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "link")
                                 .font(.system(size: 16, weight: .semibold))
-                            Text("Buy Tickets")
+                            Text(NSLocalizedString("Buy Tickets", comment: "Button to buy event tickets"))
                                 .fontWeight(.semibold)
                         }
                         .foregroundColor(.white)
@@ -386,12 +386,12 @@ struct FanEventDetailView: View {
                             .foregroundColor(.green)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("No tickets required!")
+                            Text(NSLocalizedString("No tickets required!", comment: "Message for free events"))
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.green)
                             
-                            Text("Just come and enjoy the event")
+                            Text(NSLocalizedString("Just come and enjoy the event", comment: "Encouragement message for free events"))
                                 .font(.caption)
                                 .foregroundColor(.green.opacity(0.8))
                         }
@@ -429,12 +429,12 @@ struct FanEventDetailView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Send a Gift")
+                        Text(NSLocalizedString("Send a Gift", comment: "Title for birthday gift section"))
                             .font(.title3)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
                         
-                        Text("Want to send a birthday gift?")
+                        Text(NSLocalizedString("Want to send a birthday gift?", comment: "Question for birthday gift sending"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -452,7 +452,7 @@ struct FanEventDetailView: View {
                     ProgressView()
                         .scaleEffect(0.9)
                     
-                    Text("Loading gift options...")
+                    Text(NSLocalizedString("Loading gift options...", comment: "Loading message for gift options"))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -465,7 +465,7 @@ struct FanEventDetailView: View {
                 VStack(spacing: 16) {
                     // PayPal Address Section
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("PayPal Address")
+                        Text(NSLocalizedString("PayPal Address", comment: "Label for PayPal address"))
                             .font(.caption)
                             .fontWeight(.bold)
                             .foregroundColor(.secondary)
@@ -510,7 +510,7 @@ struct FanEventDetailView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "creditcard.fill")
                                 .font(.system(size: 16, weight: .semibold))
-                            Text("Send Gift via PayPal")
+                            Text(NSLocalizedString("Send Gift via PayPal", comment: "Button to send gift via PayPal"))
                                 .fontWeight(.semibold)
                         }
                         .foregroundColor(.white)
@@ -536,12 +536,12 @@ struct FanEventDetailView: View {
                             .foregroundColor(.orange)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Gift sending unavailable")
+                            Text(NSLocalizedString("Gift sending unavailable", comment: "Message when gift sending is not available"))
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.orange)
                             
-                            Text("The band hasn't set up gift receiving yet")
+                            Text(NSLocalizedString("The band hasn't set up gift receiving yet", comment: "Explanation when gift receiving is not set up"))
                                 .font(.caption)
                                 .foregroundColor(.orange.opacity(0.8))
                         }
@@ -579,14 +579,14 @@ struct FanEventDetailView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(fanEvent.type == .birthday ? "Gift Status" : "Attendance")
+                        Text(fanEvent.type == .birthday ? NSLocalizedString("Gift Status", comment: "Title for gift status section") : NSLocalizedString("Attendance", comment: "Title for attendance section"))
                             .font(.title3)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
                         
                         Text(fanEvent.type == .birthday ?
-                             "Mark if you've sent a gift" :
-                             "Mark if you attended this event")
+                             NSLocalizedString("Mark if you've sent a gift", comment: "Instructions for gift status") :
+                             NSLocalizedString("Mark if you attended this event", comment: "Instructions for attendance"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -598,7 +598,7 @@ struct FanEventDetailView: View {
                     VStack(spacing: 4) {
                         ProgressView()
                             .scaleEffect(0.8)
-                        Text("Updating...")
+                        Text(NSLocalizedString("Updating...", comment: "Text shown while updating attendance"))
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
@@ -623,15 +623,15 @@ struct FanEventDetailView: View {
                         
                         VStack(alignment: .leading, spacing: 2) {
                             Text(fanEvent.type == .birthday ?
-                                 "Thank you for sending a gift!" :
-                                 "Great! We're excited to see you there!")
+                                 NSLocalizedString("Thank you for sending a gift!", comment: "Thank you message for birthday gift") :
+                                 NSLocalizedString("Great! We're excited to see you there!", comment: "Confirmation message for event attendance"))
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
                                 .foregroundColor(fanEvent.type == .birthday ? .pink : .blue)
                             
                             Text(fanEvent.type == .birthday ?
-                                 "Your gift means a lot 🎁" :
-                                 "See you at the event! 🎉")
+                                 NSLocalizedString("Your gift means a lot 🎁", comment: "Appreciation message for gift") :
+                                 NSLocalizedString("See you at the event! 🎉", comment: "See you message for event attendance"))
                                 .font(.caption)
                                 .foregroundColor((fanEvent.type == .birthday ? Color.pink : Color.blue).opacity(0.8))
                         }

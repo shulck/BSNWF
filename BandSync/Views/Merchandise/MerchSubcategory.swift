@@ -48,6 +48,23 @@ enum MerchSubcategory: String, Codable, CaseIterable, Identifiable {
         case .other: return "ellipsis"
         }
     }
+    
+    var localizedName: String {
+        switch self {
+        case .tshirt: return NSLocalizedString("T-shirt", comment: "T-shirt subcategory")
+        case .hoodie: return NSLocalizedString("Hoodie", comment: "Hoodie subcategory")
+        case .jacket: return NSLocalizedString("Jacket", comment: "Jacket subcategory")
+        case .cap: return NSLocalizedString("Cap", comment: "Cap subcategory")
+        case .vinyl: return NSLocalizedString("Vinyl Record", comment: "Vinyl Record subcategory")
+        case .cd: return NSLocalizedString("CD", comment: "CD subcategory")
+        case .tape: return NSLocalizedString("Tape", comment: "Tape subcategory")
+        case .poster: return NSLocalizedString("Poster", comment: "Poster subcategory")
+        case .sticker: return NSLocalizedString("Sticker", comment: "Sticker subcategory")
+        case .pin: return NSLocalizedString("Pin", comment: "Pin subcategory")
+        case .keychain: return NSLocalizedString("Keychain", comment: "Keychain subcategory")
+        case .other: return NSLocalizedString("Other", comment: "Other subcategory")
+        }
+    }
 
     // Get subcategories for a specific category
     static func subcategories(for category: MerchCategory) -> [MerchSubcategory] {

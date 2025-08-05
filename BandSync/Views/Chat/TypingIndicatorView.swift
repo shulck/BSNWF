@@ -28,15 +28,15 @@ struct TypingIndicatorView: View {
                 
                 VStack(alignment: .leading, spacing: 2) {
                     if typingUsers.count == 1 {
-                        Text("\(typingUsers.first!) \("is typing...".localized)")
+                        Text(String.localizedStringWithFormat(NSLocalizedString("userIsTyping", comment: "User is typing..."), typingUsers.first!))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else if typingUsers.count == 2 {
-                        Text("\(typingUsers[0]) \("and".localized) \(typingUsers[1]) \("are typing...".localized)")
+                        Text(String.localizedStringWithFormat(NSLocalizedString("twoUsersAreTyping", comment: "X and Y are typing..."), typingUsers[0], typingUsers[1]))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("\(typingUsers.count) \("people are typing...".localized)")
+                        Text(String.localizedStringWithFormat(NSLocalizedString("multipleUsersAreTyping", comment: "X people are typing..."), typingUsers.count))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -63,17 +63,17 @@ struct TypingIndicatorView: View {
 struct TypingIndicatorView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            TypingIndicatorView(typingUsers: ["Alex"])
-                .previewDisplayName("Single user")
+            TypingIndicatorView(typingUsers: [NSLocalizedString("previewUserAlex", comment: "Preview user Alex")])
+                .previewDisplayName(NSLocalizedString("singleUser", comment: "Single user preview"))
             
-            TypingIndicatorView(typingUsers: ["Alex", "Maria"])
-                .previewDisplayName("Two users")
+            TypingIndicatorView(typingUsers: [NSLocalizedString("previewUserAlex", comment: "Preview user Alex"), NSLocalizedString("previewUserMaria", comment: "Preview user Maria")])
+                .previewDisplayName(NSLocalizedString("twoUsers", comment: "Two users preview"))
             
-            TypingIndicatorView(typingUsers: ["Alex", "Maria", "John", "Anna"])
-                .previewDisplayName("Multiple users")
+            TypingIndicatorView(typingUsers: [NSLocalizedString("previewUserAlex", comment: "Preview user Alex"), NSLocalizedString("previewUserMaria", comment: "Preview user Maria"), NSLocalizedString("previewUserJohn", comment: "Preview user John"), NSLocalizedString("previewUserAnna", comment: "Preview user Anna")])
+                .previewDisplayName(NSLocalizedString("multipleUsers", comment: "Multiple users preview"))
             
             TypingIndicatorView(typingUsers: [])
-                .previewDisplayName("Nobody typing")
+                .previewDisplayName(NSLocalizedString("nobodyTyping", comment: "Nobody typing preview"))
         }
         .padding()
         .previewLayout(.sizeThatFits)

@@ -18,9 +18,9 @@ struct ContactsView: View {
         
         var displayName: String {
             switch self {
-            case .all: return "All Contacts".localized
-            case .events: return "Event Contacts".localized
-            case .general: return "General Contacts".localized
+            case .all: return NSLocalizedString("allContacts", comment: "All Contacts")
+            case .events: return NSLocalizedString("eventContacts", comment: "Event Contacts")
+            case .general: return NSLocalizedString("generalContacts", comment: "General Contacts")
             }
         }
     }
@@ -75,7 +75,7 @@ struct ContactsView: View {
     var body: some View {
         VStack(spacing: 0) {
             // Filter Picker
-            Picker("Contact Type".localized, selection: $selectedFilter) {
+            Picker(NSLocalizedString("contactType", comment: "Contact Type"), selection: $selectedFilter) {
                 ForEach(ContactFilter.allCases, id: \.self) { filter in
                     Text(filter.displayName).tag(filter)
                 }
@@ -90,7 +90,7 @@ struct ContactsView: View {
                 case .all:
                     // Show both general and event contacts
                     if !generalContacts.isEmpty {
-                        Section("General Contacts".localized) {
+                        Section(NSLocalizedString("generalContacts", comment: "General Contacts")) {
                             ForEach(generalContacts, id: \.id) { contact in
                                 NavigationLink(destination: ContactDetailView(contact: contact)) {
                                     ContactRowView(contact: contact)
@@ -100,7 +100,7 @@ struct ContactsView: View {
                     }
                     
                     if !filteredEventTags.isEmpty {
-                        Section("Event Contacts".localized) {
+                        Section(NSLocalizedString("eventContacts", comment: "Event Contacts")) {
                             ForEach(filteredEventTags, id: \.self) { eventTag in
                                 NavigationLink(destination: EventContactsDetailView(eventTag: eventTag, contacts: contactService.contacts.filter { $0.eventTag == eventTag })) {
                                     EventContactRowView(
@@ -116,7 +116,7 @@ struct ContactsView: View {
                 case .general:
                     // Show only general contacts
                     if !generalContacts.isEmpty {
-                        Section("General Contacts".localized) {
+                        Section(NSLocalizedString("generalContacts", comment: "General Contacts")) {
                             ForEach(generalContacts, id: \.id) { contact in
                                 NavigationLink(destination: ContactDetailView(contact: contact)) {
                                     ContactRowView(contact: contact)
@@ -124,13 +124,13 @@ struct ContactsView: View {
                             }
                         }
                     } else {
-                        emptyStateView(message: "No general contacts found".localized)
+                        emptyStateView(message: NSLocalizedString("noGeneralContactsFound", comment: "No general contacts found"))
                     }
                     
                 case .events:
                     // Show only event contacts
                     if !filteredEventTags.isEmpty {
-                        Section("Event Contacts".localized) {
+                        Section(NSLocalizedString("eventContacts", comment: "Event Contacts")) {
                             ForEach(filteredEventTags, id: \.self) { eventTag in
                                 NavigationLink(destination: EventContactsDetailView(eventTag: eventTag, contacts: contactService.contacts.filter { $0.eventTag == eventTag })) {
                                     EventContactRowView(
@@ -142,32 +142,32 @@ struct ContactsView: View {
                             }
                         }
                     } else {
-                        emptyStateView(message: "No event contacts found".localized)
+                        emptyStateView(message: NSLocalizedString("noEventContactsFound", comment: "No event contacts found"))
                     }
                 }
                 
                 // Empty state for completely empty contacts
                 if contactService.contacts.isEmpty {
-                    emptyStateView(message: "No contacts yet".localized)
+                    emptyStateView(message: NSLocalizedString("noContactsYet", comment: "No contacts yet"))
                 }
             }
         }
-        .navigationTitle("Contacts".localized)
+        .navigationTitle(NSLocalizedString("contacts", comment: "Contacts"))
         .navigationBarTitleDisplayMode(.inline)
-        .searchable(text: $searchText, prompt: "Search contacts".localized)
+        .searchable(text: $searchText, prompt: NSLocalizedString("searchContacts", comment: "Search contacts"))
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
                     Button(action: {
                         showAddContact = true
                     }) {
-                        Label("Add Contact".localized, systemImage: "person.badge.plus")
+                        Label(NSLocalizedString("addContact", comment: "Add Contact"), systemImage: "person.badge.plus")
                     }
                     
                     Button(action: {
                         showImportContacts = true
                     }) {
-                        Label("Import from Phone".localized, systemImage: "person.crop.circle.badge.plus")
+                        Label(NSLocalizedString("importFromPhone", comment: "Import from Phone"), systemImage: "person.crop.circle.badge.plus")
                     }
                 } label: {
                     Image(systemName: "plus")
@@ -236,9 +236,9 @@ struct ContactsView: View {
     
     private func getEmptyStateTitle() -> String {
         switch selectedFilter {
-        case .all: return "No Contacts".localized
-        case .general: return "No General Contacts".localized
-        case .events: return "No Event Contacts".localized
+        case .all: return NSLocalizedString("noContacts", comment: "No Contacts")
+        case .general: return NSLocalizedString("noGeneralContacts", comment: "No General Contacts")
+        case .events: return NSLocalizedString("noEventContacts", comment: "No Event Contacts")
         }
     }
     
@@ -278,7 +278,7 @@ struct ContactsView: View {
             name: fullName,
             email: emailAddress,
             phone: phoneNumber,
-            role: "Others",
+            role: NSLocalizedString("roleOthers", comment: "Others role"),
             groupId: groupId
         )
         
@@ -318,7 +318,9 @@ struct EventContactRowView: View {
                             .foregroundColor(.secondary)
                     }
                     
-                    Text("\(contacts.count) contact\(contacts.count != 1 ? "s" : "")")
+                    Text(contacts.count == 1 ? 
+                         NSLocalizedString("contactSingular", comment: "1 contact") : 
+                         String.localizedStringWithFormat(NSLocalizedString("contactsPlural", comment: "%d contacts"), contacts.count))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

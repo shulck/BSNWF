@@ -56,7 +56,7 @@ struct AccountSettingsView: View {
                     }
                     .padding(.vertical, 8)
                 } header: {
-                    Text("Account Information".localized)
+                    Text(NSLocalizedString("Account Information", comment: "Section header for account information"))
                 }
             }
             
@@ -73,7 +73,7 @@ struct AccountSettingsView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
             } header: {
-                Text("Security".localized)
+                Text(NSLocalizedString("Security", comment: "Section header for security options"))
             }
             
             Section {
@@ -103,9 +103,9 @@ struct AccountSettingsView: View {
                 .buttonStyle(PlainButtonStyle())
                 .disabled(isLoading)
             } header: {
-                Text("Account Actions".localized)
+                Text(NSLocalizedString("Account Actions", comment: "Section header for account actions"))
             } footer: {
-                Text("Deleting your account will permanently remove all your data and cannot be undone.".localized)
+                Text(NSLocalizedString("Deleting your account will permanently remove all your data and cannot be undone.", comment: "Warning about account deletion"))
             }
             
             if isLoading {
@@ -114,7 +114,7 @@ struct AccountSettingsView: View {
                         ProgressView()
                             .scaleEffect(0.8)
                         
-                        Text("Processing...".localized)
+                        Text(NSLocalizedString("Processing...", comment: "Loading indicator text"))
                             .font(.body)
                             .foregroundColor(.secondary)
                         
@@ -124,7 +124,7 @@ struct AccountSettingsView: View {
                 }
             }
         }
-        .navigationTitle("Account".localized)
+        .navigationTitle(NSLocalizedString("Account", comment: "Navigation title for account settings"))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showChangePassword) {
             ChangePasswordView()
@@ -134,24 +134,24 @@ struct AccountSettingsView: View {
                 ProfileEditView(user: user)
             }
         }
-        .alert("Sign Out".localized, isPresented: $showLogoutConfirmation) {
-            Button("Cancel".localized, role: .cancel) { }
-            Button("Sign Out".localized, role: .destructive) {
+        .alert(NSLocalizedString("Sign Out", comment: "Alert title for sign out confirmation"), isPresented: $showLogoutConfirmation) {
+            Button(NSLocalizedString("Cancel", comment: "Cancel button"), role: .cancel) { }
+            Button(NSLocalizedString("Sign Out", comment: "Sign out button"), role: .destructive) {
                 signOut()
             }
         } message: {
-            Text("Are you sure you want to sign out?".localized)
+            Text(NSLocalizedString("Are you sure you want to sign out?", comment: "Sign out confirmation message"))
         }
-        .alert("Delete Account".localized, isPresented: $showDeleteAccount) {
-            Button("Cancel".localized, role: .cancel) { }
-            Button("Delete".localized, role: .destructive) {
+        .alert(NSLocalizedString("Delete Account", comment: "Alert title for delete account confirmation"), isPresented: $showDeleteAccount) {
+            Button(NSLocalizedString("Cancel", comment: "Cancel button"), role: .cancel) { }
+            Button(NSLocalizedString("Delete", comment: "Delete button"), role: .destructive) {
                 deleteAccount()
             }
         } message: {
-            Text("This action cannot be undone. All your data will be permanently deleted.".localized)
+            Text(NSLocalizedString("This action cannot be undone. All your data will be permanently deleted.", comment: "Delete account warning message"))
         }
-        .alert("Error".localized, isPresented: $showErrorAlert) {
-            Button("OK".localized, role: .cancel) { }
+        .alert(NSLocalizedString("Error", comment: "Error alert title"), isPresented: $showErrorAlert) {
+            Button(NSLocalizedString("OK", comment: "OK button"), role: .cancel) { }
         } message: {
             Text(errorMessage ?? "An unknown error occurred")
         }
@@ -162,12 +162,12 @@ struct AccountSettingsView: View {
             accountIcon(icon: icon, color: color)
             
             VStack(alignment: .leading, spacing: 2) {
-                Text(title.localized)
+                Text(NSLocalizedString(title, comment: "Account row title"))
                     .font(.body)
                     .fontWeight(.medium)
                     .foregroundColor(.primary)
                 
-                Text(subtitle.localized)
+                Text(NSLocalizedString(subtitle, comment: "Account row subtitle"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -233,22 +233,22 @@ struct ChangePasswordView: View {
     var body: some View {
         Form {
             Section {
-                SecureField("Current Password".localized, text: $currentPassword)
+                SecureField(NSLocalizedString("Current Password", comment: "Placeholder for current password field"), text: $currentPassword)
                     .textContentType(.password)
             } header: {
-                Text("Current Password".localized)
+                Text(NSLocalizedString("Current Password", comment: "Section header for current password"))
             }
             
             Section {
-                SecureField("New Password".localized, text: $newPassword)
+                SecureField(NSLocalizedString("New Password", comment: "Placeholder for new password field"), text: $newPassword)
                     .textContentType(.newPassword)
                 
-                SecureField("Confirm New Password".localized, text: $confirmPassword)
+                SecureField(NSLocalizedString("Confirm New Password", comment: "Placeholder for confirm password field"), text: $confirmPassword)
                     .textContentType(.newPassword)
             } header: {
-                Text("New Password".localized)
+                Text(NSLocalizedString("New Password", comment: "Section header for new password"))
             } footer: {
-                Text("Password must be at least 6 characters long".localized)
+                Text(NSLocalizedString("Password must be at least 6 characters long", comment: "Password requirements footer"))
             }
             
             if isLoading {
@@ -256,39 +256,39 @@ struct ChangePasswordView: View {
                     HStack {
                         ProgressView()
                             .scaleEffect(0.8)
-                        Text("Updating password...".localized)
+                        Text(NSLocalizedString("Updating password...", comment: "Loading text for password update"))
                             .foregroundColor(.secondary)
                     }
                 }
             }
         }
-        .navigationTitle("Change Password".localized)
+        .navigationTitle(NSLocalizedString("Change Password", comment: "Navigation title for change password screen"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel".localized) {
+                Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
                     dismiss()
                 }
             }
             
             ToolbarItem(placement: .confirmationAction) {
-                Button("Update".localized) {
+                Button(NSLocalizedString("Update", comment: "Update password button")) {
                     updatePassword()
                 }
                 .disabled(!isValidInput || isLoading)
             }
         }
-        .alert("Error".localized, isPresented: $showErrorAlert) {
-            Button("OK".localized, role: .cancel) { }
+        .alert(NSLocalizedString("Error", comment: "Error alert title"), isPresented: $showErrorAlert) {
+            Button(NSLocalizedString("OK", comment: "OK button"), role: .cancel) { }
         } message: {
             Text(errorMessage ?? "An unknown error occurred")
         }
-        .alert("Success".localized, isPresented: $showSuccessAlert) {
-            Button("OK".localized) {
+        .alert(NSLocalizedString("Success", comment: "Success alert title"), isPresented: $showSuccessAlert) {
+            Button(NSLocalizedString("OK", comment: "OK button")) {
                 dismiss()
             }
         } message: {
-            Text("Your password has been updated successfully".localized)
+            Text(NSLocalizedString("Your password has been updated successfully", comment: "Password update success message"))
         }
     }
     

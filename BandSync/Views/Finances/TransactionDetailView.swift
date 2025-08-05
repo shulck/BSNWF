@@ -10,9 +10,9 @@ struct TransactionDetailView: View {
     
     private var navigationTitle: String {
         if horizontalSizeClass == .compact {
-            return "Transaction Details".localized
+            return NSLocalizedString("Transaction Details", comment: "Navigation title for transaction details view")
         } else {
-            return "Transaction Details".localized
+            return NSLocalizedString("Transaction Details", comment: "Navigation title for transaction details view on larger devices")
         }
     }
     @State private var showShareSheet = false
@@ -86,7 +86,7 @@ struct TransactionDetailView: View {
                         HStack {
                             Spacer()
                             
-                            Text(record.type == .income ? "Income" : "Expense")
+                            Text(record.type == .income ? NSLocalizedString("Income", comment: "Income type label") : NSLocalizedString("Expense", comment: "Expense type label"))
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.white)
@@ -160,14 +160,14 @@ struct TransactionDetailView: View {
                     
                     // Transaction Details Card
                     VStack(alignment: .leading, spacing: 20) {
-                        Text("Details".localized)
+                        Text(NSLocalizedString("Details", comment: "Details section title"))
                             .font(.caption)
                             .fontWeight(.semibold)
                             .foregroundColor(.secondary)
                         
                         if !record.details.isEmpty {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Description".localized)
+                                Text(NSLocalizedString("Description", comment: "Description field label"))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                 
@@ -192,11 +192,11 @@ struct TransactionDetailView: View {
                                     .font(.title3)
                                 
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Sync Status".localized)
+                                    Text(NSLocalizedString("Sync Status", comment: "Sync status field label"))
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                     
-                                    Text("Waiting for synchronization".localized)
+                                    Text(NSLocalizedString("Waiting for synchronization", comment: "Sync status waiting message"))
                                         .font(.callout)
                                         .foregroundColor(.orange)
                                 }
@@ -217,7 +217,7 @@ struct TransactionDetailView: View {
                            !receiptUrl.isEmpty,
                            FirebaseStorageService.isFirebaseStorageURL(receiptUrl) {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Receipt".localized)
+                                Text(NSLocalizedString("Receipt", comment: "Receipt field label"))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                 
@@ -226,7 +226,7 @@ struct TransactionDetailView: View {
                                         ProgressView()
                                             .scaleEffect(0.8)
                                         
-                                        Text("Loading from cloud".localized)
+                                        Text(NSLocalizedString("Loading from cloud", comment: "Loading receipt from cloud message"))
                                             .fontWeight(.medium)
                                             .foregroundColor(.blue)
                                     } else {
@@ -235,10 +235,10 @@ struct TransactionDetailView: View {
                                             .foregroundColor(.blue)
                                         
                                         VStack(alignment: .leading, spacing: 2) {
-                                            Text("Receipt in cloud storage".localized)
+                                            Text(NSLocalizedString("Receipt in cloud storage", comment: "Receipt stored in cloud message"))
                                                 .fontWeight(.medium)
                                             
-                                            Text("Stored securely in Firebase".localized)
+                                            Text(NSLocalizedString("Stored securely in Firebase", comment: "Firebase storage description"))
                                                 .font(.caption)
                                                 .foregroundColor(.blue)
                                         }
@@ -251,7 +251,7 @@ struct TransactionDetailView: View {
                                             loadReceiptFromFirebase(url: receiptUrl)
                                             showReceiptImage = true
                                         } label: {
-                                            Text("View".localized)
+                                            Text(NSLocalizedString("View", comment: "View button label"))
                                                 .font(.subheadline)
                                                 .fontWeight(.semibold)
                                                 .foregroundColor(.white)
@@ -305,7 +305,7 @@ struct TransactionDetailView: View {
                     
                     // Action Buttons Card
                     VStack(spacing: 16) {
-                        Text("Actions".localized)
+                        Text(NSLocalizedString("Actions", comment: "Actions section title"))
                             .font(.caption)
                             .fontWeight(.semibold)
                             .foregroundColor(.secondary)
@@ -315,7 +315,7 @@ struct TransactionDetailView: View {
                         HStack(spacing: 16) {
                             actionButton(
                                 icon: "square.and.arrow.up",
-                                title: "Share".localized,
+                                title: NSLocalizedString("Share", comment: "Share button label"),
                                 color: .blue,
                                 action: {
                                     createPDF()
@@ -327,7 +327,7 @@ struct TransactionDetailView: View {
                             
                             actionButton(
                                 icon: "pencil",
-                                title: "Edit".localized,
+                                title: NSLocalizedString("Edit", comment: "Edit button label"),
                                 color: .blue,
                                 action: {
                                     showEditTransaction = true
@@ -339,7 +339,7 @@ struct TransactionDetailView: View {
                             
                             actionButton(
                                 icon: "trash",
-                                title: "Delete".localized,
+                                title: NSLocalizedString("Delete", comment: "Delete button label"),
                                 color: .red,
                                 action: {
                                     showDeleteConfirmation = true
@@ -383,19 +383,19 @@ struct TransactionDetailView: View {
                     Button {
                         createPDF()
                     } label: {
-                        Label("Export PDF".localized, systemImage: "square.and.arrow.up")
+                        Label(NSLocalizedString("Export PDF", comment: "Export PDF menu option"), systemImage: "square.and.arrow.up")
                     }
                     
                     Button {
                         showEditTransaction = true
                     } label: {
-                        Label("Edit".localized, systemImage: "pencil")
+                        Label(NSLocalizedString("Edit", comment: "Edit menu option"), systemImage: "pencil")
                     }
                     
                     Button(role: .destructive) {
                         showDeleteConfirmation = true
                     } label: {
-                        Label("Delete".localized, systemImage: "trash")
+                        Label(NSLocalizedString("Delete", comment: "Delete menu option"), systemImage: "trash")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -413,7 +413,7 @@ struct TransactionDetailView: View {
                         ProgressView()
                             .scaleEffect(1.5)
                         
-                        Text("Deleting transaction".localized)
+                        Text(NSLocalizedString("Deleting transaction", comment: "Deleting transaction progress message"))
                             .font(.headline)
                             .foregroundColor(.primary)
                     }
@@ -447,11 +447,11 @@ struct TransactionDetailView: View {
                 showAnimatedDetails = true
             }
         }
-        .alert("Are you sure you want to delete this transaction?".localized, isPresented: $showDeleteConfirmation) {
-            Button("Delete".localized, role: .destructive) {
+        .alert(NSLocalizedString("Are you sure you want to delete this transaction?", comment: "Delete transaction confirmation message"), isPresented: $showDeleteConfirmation) {
+            Button(NSLocalizedString("Delete", comment: "Delete confirmation button"), role: .destructive) {
                 deleteTransaction()
             }
-            Button("Cancel".localized, role: .cancel) {}
+            Button(NSLocalizedString("Cancel", comment: "Cancel deletion button"), role: .cancel) {}
         }
     }
     
@@ -463,7 +463,7 @@ struct TransactionDetailView: View {
             VStack(spacing: 0) {
                 // Top bar
                 HStack {
-                    Button("Close".localized) {
+                    Button(NSLocalizedString("Close", comment: "Close button label")) {
                         showReceiptImage = false
                     }
                     .font(.headline)
@@ -471,7 +471,7 @@ struct TransactionDetailView: View {
                     
                     Spacer()
                     
-                    Text("Receipt".localized)
+                    Text(NSLocalizedString("Receipt", comment: "Receipt title in image viewer"))
                         .font(.headline)
                     
                     Spacer()
@@ -501,7 +501,7 @@ struct TransactionDetailView: View {
                             ProgressView()
                                 .scaleEffect(1.5)
                             
-                            Text("Loading receipt from cloud".localized)
+                            Text(NSLocalizedString("Loading receipt from cloud", comment: "Loading receipt from cloud message"))
                                 .font(.headline)
                                 .foregroundColor(.primary)
                         }
@@ -518,17 +518,17 @@ struct TransactionDetailView: View {
                                 .font(.system(size: 60))
                                 .foregroundColor(.orange)
                             
-                            Text("Receipt unavailable".localized)
+                            Text(NSLocalizedString("Receipt unavailable", comment: "Receipt unavailable error title"))
                                 .font(.title2)
                                 .fontWeight(.bold)
                             
-                            Text("Could not load receipt from cloud storage".localized)
+                            Text(NSLocalizedString("Could not load receipt from cloud storage", comment: "Receipt loading error message"))
                                 .font(.headline)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.center)
                             
                             if let error = receiptLoadError {
-                                Text(String(format: "Error: %@".localized, error))
+                                Text(String(format: NSLocalizedString("Error: %@", comment: "Error message format"), error))
                                     .font(.caption)
                                     .foregroundColor(.red)
                                     .padding(8)
@@ -594,7 +594,7 @@ struct TransactionDetailView: View {
                     receiptLoadError = nil
                 } else {
                     print("❌ Failed to load receipt")
-                    receiptLoadError = "Failed to download from cloud storage".localized
+                    receiptLoadError = NSLocalizedString("Failed to download from cloud storage", comment: "Receipt download failure error message")
                 }
             }
         }
@@ -640,7 +640,7 @@ struct TransactionDetailView: View {
                 if success {
                     dismiss()
                 } else {
-                    deleteError = "Failed to delete the transaction. Please try again.".localized
+                    deleteError = NSLocalizedString("Failed to delete the transaction. Please try again.", comment: "Transaction deletion error message")
                 }
             }
         }
@@ -682,18 +682,18 @@ struct TransactionDetailView: View {
             .paragraphStyle: paragraphStyle
         ]
 
-        let title = "Financial Transaction".localized
+        let title = NSLocalizedString("Financial Transaction", comment: "PDF document title")
         title.draw(in: CGRect(x: 50, y: 50, width: 495, height: 30), withAttributes: titleAttributes)
 
         var y = 100.0
         let lineHeight = 25.0
 
         let details = [
-            String(format: "Type: %@".localized, record.type == .income ? "Income".localized : "Expense".localized),
-            String(format: "Category: %@".localized, record.category),
-            String(format: "Amount: %.2f %@".localized, record.amount, record.currency),
-            String(format: "Date: %@".localized, formatter.string(from: record.date)),
-            String(format: "Description: %@".localized, record.details)
+            String(format: NSLocalizedString("Type: %@", comment: "Transaction type field in PDF"), record.type == .income ? NSLocalizedString("Income", comment: "Income type in PDF") : NSLocalizedString("Expense", comment: "Expense type in PDF")),
+            String(format: NSLocalizedString("Category: %@", comment: "Transaction category field in PDF"), record.category),
+            String(format: NSLocalizedString("Amount: %.2f %@", comment: "Transaction amount field in PDF"), record.amount, record.currency),
+            String(format: NSLocalizedString("Date: %@", comment: "Transaction date field in PDF"), formatter.string(from: record.date)),
+            String(format: NSLocalizedString("Description: %@", comment: "Transaction description field in PDF"), record.details)
         ]
 
         for detail in details {
@@ -704,7 +704,7 @@ struct TransactionDetailView: View {
         // Receipt information
         if let receiptUrl = record.receiptUrl, !receiptUrl.isEmpty {
             y += lineHeight
-            "Receipt: Available in Firebase Cloud Storage".localized.draw(in: CGRect(x: 50, y: y, width: 495, height: lineHeight), withAttributes: attributes)
+            NSLocalizedString("Receipt: Available in Firebase Cloud Storage", comment: "Receipt availability info in PDF").draw(in: CGRect(x: 50, y: y, width: 495, height: lineHeight), withAttributes: attributes)
         }
 
         UIGraphicsEndPDFContext()

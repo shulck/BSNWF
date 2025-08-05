@@ -76,7 +76,7 @@ struct AddSetlistView: View {
                 .padding(.horizontal, 16)
                 .padding(.top, 20)
             }
-            .navigationTitle("Create Setlist".localized)
+            .navigationTitle(NSLocalizedString("Create Setlist", comment: "Navigation title for creating setlist"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -128,7 +128,7 @@ struct AddSetlistView: View {
                     .foregroundColor(.white)
             }
             
-            Text("Create New Setlist".localized)
+            Text(NSLocalizedString("Create New Setlist", comment: "Header title for creating new setlist"))
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
@@ -144,7 +144,7 @@ struct AddSetlistView: View {
                     .foregroundColor(.blue)
                     .font(.title3)
                 
-                Text("Setlist Information".localized)
+                Text(NSLocalizedString("Setlist Information", comment: "Section header for setlist information"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -161,12 +161,12 @@ struct AddSetlistView: View {
             VStack(spacing: 16) {
                 // Название сетлиста
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Setlist Name".localized)
+                    Text(NSLocalizedString("Setlist Name", comment: "Label for setlist name field"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
                     
-                    TextField("Enter setlist name", text: $name)
+                    TextField(NSLocalizedString("Enter setlist name", comment: "Placeholder for setlist name field"), text: $name)
                         .font(.body)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
@@ -177,12 +177,12 @@ struct AddSetlistView: View {
                 // Toggle для времени концерта
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Concert Timing".localized)
+                        Text(NSLocalizedString("Concert Timing", comment: "Label for concert timing toggle"))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                         
-                        Text("Plan your setlist with specific timing".localized)
+                        Text(NSLocalizedString("Plan your setlist with specific timing", comment: "Description for concert timing feature"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -210,7 +210,7 @@ struct AddSetlistView: View {
                     .foregroundColor(.orange)
                     .font(.title3)
                 
-                Text("Concert Settings".localized)
+                Text(NSLocalizedString("Concert Settings", comment: "Section header for concert settings"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -226,12 +226,12 @@ struct AddSetlistView: View {
             VStack(spacing: 16) {
                 // Дата и время концерта
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Concert Start".localized)
+                    Text(NSLocalizedString("Concert Start", comment: "Label for concert start time"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
                     
-                    DatePicker("Concert Start", selection: $concertDate, displayedComponents: [.date, .hourAndMinute])
+                    DatePicker(NSLocalizedString("Concert Start", comment: "Date picker label for concert start"), selection: $concertDate, displayedComponents: [.date, .hourAndMinute])
                         .labelsHidden()
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
@@ -241,20 +241,20 @@ struct AddSetlistView: View {
                 
                 // Продолжительность концерта
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Concert Duration".localized)
+                    Text(NSLocalizedString("Concert Duration", comment: "Label for concert duration"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
                     
                     HStack(spacing: 12) {
                         VStack(spacing: 4) {
-                            Text("Hours".localized)
+                            Text(NSLocalizedString("Hours", comment: "Label for hours"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
                             Picker("", selection: $concertLengthHours) {
                                 ForEach(0..<6, id: \.self) { hour in
-                                    Text("\(hour) " + "h".localized).tag(hour)
+                                    Text("\(hour) " + NSLocalizedString("h", comment: "Hours abbreviation")).tag(hour)
                                 }
                             }
                             .pickerStyle(MenuPickerStyle())
@@ -265,14 +265,14 @@ struct AddSetlistView: View {
                         }
                         
                         VStack(spacing: 4) {
-                            Text("Minutes".localized)
+                            Text(NSLocalizedString("Minutes", comment: "Label for minutes"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
                             Picker("", selection: $concertLengthMinutes) {
                                 ForEach(0..<60, id: \.self) { minute in
                                     if minute % 5 == 0 {
-                                        Text("\(minute) " + "min".localized).tag(minute)
+                                        Text("\(minute) " + NSLocalizedString("min", comment: "Minutes abbreviation")).tag(minute)
                                     }
                                 }
                             }
@@ -288,7 +288,7 @@ struct AddSetlistView: View {
                 }
                 
                 // Кнопка автосоздания
-                Button("Auto-create songs for concert".localized) {
+                Button(NSLocalizedString("Auto-create songs for concert", comment: "Button to auto-create songs for concert")) {
                     autoCreateSongsForConcert()
                 }
                 .font(.subheadline)
@@ -316,7 +316,7 @@ struct AddSetlistView: View {
                     .foregroundColor(.purple)
                     .font(.title3)
                 
-                Text("Auto-created Songs".localized)
+                Text(NSLocalizedString("Auto-created Songs", comment: "Section header for auto-created songs"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -331,7 +331,7 @@ struct AddSetlistView: View {
             
             VStack(spacing: 12) {
                 HStack {
-                    Text("Total songs:".localized)
+                    Text(NSLocalizedString("Total songs:", comment: "Label for total songs count"))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     Spacer()
@@ -342,7 +342,7 @@ struct AddSetlistView: View {
                 }
                 
                 HStack {
-                    Text("Total Duration:".localized)
+                    Text(NSLocalizedString("Total Duration:", comment: "Label for total duration"))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     Spacer()
@@ -352,7 +352,7 @@ struct AddSetlistView: View {
                         .foregroundColor(.purple)
                 }
                 
-                Button("Clear and recreate".localized) {
+                Button(NSLocalizedString("Clear and recreate", comment: "Button to clear and recreate songs")) {
                     autoCreateSongsForConcert()
                 }
                 .font(.subheadline)
@@ -380,7 +380,7 @@ struct AddSetlistView: View {
                     .foregroundColor(.green)
                     .font(.title3)
                 
-                Text("Add Songs".localized)
+                Text(NSLocalizedString("Add Songs", comment: "Section header for adding songs"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -396,12 +396,12 @@ struct AddSetlistView: View {
             VStack(spacing: 16) {
                 // Название песни
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Song Name".localized)
+                    Text(NSLocalizedString("Song Name", comment: "Label for song name field"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
                     
-                    TextField("Enter song name", text: $newTitle)
+                    TextField(NSLocalizedString("Enter song name", comment: "Placeholder for song name field"), text: $newTitle)
                         .font(.body)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
@@ -411,14 +411,14 @@ struct AddSetlistView: View {
                 
                 // Продолжительность
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Duration".localized)
+                    Text(NSLocalizedString("Duration", comment: "Label for song duration"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
                     
                     HStack(spacing: 12) {
                         VStack(spacing: 4) {
-                            Text("Min".localized)
+                            Text(NSLocalizedString("Min", comment: "Minutes abbreviation"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
@@ -438,7 +438,7 @@ struct AddSetlistView: View {
                             .padding(.top, 16)
                         
                         VStack(spacing: 4) {
-                            Text("Sec".localized)
+                            Text(NSLocalizedString("Sec", comment: "Seconds abbreviation"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
@@ -459,7 +459,7 @@ struct AddSetlistView: View {
                 // BPM и Тональность
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("BPM".localized)
+                        Text(NSLocalizedString("BPM", comment: "BPM label"))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
@@ -475,12 +475,12 @@ struct AddSetlistView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Key (Optional)")
+                        Text(NSLocalizedString("Key (Optional)", comment: "Label for musical key field"))
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                         
-                        TextField("C, Am, etc.", text: $key)
+                        TextField(NSLocalizedString("C, Am, etc.", comment: "Placeholder for musical key field"), text: $key)
                             .font(.body)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 12)
@@ -492,7 +492,7 @@ struct AddSetlistView: View {
                 
                 // Кнопки действий
                 HStack(spacing: 12) {
-                    Button("Add Song".localized) {
+                    Button(NSLocalizedString("Add Song", comment: "Button to add song")) {
                         addSongManually()
                     }
                     .font(.subheadline)
@@ -505,7 +505,7 @@ struct AddSetlistView: View {
                     .disabled(newTitle.isEmpty || (minutes.isEmpty && seconds.isEmpty) || bpm.isEmpty)
                     .opacity((newTitle.isEmpty || (minutes.isEmpty && seconds.isEmpty) || bpm.isEmpty) ? 0.6 : 1.0)
                     
-                    Button("Import Songs".localized) {
+                    Button(NSLocalizedString("Import Songs", comment: "Button to import songs")) {
                         showImportSongs = true
                     }
                     .font(.subheadline)
@@ -635,7 +635,7 @@ struct AddSetlistView: View {
                     .foregroundColor(.purple)
                     .font(.title3)
                 
-                Text("Summary".localized)
+                Text(NSLocalizedString("Summary", comment: "Section header for summary"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -649,7 +649,7 @@ struct AddSetlistView: View {
                 .padding(.horizontal, 20)
             
             HStack {
-                Text("Total Duration".localized)
+                Text(NSLocalizedString("Total Duration", comment: "Label for total duration in summary"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
@@ -670,7 +670,7 @@ struct AddSetlistView: View {
     
     // MARK: - Buttons
     private var cancelButton: some View {
-        Button("Cancel".localized) {
+        Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
             dismiss()
         }
         .font(.body)
@@ -678,7 +678,7 @@ struct AddSetlistView: View {
     }
     
     private var saveButton: some View {
-        Button("Save".localized) {
+        Button(NSLocalizedString("Save", comment: "Save button")) {
             saveSetlist()
         }
         .font(.headline)

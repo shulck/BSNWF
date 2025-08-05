@@ -25,12 +25,12 @@ struct RoleView: View {
                         roleIcon(icon: "person.crop.rectangle.stack.fill", color: .blue)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Select Role".localized)
+                            Text(NSLocalizedString("Select Role", comment: ""))
                                 .font(.body)
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary)
                             
-                            Text("Choose the appropriate role for this user".localized)
+                            Text(NSLocalizedString("Choose the appropriate role for this user", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -39,7 +39,7 @@ struct RoleView: View {
                     }
                     .padding(.vertical, 4)
                 } header: {
-                    Text("Role Assignment".localized)
+                    Text(NSLocalizedString("Role Assignment", comment: ""))
                 }
                 
                 // Current Role Info
@@ -49,11 +49,11 @@ struct RoleView: View {
                             roleIcon(icon: "info.circle.fill", color: .orange)
                             
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("\("Current role:".localized) \(getLocalizedRoleName(for: currentRole))")
+                                Text(String(format: NSLocalizedString("Current role: %@", comment: ""), getLocalizedRoleName(for: currentRole)))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                 
-                                Text("\("Will change to:".localized) \(getLocalizedRoleName(for: selectedRole))")
+                                Text(String(format: NSLocalizedString("Will change to: %@", comment: ""), getLocalizedRoleName(for: selectedRole)))
                                     .font(.subheadline)
                                     .fontWeight(.medium)
                                     .foregroundColor(.blue)
@@ -106,7 +106,7 @@ struct RoleView: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 } header: {
-                    Text("Available Roles".localized)
+                    Text(NSLocalizedString("Available Roles", comment: ""))
                 }
                 
                 // Loading Section
@@ -116,7 +116,7 @@ struct RoleView: View {
                             ProgressView()
                                 .scaleEffect(0.8)
                             
-                            Text("Updating role...".localized)
+                            Text(NSLocalizedString("Updating role...", comment: ""))
                                 .font(.body)
                                 .foregroundColor(.secondary)
                             
@@ -126,18 +126,18 @@ struct RoleView: View {
                     }
                 }
             }
-            .navigationTitle("Change Role".localized)
+            .navigationTitle(NSLocalizedString("Change Role", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "")) {
                         dismiss()
                     }
                     .disabled(isLoading)
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save".localized) {
+                    Button(NSLocalizedString("Save", comment: "")) {
                         changeRole()
                     }
                     .disabled(isLoading || selectedRole == currentRole)
@@ -145,9 +145,9 @@ struct RoleView: View {
             }
         }            .alert(isPresented: $showAlert) {
                 Alert(
-                    title: Text("Role Update".localized),
+                    title: Text(NSLocalizedString("Role Update", comment: "")),
                     message: Text(alertMessage),
-                    dismissButton: .default(Text("OK".localized)) {
+                    dismissButton: .default(Text(NSLocalizedString("OK", comment: ""))) {
                     if alertMessage.contains("successfully") {
                         dismiss()
                     }
@@ -190,19 +190,19 @@ struct RoleView: View {
     
     private func getLocalizedRoleName(for role: UserModel.UserRole) -> String {
         switch role {
-        case .admin: return "Admin".localized
-        case .manager: return "Manager".localized
-        case .musician: return "Musician".localized
-        case .member: return "Member".localized
+        case .admin: return NSLocalizedString("Admin", comment: "")
+        case .manager: return NSLocalizedString("Manager", comment: "")
+        case .musician: return NSLocalizedString("Musician", comment: "")
+        case .member: return NSLocalizedString("Member", comment: "")
         }
     }
     
     private func getRoleDescription(for role: UserModel.UserRole) -> String {
         switch role {
-        case .admin: return "Full access to all features and settings".localized
-        case .manager: return "Management and coordination responsibilities".localized
-        case .musician: return "Band member with musical performance role".localized
-        case .member: return "Basic band member with limited access".localized
+        case .admin: return NSLocalizedString("Full access to all features and settings", comment: "")
+        case .manager: return NSLocalizedString("Management and coordination responsibilities", comment: "")
+        case .musician: return NSLocalizedString("Band member with musical performance role", comment: "")
+        case .member: return NSLocalizedString("Basic band member with limited access", comment: "")
         }
     }
     
@@ -210,7 +210,7 @@ struct RoleView: View {
 
     private func changeRole() {
         guard !userId.isEmpty && userId != "temp" else {
-            alertMessage = "Invalid user ID".localized
+            alertMessage = NSLocalizedString("Invalid user ID", comment: "")
             showAlert = true
             return
         }
@@ -224,9 +224,9 @@ struct RoleView: View {
                 isLoading = false
                 
                 if let error = error {
-                    alertMessage = String(format: "Error updating role".localized, error.localizedDescription)
+                    alertMessage = String(format: NSLocalizedString("Error updating role: %@", comment: ""), error.localizedDescription)
                 } else {
-                    alertMessage = String(format: "Role updated successfully".localized, getLocalizedRoleName(for: selectedRole))
+                    alertMessage = String(format: NSLocalizedString("Role updated successfully to %@", comment: ""), getLocalizedRoleName(for: selectedRole))
                     
                     UserService.shared.fetchUsers()
                 }

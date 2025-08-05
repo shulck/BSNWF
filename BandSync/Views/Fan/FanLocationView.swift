@@ -107,7 +107,7 @@ struct FanLocationView: View {
                                                 .font(.title3)
                                                 .foregroundColor(.blue)
                                             
-                                            Text("Event Location")
+                                            Text(NSLocalizedString("Event Location", comment: "Title for event location section"))
                                                 .font(.title2)
                                                 .fontWeight(.bold)
                                                 .foregroundColor(.primary)
@@ -119,7 +119,7 @@ struct FanLocationView: View {
                                                 .foregroundColor(.secondary)
                                                 .lineLimit(nil)
                                         } else {
-                                            Text("Location not specified")
+                                            Text(NSLocalizedString("Location not specified", comment: "Message when event location is not specified"))
                                                 .font(.subheadline)
                                                 .foregroundColor(.secondary)
                                                 .italic()
@@ -135,7 +135,7 @@ struct FanLocationView: View {
                                         HStack(spacing: 8) {
                                             Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
                                                 .font(.system(size: 16, weight: .semibold))
-                                            Text("Get Directions")
+                                            Text(NSLocalizedString("Get Directions", comment: "Button to get directions to event location"))
                                                 .font(.headline)
                                                 .fontWeight(.semibold)
                                         }
@@ -202,7 +202,7 @@ struct FanLocationView: View {
                                         .frame(width: 24, height: 24)
                                     
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text("Date & Time")
+                                        Text(NSLocalizedString("Date & Time", comment: "Label for event date and time"))
                                             .font(.caption)
                                             .fontWeight(.semibold)
                                             .foregroundColor(.secondary)

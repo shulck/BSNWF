@@ -16,7 +16,7 @@ struct MerchandiseSettingsView: View {
     var body: some View {
         List {
             Section {
-                Toggle("Low Stock Notifications".localized, isOn: $lowStockNotificationsEnabled)
+                Toggle(NSLocalizedString("low_stock_notifications", comment: "Toggle for enabling low stock notifications"), isOn: $lowStockNotificationsEnabled)
                     .onChange(of: lowStockNotificationsEnabled) {
                         saveLowStockSettings()
                     }
@@ -25,20 +25,20 @@ struct MerchandiseSettingsView: View {
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.green)
-                        Text("You'll get notified when items are running low".localized)
+                        Text(NSLocalizedString("low_stock_notification_description", comment: "Description of low stock notifications"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
             } header: {
-                Text("Notifications".localized)
+                Text(NSLocalizedString("notifications", comment: "Header for notifications section"))
             }
             
             if lowStockNotificationsEnabled {
                 Section {
-                    Picker("Threshold".localized, selection: $lowStockThreshold) {
+                    Picker(NSLocalizedString("threshold", comment: "Picker label for threshold setting"), selection: $lowStockThreshold) {
                         ForEach(thresholdOptions, id: \.self) { threshold in
-                            Text(String(format: "%d items or less".localized, threshold)).tag(threshold)
+                            Text(String(format: NSLocalizedString("items_or_less", comment: "Format string for threshold options with count"), threshold)).tag(threshold)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
@@ -46,13 +46,13 @@ struct MerchandiseSettingsView: View {
                         saveLowStockSettings()
                     }
                 } header: {
-                    Text("Low Stock Threshold".localized)
+                    Text(NSLocalizedString("low_stock_threshold", comment: "Header for low stock threshold section"))
                 } footer: {
-                    Text(String(format: "You'll receive notifications when any merchandise item has %d or fewer items in stock.".localized, lowStockThreshold))
+                    Text(String(format: NSLocalizedString("threshold_description", comment: "Description of threshold setting with count"), lowStockThreshold))
                 }
             }
         }
-        .navigationTitle("Merchandise".localized)
+        .navigationTitle(NSLocalizedString("merchandise", comment: "Navigation title for merchandise settings"))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             loadLowStockSettings()

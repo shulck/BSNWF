@@ -106,7 +106,7 @@ class ChatDetailViewModel: ObservableObject {
                 case .success:
                     self?.replyingTo = nil
                 case .failure(let error):
-                    self?.showError("Failed to send message: \(error.localizedDescription)")
+                    self?.showError(String(format: NSLocalizedString("Failed to send message: %@", comment: "Error message for failed message sending"), error.localizedDescription))
                 }
             }
         }
@@ -137,7 +137,7 @@ class ChatDetailViewModel: ObservableObject {
                 case .success:
                     self?.replyingTo = nil
                 case .failure(let error):
-                    self?.showError("Failed to send image: \(error.localizedDescription)")
+                    self?.showError(String(format: NSLocalizedString("Failed to send image: %@", comment: "Error message for failed image sending"), error.localizedDescription))
                 }
             }
         }
@@ -214,7 +214,7 @@ class ChatDetailViewModel: ObservableObject {
         if let user = userService.users.first(where: { $0.id == currentUserId }) {
             return user.name
         }
-        return userService.currentUser?.name ?? "Unknown".localized
+        return userService.currentUser?.name ?? NSLocalizedString("Unknown", comment: "Unknown user name fallback")
     }
     
     func showError(_ message: String) {
@@ -271,10 +271,10 @@ struct ChatDetailView: View {
             return "User \(otherUserId.prefix(8))"
             
         case .group:
-            return chat.name ?? "Group Chat".localized
+            return chat.name ?? NSLocalizedString("Group Chat", comment: "Default group chat name")
             
         case .bandWide:
-            return chat.name ?? "Band Announcement".localized
+            return chat.name ?? NSLocalizedString("Band Announcement", comment: "Default band announcement name")
         }
     }
     
@@ -285,7 +285,7 @@ struct ChatDetailView: View {
                 .fontWeight(.semibold)
             
             if !viewModel.chatService.typingUsers.isEmpty {
-                Text("\(viewModel.chatService.typingUsers.first ?? "") is typing...".localized)
+                Text(String(format: NSLocalizedString("%@ is typing...", comment: "Typing indicator format"), viewModel.chatService.typingUsers.first ?? ""))
                     .font(.caption)
                     .foregroundColor(.green)
             }
@@ -307,7 +307,7 @@ struct ChatDetailView: View {
                                             .scaleEffect(0.8)
                                     }
                                     
-                                    Text(viewModel.isLoadingOlderMessages ? "Loading...".localized : "Load older messages".localized)
+                                    Text(viewModel.isLoadingOlderMessages ? NSLocalizedString("Loading...", comment: "Loading older messages progress") : NSLocalizedString("Load older messages", comment: "Button to load older messages"))
                                         .font(.caption)
                                         .foregroundColor(.blue)
                                 }
@@ -339,7 +339,7 @@ struct ChatDetailView: View {
                             HStack {
                                 ProgressView()
                                     .scaleEffect(0.8)
-                                Text("Sending image...".localized)
+                                Text(NSLocalizedString("Sending image...", comment: "Progress message while sending image"))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -423,7 +423,7 @@ struct ChatDetailView: View {
                 Menu {
                     if chat.canUserDelete(currentUserId) {
                         Button(role: .destructive, action: { viewModel.showingDeleteChatConfirmation = true }) {
-                            Label("Delete Chat".localized, systemImage: "trash")
+                            Label(NSLocalizedString("Delete Chat", comment: "Menu item to delete chat"), systemImage: "trash")
                         }
                     }
                 } label: {
@@ -451,55 +451,55 @@ struct ChatDetailView: View {
                     }
             }
         }
-        .confirmationDialog("Message Actions".localized, isPresented: $viewModel.showingMessageOptions, presenting: viewModel.selectedMessage) { message in
-            Button("Reply".localized) {
+        .confirmationDialog(NSLocalizedString("Message Actions", comment: "Title for message actions dialog"), isPresented: $viewModel.showingMessageOptions, presenting: viewModel.selectedMessage) { message in
+            Button(NSLocalizedString("Reply", comment: "Reply to message button")) {
                 viewModel.replyingTo = message
                 isTextFieldFocused = true
             }
             
             if message.senderID == currentUserId {
-                Button("Edit".localized) {
+                Button(NSLocalizedString("Edit", comment: "Edit message button")) {
                     viewModel.editingMessage = message
                     messageText = message.content
                     isTextFieldFocused = true
                 }
                 
-                Button("Delete".localized, role: .destructive) {
+                Button(NSLocalizedString("Delete", comment: "Delete message button"), role: .destructive) {
                     viewModel.deleteMessage(message)
                 }
             }
             
-            Button("Copy".localized) {
+            Button(NSLocalizedString("Copy", comment: "Copy message button")) {
                 UIPasteboard.general.string = message.content
             }
             
-            Button("Share".localized) {
+            Button(NSLocalizedString("Share", comment: "Share message button")) {
                 print("🔄 ChatDetailView Share button pressed")
                 showingShareSheet = true
             }
             
-            Button("Create Task".localized) {
+            Button(NSLocalizedString("Create Task", comment: "Create task from message button")) {
                 print("🔄 ChatDetailView Create Task button pressed")
                 showingIntegrationSheet = true
             }
             
-            Button("Cancel".localized, role: .cancel) { }
+            Button(NSLocalizedString("Cancel", comment: "Cancel button in message actions"), role: .cancel) { }
         }
-        .alert("Error".localized, isPresented: $viewModel.showingError) {
-            Button("OK".localized) {
+        .alert(NSLocalizedString("Error", comment: "Error alert title"), isPresented: $viewModel.showingError) {
+            Button(NSLocalizedString("OK", comment: "OK button in error alert")) {
                 viewModel.showingError = false
                 viewModel.errorMessage = ""
             }
         } message: {
             Text(viewModel.errorMessage)
         }
-        .alert("Delete Chat".localized, isPresented: $viewModel.showingDeleteChatConfirmation) {
-            Button("Delete".localized, role: .destructive) {
+        .alert(NSLocalizedString("Delete Chat", comment: "Delete chat confirmation alert title"), isPresented: $viewModel.showingDeleteChatConfirmation) {
+            Button(NSLocalizedString("Delete", comment: "Delete button in delete chat alert"), role: .destructive) {
                 deleteChatAndDismiss()
             }
-            Button("Cancel".localized, role: .cancel) { }
+            Button(NSLocalizedString("Cancel", comment: "Cancel button in delete chat alert"), role: .cancel) { }
         } message: {
-            Text("Delete Chat Confirmation".localized)
+            Text(NSLocalizedString("Delete Chat Confirmation", comment: "Delete chat confirmation message"))
         }
         .onAppear {
             setupView()
@@ -570,7 +570,7 @@ struct ChatDetailView: View {
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    viewModel.showError("Failed to delete chat: \(error.localizedDescription)")
+                    viewModel.showError(String(format: NSLocalizedString("Failed to delete chat: %@", comment: "Error message for failed chat deletion"), error.localizedDescription))
                 }
             }
         }
@@ -584,11 +584,11 @@ struct ReplyBannerView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Reply to message".localized)
+                Text(NSLocalizedString("Reply to message", comment: "Reply banner title"))
                     .font(.caption)
                     .foregroundColor(.blue)
                 
-                Text(message.content.isEmpty ? "📷 Photo" : message.content)
+                Text(message.content.isEmpty ? NSLocalizedString("📷 Photo", comment: "Photo placeholder in reply banner") : message.content)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(1)
@@ -613,7 +613,7 @@ struct EditBannerView: View {
     
     var body: some View {
         HStack {
-            Text("Edit message".localized)
+            Text(NSLocalizedString("Edit message", comment: "Edit banner title"))
                 .font(.caption)
                 .foregroundColor(.orange)
             
@@ -652,12 +652,12 @@ struct MessageInputView: View {
             }
             
             HStack {
-                TextField(isEditing ? "Edit message...".localized : "Type a message...".localized, text: $text, axis: .vertical)
+                TextField(isEditing ? NSLocalizedString("Edit message...", comment: "Edit message text field placeholder") : NSLocalizedString("Type a message...", comment: "Type message text field placeholder"), text: $text, axis: .vertical)
                     .textFieldStyle(PlainTextFieldStyle())
                     .lineLimit(1...5)
                 
                 if isEditing {
-                    Button("Cancel".localized, action: onCancel)
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button in edit banner"), action: onCancel)
                         .font(.caption)
                         .foregroundColor(.red)
                 }
@@ -674,7 +674,7 @@ struct MessageInputView: View {
                         .foregroundColor(canSend ? .blue : .gray)
                 }
                 .disabled(!canSend || isSendingImage)
-                .accessibilityLabel(isEditing ? "Save changes" : "Send message")
+                .accessibilityLabel(isEditing ? NSLocalizedString("Save changes", comment: "Accessibility label for save changes button") : NSLocalizedString("Send message", comment: "Accessibility label for send message button"))
             }
         }
         .padding()

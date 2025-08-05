@@ -19,12 +19,12 @@ struct PersonalPermissionsEditorView: View {
                         editorIcon(icon: "person.crop.rectangle.stack.fill", color: .blue)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Personal Permissions".localized)
+                            Text(NSLocalizedString("Personal Permissions", comment: ""))
                                 .font(.body)
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary)
                             
-                            Text("\("Additional access for".localized) \(userName)")
+                            Text(String(format: NSLocalizedString("Additional access for %@", comment: ""), userName))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -33,7 +33,7 @@ struct PersonalPermissionsEditorView: View {
                     }
                     .padding(.vertical, 4)
                 } header: {
-                    Text("User Access".localized)
+                    Text(NSLocalizedString("User Access", comment: ""))
                 }
                 
                 // Description Section
@@ -41,7 +41,7 @@ struct PersonalPermissionsEditorView: View {
                     HStack(spacing: 12) {
                         editorIcon(icon: "info.circle.fill", color: .blue)
                         
-                        Text("\("Personal permissions grant additional access beyond the user's role. Select modules that".localized) \(userName) \("should have access to.".localized)")
+                        Text(String(format: NSLocalizedString("Personal permissions grant additional access beyond the user's role. Select modules that %@ should have access to.", comment: ""), userName))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
@@ -65,7 +65,7 @@ struct PersonalPermissionsEditorView: View {
                                         .fontWeight(.medium)
                                         .foregroundColor(.primary)
                                     
-                                    Text("Grant personal access".localized)
+                                    Text(NSLocalizedString("Grant personal access", comment: ""))
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                 }
@@ -87,7 +87,7 @@ struct PersonalPermissionsEditorView: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 } header: {
-                    Text("\("Available Modules".localized) (\(selectedModules.count) \("selected".localized))")
+                    Text(String(format: NSLocalizedString("%@ (%d %@)", comment: ""), NSLocalizedString("Available Modules", comment: ""), selectedModules.count, NSLocalizedString("selected", comment: "")))
                 }
                 
                 // Loading Section
@@ -97,7 +97,7 @@ struct PersonalPermissionsEditorView: View {
                             ProgressView()
                                 .scaleEffect(0.8)
                             
-                            Text("Saving permissions...".localized)
+                            Text(NSLocalizedString("Saving permissions...", comment: ""))
                                 .font(.body)
                                 .foregroundColor(.secondary)
                             
@@ -107,17 +107,17 @@ struct PersonalPermissionsEditorView: View {
                     }
                 }
             }
-            .navigationTitle("Personal Access".localized)
+            .navigationTitle(NSLocalizedString("Personal Access", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "")) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save".localized) {
+                    Button(NSLocalizedString("Save", comment: "")) {
                         savePermissions()
                     }
                     .disabled(isLoading)
@@ -128,9 +128,9 @@ struct PersonalPermissionsEditorView: View {
             }
             .alert(isPresented: $showAlert) {
                 Alert(
-                    title: Text("Personal Permissions".localized),
+                    title: Text(NSLocalizedString("Personal Permissions", comment: "")),
                     message: Text(alertMessage),
-                    dismissButton: .default(Text("OK".localized)) {
+                    dismissButton: .default(Text(NSLocalizedString("OK", comment: ""))) {
                         if alertMessage.contains("successfully") {
                             dismiss()
                         }
@@ -193,7 +193,7 @@ struct PersonalPermissionsEditorView: View {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             isLoading = false
-            alertMessage = "\("Personal permissions updated successfully for".localized) \(userName)"
+            alertMessage = String(format: NSLocalizedString("Personal permissions updated successfully for %@", comment: ""), userName)
             showAlert = true
         }
     }

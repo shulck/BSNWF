@@ -43,11 +43,11 @@ struct FanRegistrationView: View {
                             .foregroundColor(.purple)
                         
                         VStack(spacing: 8) {
-                            Text(NSLocalizedString("Join Fan Club", comment: ""))
+                            Text(NSLocalizedString("Join Fan Club", comment: "Join fan club header title"))
                                 .font(.title2)
                                 .fontWeight(.bold)
                             
-                            Text(NSLocalizedString("Connect with your favorite band and get exclusive access to events, merchandise, and updates!", comment: ""))
+                            Text(NSLocalizedString("Connect with your favorite band and get exclusive access to events, merchandise, and updates!", comment: "Fan club benefits description"))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.center)
@@ -61,16 +61,16 @@ struct FanRegistrationView: View {
                 // Invite code section
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text(NSLocalizedString("Invitation Code", comment: ""))
+                        Text(NSLocalizedString("Invitation Code", comment: "Invitation code section title"))
                             .font(.headline)
                             .foregroundColor(.primary)
                         
-                        Text(NSLocalizedString("Enter the invite code you received from the band", comment: ""))
+                        Text(NSLocalizedString("Enter the invite code you received from the band", comment: "Invitation code description"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
                         HStack {
-                            TextField(NSLocalizedString("Enter invite code", comment: ""), text: $inviteCode)
+                            TextField(NSLocalizedString("Enter invite code", comment: "Invite code text field placeholder"), text: $inviteCode)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .textInputAutocapitalization(.characters)
                                 .disableAutocorrection(true)
@@ -112,59 +112,59 @@ struct FanRegistrationView: View {
                         
                         // Validation message
                         if validationStatus == .invalid {
-                            Text(NSLocalizedString("Invalid invite code. Please check and try again.", comment: ""))
+                            Text(NSLocalizedString("Invalid invite code. Please check and try again.", comment: "Invalid invite code error message"))
                                 .font(.caption)
                                 .foregroundColor(.red)
                         } else if validationStatus == .valid {
                             HStack {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundColor(.green)
-                                Text(NSLocalizedString("Valid invite code! You can join this fan club.", comment: ""))
+                                Text(NSLocalizedString("Valid invite code! You can join this fan club.", comment: "Valid invite code success message"))
                                     .font(.caption)
                                     .foregroundColor(.green)
                             }
                         }
                     }
                 } header: {
-                    Text(NSLocalizedString("Step 1", comment: ""))
+                    Text(NSLocalizedString("Step 1", comment: "Step 1 header for invite code section"))
                 }
                 
                 // Fan profile section
                 Section {
                     VStack(alignment: .leading, spacing: 16) {
-                        Text(NSLocalizedString("Fan Profile", comment: ""))
+                        Text(NSLocalizedString("Fan Profile", comment: "Fan profile section title"))
                             .font(.headline)
                             .foregroundColor(.primary)
                         
                         // Nickname field
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(NSLocalizedString("Nickname", comment: ""))
+                            Text(NSLocalizedString("Nickname", comment: "Nickname field label"))
                                 .font(.subheadline)
                                 .fontWeight(.medium)
-                            TextField(NSLocalizedString("Enter your fan nickname", comment: ""), text: $nickname)
+                            TextField(NSLocalizedString("Enter your fan nickname", comment: "Nickname field placeholder"), text: $nickname)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                         
                         // Location field (optional)
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(NSLocalizedString("Location (Optional)", comment: ""))
+                            Text(NSLocalizedString("Location (Optional)", comment: "Location field label"))
                                 .font(.subheadline)
                                 .fontWeight(.medium)
-                            TextField(NSLocalizedString("City, Country", comment: ""), text: $location)
+                            TextField(NSLocalizedString("City, Country", comment: "Location field placeholder"), text: $location)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                         
                         // Favorite song field (optional)
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(NSLocalizedString("Favorite Song (Optional)", comment: ""))
+                            Text(NSLocalizedString("Favorite Song (Optional)", comment: "Favorite song field label"))
                                 .font(.subheadline)
                                 .fontWeight(.medium)
-                            TextField(NSLocalizedString("What's your favorite song?", comment: ""), text: $favoriteSong)
+                            TextField(NSLocalizedString("What's your favorite song?", comment: "Favorite song field placeholder"), text: $favoriteSong)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                     }
                 } header: {
-                    Text(NSLocalizedString("Step 2", comment: ""))
+                    Text(NSLocalizedString("Step 2", comment: "Step 2 header for fan profile section"))
                 }
                 
                 // Join button
@@ -177,7 +177,7 @@ struct FanRegistrationView: View {
                                     .scaleEffect(0.9)
                             } else {
                                 Image(systemName: "heart.fill")
-                                Text(NSLocalizedString("Join Fan Club", comment: ""))
+                                Text(NSLocalizedString("Join Fan Club", comment: "Join fan club button text"))
                             }
                         }
                         .font(.headline)
@@ -199,19 +199,19 @@ struct FanRegistrationView: View {
                 }
                 .listRowBackground(Color.clear)
             }
-            .navigationTitle(NSLocalizedString("Fan Registration", comment: ""))
+            .navigationTitle(NSLocalizedString("Fan Registration", comment: "Fan registration screen title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(NSLocalizedString("Cancel", comment: "")) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel registration button")) {
                         dismiss()
                     }
                     .foregroundColor(.primary)
                 }
             }
         }
-        .alert(NSLocalizedString("Registration Error", comment: ""), isPresented: $showErrorAlert) {
-            Button(NSLocalizedString("OK", comment: ""), role: .cancel) {}
+        .alert(NSLocalizedString("Registration Error", comment: "Registration error alert title"), isPresented: $showErrorAlert) {
+            Button(NSLocalizedString("OK", comment: "OK button in error alert"), role: .cancel) {}
         } message: {
             Text(errorMessage)
         }

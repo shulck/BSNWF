@@ -7,79 +7,79 @@ struct ConsentDetailsView: View {
         List {
             if let record = consentRecord {
                 Section {
-                    DetailRow(title: "Agreement Date".localized, value: record.formattedTimestamp)
-                    DetailRow(title: "Terms Version".localized, value: record.termsVersion)
-                    DetailRow(title: "App Version".localized, value: record.appVersion)
+                    DetailRow(title: NSLocalizedString("Agreement Date", comment: "Label for agreement date"), value: record.formattedTimestamp)
+                    DetailRow(title: NSLocalizedString("Terms Version", comment: "Label for terms version"), value: record.termsVersion)
+                    DetailRow(title: NSLocalizedString("App Version", comment: "Label for app version"), value: record.appVersion)
                 } header: {
-                    Text("Consent Information".localized)
+                    Text(NSLocalizedString("Consent Information", comment: "Section header for consent information"))
                 }
                 
                 Section {
-                    DetailRow(title: "Device Model".localized, value: record.deviceInfo.deviceModel)
-                    DetailRow(title: "Operating System".localized, value: "\(record.deviceInfo.systemName) \(record.deviceInfo.systemVersion)")
-                    DetailRow(title: "Device Identifier".localized, value: record.deviceInfo.deviceId)
+                    DetailRow(title: NSLocalizedString("Device Model", comment: "Label for device model"), value: record.deviceInfo.deviceModel)
+                    DetailRow(title: NSLocalizedString("Operating System", comment: "Label for operating system"), value: "\(record.deviceInfo.systemName) \(record.deviceInfo.systemVersion)")
+                    DetailRow(title: NSLocalizedString("Device Identifier", comment: "Label for device identifier"), value: record.deviceInfo.deviceId)
                 } header: {
-                    Text("Device Information".localized)
+                    Text(NSLocalizedString("Device Information", comment: "Section header for device information"))
                 }
                 
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Agreement Record".localized)
+                        Text(NSLocalizedString("Agreement Record", comment: "Title for agreement record section"))
                             .font(.body)
                             .fontWeight(.bold)
                         
-                        Text("This record confirms that you voluntarily agreed to our Terms of Service and Privacy Policy on the date shown above.".localized)
+                        Text(NSLocalizedString("This record confirms that you voluntarily agreed to our Terms of Service and Privacy Policy on the date shown above.", comment: "Explanation of agreement record"))
                             .font(.body)
                             .foregroundColor(.secondary)
                         
-                        Text("What This Means".localized)
+                        Text(NSLocalizedString("What This Means", comment: "Section title for what agreement means"))
                             .font(.body)
                             .fontWeight(.bold)
                             .padding(.top, 8)
                         
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("• You have read and accepted our terms and privacy policy".localized)
-                            Text("• Your consent was given freely and voluntarily".localized)
-                            Text("• You understand how we collect and use your data".localized)
-                            Text("• You can withdraw consent at any time".localized)
-                            Text("• This record helps us maintain compliance with privacy laws".localized)
+                            Text(NSLocalizedString("• You have read and accepted our terms and privacy policy", comment: "Agreement point 1"))
+                            Text(NSLocalizedString("• Your consent was given freely and voluntarily", comment: "Agreement point 2"))
+                            Text(NSLocalizedString("• You understand how we collect and use your data", comment: "Agreement point 3"))
+                            Text(NSLocalizedString("• You can withdraw consent at any time", comment: "Agreement point 4"))
+                            Text(NSLocalizedString("• This record helps us maintain compliance with privacy laws", comment: "Agreement point 5"))
                         }
                         .font(.caption)
                         .foregroundColor(.secondary)
                         
-                        Text("Your Rights".localized)
+                        Text(NSLocalizedString("Your Rights", comment: "Section title for user rights"))
                             .font(.body)
                             .fontWeight(.bold)
                             .padding(.top, 8)
                         
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("• Access and review your personal data".localized)
-                            Text("• Request corrections to inaccurate information".localized)
-                            Text("• Delete your account and data".localized)
-                            Text("• Export your data in portable formats".localized)
-                            Text("• Contact support with questions or concerns".localized)
+                            Text(NSLocalizedString("• Access and review your personal data", comment: "User right 1"))
+                            Text(NSLocalizedString("• Request corrections to inaccurate information", comment: "User right 2"))
+                            Text(NSLocalizedString("• Delete your account and data", comment: "User right 3"))
+                            Text(NSLocalizedString("• Export your data in portable formats", comment: "User right 4"))
+                            Text(NSLocalizedString("• Contact support with questions or concerns", comment: "User right 5"))
                         }
                         .font(.caption)
                         .foregroundColor(.secondary)
                     }
                 } header: {
-                    Text("Agreement Details".localized)
+                    Text(NSLocalizedString("Agreement Details", comment: "Section header for agreement details"))
                 }
                 
                 Section {
-                    Button("Export Consent Record".localized) {
+                    Button(NSLocalizedString("Export Consent Record", comment: "Button to export consent record")) {
                         exportConsentRecord(record)
                     }
                     .foregroundColor(.blue)
                     
-                    Button("Reset Consent (Testing Only)".localized) {
+                    Button(NSLocalizedString("Reset Consent (Testing Only)", comment: "Button to reset consent for testing")) {
                         resetConsent()
                     }
                     .foregroundColor(.orange)
                 } header: {
-                    Text("Actions".localized)
+                    Text(NSLocalizedString("Actions", comment: "Section header for action buttons"))
                 } footer: {
-                    Text("Resetting consent is intended for testing purposes and will require you to review and accept our terms again when you next open the app.".localized)
+                    Text(NSLocalizedString("Resetting consent is intended for testing purposes and will require you to review and accept our terms again when you next open the app.", comment: "Footer text explaining reset consent"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -90,16 +90,16 @@ struct ConsentDetailsView: View {
                             .font(.largeTitle)
                             .foregroundColor(.blue)
                         
-                        Text("No Consent Record Found".localized)
+                        Text(NSLocalizedString("No Consent Record Found", comment: "Title when no consent record exists"))
                             .font(.headline)
                             .fontWeight(.medium)
                         
-                        Text("You have not yet reviewed and accepted our Terms of Service and Privacy Policy. You will be prompted to review these documents when you next launch the app.".localized)
+                        Text(NSLocalizedString("You have not yet reviewed and accepted our Terms of Service and Privacy Policy. You will be prompted to review these documents when you next launch the app.", comment: "Explanation when no consent record exists"))
                             .font(.body)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                         
-                        Text("Your privacy and understanding of our terms are important to us.".localized)
+                        Text(NSLocalizedString("Your privacy and understanding of our terms are important to us.", comment: "Additional note about privacy importance"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -107,11 +107,11 @@ struct ConsentDetailsView: View {
                     }
                     .padding(.vertical, 20)
                 } header: {
-                    Text("Consent Status".localized)
+                    Text(NSLocalizedString("Consent Status", comment: "Section header for consent status"))
                 }
             }
         }
-        .navigationTitle("Consent Details".localized)
+        .navigationTitle(NSLocalizedString("Consent Details", comment: "Navigation title for consent details view"))
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
             loadConsentRecord()
@@ -125,29 +125,29 @@ struct ConsentDetailsView: View {
     private func exportConsentRecord(_ record: LegalConsentRecord) {
         // Create a user-friendly version of the consent record
         let exportText = """
-        \("BANDSYNC CONSENT RECORD".localized)
+        \(NSLocalizedString("BANDSYNC CONSENT RECORD", comment: "Title for exported consent record"))
         ======================
         
-        \("Agreement Date".localized): \(record.formattedTimestamp)
-        \("Terms Version".localized): \(record.termsVersion)
-        \("App Version".localized): \(record.appVersion)
+        \(NSLocalizedString("Agreement Date", comment: "Label for agreement date")): \(record.formattedTimestamp)
+        \(NSLocalizedString("Terms Version", comment: "Label for terms version")): \(record.termsVersion)
+        \(NSLocalizedString("App Version", comment: "Label for app version")): \(record.appVersion)
         
-        \("Device Information".localized):
-        - \("Model".localized): \(record.deviceInfo.deviceModel)
-        - \("System".localized): \(record.deviceInfo.systemName) \(record.deviceInfo.systemVersion)
-        - \("Device ID".localized): \(record.deviceInfo.deviceId)
+        \(NSLocalizedString("Device Information", comment: "Section header for device information")):
+        - \(NSLocalizedString("Model", comment: "Label for device model")): \(record.deviceInfo.deviceModel)
+        - \(NSLocalizedString("System", comment: "Label for operating system")): \(record.deviceInfo.systemName) \(record.deviceInfo.systemVersion)
+        - \(NSLocalizedString("Device ID", comment: "Label for device identifier")): \(record.deviceInfo.deviceId)
         
-        \("Summary".localized):
-        \("You voluntarily agreed to BandSync's Terms of Service and Privacy Policy on the date shown above. This record is maintained for compliance with privacy regulations and to document your informed consent.".localized)
+        \(NSLocalizedString("Summary", comment: "Summary section title")):
+        \(NSLocalizedString("You voluntarily agreed to BandSync's Terms of Service and Privacy Policy on the date shown above. This record is maintained for compliance with privacy regulations and to document your informed consent.", comment: "Summary text for consent record"))
         
-        \("Your Rights".localized):
-        - \("Access your personal data".localized)
-        - \("Request data corrections".localized)
-        - \("Delete your account and data".localized)
-        - \("Export your data".localized)
-        - \("Contact support for assistance".localized)
+        \(NSLocalizedString("Your Rights", comment: "Section title for user rights")):
+        - \(NSLocalizedString("Access your personal data", comment: "User right 1 short"))
+        - \(NSLocalizedString("Request data corrections", comment: "User right 2 short"))
+        - \(NSLocalizedString("Delete your account and data", comment: "User right 3 short"))
+        - \(NSLocalizedString("Export your data", comment: "User right 4 short"))
+        - \(NSLocalizedString("Contact support for assistance", comment: "User right 5 short"))
         
-        \("Record Generated".localized): \(Date().formatted(date: .abbreviated, time: .shortened))
+        \(NSLocalizedString("Record Generated", comment: "Label for record generation date")): \(Date().formatted(date: .abbreviated, time: .shortened))
         """
         
         let activityController = UIActivityViewController(
@@ -174,7 +174,7 @@ struct DetailRow: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title.localized)
+            Text(title)
                 .font(.body)
                 .fontWeight(.medium)
             Text(value)

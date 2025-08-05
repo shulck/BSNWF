@@ -15,13 +15,13 @@ struct JoinGroupView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Group code".localized)) {
-                    TextField("Enter invitation code".localized, text: $viewModel.groupCode)
+                Section(header: Text(NSLocalizedString("Group code", comment: "Header for group code input section"))) {
+                    TextField(NSLocalizedString("Enter invitation code", comment: "Placeholder for invitation code input field"), text: $viewModel.groupCode)
                         .autocapitalization(.allCharacters)
                 }
                 
                 Section {
-                    Button("Join".localized) {
+                    Button(NSLocalizedString("Join", comment: "Button to join a group")) {
                         joinGroup()
                     }
                     .disabled(viewModel.groupCode.isEmpty || viewModel.isLoading)
@@ -49,10 +49,10 @@ struct JoinGroupView: View {
                     }
                 }
             }
-            .navigationTitle("Join Group".localized)
+            .navigationTitle(NSLocalizedString("Join Group", comment: "Navigation title for join group screen"))
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button in join group screen")) {
                         dismiss()
                     }
                 }

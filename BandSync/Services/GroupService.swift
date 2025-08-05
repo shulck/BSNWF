@@ -38,6 +38,8 @@ final class GroupService: ObservableObject {
             if let data = try? snapshot?.data(as: GroupModel.self) {
                 DispatchQueue.main.async {
                     self.group = data
+                    // ✅ ИСПРАВЛЕНО: Автоматически загружаем участников группы
+                    self.fetchGroupMembersDirectly()
                     self.isLoading = false
                 }
                 completion(true)
@@ -47,6 +49,8 @@ final class GroupService: ObservableObject {
                     let group = self.parseGroupFromFirebase(data, id: id)
                     DispatchQueue.main.async {
                         self.group = group
+                        // ✅ ИСПРАВЛЕНО: Автоматически загружаем участников группы
+                        self.fetchGroupMembersDirectly()
                         self.isLoading = false
                     }
                     completion(true)
@@ -109,13 +113,156 @@ final class GroupService: ObservableObject {
         )
     }
     
+    // ✅ ИСПРАВЛЕНО: Прямая загрузка участников группы БЕЗ фильтрации UserService
+    private func fetchGroupMembersDirectly() {
+        guard let group = self.group else { 
+            return 
+        }
+        
+        let allUserIds = group.members + group.pendingMembers
+        
+        if allUserIds.isEmpty {
+            DispatchQueue.main.async {
+                self.groupMembers = []
+                self.pendingMembers = []
+            }
+            return
+        }
+        
+        // ✅ КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Используем thread-safe array
+        let dispatchGroup = DispatchGroup()
+        let syncQueue = DispatchQueue(label: "group.members.sync")
+        var loadedUsers: [UserModel] = []
+        
+        for userId in allUserIds {
+            dispatchGroup.enter()
+            
+            db.collection("users").document(userId).getDocument { snapshot, error in
+                defer { dispatchGroup.leave() }
+                
+                if let error = error {
+                    return
+                }
+                
+                guard let data = snapshot?.data() else {
+                    return
+                }
+                
+                // ✅ КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Правильно парсим fanProfile
+                let fanProfile = Self.parseFanProfile(from: data["fanProfile"])
+                
+                let user = UserModel(
+                    id: data["id"] as? String ?? userId,
+                    email: data["email"] as? String ?? "",
+                    name: data["name"] as? String ?? "",
+                    phone: data["phone"] as? String ?? "",
+                    groupId: data["groupId"] as? String,
+                    role: UserModel.UserRole(rawValue: data["role"] as? String ?? "Member") ?? .member,
+                    isOnline: data["isOnline"] as? Bool,
+                    lastSeen: (data["lastSeen"] as? Timestamp)?.dateValue(),
+                    avatarURL: data["avatarURL"] as? String,
+                    documentPermissions: nil,
+                    googleDriveEmail: data["googleDriveEmail"] as? String,
+                    hasGoogleDriveAccess: data["hasGoogleDriveAccess"] as? Bool,
+                    userType: UserType(rawValue: data["userType"] as? String ?? "BandMember") ?? .bandMember,
+                    fanGroupId: data["fanGroupId"] as? String,
+                    fanProfile: fanProfile
+                )
+                
+                // ✅ Thread-safe добавление
+                syncQueue.sync {
+                    loadedUsers.append(user)
+                }
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            // ✅ КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Лучшая фильтрация с отладкой
+            let members = loadedUsers.filter { user in
+                group.members.contains(user.id)
+            }
+            
+            let pending = loadedUsers.filter { user in
+                group.pendingMembers.contains(user.id)
+            }
+            
+            self.groupMembers = members
+            self.pendingMembers = pending
+        }
+    }
+    
+    // ✅ НОВЫЙ: Статический метод для парсинга FanProfile в GroupService
+    private static func parseFanProfile(from data: Any?) -> FanProfile? {
+        guard let fanProfileDict = data as? [String: Any],
+              let nickname = fanProfileDict["nickname"] as? String,
+              let joinDateTimestamp = fanProfileDict["joinDate"] as? Timestamp,
+              let location = fanProfileDict["location"] as? String,
+              let favoriteSong = fanProfileDict["favoriteSong"] as? String else {
+            return nil
+        }
+        
+        let joinDate = joinDateTimestamp.dateValue()
+        let levelString = fanProfileDict["level"] as? String ?? "Newbie"
+        let level = FanLevel(rawValue: levelString) ?? .newbie
+        let achievements = fanProfileDict["achievements"] as? [String] ?? []
+        let isModerator = fanProfileDict["isModerator"] as? Bool ?? false
+        
+        // Parse stats
+        var stats = FanStats()
+        if let statsDict = fanProfileDict["stats"] as? [String: Any] {
+            stats = FanStats(
+                totalMessages: statsDict["totalMessages"] as? Int ?? 0,
+                joinDate: (statsDict["joinDate"] as? Timestamp)?.dateValue() ?? joinDate,
+                lastActive: (statsDict["lastActive"] as? Timestamp)?.dateValue() ?? Date(),
+                merchandisePurchased: statsDict["merchandisePurchased"] as? Int ?? 0,
+                concertsAttended: statsDict["concertsAttended"] as? Int ?? 0,
+                achievementsUnlocked: statsDict["achievementsUnlocked"] as? Int ?? 0
+            )
+        }
+        
+        // Parse notification settings
+        var notificationSettings = FanNotificationSettings()
+        if let notificationDict = fanProfileDict["notificationSettings"] as? [String: Any] {
+            notificationSettings = FanNotificationSettings(
+                newConcerts: notificationDict["newConcerts"] as? Bool ?? true,
+                officialNews: notificationDict["officialNews"] as? Bool ?? true,
+                chatMessages: notificationDict["chatMessages"] as? Bool ?? true,
+                newMerch: notificationDict["newMerch"] as? Bool ?? true,
+                achievements: notificationDict["achievements"] as? Bool ?? true,
+                moderatorActions: notificationDict["moderatorActions"] as? Bool ?? false
+            )
+        }
+        
+        return FanProfile(
+            nickname: nickname,
+            joinDate: joinDate,
+            location: location,
+            favoriteSong: favoriteSong,
+            level: level,
+            achievements: achievements,
+            isModerator: isModerator,
+            stats: stats,
+            notificationSettings: notificationSettings
+        )
+    }
+    
+    // ✅ DEPRECATED: Старый метод с UserService (не используется)
     func fetchGroupMembers() {
         guard let groupId = group?.id else { return }
         
         UserService.shared.fetchUsers(for: groupId) { [weak self] users in
             DispatchQueue.main.async {
-                self?.groupMembers = users.filter { $0.groupId == groupId }
-                self?.pendingMembers = [] // Calculate pending separately if needed
+                // Фильтруем участников группы (members) и ожидающих (pendingMembers)
+                let memberIds = self?.group?.members ?? []
+                let pendingIds = self?.group?.pendingMembers ?? []
+                
+                self?.groupMembers = users.filter { user in
+                    memberIds.contains(user.id ?? "")
+                }
+                
+                self?.pendingMembers = users.filter { user in
+                    pendingIds.contains(user.id ?? "")
+                }
             }
         }
     }
@@ -356,7 +503,6 @@ final class GroupService: ObservableObject {
         db.collection("groups").document(groupId).updateData(groupData) { [weak self] error in
             DispatchQueue.main.async {
                 if let error = error {
-                    print("GroupService: error updating group: \(error.localizedDescription)")
                     completion(false)
                 } else {
                     self?.group = group

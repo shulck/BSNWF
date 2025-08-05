@@ -27,27 +27,27 @@ struct ContactDetailView: View {
     var body: some View {
         List {
             // Basic Information
-            Section("Information".localized) {
+            Section(NSLocalizedString("information", comment: "Information section")) {
                 if isEditing {
-                    TextField("Name".localized, text: $contact.name)
-                    TextField("Role".localized, text: $contact.role)
+                    TextField(NSLocalizedString("name", comment: "Name field"), text: $contact.name)
+                    TextField(NSLocalizedString("role", comment: "Role field"), text: $contact.role)
                 } else {
-                    LabeledContent("Name".localized, value: contact.name)
-                    LabeledContent("Role".localized, value: contact.role)
+                    LabeledContent(NSLocalizedString("name", comment: "Name label"), value: contact.name)
+                    LabeledContent(NSLocalizedString("role", comment: "Role label"), value: contact.role)
                     
                     if let eventTag = contact.eventTag, !eventTag.isEmpty {
-                        LabeledContent("Event".localized, value: eventTag)
+                        LabeledContent(NSLocalizedString("event", comment: "Event label"), value: eventTag)
                     }
                 }
             }
             
             // Contact Details
-            Section("Contact Details".localized) {
+            Section(NSLocalizedString("contactDetails", comment: "Contact Details section")) {
                 if isEditing {
                     // In edit mode show all phone numbers
                     phoneNumbersEditSection
                     
-                    TextField("Email".localized, text: $contact.email)
+                    TextField(NSLocalizedString("email", comment: "Email field"), text: $contact.email)
                         .keyboardType(.emailAddress)
                         .autocapitalization(.none)
                 } else {
@@ -59,7 +59,7 @@ struct ContactDetailView: View {
                             sendEmail(to: contact.email)
                         } label: {
                             HStack {
-                                Text("Email".localized)
+                                Text(NSLocalizedString("email", comment: "Email label"))
                                 Spacer()
                                 Text(contact.email)
                                     .foregroundColor(.blue)
@@ -75,34 +75,34 @@ struct ContactDetailView: View {
                (contact.contactSource != nil && !contact.contactSource!.isEmpty) ||
                (contact.website != nil && !contact.website!.isEmpty) ||
                (contact.address != nil && !contact.address!.isEmpty) {
-                Section("Professional Details".localized) {
+                Section(NSLocalizedString("professionalDetails", comment: "Professional Details section")) {
                     if isEditing {
-                        TextField("Company".localized, text: Binding(
+                        TextField(NSLocalizedString("company", comment: "Company field"), text: Binding(
                             get: { contact.company ?? "" },
                             set: { contact.company = $0.isEmpty ? nil : $0 }
                         ))
-                        TextField("Contact source edit placeholder".localized, text: Binding(
+                        TextField(NSLocalizedString("contactSourceEditPlaceholder", comment: "Contact source edit placeholder"), text: Binding(
                             get: { contact.contactSource ?? "" },
                             set: { contact.contactSource = $0.isEmpty ? nil : $0 }
                         ))
-                        TextField("Website".localized, text: Binding(
+                        TextField(NSLocalizedString("website", comment: "Website field"), text: Binding(
                             get: { contact.website ?? "" },
                             set: { contact.website = $0.isEmpty ? nil : $0 }
                         ))
                         .keyboardType(.URL)
                         .autocapitalization(.none)
-                        TextField("Address".localized, text: Binding(
+                        TextField(NSLocalizedString("address", comment: "Address field"), text: Binding(
                             get: { contact.address ?? "" },
                             set: { contact.address = $0.isEmpty ? nil : $0 }
                         ), axis: .vertical)
                         .lineLimit(2...4)
                     } else {
                         if let company = contact.company, !company.isEmpty {
-                            LabeledContent("Company".localized, value: company)
+                            LabeledContent(NSLocalizedString("company", comment: "Company label"), value: company)
                         }
                         
                         if let contactSource = contact.contactSource, !contactSource.isEmpty {
-                            LabeledContent("Contact Source".localized, value: contactSource)
+                            LabeledContent(NSLocalizedString("contactSource", comment: "Contact Source label"), value: contactSource)
                         }
                         
                         if let website = contact.website, !website.isEmpty {
@@ -110,7 +110,7 @@ struct ContactDetailView: View {
                                 openWebsite(website)
                             } label: {
                                 HStack {
-                                    Text("Website".localized)
+                                    Text(NSLocalizedString("website", comment: "Website label"))
                                     Spacer()
                                     Text(website)
                                         .foregroundColor(.blue)
@@ -120,16 +120,16 @@ struct ContactDetailView: View {
                         }
                         
                         if let address = contact.address, !address.isEmpty {
-                            LabeledContent("Address".localized, value: address)
+                            LabeledContent(NSLocalizedString("address", comment: "Address label"), value: address)
                         }
                     }
                 }
             }
             
             // Notes
-            Section("Notes & Description".localized) {
+            Section(NSLocalizedString("notesDescription", comment: "Notes & Description section")) {
                 if isEditing {
-                    TextField("Contact notes edit placeholder".localized, text: Binding(
+                    TextField(NSLocalizedString("contactNotesEditPlaceholder", comment: "Contact notes edit placeholder"), text: Binding(
                         get: { contact.description ?? "" },
                         set: { contact.description = $0.isEmpty ? nil : $0 }
                     ), axis: .vertical)
@@ -140,7 +140,7 @@ struct ContactDetailView: View {
                         Text(description)
                             .font(.body)
                     } else {
-                        Text("No notes added".localized)
+                        Text(NSLocalizedString("noNotesAdded", comment: "No notes added"))
                             .foregroundColor(.secondary)
                             .font(.subheadline)
                     }
@@ -149,19 +149,19 @@ struct ContactDetailView: View {
             
             // Quick Actions (only in view mode)
             if !isEditing && !phoneNumbers.isEmpty {
-                Section("Quick Actions".localized) {
+                Section(NSLocalizedString("quickActions", comment: "Quick Actions section")) {
                     // Show buttons for first number if multiple numbers exist
                     if let primaryPhone = phoneNumbers.first {
                         Button {
                             call(phone: primaryPhone)
                         } label: {
-                            Label(phoneNumbers.count > 1 ? "Call (Primary)".localized : "Call".localized, systemImage: "phone")
+                            Label(phoneNumbers.count > 1 ? NSLocalizedString("callPrimary", comment: "Call (Primary)") : NSLocalizedString("call", comment: "Call"), systemImage: "phone")
                         }
                         
                         Button {
                             sendSMS(to: primaryPhone)
                         } label: {
-                            Label(phoneNumbers.count > 1 ? "Send SMS (Primary)".localized : "Send SMS".localized, systemImage: "message")
+                            Label(phoneNumbers.count > 1 ? NSLocalizedString("sendSMSPrimary", comment: "Send SMS (Primary)") : NSLocalizedString("sendSMS", comment: "Send SMS"), systemImage: "message")
                         }
                     }
                     
@@ -169,7 +169,7 @@ struct ContactDetailView: View {
                         Button {
                             sendEmail(to: contact.email)
                         } label: {
-                            Label("Send Email".localized, systemImage: "envelope")
+                            Label(NSLocalizedString("sendEmail", comment: "Send Email"), systemImage: "envelope")
                         }
                     }
                 }
@@ -177,25 +177,25 @@ struct ContactDetailView: View {
                 // Delete button
                 if AppState.shared.hasEditPermission(for: .contacts) {
                     Section {
-                        Button("Delete Contact".localized, role: .destructive) {
+                        Button(NSLocalizedString("deleteContact", comment: "Delete Contact"), role: .destructive) {
                             showingDeleteConfirmation = true
                         }
                     }
                 }
             }
         }
-        .navigationTitle(isEditing ? "Edit Contact".localized : contact.name)
+        .navigationTitle(isEditing ? NSLocalizedString("editContact", comment: "Edit Contact") : contact.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             // Edit/Save button
             if AppState.shared.hasEditPermission(for: .contacts) {
                 ToolbarItem(placement: .primaryAction) {
                     if isEditing {
-                        Button("Save".localized) {
+                        Button(NSLocalizedString("save", comment: "Save button")) {
                             saveChanges()
                         }
                     } else {
-                        Button("Edit".localized) {
+                        Button(NSLocalizedString("edit", comment: "Edit button")) {
                             isEditing = true
                         }
                     }
@@ -205,7 +205,7 @@ struct ContactDetailView: View {
             // Cancel button (only in edit mode)
             if isEditing {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("cancel", comment: "Cancel button")) {
                         // Restore original data
                         if let original = contactService.contacts.first(where: { $0.id == contact.id }) {
                             contact = original
@@ -216,23 +216,23 @@ struct ContactDetailView: View {
                 }
             }
         }
-        .alert("Delete Contact?".localized, isPresented: $showingDeleteConfirmation) {
-            Button("Cancel".localized, role: .cancel) {}
-            Button("Delete".localized, role: .destructive) {
+        .alert(NSLocalizedString("deleteContactQuestion", comment: "Delete Contact?"), isPresented: $showingDeleteConfirmation) {
+            Button(NSLocalizedString("cancel", comment: "Cancel"), role: .cancel) {}
+            Button(NSLocalizedString("delete", comment: "Delete"), role: .destructive) {
                 deleteContact()
             }
         } message: {
-            Text("Delete contact confirmation".localized)
+            Text(NSLocalizedString("deleteContactConfirmation", comment: "Delete contact confirmation"))
         }
-        .alert("Add Phone Number".localized, isPresented: $showingAddPhone) {
-            TextField("Phone number".localized, text: $newPhoneNumber)
+        .alert(NSLocalizedString("addPhoneNumber", comment: "Add Phone Number"), isPresented: $showingAddPhone) {
+            TextField(NSLocalizedString("phoneNumber", comment: "Phone number"), text: $newPhoneNumber)
                 .keyboardType(.phonePad)
             
-            Button("Cancel".localized, role: .cancel) {
+            Button(NSLocalizedString("cancel", comment: "Cancel"), role: .cancel) {
                 newPhoneNumber = ""
             }
             
-            Button("Add".localized) {
+            Button(NSLocalizedString("add", comment: "Add")) {
                 if !newPhoneNumber.isEmpty {
                     phoneNumbers.append(newPhoneNumber)
                     newPhoneNumber = ""
@@ -252,7 +252,7 @@ struct ContactDetailView: View {
                     call(phone: phoneNumber)
                 } label: {
                     HStack {
-                        Text(phoneNumbers.count > 1 ? String(format: "Phone %d".localized, index + 1) : "Phone".localized)
+                        Text(phoneNumbers.count > 1 ? String.localizedStringWithFormat(NSLocalizedString("phoneNumbered", comment: "Phone %d"), index + 1) : NSLocalizedString("phone", comment: "Phone"))
                         Spacer()
                         Text(phoneNumber)
                             .foregroundColor(.blue)
@@ -267,7 +267,7 @@ struct ContactDetailView: View {
     private var phoneNumbersEditSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Phone Numbers".localized)
+                Text(NSLocalizedString("phoneNumbers", comment: "Phone Numbers"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
@@ -283,14 +283,14 @@ struct ContactDetailView: View {
             }
             
             if phoneNumbers.isEmpty {
-                Text("No phone numbers".localized)
+                Text(NSLocalizedString("noPhoneNumbers", comment: "No phone numbers"))
                     .foregroundColor(.secondary)
                     .font(.subheadline)
                     .padding(.vertical, 4)
             } else {
                 ForEach(Array(phoneNumbers.enumerated()), id: \.offset) { index, phoneNumber in
                     HStack {
-                        TextField(String(format: "Phone %d".localized, index + 1), text: Binding(
+                        TextField(String.localizedStringWithFormat(NSLocalizedString("phoneNumbered", comment: "Phone %d"), index + 1), text: Binding(
                             get: { phoneNumbers[index] },
                             set: { phoneNumbers[index] = $0 }
                         ))

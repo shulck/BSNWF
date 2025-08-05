@@ -5,55 +5,14 @@ import Charts
 
 struct FinanceChartView: View {
     let records: [FinanceRecord]
+    @Binding var selectedCurrency: Currency  // Now uses shared Currency enum
     @State private var chartType: ChartType = .monthly
     @State private var selectedIndex: Int? = nil
     @State private var animateChart = false
-    @State private var selectedCurrency: Currency = .usd
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     
-    // MARK: - Currency Support (same as FinancesView)
-    enum Currency: String, CaseIterable, Identifiable {
-        case usd = "USD"
-        case eur = "EUR"
-        case uah = "UAH"
-        case gbp = "GBP"
-        case cad = "CAD"
-        case aud = "AUD"
-        case chf = "CHF"
-        case jpy = "JPY"
-        case pln = "PLN"
-        case czk = "CZK"
-        case sek = "SEK"
-        case nok = "NOK"
-        case dkk = "DKK"
-        
-        var id: String { self.rawValue }
-        
-        var symbol: String {
-            switch self {
-            case .usd, .cad, .aud: return "$"
-            case .eur: return "€"
-            case .uah: return "₴"
-            case .gbp: return "£"
-            case .chf: return "₣"
-            case .jpy: return "¥"
-            case .pln: return "zł"
-            case .czk: return "Kč"
-            case .sek: return "kr"
-            case .nok: return "kr"
-            case .dkk: return "kr"
-            }
-        }
-        
-        // Device default currency based on locale
-        static var deviceDefault: Currency {
-            let locale = Locale.current
-            let currencyCode = locale.currency?.identifier ?? "USD"
-            return Currency(rawValue: currencyCode.uppercased()) ?? .usd
-        }
-    }
-    
+    // MARK: - Chart Type Support
     enum ChartType: String, CaseIterable, Identifiable {
         case monthly = "MONTHLY"
         case category = "CATEGORY"
@@ -63,9 +22,9 @@ struct FinanceChartView: View {
         var localizedName: String {
             switch self {
             case .monthly:
-                return "Monthly".localized
+                return NSLocalizedString("Monthly", comment: "Monthly chart type label")
             case .category:
-                return "Category".localized
+                return NSLocalizedString("Category", comment: "Category chart type label")
             }
         }
         
@@ -131,8 +90,8 @@ struct FinanceChartView: View {
             }
         }
         .onAppear {
-            // Set device default currency
-            selectedCurrency = Currency.deviceDefault
+            // Currency is now passed from parent via @Binding
+            // No need to set it here
             
             // Animate the chart after a short delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -163,12 +122,12 @@ struct FinanceChartView: View {
         VStack(spacing: 12) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Financial Statistics".localized)
+                    Text(NSLocalizedString("Financial Statistics", comment: "Header title for financial statistics view"))
                         .font(.title2.bold())
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
                     
-                    Text(String(format: "%d transactions".localized, records.count))
+                    Text(String(format: NSLocalizedString("%d transactions", comment: "Number of transactions label"), records.count))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -192,7 +151,7 @@ struct FinanceChartView: View {
             // Currency indicator
             HStack {
                 HStack(spacing: 8) {
-                    Text("currency:".localized)
+                    Text(NSLocalizedString("currency:", comment: "Currency indicator label"))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     
@@ -200,7 +159,7 @@ struct FinanceChartView: View {
                         .font(.title3)
                         .fontWeight(.medium)
                     
-                    Text(selectedCurrency.rawValue)
+                    Text(selectedCurrency.name)
                         .font(.subheadline)
                         .fontWeight(.medium)
                 }
@@ -262,7 +221,7 @@ struct FinanceChartView: View {
             HStack(spacing: 12) {
                 // Income card
                 statCard(
-                    title: "Income".localized,
+                    title: NSLocalizedString("Income", comment: "Income card title"),
                     value: totalIncome,
                     icon: "arrow.down.circle.fill",
                     color: .green
@@ -270,7 +229,7 @@ struct FinanceChartView: View {
                 
                 // Expense card
                 statCard(
-                    title: "Expenses".localized,
+                    title: NSLocalizedString("Expenses", comment: "Expenses card title"),
                     value: totalExpense,
                     icon: "arrow.up.circle.fill",
                     color: .red
@@ -284,7 +243,7 @@ struct FinanceChartView: View {
                         .font(.headline)
                         .foregroundColor(profit >= 0 ? .green : .red)
                     
-                    Text("Balance".localized)
+                    Text(NSLocalizedString("Balance", comment: "Balance card title"))
                         .font(.headline)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
@@ -333,7 +292,7 @@ struct FinanceChartView: View {
                     
                     // Legend for gauge
                     HStack {
-                        Text("Income".localized)
+                        Text(NSLocalizedString("Income", comment: "Income label for gauge legend"))
                             .font(.caption)
                             .foregroundColor(.green)
                             .lineLimit(1)
@@ -341,7 +300,7 @@ struct FinanceChartView: View {
                         
                         Spacer()
                         
-                        Text("Expenses".localized)
+                        Text(NSLocalizedString("Expenses", comment: "Expenses label for gauge legend"))
                             .font(.caption)
                             .foregroundColor(.red)
                             .lineLimit(1)
@@ -450,10 +409,10 @@ struct FinanceChartView: View {
                 .padding(.top, 40)
             
             VStack(spacing: 12) {
-                Text("No financial data".localized)
+                Text(NSLocalizedString("No financial data", comment: "Empty state title"))
                     .font(.title3.bold())
                 
-                Text("Add income or expense transactions to track your finances".localized)
+                Text(NSLocalizedString("Add income or expense transactions to track your finances", comment: "Empty state description"))
                     .font(.body)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
@@ -465,7 +424,7 @@ struct FinanceChartView: View {
             } label: {
                 HStack {
                     Image(systemName: "plus")
-                    Text("Add Transactions".localized)
+                    Text(NSLocalizedString("Add Transactions", comment: "Button to add transactions"))
                 }
                 .font(.headline)
                 .padding(.vertical, 14)
@@ -515,7 +474,7 @@ struct FinanceChartView: View {
                 
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Period".localized)
+                        Text(NSLocalizedString("Period", comment: "Chart period label"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
@@ -556,7 +515,7 @@ struct FinanceChartView: View {
                 monthlyBreakdownSection
             } else {
                 // No data
-                noDataView("No monthly data".localized)
+                noDataView(NSLocalizedString("No monthly data", comment: "No monthly data available message"))
             }
         }
     }
@@ -570,7 +529,7 @@ struct FinanceChartView: View {
                 // Income bars
                 BarMark(
                     x: .value("Month", record.month, unit: .month),
-                    y: .value("Income".localized, record.income)
+                    y: .value(NSLocalizedString("Income", comment: "Chart axis label for income"), record.income)
                 )
                 .foregroundStyle(
                     LinearGradient(
@@ -585,7 +544,7 @@ struct FinanceChartView: View {
                 // Expense bars (negative values)
                 BarMark(
                     x: .value("Month", record.month, unit: .month),
-                    y: .value("Expense".localized, -record.expense)
+                    y: .value(NSLocalizedString("Expense", comment: "Chart axis label for expense"), -record.expense)
                 )
                 .foregroundStyle(
                     LinearGradient(
@@ -700,7 +659,7 @@ struct FinanceChartView: View {
             HStack(spacing: 16) {
                 // Income
                 VStack(spacing: 2) {
-                    Text("Income".localized)
+                    Text(NSLocalizedString("Income", comment: "Income label for selected month details"))
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     
@@ -718,7 +677,7 @@ struct FinanceChartView: View {
                 
                 // Expense
                 VStack(spacing: 2) {
-                    Text("Expense".localized)
+                    Text(NSLocalizedString("Expense", comment: "Expense label for selected month details"))
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     
@@ -736,7 +695,7 @@ struct FinanceChartView: View {
                 
                 // Balance
                 VStack(spacing: 2) {
-                    Text("Balance".localized)
+                    Text(NSLocalizedString("Balance", comment: "Balance label for selected month details"))
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     
@@ -758,7 +717,7 @@ struct FinanceChartView: View {
     // Monthly breakdown
     private var monthlyBreakdownSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Monthly Breakdown".localized)
+            Text(NSLocalizedString("Monthly Breakdown", comment: "Monthly breakdown section title"))
                 .font(.headline)
                 .padding(.horizontal, 16)
             
@@ -874,7 +833,7 @@ struct FinanceChartView: View {
         VStack(alignment: .leading, spacing: 20) {
             // Category filter tabs
             HStack {
-                Text("Categories".localized)
+                Text(NSLocalizedString("Categories", comment: "Categories section title"))
                     .font(.headline)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
@@ -888,9 +847,9 @@ struct FinanceChartView: View {
                         }
                     }
                 )) {
-                    Text("All".localized).tag(CategoryFilter.all)
-                    Text("Income".localized).tag(CategoryFilter.income)
-                    Text("Expense".localized).tag(CategoryFilter.expense)
+                    Text(NSLocalizedString("All", comment: "All categories filter option")).tag(CategoryFilter.all)
+                    Text(NSLocalizedString("Income", comment: "Income categories filter option")).tag(CategoryFilter.income)
+                    Text(NSLocalizedString("Expense", comment: "Expense categories filter option")).tag(CategoryFilter.expense)
                 }
                 .pickerStyle(.segmented)
                 .padding(3)
@@ -903,7 +862,7 @@ struct FinanceChartView: View {
             
             if filteredCategoryRecords.isEmpty {
                 // No data for selected filter
-                noDataView("No data for category".localized)
+                noDataView(NSLocalizedString("No data for category", comment: "No data message for category filter"))
             } else {
                 // Category chart
                 VStack(spacing: 20) {
@@ -1083,8 +1042,8 @@ struct FinanceChartView: View {
                         .font(.headline)
                     
                     Text(record.isIncome ?
-                         "Income Category".localized :
-                         "Expense Category".localized)
+                         NSLocalizedString("Income Category", comment: "Income category type label") :
+                         NSLocalizedString("Expense Category", comment: "Expense category type label"))
                         .font(.subheadline)
                         .foregroundColor(record.isIncome ? .green : .red)
                 }
@@ -1124,7 +1083,7 @@ struct FinanceChartView: View {
     // Category breakdown section
     private var categoryBreakdownSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Category Overview".localized)
+            Text(NSLocalizedString("Category Overview", comment: "Category overview section title"))
                 .font(.headline)
                 .padding(.horizontal, 16)
             
@@ -1188,7 +1147,7 @@ struct FinanceChartView: View {
                     Button {
                         // Show more categories
                     } label: {
-                        Text("View All".localized)
+                        Text(NSLocalizedString("View All", comment: "View all categories button"))
                             .font(.subheadline)
                             .foregroundColor(.blue)
                             .padding(.vertical, 10)
@@ -1218,7 +1177,7 @@ struct FinanceChartView: View {
         }.sorted { $0.date > $1.date }
         
         return VStack(alignment: .leading, spacing: 16) {
-            Text("Recent Transactions".localized)
+            Text(NSLocalizedString("Recent Transactions", comment: "Recent transactions section title"))
                 .font(.headline)
                 .padding(.horizontal, 16)
             
@@ -1243,7 +1202,7 @@ struct FinanceChartView: View {
                         // Transaction details
                         VStack(alignment: .leading, spacing: 4) {
                             Text(transaction.details.isEmpty ?
-                                 "No description".localized :
+                                 NSLocalizedString("No description", comment: "No description for transaction") :
                                  transaction.details)
                                 .font(.subheadline)
                                 .fontWeight(.medium)
@@ -1276,7 +1235,7 @@ struct FinanceChartView: View {
                         // Show all transactions
                     } label: {
                         HStack {
-                            Text("View All".localized)
+                            Text(NSLocalizedString("View All", comment: "View all transactions button"))
                             Image(systemName: "chevron.right")
                         }
                         .font(.subheadline)
@@ -1378,8 +1337,18 @@ struct FinanceChartView: View {
     
     // Array of short month names for more reliable formatting
     private let monthNamesShort = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        NSLocalizedString("Jan", comment: "Short month name for January"),
+        NSLocalizedString("Feb", comment: "Short month name for February"),
+        NSLocalizedString("Mar", comment: "Short month name for March"),
+        NSLocalizedString("Apr", comment: "Short month name for April"),
+        NSLocalizedString("May", comment: "Short month name for May"),
+        NSLocalizedString("Jun", comment: "Short month name for June"),
+        NSLocalizedString("Jul", comment: "Short month name for July"),
+        NSLocalizedString("Aug", comment: "Short month name for August"),
+        NSLocalizedString("Sep", comment: "Short month name for September"),
+        NSLocalizedString("Oct", comment: "Short month name for October"),
+        NSLocalizedString("Nov", comment: "Short month name for November"),
+        NSLocalizedString("Dec", comment: "Short month name for December")
     ]
     
     // Date formatters

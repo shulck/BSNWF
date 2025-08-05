@@ -242,7 +242,7 @@ struct FanAchievementBadgesDetailView: View {
                     
                     // Заголовок достижений
                     HStack {
-                        Text("Unlocked Achievements")
+                        Text(NSLocalizedString("Unlocked Achievements", comment: "Title for the unlocked achievements section"))
                             .font(.title2)
                             .fontWeight(.bold)
                         
@@ -262,11 +262,11 @@ struct FanAchievementBadgesDetailView: View {
                                 .font(.system(size: 48))
                                 .foregroundColor(.gray)
                             
-                            Text("No achievements yet")
+                            Text(NSLocalizedString("No achievements yet", comment: "Message shown when user has no achievements"))
                                 .font(.headline)
                                 .foregroundColor(.secondary)
                             
-                            Text("Keep participating to unlock achievements!")
+                            Text(NSLocalizedString("Keep participating to unlock achievements!", comment: "Encouragement message for unlocking achievements"))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.center)
@@ -324,11 +324,11 @@ struct FanAchievementBadgesDetailView: View {
                     }
                 }
             }
-            .navigationTitle("Achievements")
+            .navigationTitle(NSLocalizedString("Achievements", comment: "Navigation title for achievements screen"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(NSLocalizedString("Done", comment: "Button to dismiss achievements screen")) {
                         dismiss()
                     }
                 }

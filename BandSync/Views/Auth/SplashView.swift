@@ -6,14 +6,14 @@ struct SplashView: View {
     @State private var progress: Double = 0.0
     @State private var logoScale: CGFloat = 1.0
     @State private var showProgressBar = false
-    @State private var loadingText = "Initializing..."
+    @State private var loadingText = NSLocalizedString("Initializing...", comment: "")
     
     private let loadingSteps = [
-        "Initializing...",
-        "Loading user data...",
-        "Connecting to server...",
-        "Preparing interface...",
-        "Almost ready..."
+        NSLocalizedString("Initializing...", comment: ""),
+        NSLocalizedString("Loading user data...", comment: ""),
+        NSLocalizedString("Connecting to server...", comment: ""),
+        NSLocalizedString("Preparing interface...", comment: ""),
+        NSLocalizedString("Almost ready...", comment: "")
     ]
     
     var body: some View {
@@ -244,7 +244,7 @@ private struct LoadingUserView: View {
             ProgressView()
                 .scaleEffect(1.2)
             
-            Text("Loading user data...")
+            Text(NSLocalizedString("Loading user data...", comment: ""))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }

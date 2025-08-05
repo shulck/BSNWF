@@ -15,43 +15,43 @@ struct SettingsView: View {
             Section {
                 NavigationLink(destination: NotificationSettingsView()) {
                     settingsRow(
-                        title: "Notifications".localized,
-                        subtitle: "Manage alerts and reminders".localized,
+                        title: NSLocalizedString("Notifications", comment: "Settings section for notifications"),
+                        subtitle: NSLocalizedString("Manage alerts and reminders", comment: "Settings subtitle for notifications"),
                         icon: "bell.fill",
                         color: .orange
                     )
                 }
             } header: {
-                Text("Preferences".localized)
+                Text(NSLocalizedString("Preferences", comment: "Settings section header for preferences"))
             }
             
             Section {
                 NavigationLink(destination: AccountSettingsView()) {
                     settingsRow(
-                        title: "Account".localized,
-                        subtitle: "Password, security, delete account".localized,
+                        title: NSLocalizedString("Account", comment: "Settings section for account"),
+                        subtitle: NSLocalizedString("Password, security, delete account", comment: "Settings subtitle for account"),
                         icon: "person.circle",
                         color: .green
                     )
                 }
             } header: {
-                Text("Account".localized)
+                Text(NSLocalizedString("Account", comment: "Settings section header for account"))
             }
             
             Section {
                 NavigationLink(destination: AboutView()) {
                     settingsRow(
-                        title: "About & Legal".localized,
-                        subtitle: "App info, terms, privacy, support".localized,
+                        title: NSLocalizedString("About & Legal", comment: "Settings section for about and legal"),
+                        subtitle: NSLocalizedString("App info, terms, privacy, support", comment: "Settings subtitle for about and legal"),
                         icon: "info.circle.fill",
                         color: .purple
                     )
                 }
             } header: {
-                Text("Information".localized)
+                Text(NSLocalizedString("Information", comment: "Settings section header for information"))
             }
         }
-        .navigationTitle("Settings".localized)
+        .navigationTitle(NSLocalizedString("Settings", comment: "Navigation title for settings"))
         .navigationBarTitleDisplayMode(.inline)
     }
     

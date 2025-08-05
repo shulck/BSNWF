@@ -23,9 +23,9 @@ struct AddTransactionView: View {
     
     private var navigationTitle: String {
         if horizontalSizeClass == .compact {
-            return "New Transaction".localized
+            return NSLocalizedString("New Transaction", comment: "New transaction navigation title")
         } else {
-            return "Add New Financial Transaction".localized
+            return NSLocalizedString("Add New Financial Transaction", comment: "Add new financial transaction navigation title")
         }
     }
     
@@ -64,12 +64,12 @@ struct AddTransactionView: View {
                                     .foregroundStyle(.blue)
                                 
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Transaction Type".localized)
+                                    Text(NSLocalizedString("Transaction Type", comment: "Transaction type label"))
                                         .font(.caption)
                                         .fontWeight(.bold)
                                         .foregroundColor(.secondary)
                                     
-                                    Text("Choose Transaction Type".localized)
+                                    Text(NSLocalizedString("Choose Transaction Type", comment: "Choose transaction type description"))
                                         .font(.subheadline)
                                         .foregroundColor(.primary)
                                 }
@@ -78,8 +78,8 @@ struct AddTransactionView: View {
                             }
                             
                             Picker("", selection: $type) {
-                                Text("Income".localized).tag(FinanceType.income)
-                                Text("Expense".localized).tag(FinanceType.expense)
+                                Text(NSLocalizedString("Income", comment: "Income transaction type")).tag(FinanceType.income)
+                                Text(NSLocalizedString("Expense", comment: "Expense transaction type")).tag(FinanceType.expense)
                             }
                             .pickerStyle(.segmented)
                             .padding(6)
@@ -107,12 +107,12 @@ struct AddTransactionView: View {
                                     .foregroundStyle(.orange)
                                 
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Category".localized)
+                                    Text(NSLocalizedString("Category", comment: "Category label"))
                                         .font(.caption)
                                         .fontWeight(.bold)
                                         .foregroundColor(.secondary)
                                     
-                                    Text("Select Category".localized)
+                                    Text(NSLocalizedString("Select Category", comment: "Select category description"))
                                         .font(.subheadline)
                                         .foregroundColor(.primary)
                                 }
@@ -137,7 +137,7 @@ struct AddTransactionView: View {
                                 }
                             }
                             
-                            Picker("Category".localized, selection: $category) {
+                            Picker(NSLocalizedString("Category", comment: "Category picker label"), selection: $category) {
                                 ForEach(FinanceCategory.forType(type)) { cat in
                                     HStack {
                                         ZStack {
@@ -179,12 +179,12 @@ struct AddTransactionView: View {
                                     .foregroundStyle(.green)
                                 
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Transaction Details".localized)
+                                    Text(NSLocalizedString("Transaction Details", comment: "Transaction details label"))
                                         .font(.caption)
                                         .fontWeight(.bold)
                                         .foregroundColor(.secondary)
                                     
-                                    Text("Enter amount and details".localized)
+                                    Text(NSLocalizedString("Enter amount and details", comment: "Enter amount and details description"))
                                         .font(.subheadline)
                                         .foregroundColor(.primary)
                                 }
@@ -193,13 +193,13 @@ struct AddTransactionView: View {
                             }
                             
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Amount".localized)
+                                Text(NSLocalizedString("Amount", comment: "Amount label"))
                                     .font(.subheadline)
                                     .fontWeight(.medium)
                                     .foregroundColor(.secondary)
                                 
                                 HStack(spacing: 12) {
-                                    TextField("0.00".localized, text: $amount)
+                                    TextField(NSLocalizedString("0.00", comment: "Amount placeholder"), text: $amount)
                                         .keyboardType(.decimalPad)
                                         .font(.title)
                                         .fontWeight(.bold)
@@ -249,7 +249,7 @@ struct AddTransactionView: View {
                                     HStack(spacing: 8) {
                                         Image(systemName: "exclamationmark.triangle.fill")
                                             .foregroundColor(.red)
-                                        Text("Please enter a valid amount".localized)
+                                        Text(NSLocalizedString("Please enter a valid amount", comment: "Invalid amount error message"))
                                             .font(.callout)
                                             .foregroundColor(.red)
                                     }
@@ -258,12 +258,12 @@ struct AddTransactionView: View {
                             }
                             
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Description".localized)
+                                Text(NSLocalizedString("Description", comment: "Description label"))
                                     .font(.subheadline)
                                     .fontWeight(.medium)
                                     .foregroundColor(.secondary)
                                 
-                                TextField("Add description".localized, text: $details)
+                                TextField(NSLocalizedString("Add description", comment: "Add description placeholder"), text: $details)
                                     .padding(16)
                                     .background(
                                         RoundedRectangle(cornerRadius: 16)
@@ -272,7 +272,7 @@ struct AddTransactionView: View {
                             }
                             
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Date".localized)
+                                Text(NSLocalizedString("Date", comment: "Date label"))
                                     .font(.subheadline)
                                     .fontWeight(.medium)
                                     .foregroundColor(.secondary)
@@ -301,12 +301,12 @@ struct AddTransactionView: View {
                                     .foregroundStyle(.purple)
                                 
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Receipt".localized)
+                                    Text(NSLocalizedString("Receipt", comment: "Receipt label"))
                                         .font(.caption)
                                         .fontWeight(.bold)
                                         .foregroundColor(.secondary)
                                     
-                                    Text("Scan or attach receipt".localized)
+                                    Text(NSLocalizedString("Scan or attach receipt", comment: "Scan or attach receipt description"))
                                         .font(.subheadline)
                                         .foregroundColor(.primary)
                                 }
@@ -330,11 +330,11 @@ struct AddTransactionView: View {
                                         }
                                         
                                         VStack(alignment: .leading, spacing: 4) {
-                                            Text("Receipt added".localized)
+                                            Text(NSLocalizedString("Receipt added", comment: "Receipt added status"))
                                                 .fontWeight(.bold)
                                                 .foregroundColor(.green)
                                             
-                                            Text("Tap to change".localized)
+                                            Text(NSLocalizedString("Tap to change", comment: "Tap to change receipt"))
                                                 .font(.caption)
                                                 .foregroundColor(.secondary)
                                         }
@@ -350,11 +350,11 @@ struct AddTransactionView: View {
                                         }
                                         
                                         VStack(alignment: .leading, spacing: 4) {
-                                            Text("Scan Receipt".localized)
+                                            Text(NSLocalizedString("Scan Receipt", comment: "Scan receipt button"))
                                                 .fontWeight(.bold)
                                                 .foregroundColor(.primary)
                                             
-                                            Text("Capture receipt details automatically".localized)
+                                            Text(NSLocalizedString("Capture receipt details automatically", comment: "Capture receipt details description"))
                                                 .font(.caption)
                                                 .foregroundColor(.secondary)
                                         }
@@ -388,7 +388,7 @@ struct AddTransactionView: View {
                                 Image(systemName: "checkmark.circle.fill")
                                     .font(.title2)
                                 
-                                Text("Save Transaction".localized)
+                                Text(NSLocalizedString("Save Transaction", comment: "Save transaction button"))
                                     .font(.headline)
                                     .fontWeight(.bold)
                             }
@@ -446,7 +446,7 @@ struct AddTransactionView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
                         dismiss()
                     }
                 }
@@ -463,12 +463,12 @@ struct AddTransactionView: View {
                                 .tint(.white)
                             
                             VStack(spacing: 8) {
-                                Text("Saving transaction".localized)
+                                Text(NSLocalizedString("Saving transaction", comment: "Saving transaction progress message"))
                                     .font(.headline)
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
                                 
-                                Text("Please wait".localized)
+                                Text(NSLocalizedString("Please wait", comment: "Please wait message"))
                                     .font(.subheadline)
                                     .foregroundColor(.white.opacity(0.8))
                             }
@@ -510,7 +510,7 @@ struct AddTransactionView: View {
         let amountString = amount.replacingOccurrences(of: ",", with: ".")
         guard let amountValue = Double(amountString),
               let groupId = AppState.shared.user?.groupId else {
-            errorMessage = "Invalid amount or user group".localized
+            errorMessage = NSLocalizedString("Invalid amount or user group", comment: "Invalid amount or user group error")
             return
         }
         
@@ -539,7 +539,7 @@ struct AddTransactionView: View {
                 if success {
                     dismiss()
                 } else {
-                    errorMessage = "Failed to save transaction".localized
+                    errorMessage = NSLocalizedString("Failed to save transaction", comment: "Failed to save transaction error")
                 }
             }
         }

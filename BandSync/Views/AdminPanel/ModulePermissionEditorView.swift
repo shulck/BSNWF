@@ -21,7 +21,7 @@ struct ModulePermissionEditorView: View {
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary)
                             
-                            Text("Configure access permissions".localized)
+                            Text(NSLocalizedString("Configure access permissions", comment: ""))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -30,7 +30,7 @@ struct ModulePermissionEditorView: View {
                     }
                     .padding(.vertical, 4)
                 } header: {
-                    Text("Module Access".localized)
+                    Text(NSLocalizedString("Module Access", comment: ""))
                 }
                 
                 // Description Section
@@ -38,7 +38,7 @@ struct ModulePermissionEditorView: View {
                     HStack(spacing: 12) {
                         editorIcon(icon: "info.circle.fill", color: .blue)
                         
-                        Text("\("Select roles that will have access to the".localized) '\(module.displayName)' \("module".localized)")
+                        Text(String(format: NSLocalizedString("Select roles that will have access to the '%@' module", comment: ""), module.displayName))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
@@ -84,7 +84,7 @@ struct ModulePermissionEditorView: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 } header: {
-                    Text("User Roles".localized)
+                    Text(NSLocalizedString("User Roles", comment: ""))
                 }
                 
                 // Loading Section
@@ -94,7 +94,7 @@ struct ModulePermissionEditorView: View {
                             ProgressView()
                                 .scaleEffect(0.8)
                             
-                            Text("Saving permissions...".localized)
+                            Text(NSLocalizedString("Saving permissions...", comment: ""))
                                 .font(.body)
                                 .foregroundColor(.secondary)
                             
@@ -108,13 +108,13 @@ struct ModulePermissionEditorView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "")) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save".localized) {
+                    Button(NSLocalizedString("Save", comment: "")) {
                         savePermissions()
                     }
                     .disabled(permissionService.isLoading)
@@ -174,19 +174,19 @@ struct ModulePermissionEditorView: View {
     
     private func getLocalizedRoleName(for role: UserModel.UserRole) -> String {
         switch role {
-        case .admin: return "Admin".localized
-        case .manager: return "Manager".localized
-        case .musician: return "Musician".localized
-        case .member: return "Member".localized
+        case .admin: return NSLocalizedString("Admin", comment: "")
+        case .manager: return NSLocalizedString("Manager", comment: "")
+        case .musician: return NSLocalizedString("Musician", comment: "")
+        case .member: return NSLocalizedString("Member", comment: "")
         }
     }
     
     private func getRoleDescription(for role: UserModel.UserRole) -> String {
         switch role {
-        case .admin: return "Full access to all features".localized
-        case .manager: return "Management and coordination".localized
-        case .musician: return "Band member with musical role".localized
-        case .member: return "Basic band member".localized
+        case .admin: return NSLocalizedString("Full access to all features", comment: "")
+        case .manager: return NSLocalizedString("Management and coordination", comment: "")
+        case .musician: return NSLocalizedString("Band member with musical role", comment: "")
+        case .member: return NSLocalizedString("Basic band member", comment: "")
         }
     }
     

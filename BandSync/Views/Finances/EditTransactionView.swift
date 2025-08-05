@@ -26,9 +26,9 @@ struct EditTransactionView: View {
     // Adaptive window title
     private var navigationTitle: String {
         if horizontalSizeClass == .compact {
-            return "Edit Transaction".localized
+            return NSLocalizedString("Edit Transaction", comment: "Edit transaction navigation title")
         } else {
-            return "Edit Financial Transaction".localized
+            return NSLocalizedString("Edit Financial Transaction", comment: "Edit financial transaction navigation title")
         }
     }
     
@@ -81,7 +81,7 @@ struct EditTransactionView: View {
                     VStack(spacing: 16) {
                         // Transaction Type Card
                         VStack(spacing: 12) {
-                            Text("Transaction Type".localized)
+                            Text(NSLocalizedString("Transaction Type", comment: "Transaction type label"))
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.secondary)
@@ -90,14 +90,14 @@ struct EditTransactionView: View {
                             Picker("Type", selection: $type) {
                                 HStack {
                                     Image(systemName: "arrow.down.circle.fill")
-                                    Text("Income".localized)
+                                    Text(NSLocalizedString("Income", comment: "Income transaction type"))
                                 }
                                 .foregroundColor(.green)
                                 .tag(FinanceType.income)
                                 
                                 HStack {
                                     Image(systemName: "arrow.up.circle.fill")
-                                    Text("Expense".localized)
+                                    Text(NSLocalizedString("Expense", comment: "Expense transaction type"))
                                 }
                                 .foregroundColor(.red)
                                 .tag(FinanceType.expense)
@@ -123,7 +123,7 @@ struct EditTransactionView: View {
                         
                         // Category Card
                         VStack(spacing: 12) {
-                            Text("Category".localized)
+                            Text(NSLocalizedString("Category", comment: "Category label"))
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.secondary)
@@ -170,11 +170,11 @@ struct EditTransactionView: View {
                         .sheet(isPresented: $showCategoryPicker) {
                             NavigationView {
                                 categoryPickerView
-                                    .navigationTitle("Select Category".localized)
+                                    .navigationTitle(NSLocalizedString("Select Category", comment: "Select category navigation title"))
                                     .navigationBarTitleDisplayMode(.inline)
                                     .toolbar {
                                         ToolbarItem(placement: .confirmationAction) {
-                                            Button("Done".localized) {
+                                            Button(NSLocalizedString("Done", comment: "Done button")) {
                                                 showCategoryPicker = false
                                             }
                                         }
@@ -184,7 +184,7 @@ struct EditTransactionView: View {
                         
                         // Amount Card
                         VStack(spacing: 12) {
-                            Text("Amount".localized)
+                            Text(NSLocalizedString("Amount", comment: "Amount label"))
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.secondary)
@@ -193,11 +193,11 @@ struct EditTransactionView: View {
                             HStack(spacing: 12) {
                                 // Amount field
                                 VStack(alignment: .leading, spacing: 8) {
-                                    Text("Value".localized)
+                                    Text(NSLocalizedString("Value", comment: "Value label"))
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                     
-                                    TextField("0.00".localized, text: $amount)
+                                    TextField(NSLocalizedString("0.00", comment: "Amount placeholder"), text: $amount)
                                         .keyboardType(.decimalPad)
                                         .font(.system(size: 20, weight: .semibold))
                                         .foregroundColor(type == .income ? .green : .red)
@@ -211,7 +211,7 @@ struct EditTransactionView: View {
                                 
                                 // Currency picker
                                 VStack(alignment: .leading, spacing: 8) {
-                                    Text("Currency".localized)
+                                    Text(NSLocalizedString("Currency", comment: "Currency label"))
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                     
@@ -242,7 +242,7 @@ struct EditTransactionView: View {
                             }
                             
                             if !isAmountValid {
-                                Text("Invalid amount format".localized)
+                                Text(NSLocalizedString("Invalid amount format", comment: "Invalid amount format error"))
                                     .font(.caption)
                                     .foregroundColor(.red)
                                     .padding(.top, 4)
@@ -258,7 +258,7 @@ struct EditTransactionView: View {
                         
                         // Details Card
                         VStack(spacing: 12) {
-                            Text("Details".localized)
+                            Text(NSLocalizedString("Details", comment: "Details label"))
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.secondary)
@@ -286,7 +286,7 @@ struct EditTransactionView: View {
                         
                         // Date Card
                         VStack(spacing: 12) {
-                            Text("Date".localized)
+                            Text(NSLocalizedString("Date", comment: "Date label"))
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.secondary)
@@ -341,7 +341,7 @@ struct EditTransactionView: View {
                         Button {
                             updateRecord()
                         } label: {
-                            Text("Save Changes".localized)
+                            Text(NSLocalizedString("Save Changes", comment: "Save changes button"))
                                 .font(.headline)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -382,13 +382,13 @@ struct EditTransactionView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized, role: .cancel) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button"), role: .cancel) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save".localized) {
+                    Button(NSLocalizedString("Save", comment: "Save button")) {
                         updateRecord()
                     }
                     .font(.headline)
@@ -406,7 +406,7 @@ struct EditTransactionView: View {
                             ProgressView()
                                 .scaleEffect(1.5)
                             
-                            Text("Saving changes".localized)
+                            Text(NSLocalizedString("Saving changes", comment: "Saving changes progress message"))
                                 .font(.headline)
                                 .foregroundColor(.primary)
                         }
@@ -491,7 +491,7 @@ struct EditTransactionView: View {
     // MARK: - Update Function
     private func updateRecord() {
         guard let amountValue = Double(amount.replacingOccurrences(of: ",", with: ".")) else {
-            errorMessage = "Invalid amount format".localized
+            errorMessage = NSLocalizedString("Invalid amount format", comment: "Invalid amount format error")
             return
         }
         
@@ -516,7 +516,7 @@ struct EditTransactionView: View {
                 if success {
                     dismiss()
                 } else {
-                    errorMessage = "Failed to update transaction".localized
+                    errorMessage = NSLocalizedString("Failed to update transaction", comment: "Failed to update transaction error")
                 }
             }
         }

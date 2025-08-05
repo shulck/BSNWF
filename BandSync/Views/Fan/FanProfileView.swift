@@ -64,13 +64,13 @@ struct FanProfileView: View {
             // (из отдельного файла EditFanProfileView.swift)
             EditFanProfileView()
         }
-        .alert("Logout", isPresented: $showingLogoutAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Logout", role: .destructive) {
+        .alert(NSLocalizedString("Logout", comment: "Logout confirmation dialog title"), isPresented: $showingLogoutAlert) {
+            Button(NSLocalizedString("Cancel", comment: "Cancel logout action"), role: .cancel) {}
+            Button(NSLocalizedString("Logout", comment: "Confirm logout action"), role: .destructive) {
                 appState.logout()
             }
         } message: {
-            Text("Are you sure you want to logout?")
+            Text(NSLocalizedString("Are you sure you want to logout?", comment: "Logout confirmation message"))
         }
     }
     
@@ -273,9 +273,9 @@ struct FanProfileView: View {
             HStack(spacing: 0) {
                 // Events Attended
                 StatCard(
-                    title: "Events",
+                    title: NSLocalizedString("Events", comment: "Events statistics card title"),
                     value: "\(fanProfile.stats.concertsAttended)",
-                    subtitle: "Attended",
+                    subtitle: NSLocalizedString("Attended", comment: "Events attended subtitle"),
                     icon: "calendar",
                     color: .blue
                 )
@@ -286,9 +286,9 @@ struct FanProfileView: View {
                 
                 // Fan Level Progress
                 StatCard(
-                    title: "Level",
+                    title: NSLocalizedString("Level", comment: "Fan level statistics card title"),
                     value: levelProgressText(fanProfile.level, stats: fanProfile.stats),
-                    subtitle: "Progress",
+                    subtitle: NSLocalizedString("Progress", comment: "Level progress subtitle"),
                     icon: "star.fill",
                     color: Color(hex: fanProfile.level.color)
                 )
@@ -299,9 +299,9 @@ struct FanProfileView: View {
                 
                 // Days as Fan
                 StatCard(
-                    title: "Member",
+                    title: NSLocalizedString("Member", comment: "Membership statistics card title"),
                     value: "\(daysSinceJoining(fanProfile.joinDate))",
-                    subtitle: "Days",
+                    subtitle: NSLocalizedString("Days", comment: "Days as member subtitle"),
                     icon: "heart.fill",
                     color: .pink
                 )
@@ -334,7 +334,7 @@ struct FanProfileView: View {
                     .font(.title3)
                     .foregroundColor(.orange)
                 
-                Text("Recent Activity")
+                Text(NSLocalizedString("Recent Activity", comment: "Recent activity section title"))
                     .font(.headline)
                     .fontWeight(.bold)
                 
@@ -344,23 +344,23 @@ struct FanProfileView: View {
             VStack(spacing: 12) {
                 ActivityRow(
                     icon: "message.fill",
-                    title: "Last message sent",
-                    subtitle: "General chat",
-                    time: "2h ago"
+                    title: NSLocalizedString("Last message sent", comment: "Last message activity title"),
+                    subtitle: NSLocalizedString("General chat", comment: "General chat subtitle"),
+                    time: NSLocalizedString("2h ago", comment: "Time ago format - 2 hours")
                 )
                 
                 ActivityRow(
                     icon: "calendar",
-                    title: "Concert attended",
-                    subtitle: "Summer Festival 2024",
-                    time: "1 week ago"
+                    title: NSLocalizedString("Concert attended", comment: "Concert attendance activity title"),
+                    subtitle: NSLocalizedString("Summer Festival 2024", comment: "Example concert name"),
+                    time: NSLocalizedString("1 week ago", comment: "Time ago format - 1 week")
                 )
                 
                 ActivityRow(
                     icon: "star.fill",
-                    title: "Achievement unlocked",
-                    subtitle: "First Concert",
-                    time: "1 week ago"
+                    title: NSLocalizedString("Achievement unlocked", comment: "Achievement unlocked activity title"),
+                    subtitle: NSLocalizedString("First Concert", comment: "Example achievement name"),
+                    time: NSLocalizedString("1 week ago", comment: "Time ago format - 1 week")
                 )
             }
             .padding(.vertical, 16)
@@ -391,7 +391,7 @@ struct FanProfileView: View {
                     .font(.title3)
                     .foregroundColor(.gray)
                 
-                Text("Settings")
+                Text(NSLocalizedString("Settings", comment: "Settings section title"))
                     .font(.headline)
                     .fontWeight(.bold)
                 
@@ -401,8 +401,8 @@ struct FanProfileView: View {
             VStack(spacing: 12) {
                 SettingsRow(
                     icon: "person.fill",
-                    title: "Edit Profile",
-                    subtitle: "Update your fan information and contact details",
+                    title: NSLocalizedString("Edit Profile", comment: "Edit profile settings option"),
+                    subtitle: NSLocalizedString("Update your fan information and contact details", comment: "Edit profile description"),
                     color: .blue
                 ) {
                     showingEditProfile = true
@@ -410,8 +410,8 @@ struct FanProfileView: View {
                 
                 SettingsRow(
                     icon: "rectangle.portrait.and.arrow.right.fill",
-                    title: "Logout",
-                    subtitle: "Sign out of your account",
+                    title: NSLocalizedString("Logout", comment: "Logout settings option"),
+                    subtitle: NSLocalizedString("Sign out of your account", comment: "Logout description"),
                     color: .red
                 ) {
                     showingLogoutAlert = true
@@ -466,7 +466,7 @@ struct FanProfileView: View {
     private func formatJoinDateShort(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
-        return "Since \(formatter.string(from: date))"
+        return String(format: NSLocalizedString("Since %@", comment: "Member since date format"), formatter.string(from: date))
     }
 }
 
@@ -634,7 +634,7 @@ struct FanAchievementsProfileSection: View {
                             .font(.title3)
                             .foregroundColor(.yellow)
                         
-                        Text("Achievements")
+                        Text(NSLocalizedString("Achievements", comment: "Achievements section title"))
                             .font(.headline)
                             .fontWeight(.bold)
                     }
@@ -645,7 +645,7 @@ struct FanAchievementsProfileSection: View {
                             Image(systemName: "star.fill")
                                 .font(.caption)
                                 .foregroundColor(.yellow)
-                            Text("\(calculateTotalPoints()) pts")
+                            Text(NSLocalizedString("\(calculateTotalPoints()) pts", comment: "Achievement points total format"))
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .foregroundColor(.secondary)
@@ -656,7 +656,7 @@ struct FanAchievementsProfileSection: View {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.caption)
                                 .foregroundColor(.green)
-                            Text("\(unlockedCount())/\(Achievement.defaults.count)")
+                            Text(NSLocalizedString("\(unlockedCount())/\(Achievement.defaults.count)", comment: "Unlocked achievements count format"))
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .foregroundColor(.secondary)
@@ -666,7 +666,7 @@ struct FanAchievementsProfileSection: View {
                 
                 Spacer()
                 
-                Button("View All") {
+                Button(NSLocalizedString("View All", comment: "View all achievements button")) {
                     showingAllAchievements = true
                 }
                 .font(.caption)
@@ -829,7 +829,7 @@ struct FanAchievementsDetailView: View {
                                 .font(.title)
                                 .fontWeight(.bold)
                             
-                            Text("points")
+                            Text(NSLocalizedString("points", comment: "Points label for achievements"))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -840,7 +840,7 @@ struct FanAchievementsDetailView: View {
                         ProgressView(value: Double(unlockedCount), total: Double(totalCount))
                             .tint(.green)
                         
-                        Text("\(unlockedCount) of \(totalCount) achievements unlocked")
+                        Text(NSLocalizedString("\(unlockedCount) of \(totalCount) achievements unlocked", comment: "Achievements progress text"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -855,7 +855,7 @@ struct FanAchievementsDetailView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 12) {
                             CategoryButton(
-                                title: "All",
+                                title: NSLocalizedString("All", comment: "All categories filter option"),
                                 isSelected: selectedCategory == nil
                             ) {
                                 selectedCategory = nil
@@ -886,11 +886,11 @@ struct FanAchievementsDetailView: View {
                     .padding(.horizontal)
                 }
             }
-            .navigationTitle("Achievements")
+            .navigationTitle(NSLocalizedString("Achievements", comment: "Achievements detail view title"))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(NSLocalizedString("Done", comment: "Done button to close achievements view")) {
                         dismiss()
                     }
                 }
@@ -954,11 +954,9 @@ struct FullAchievementCard: View {
                 if !isUnlocked {
                     VStack(alignment: .leading, spacing: 4) {
                         HStack {
-                            Text("Progress")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            
-                            Spacer()
+                        Text(NSLocalizedString("Progress", comment: "Progress label for achievements"))
+                            .font(.caption)
+                            .foregroundColor(.secondary);                            Spacer()
                             
                             Text("\(Int(progress * 100))%")
                                 .font(.caption)

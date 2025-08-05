@@ -21,33 +21,33 @@ struct MessageBubbleView: View {
     
     private var senderName: String {
         if isCurrentUser {
-            return "You"
+            return NSLocalizedString("you", comment: "You (current user indicator)")
         }
         if let user = userService.users.first(where: { $0.id == message.senderID }) {
             return user.name
         }
-        return message.senderName.isEmpty ? "Unknown" : message.senderName
+        return message.senderName.isEmpty ? NSLocalizedString("unknown", comment: "Unknown user") : message.senderName
     }
     
     private var accessibilityLabel: String {
-        let sender = isCurrentUser ? "You" : senderName
+        let sender = isCurrentUser ? NSLocalizedString("you", comment: "You (current user indicator)") : senderName
         let time = DateFormatter.localizedString(from: message.timestamp, dateStyle: .none, timeStyle: .short)
         
         switch message.type {
         case .text:
-            return "\(sender) said \(message.content) at \(time)"
+            return String.localizedStringWithFormat(NSLocalizedString("userSaidMessageAtTime", comment: "User said message at time"), sender, message.content, time)
         case .image:
-            return "\(sender) sent an image at \(time)"
+            return String.localizedStringWithFormat(NSLocalizedString("userSentImageAtTime", comment: "User sent an image at time"), sender, time)
         case .reply:
-            return "\(sender) replied \(message.content) at \(time)"
+            return String.localizedStringWithFormat(NSLocalizedString("userRepliedMessageAtTime", comment: "User replied message at time"), sender, message.content, time)
         default:
-            return "\(sender) sent a message at \(time)"
+            return String.localizedStringWithFormat(NSLocalizedString("userSentMessageAtTime", comment: "User sent a message at time"), sender, time)
         }
     }
     
     private var accessibilityHint: String {
-        let deleteHint = "Double tap to delete, long press for options"
-        let optionsHint = "Long press for options"
+        let deleteHint = NSLocalizedString("doubleTapToDeleteLongPressForOptions", comment: "Double tap to delete, long press for options")
+        let optionsHint = NSLocalizedString("longPressForOptions", comment: "Long press for options")
         
         return isCurrentUser ? deleteHint : optionsHint
     }
@@ -81,24 +81,24 @@ struct MessageBubbleView: View {
                     print("📋 IntegrationSheet is about to be presented")
                 }
         }
-        .alert("Delete Message".localized, isPresented: $showingDeleteConfirmation) {
-            Button("Cancel", role: .cancel) { }
-            Button("Delete", role: .destructive) {
+        .alert(NSLocalizedString("Delete Message", comment: "Alert title for deleting a message"), isPresented: $showingDeleteConfirmation) {
+            Button(NSLocalizedString("cancel", comment: "Cancel button"), role: .cancel) { }
+            Button(NSLocalizedString("delete", comment: "Delete button"), role: .destructive) {
                 deleteMessage()
             }
         } message: {
-            Text("Delete Message Confirmation".localized)
+            Text(NSLocalizedString("Delete Message Confirmation", comment: "Confirmation message for deleting a message"))
         }
-        .alert("Edit Message".localized, isPresented: $showingEditAlert) {
-            TextField("Message".localized, text: $editText)
-            Button("Cancel".localized, role: .cancel) { }
-            Button("Save".localized) {
+        .alert(NSLocalizedString("Edit Message", comment: "Alert title for editing a message"), isPresented: $showingEditAlert) {
+            TextField(NSLocalizedString("Message", comment: "Placeholder for message input field"), text: $editText)
+            Button(NSLocalizedString("Cancel", comment: "Cancel button in edit message alert"), role: .cancel) { }
+            Button(NSLocalizedString("Save", comment: "Save button in edit message alert")) {
                 editMessage()
             }
         }
         .actionSheet(isPresented: $showingActionSheet) {
             ActionSheet(
-                title: Text("Message Actions".localized),
+                title: Text(NSLocalizedString("Message Actions", comment: "Action sheet title for message actions")),
                 buttons: createActionSheetButtons()
             )
         }
@@ -118,8 +118,8 @@ struct MessageBubbleView: View {
     private var replyPreviewView: some View {
         if message.replyToMessageId != nil {
             ReplyPreviewView(
-                replyToContent: message.replyToContent ?? "Message",
-                replyToSenderName: message.replyToSenderName ?? "Unknown"
+                replyToContent: message.replyToContent ?? NSLocalizedString("message", comment: "Message fallback"),
+                replyToSenderName: message.replyToSenderName ?? NSLocalizedString("unknown", comment: "Unknown user")
             )
             .padding(.horizontal, isCurrentUser ? 16 : 0)
         }
@@ -133,7 +133,7 @@ struct MessageBubbleView: View {
                     AvatarView(user: sender, size: 32)
                 } else {
                     // Fallback avatar while user data is loading
-                    AvatarView(avatarURL: nil, name: message.senderName.isEmpty ? "User" : message.senderName, size: 32)
+                    AvatarView(avatarURL: nil, name: message.senderName.isEmpty ? NSLocalizedString("user", comment: "User fallback") : message.senderName, size: 32)
                 }
             }
             
@@ -252,12 +252,12 @@ struct MessageBubbleView: View {
         var buttons: [ActionSheet.Button] = []
         
         // ✅ ИСПРАВЛЕНО: Только самые важные действия
-        buttons.append(.default(Text("Reply".localized)) {
+        buttons.append(.default(Text(NSLocalizedString("Reply", comment: "Reply button in message actions"))) {
             onReply?(message)
         })
         
         if !message.content.isEmpty {
-            buttons.append(.default(Text("Copy".localized)) {
+            buttons.append(.default(Text(NSLocalizedString("Copy", comment: "Copy button in message actions"))) {
                 copyMessageText()
             })
         }
@@ -268,13 +268,13 @@ struct MessageBubbleView: View {
         buttons.append(.default(Text("😂")) { addReaction("😂") })
         
         // Дополнительные действия
-        buttons.append(.default(Text("Share".localized)) {
+        buttons.append(.default(Text(NSLocalizedString("Share", comment: "Share button in message actions"))) {
             print("🔄 ActionSheet Share button pressed")
             showingShareSheet = true
             print("📤 ActionSheet showingShareSheet set to: \(showingShareSheet)")
         })
         
-        buttons.append(.default(Text("Create Task".localized)) {
+        buttons.append(.default(Text(NSLocalizedString("Create Task", comment: "Create task button in message actions"))) {
             print("🔄 ActionSheet Create Task button pressed")
             showingIntegrationSheet = true
             print("📋 ActionSheet showingIntegrationSheet set to: \(showingIntegrationSheet)")
@@ -283,13 +283,13 @@ struct MessageBubbleView: View {
         // Только для своих сообщений
         if isCurrentUser {
             if !message.content.isEmpty {
-                buttons.append(.default(Text("Edit".localized)) {
+                buttons.append(.default(Text(NSLocalizedString("Edit", comment: "Edit button in message actions"))) {
                     editText = message.content
                     showingEditAlert = true
                 })
             }
             
-            buttons.append(.destructive(Text("Delete".localized)) {
+            buttons.append(.destructive(Text(NSLocalizedString("Delete", comment: "Delete button in message actions"))) {
                 showingDeleteConfirmation = true
             })
         }
@@ -363,7 +363,7 @@ struct MessageContentView: View {
                                 VStack {
                                     Image(systemName: "exclamationmark.triangle")
                                         .foregroundColor(.red)
-                                    Text("Failed to load".localized)
+                                    Text(NSLocalizedString("Failed to load", comment: "Error message when content fails to load"))
                                         .font(.caption)
                                         .foregroundColor(.red)
                                 }
@@ -381,7 +381,7 @@ struct MessageContentView: View {
             }
             
             if message.isEdited {
-                Text("edited".localized)
+                Text(NSLocalizedString("edited", comment: "Label indicating message was edited"))
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .italic()
@@ -526,7 +526,7 @@ struct ReplyPreviewView: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.blue)
                 
-                Text(replyToContent.isEmpty ? "📷 Photo" : replyToContent)
+                Text(replyToContent.isEmpty ? NSLocalizedString("photo", comment: "Photo message type") : replyToContent)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(2)
@@ -558,10 +558,10 @@ struct CompactMessageContextMenu: View {
     var body: some View {
         Group {
             // Основные действия
-            Button("Reply", action: onReply)
+            Button(NSLocalizedString("reply", comment: "Reply button"), action: onReply)
             
             if !message.content.isEmpty {
-                Button("Copy", action: onCopy)
+                Button(NSLocalizedString("copy", comment: "Copy button"), action: onCopy)
             }
             
             // Только самые популярные реакции
@@ -574,10 +574,10 @@ struct CompactMessageContextMenu: View {
                 Divider()
                 
                 if !message.content.isEmpty {
-                    Button("Edit", action: onEdit)
+                    Button(NSLocalizedString("edit", comment: "Edit button"), action: onEdit)
                 }
                 
-                Button("Delete", role: .destructive, action: onDelete)
+                Button(NSLocalizedString("delete", comment: "Delete button"), role: .destructive, action: onDelete)
             }
         }
     }
@@ -597,10 +597,10 @@ struct MessageContextMenu: View {
     
     var body: some View {
         Group {
-            Button("Reply", action: onReply)
+            Button(NSLocalizedString("reply", comment: "Reply button"), action: onReply)
             
             if !message.content.isEmpty {
-                Button("Copy", action: onCopy)
+                Button(NSLocalizedString("copy", comment: "Copy button"), action: onCopy)
             }
             
             Button("👍") { onReact("👍") }
@@ -612,15 +612,15 @@ struct MessageContextMenu: View {
             
             Divider()
             
-            Button("Share", action: onShare)
-            Button("Create Task", action: onIntegrate)
+            Button(NSLocalizedString("share", comment: "Share button"), action: onShare)
+            Button(NSLocalizedString("createTask", comment: "Create task button"), action: onIntegrate)
             
             if isCurrentUser && !message.content.isEmpty {
-                Button("Edit", action: onEdit)
+                Button(NSLocalizedString("edit", comment: "Edit button"), action: onEdit)
             }
             
             if isCurrentUser {
-                Button("Delete", role: .destructive, action: onDelete)
+                Button(NSLocalizedString("delete", comment: "Delete button"), role: .destructive, action: onDelete)
             }
         }
     }
@@ -684,7 +684,7 @@ struct ImageViewerSheet: View {
                             Image(systemName: "exclamationmark.triangle")
                                 .font(.system(size: 50))
                                 .foregroundColor(.white)
-                            Text("Failed to load image".localized)
+                            Text(NSLocalizedString("Failed to load image", comment: "Error message when image fails to load"))
                                 .foregroundColor(.white)
                                 .font(.headline)
                         }
@@ -696,7 +696,7 @@ struct ImageViewerSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Close".localized) {
+                    Button(NSLocalizedString("Close", comment: "Close button")) {
                         dismiss()
                     }
                     .foregroundColor(.white)
@@ -762,9 +762,9 @@ extension MessageBubbleView {
     let sampleMessage = Message(
         id: "sample",
         chatId: "chat1",
-        content: "Hello! How are you doing today? This is a longer message to test the layout!",
+        content: NSLocalizedString("sampleMessageContent", comment: "Sample message content for preview"),
         senderID: "user1",
-        senderName: "User 1",
+        senderName: NSLocalizedString("sampleUser1", comment: "Sample user 1 name"),
         timestamp: Date(),
         type: .text,
         reactions: ["👍": ["user2"], "❤️": ["user3", "user4"]]
@@ -776,7 +776,7 @@ extension MessageBubbleView {
         createdBy: "user1",
         createdAt: Date(),
         updatedAt: Date(),
-        name: "Test Chat"
+        name: NSLocalizedString("testChat", comment: "Test chat name")
     )
     
     VStack(spacing: 20) {
@@ -786,9 +786,9 @@ extension MessageBubbleView {
         MessageBubbleView(message: Message(
             id: "sample2",
             chatId: "chat1",
-            content: "Hey there! This is a message from another user",
+            content: NSLocalizedString("sampleMessageFromOtherUser", comment: "Sample message from another user"),
             senderID: "user2",
-            senderName: "Other User",
+            senderName: NSLocalizedString("otherUser", comment: "Other user name"),
             timestamp: Date(),
             type: .text
         ), chat: sampleChat, onReply: nil)

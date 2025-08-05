@@ -28,22 +28,22 @@ struct CreateDocumentView: View {
         NavigationView {
             Form {
                 // Document Info Section
-                Section("Document Information".localized) {
-                    TextField("Document Name".localized, text: $documentName)
+                Section(NSLocalizedString("documentInformation", comment: "Document Information")) {
+                    TextField(NSLocalizedString("documentName", comment: "Document Name"), text: $documentName)
                         .textInputAutocapitalization(.words)
                     
-                    TextField("Description (Optional)".localized, text: $documentDescription, axis: .vertical)
+                    TextField(NSLocalizedString("descriptionOptional", comment: "Description (Optional)"), text: $documentDescription, axis: .vertical)
                         .lineLimit(2...4)
                 }
                 
                 // File Upload Section
-                Section("File Upload".localized) {
+                Section(NSLocalizedString("fileUpload", comment: "File Upload")) {
                         VStack(alignment: .leading, spacing: 12) {
                             HStack {
                                 Button {
                                     showingFilePicker = true
                                 } label: {
-                                    Label("Choose File".localized, systemImage: "doc.badge.plus")
+                                    Label(NSLocalizedString("chooseFile", comment: "Choose File"), systemImage: "doc.badge.plus")
                                         .frame(maxWidth: .infinity)
                                 }
                                 .buttonStyle(.bordered)
@@ -52,7 +52,7 @@ struct CreateDocumentView: View {
                                     selection: $selectedPhotoItem,
                                     matching: .images
                                 ) {
-                                    Label("Photo".localized, systemImage: "photo")
+                                    Label(NSLocalizedString("photo", comment: "Photo"), systemImage: "photo")
                                 }
                                 .buttonStyle(.bordered)
                             }
@@ -75,7 +75,7 @@ struct CreateDocumentView: View {
                                     
                                     Spacer()
                                     
-                                    Button("Remove".localized) {
+                                    Button(NSLocalizedString("remove", comment: "Remove")) {
                                         selectedFileData = nil
                                         selectedFileName = ""
                                         selectedPhotoItem = nil
@@ -91,16 +91,16 @@ struct CreateDocumentView: View {
                     }
                 
                 // Google Drive Status
-                Section("Storage".localized) {
+                Section(NSLocalizedString("storage", comment: "Storage")) {
                     HStack {
                         Image(systemName: googleDriveService.isAuthenticated ? "icloud.fill" : "icloud.slash")
                             .foregroundColor(googleDriveService.isAuthenticated ? .green : .orange)
                         
                         VStack(alignment: .leading) {
-                            Text("Google Drive".localized)
+                            Text(NSLocalizedString("googleDrive", comment: "Google Drive"))
                                 .font(.subheadline)
                             
-                            Text(googleDriveService.isAuthenticated ? "Connected".localized : "Not Connected".localized)
+                            Text(googleDriveService.isAuthenticated ? NSLocalizedString("connected", comment: "Connected") : NSLocalizedString("notConnected", comment: "Not Connected"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -108,7 +108,7 @@ struct CreateDocumentView: View {
                         Spacer()
                         
                         if !googleDriveService.isAuthenticated {
-                            Button("Connect".localized) {
+                            Button(NSLocalizedString("connect", comment: "Connect")) {
                                 connectToGoogleDrive()
                             }
                             .font(.caption)
@@ -116,17 +116,17 @@ struct CreateDocumentView: View {
                     }
                 }
             }
-            .navigationTitle("New Document".localized)
+            .navigationTitle(NSLocalizedString("newDocument", comment: "New Document"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("cancel", comment: "Cancel")) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Create".localized) {
+                    Button(NSLocalizedString("create", comment: "Create")) {
                         createDocument()
                     }
                     .disabled(!isFormValid || isUploading)
@@ -147,10 +147,10 @@ struct CreateDocumentView: View {
             .onChange(of: selectedPhotoItem) { _, newItem in
                 handlePhotoSelection(newItem)
             }
-            .alert("Error".localized, isPresented: $showingError) {
-                Button("OK".localized) { }
+            .alert(NSLocalizedString("error", comment: "Error"), isPresented: $showingError) {
+                Button(NSLocalizedString("ok", comment: "OK")) { }
             } message: {
-                Text(errorMessage ?? "Unknown error occurred".localized)
+                Text(errorMessage ?? NSLocalizedString("unknownErrorOccurred", comment: "Unknown error occurred"))
             }
         }
     }
@@ -170,10 +170,10 @@ struct CreateDocumentView: View {
             ProgressView()
                 .scaleEffect(1.5)
             
-            Text("Creating Document".localized)
+            Text(NSLocalizedString("creatingDocument", comment: "Creating Document"))
                 .font(.headline)
             
-            Text("Uploading to Google Drive".localized)
+            Text(NSLocalizedString("uploadingToGoogleDrive", comment: "Uploading to Google Drive"))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }
@@ -239,13 +239,13 @@ struct CreateDocumentView: View {
             // Проверяем тип файла перед загрузкой
             let fileName = url.lastPathComponent.lowercased()
             if isAudioOrVideoFile(fileName) {
-                self.errorMessage = "Audio and video files upload is not supported from the app. Please use Google Drive web interface to upload such files.".localized
+                self.errorMessage = NSLocalizedString("audioVideoFilesNotSupported", comment: "Audio and video files upload is not supported from the app. Please use Google Drive web interface to upload such files.")
                 self.showingError = true
                 return
             }
             
             guard url.startAccessingSecurityScopedResource() else {
-                self.errorMessage = "Failed to access selected file".localized + ": " + "Permission denied".localized
+                self.errorMessage = NSLocalizedString("failedToAccessFile", comment: "Failed to access selected file") + ": " + NSLocalizedString("permissionDenied", comment: "Permission denied")
                 self.showingError = true
                 return
             }
@@ -259,7 +259,7 @@ struct CreateDocumentView: View {
                 
                 // Дополнительная проверка по содержимому файла
                 if isAudioOrVideoData(data) {
-                    self.errorMessage = "Audio and video files upload is not supported from the app. Please use Google Drive web interface to upload such files.".localized
+                    self.errorMessage = NSLocalizedString("audioVideoFilesNotSupported", comment: "Audio and video files upload is not supported from the app. Please use Google Drive web interface to upload such files.")
                     self.showingError = true
                     return
                 }
@@ -267,12 +267,12 @@ struct CreateDocumentView: View {
                 self.selectedFileData = data
                 self.selectedFileName = url.lastPathComponent
             } catch {
-                self.errorMessage = "Failed to read selected file".localized + ": \(error.localizedDescription)"
+                self.errorMessage = NSLocalizedString("failedToReadFile", comment: "Failed to read selected file") + ": \(error.localizedDescription)"
                 self.showingError = true
             }
             
         case .failure(let error):
-            self.errorMessage = "Failed to select file".localized + ": \(error.localizedDescription)"
+            self.errorMessage = NSLocalizedString("failedToSelectFile", comment: "Failed to select file") + ": \(error.localizedDescription)"
             self.showingError = true
         }
     }
@@ -289,7 +289,7 @@ struct CreateDocumentView: View {
                         self.selectedFileName = "photo.jpg"
                     }
                 case .failure(let error):
-                    self.errorMessage = "Failed to load photo".localized + ": \(error.localizedDescription)"
+                    self.errorMessage = NSLocalizedString("failedToLoadPhoto", comment: "Failed to load photo") + ": \(error.localizedDescription)"
                     self.showingError = true
                 }
             }

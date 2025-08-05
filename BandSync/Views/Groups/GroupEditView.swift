@@ -47,18 +47,18 @@ struct GroupEditView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Edit Group".localized)
+            .navigationTitle(NSLocalizedString("Edit Group", comment: "Edit group navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button label")) {
                         dismiss()
                     }
                     .disabled(isUploading)
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save".localized) {
+                    Button(NSLocalizedString("Save", comment: "Save button label")) {
                         saveGroup()
                     }
                     .disabled(isUploading || !hasChanges)
@@ -67,25 +67,25 @@ struct GroupEditView: View {
             .sheet(isPresented: $showingImagePicker) {
                 ImagePickerView(selectedImage: $selectedImage)
             }
-            .alert("Error".localized, isPresented: $showError) {
+            .alert(NSLocalizedString("Error", comment: "Error alert title"), isPresented: $showError) {
                 Button("OK") { }
             } message: {
-                Text(errorMessage ?? "Unknown error".localized)
+                Text(errorMessage ?? NSLocalizedString("Unknown error", comment: "Unknown error message"))
             }
-            .alert("Success".localized, isPresented: $showSuccess) {
+            .alert(NSLocalizedString("Success", comment: "Success alert title"), isPresented: $showSuccess) {
                 Button("OK") {
                     dismiss()
                 }
             } message: {
-                Text("Group updated successfully".localized)
+                Text(NSLocalizedString("Group updated successfully", comment: "Group update success message"))
             }
-            .confirmationDialog("Delete Logo".localized, isPresented: $showingDeleteConfirmation) {
+            .confirmationDialog(NSLocalizedString("Delete Logo", comment: "Delete logo confirmation dialog title"), isPresented: $showingDeleteConfirmation) {
                 Button("Delete", role: .destructive) {
                     deleteLogo()
                 }
                 Button("Cancel", role: .cancel) { }
             } message: {
-                Text("Are you sure you want to delete the group logo?".localized)
+                Text(NSLocalizedString("Are you sure you want to delete the group logo?", comment: "Delete logo confirmation message"))
             }
         }
     }
@@ -149,7 +149,7 @@ struct GroupEditView: View {
                 }
             }
             
-            Text("Tap the camera icon to change the group logo".localized)
+            Text(NSLocalizedString("Tap the camera icon to change the group logo", comment: "Group logo change instruction"))
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -162,18 +162,18 @@ struct GroupEditView: View {
         VStack(spacing: 20) {
             // Name Field
             VStack(alignment: .leading, spacing: 8) {
-                Text("Group Name".localized)
+                Text(NSLocalizedString("Group Name", comment: "Group name field label"))
                     .font(.headline)
                     .foregroundColor(.primary)
                 
-                TextField("Enter group name".localized, text: $name)
+                TextField(NSLocalizedString("Enter group name", comment: "Group name text field placeholder"), text: $name)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .disabled(isUploading)
             }
             
             // Description Field
             VStack(alignment: .leading, spacing: 8) {
-                Text("Description".localized)
+                Text(NSLocalizedString("Description", comment: "Description field label"))
                     .font(.headline)
                     .foregroundColor(.primary)
                 
@@ -187,7 +187,7 @@ struct GroupEditView: View {
             
             // Group Code Field (Read-only)
             VStack(alignment: .leading, spacing: 8) {
-                Text("Group Code".localized)
+                Text(NSLocalizedString("Group Code", comment: "Group code field label"))
                     .font(.headline)
                     .foregroundColor(.primary)
                 
@@ -212,14 +212,14 @@ struct GroupEditView: View {
             
             // Members Count (Read-only)
             VStack(alignment: .leading, spacing: 8) {
-                Text("Members".localized)
+                Text(NSLocalizedString("Members", comment: "Members field label"))
                     .font(.headline)
                     .foregroundColor(.primary)
                 
                 HStack {
                     Image(systemName: "person.3.fill")
                         .foregroundColor(.blue)
-                    Text("\(group.members.count) members".localized)
+                    Text(String(format: NSLocalizedString("%d members", comment: "Members count format"), group.members.count))
                         .foregroundColor(.secondary)
                     Spacer()
                 }
@@ -238,7 +238,7 @@ struct GroupEditView: View {
         } label: {
             HStack {
                 Image(systemName: "trash")
-                Text("Delete Logo".localized)
+                Text(NSLocalizedString("Delete Logo", comment: "Delete logo button label"))
             }
             .foregroundColor(.red)
             .padding()
@@ -261,13 +261,13 @@ struct GroupEditView: View {
     
     private func saveGroup() {
         guard !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            errorMessage = "Group name cannot be empty".localized
+            errorMessage = NSLocalizedString("Group name cannot be empty", comment: "Empty group name error message")
             showError = true
             return
         }
         
         guard let groupId = group.id else {
-            errorMessage = "Group ID not found".localized
+            errorMessage = NSLocalizedString("Group ID not found", comment: "Group ID not found error message")
             showError = true
             return
         }
@@ -314,7 +314,7 @@ struct GroupEditView: View {
                 if success {
                     self.showSuccess = true
                 } else {
-                    self.errorMessage = "Failed to update group".localized
+                    self.errorMessage = NSLocalizedString("Failed to update group", comment: "Group update failure error message")
                     self.showError = true
                 }
             }
@@ -323,7 +323,7 @@ struct GroupEditView: View {
     
     private func deleteLogo() {
         guard let groupId = group.id else {
-            errorMessage = "Group ID not found".localized
+            errorMessage = NSLocalizedString("Group ID not found", comment: "Group ID not found error message")
             showError = true
             return
         }

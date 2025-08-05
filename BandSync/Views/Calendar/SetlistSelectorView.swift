@@ -21,7 +21,7 @@ struct SetlistSelectorView: View {
                     dismiss()
                 } label: {
                     HStack {
-                        Text("No setlist".localized)
+                        Text(NSLocalizedString("No setlist", comment: "Option to select no setlist"))
                             .foregroundColor(.primary)
                         Spacer()
                         if selectedSetlistId == nil {
@@ -42,7 +42,7 @@ struct SetlistSelectorView: View {
                                 Text(setlist.name)
                                     .foregroundColor(.primary)
                                 
-                                Text("\(setlist.songs.count) " + "songs".localized + " • \(setlist.formattedTotalDuration)")
+                                Text(String(format: NSLocalizedString("%d songs • %@", comment: "Setlist songs count and duration format"), setlist.songs.count, setlist.formattedTotalDuration))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -58,17 +58,17 @@ struct SetlistSelectorView: View {
                 }
                 
                 if setlistService.setlists.isEmpty {
-                    Text("No available setlists".localized)
+                    Text(NSLocalizedString("No available setlists", comment: "Message when no setlists are available"))
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding()
                 }
             }
-            .navigationTitle("Select setlist".localized)
+            .navigationTitle(NSLocalizedString("Select setlist", comment: "Navigation title for setlist selector"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel".localized) {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button in setlist selector")) {
                         dismiss()
                     }
                 }

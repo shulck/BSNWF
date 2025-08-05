@@ -18,7 +18,7 @@ struct EventMapView: View {
                 ProgressView()
                     .padding()
             } else if mapPoints.isEmpty {
-                Text("No location information".localized)
+                Text(NSLocalizedString("No location information", comment: "Message when no location information is available for event"))
                     .foregroundColor(.gray)
                     .padding()
             } else {

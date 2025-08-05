@@ -9,7 +9,7 @@ struct PhotoSavedView: View {
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(.white)
             
-            Text("Image saved".localized)
+            Text(NSLocalizedString("Image saved", comment: "Confirmation message when image is saved to photo library"))
                 .font(.system(size: 14, weight: .medium))
                 .foregroundColor(.white)
         }

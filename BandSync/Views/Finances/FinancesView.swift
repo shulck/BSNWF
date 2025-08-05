@@ -14,7 +14,7 @@ struct FinancesView: View {
     @State private var extractedFinanceRecord: FinanceRecord?
     @State private var selectedTab: FinanceTab = .all
     @State private var animateChart = false
-    @State private var selectedCurrency: Currency = .usd
+    @State private var selectedCurrency: Currency = Currency.loadSaved()
 
     // States for filtering
     @State private var showFilter = false
@@ -22,100 +22,15 @@ struct FinancesView: View {
     @State private var filterPeriod: FilterPeriod = .allTime
     @State private var showCurrencyPicker = false
     
-    // MARK: - Currency Support
-    enum Currency: String, CaseIterable, Identifiable {
-        case usd = "USD"
-        case eur = "EUR"
-        case uah = "UAH"
-        case gbp = "GBP"
-        case cad = "CAD"
-        case aud = "AUD"
-        case chf = "CHF"
-        case jpy = "JPY"
-        case pln = "PLN"
-        case czk = "CZK"
-        case sek = "SEK"
-        case nok = "NOK"
-        case dkk = "DKK"
-        
-        var id: String { self.rawValue }
-        
-        var symbol: String {
-            switch self {
-            case .usd, .cad, .aud: return "$"
-            case .eur: return "€"
-            case .uah: return "₴"
-            case .gbp: return "£"
-            case .chf: return "₣"
-            case .jpy: return "¥"
-            case .pln: return "zł"
-            case .czk: return "Kč"
-            case .sek: return "kr"
-            case .nok: return "kr"
-            case .dkk: return "kr"
-            }
-        }
-        
-        var name: String {
-            switch self {
-            case .usd: return "US Dollar"
-            case .eur: return "Euro"
-            case .uah: return "Ukrainian Hryvnia"
-            case .gbp: return "British Pound"
-            case .cad: return "Canadian Dollar"
-            case .aud: return "Australian Dollar"
-            case .chf: return "Swiss Franc"
-            case .jpy: return "Japanese Yen"
-            case .pln: return "Polish Złoty"
-            case .czk: return "Czech Koruna"
-            case .sek: return "Swedish Krona"
-            case .nok: return "Norwegian Krone"
-            case .dkk: return "Danish Krone"
-            }
-        }
-        
-        var flag: String {
-            switch self {
-            case .usd: return "🇺🇸"
-            case .eur: return "🇪🇺"
-            case .uah: return "🇺🇦"
-            case .gbp: return "🇬🇧"
-            case .cad: return "🇨🇦"
-            case .aud: return "🇦🇺"
-            case .chf: return "🇨🇭"
-            case .jpy: return "🇯🇵"
-            case .pln: return "🇵🇱"
-            case .czk: return "🇨🇿"
-            case .sek: return "🇸🇪"
-            case .nok: return "🇳🇴"
-            case .dkk: return "🇩🇰"
-            }
-        }
-        
-        // Device default currency based on locale
-        static var deviceDefault: Currency {
-            let locale = Locale.current
-            
-            // Use the new iOS 16+ API if available, fallback to deprecated one for older versions
-            let currencyCode: String
-            if #available(iOS 16.0, *) {
-                currencyCode = locale.currency?.identifier.uppercased() ?? "USD"
-            } else {
-                currencyCode = locale.currencyCode?.uppercased() ?? "USD"
-            }
-            
-            return Currency(rawValue: currencyCode) ?? .usd
-        }
-    }
-    
+    // MARK: - Computed Properties
     // Computed property for adaptive navigation title
     private var navigationTitle: String {
         // On smaller devices or compact size class, use shorter title
         if horizontalSizeClass == .compact {
-            return "Finances".localized
+            return NSLocalizedString("Finances", comment: "Short navigation title for finances view")
         } else {
             // On larger devices like iPad, use more descriptive title
-            return "Band Finances".localized
+            return NSLocalizedString("Band Finances", comment: "Full navigation title for finances view on larger devices")
         }
     }
 
@@ -127,9 +42,9 @@ struct FinancesView: View {
         
         var localizedTitle: String {
             switch self {
-            case .all: return "All Transactions".localized
-            case .income: return "Income Transactions".localized
-            case .expense: return "Expense Transactions".localized
+            case .all: return NSLocalizedString("All Transactions", comment: "Filter option for all transaction types")
+            case .income: return NSLocalizedString("Income Transactions", comment: "Filter option for income transactions only")
+            case .expense: return NSLocalizedString("Expense Transactions", comment: "Filter option for expense transactions only")
             }
         }
     }
@@ -144,10 +59,10 @@ struct FinancesView: View {
         
         var fullTitle: String {
             switch self {
-            case .allTime: return "All Time".localized
-            case .thisMonth: return "This Month".localized
-            case .last3Months: return "Last 3 Months".localized
-            case .thisYear: return "This Year".localized
+            case .allTime: return NSLocalizedString("All Time", comment: "Time filter option for all time")
+            case .thisMonth: return NSLocalizedString("This Month", comment: "Time filter option for this month")
+            case .last3Months: return NSLocalizedString("Last 3 Months", comment: "Time filter option for last 3 months")
+            case .thisYear: return NSLocalizedString("This Year", comment: "Time filter option for this year")
             }
         }
     }
@@ -161,17 +76,17 @@ struct FinancesView: View {
         
         var localizedTitle: String {
             switch self {
-            case .all: return "All Transactions".localized
-            case .income: return "Income Transactions".localized
-            case .expense: return "Expense Transactions".localized
+            case .all: return NSLocalizedString("All Transactions", comment: "Tab title for all transactions")
+            case .income: return NSLocalizedString("Income Transactions", comment: "Tab title for income transactions")
+            case .expense: return NSLocalizedString("Expense Transactions", comment: "Tab title for expense transactions")
             }
         }
         
         var shortName: String {
             switch self {
-            case .all: return "All Transactions".localized
-            case .income: return "Income".localized
-            case .expense: return "Expense".localized
+            case .all: return NSLocalizedString("All Transactions", comment: "Short tab name for all transactions")
+            case .income: return NSLocalizedString("Income", comment: "Short tab name for income")
+            case .expense: return NSLocalizedString("Expense", comment: "Short tab name for expense")
             }
         }
         
@@ -265,8 +180,8 @@ struct FinancesView: View {
             }
         }
         .onAppear {
-            // Set device default currency
-            selectedCurrency = Currency.deviceDefault
+            // Keep user's selected currency, don't auto-change based on locale
+            // selectedCurrency stays as initialized (.usd by default)
             
             // Fetch data and animate chart after a delay
             if let groupId = AppState.shared.user?.groupId {
@@ -290,7 +205,7 @@ struct FinancesView: View {
             EnhancedReceiptScannerView(recognizedText: $scannedText, extractedFinanceRecord: $extractedFinanceRecord)
         }
         .sheet(isPresented: $showChart) {
-            FinanceChartView(records: filteredRecords)
+            FinanceChartView(records: filteredRecords, selectedCurrency: $selectedCurrency)
         }
         .sheet(isPresented: $showFilter) {
             filterSheet
@@ -337,6 +252,7 @@ struct FinancesView: View {
                 ForEach(Currency.allCases) { currency in
                     Button {
                         selectedCurrency = currency
+                        currency.save() // Save the selected currency
                         showCurrencyPicker = false
                     } label: {
                         HStack {
@@ -370,11 +286,11 @@ struct FinancesView: View {
                     .buttonStyle(PlainButtonStyle())
                 }
             }
-            .navigationTitle("Select Currency".localized)
+            .navigationTitle(NSLocalizedString("Select Currency", comment: "Currency picker navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done".localized) {
+                    Button(NSLocalizedString("Done", comment: "Done button in currency picker")) {
                         showCurrencyPicker = false
                     }
                 }
@@ -401,7 +317,7 @@ struct FinancesView: View {
         VStack(spacing: 12) {
             // Balance section
             VStack(spacing: 4) {
-                Text("Balance".localized)
+                Text(NSLocalizedString("Balance", comment: "Balance section title"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .lineLimit(1)
@@ -426,7 +342,7 @@ struct FinancesView: View {
                             .lineLimit(1)
                             .minimumScaleFactor(0.8)
                         
-                        Text("vs Previous".localized)
+                        Text(NSLocalizedString("vs Previous", comment: "Comparison label vs previous period"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .lineLimit(1)
@@ -458,7 +374,7 @@ struct FinancesView: View {
             HStack(spacing: 12) {
                 // Income card
                 cardView(
-                    title: "Income".localized,
+                    title: NSLocalizedString("Income", comment: "Income card title"),
                     amount: totalIncome,
                     icon: "arrow.down.circle.fill",
                     color: .green
@@ -466,7 +382,7 @@ struct FinancesView: View {
                 
                 // Expense card
                 cardView(
-                    title: "Expenses".localized,
+                    title: NSLocalizedString("Expenses", comment: "Expenses card title"),
                     amount: totalExpense,
                     icon: "arrow.up.circle.fill",
                     color: .red
@@ -708,7 +624,7 @@ struct FinancesView: View {
     private var recentActivityList: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("Activity".localized)
+                Text(NSLocalizedString("Activity", comment: "Activity section title"))
                     .font(.title3)
                     .fontWeight(.bold)
                     .lineLimit(1)
@@ -778,12 +694,12 @@ struct FinancesView: View {
                 .padding(.top, 20)
             
             VStack(spacing: 8) {
-                Text("No Records".localized)
+                Text(NSLocalizedString("No Records", comment: "Empty state title when no financial records exist"))
                     .font(.headline)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
                 
-                Text("Add income or expenses to track your finances".localized)
+                Text(NSLocalizedString("Add income or expenses to track your finances", comment: "Empty state description"))
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
@@ -795,7 +711,7 @@ struct FinancesView: View {
             Button {
                 showAdd = true
             } label: {
-                Text("Add".localized)
+                Text(NSLocalizedString("Add", comment: "Add button in empty state"))
                     .font(.headline)
                     .padding(.vertical, 12)
                     .padding(.horizontal, 24)
@@ -918,13 +834,13 @@ struct FinancesView: View {
             Button {
                 // Creates a copy for repeating transaction
             } label: {
-                Label("Repeat".localized, systemImage: "arrow.triangle.2.circlepath")
+                Label(NSLocalizedString("Repeat", comment: "Context menu option to repeat transaction"), systemImage: "arrow.triangle.2.circlepath")
             }
             
             Button {
                 // View details
             } label: {
-                Label("Details".localized, systemImage: "doc.text.magnifyingglass")
+                Label(NSLocalizedString("Details", comment: "Context menu option to view transaction details"), systemImage: "doc.text.magnifyingglass")
             }
         }
     }
@@ -967,7 +883,7 @@ struct FinancesView: View {
             VStack(spacing: 20) {
                 // Period filter
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Time Period".localized)
+                    Text(NSLocalizedString("Time Period", comment: "Filter section title for time period"))
                         .font(.headline)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
@@ -1005,11 +921,11 @@ struct FinancesView: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle("Filter".localized)
+            .navigationTitle(NSLocalizedString("Filter", comment: "Filter sheet navigation title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done".localized) {
+                    Button(NSLocalizedString("Done", comment: "Done button in filter sheet")) {
                         showFilter = false
                     }
                 }
@@ -1023,19 +939,19 @@ struct FinancesView: View {
             Button {
                 showScanner = true
             } label: {
-                Label("Scan Receipt".localized, systemImage: "doc.text.viewfinder")
+                Label(NSLocalizedString("Scan Receipt", comment: "Toolbar menu option to scan receipt"), systemImage: "doc.text.viewfinder")
             }
             
             Button {
                 showChart = true
             } label: {
-                Label("View Charts".localized, systemImage: "chart.bar")
+                Label(NSLocalizedString("View Charts", comment: "Toolbar menu option to view charts"), systemImage: "chart.bar")
             }
             
             Button {
                 showFilter = true
             } label: {
-                Label("Filter Transactions".localized, systemImage: "line.3.horizontal.decrease.circle")
+                Label(NSLocalizedString("Filter Transactions", comment: "Toolbar menu option to filter transactions"), systemImage: "line.3.horizontal.decrease.circle")
             }
         } label: {
             Image(systemName: "ellipsis.circle")
@@ -1255,13 +1171,13 @@ struct FinancesView: View {
         if let day = components.day, day > 7 {
             return dateFormatter.string(from: date)
         } else if let day = components.day, day > 0 {
-            return day == 1 ? "Yesterday".localized : String(format: "%dd ago".localized, day)
+            return day == 1 ? NSLocalizedString("Yesterday", comment: "Yesterday time indicator") : String(format: NSLocalizedString("%dd ago", comment: "Days ago time indicator"), day)
         } else if let hour = components.hour, hour > 0 {
-            return String(format: "%dh ago".localized, hour)
+            return String(format: NSLocalizedString("%dh ago", comment: "Hours ago time indicator"), hour)
         } else if let minute = components.minute, minute > 0 {
-            return String(format: "%dm ago".localized, minute)
+            return String(format: NSLocalizedString("%dm ago", comment: "Minutes ago time indicator"), minute)
         } else {
-            return "Now".localized
+            return NSLocalizedString("Now", comment: "Now time indicator")
         }
     }
     

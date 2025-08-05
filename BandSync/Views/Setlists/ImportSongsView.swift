@@ -57,7 +57,7 @@ struct ImportSongsView: View {
                     }
                 }
             }
-            .navigationTitle("Import Songs".localized)
+            .navigationTitle(NSLocalizedString("Import Songs", comment: "Navigation title for importing songs"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -99,12 +99,12 @@ struct ImportSongsView: View {
             }
             
             VStack(spacing: 8) {
-                Text("Import Songs".localized)
+                Text(NSLocalizedString("Import Songs", comment: "Header title for importing songs"))
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 
-                Text("Choose songs from setlists".localized)
+                Text(NSLocalizedString("Choose songs from setlists", comment: "Header description for importing songs"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -135,12 +135,12 @@ struct ImportSongsView: View {
             }
             
             VStack(spacing: 12) {
-                Text("No setlists available".localized)
+                Text(NSLocalizedString("No setlists available", comment: "Empty state title when no setlists"))
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                 
-                Text("Create setlists first".localized)
+                Text(NSLocalizedString("Create setlists first", comment: "Empty state description when no setlists"))
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -160,7 +160,7 @@ struct ImportSongsView: View {
                     .foregroundColor(.blue)
                     .font(.title3)
                 
-                Text("Choose setlist".localized)
+                Text(NSLocalizedString("Choose setlist", comment: "Section header for choosing setlist"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -175,13 +175,13 @@ struct ImportSongsView: View {
             
             VStack(spacing: 16) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Source setlist".localized)
+                    Text(NSLocalizedString("Source setlist", comment: "Label for source setlist selection"))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
                     
                     Picker("Setlist", selection: $selectedSetlist) {
-                        Text("Select setlist".localized).tag(nil as Setlist?)
+                        Text(NSLocalizedString("Select setlist", comment: "Placeholder for setlist picker")).tag(nil as Setlist?)
                         ForEach(service.setlists) { setlist in
                             Text(setlist.name).tag(setlist as Setlist?)
                         }
@@ -199,7 +199,7 @@ struct ImportSongsView: View {
                 if let setlist = selectedSetlist {
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Setlist info".localized)
+                            Text(NSLocalizedString("Setlist info", comment: "Label for setlist information"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
@@ -238,7 +238,7 @@ struct ImportSongsView: View {
                     .foregroundColor(.purple)
                     .font(.title3)
                 
-                Text("Select Songs (\(selectedIndices.count)/\(setlist.songs.count))")
+                Text(NSLocalizedString("Select Songs (%d/%d)", comment: "Section header for selecting songs with counts").replacingOccurrences(of: "%d", with: "\(selectedIndices.count)").replacingOccurrences(of: "%d", with: "\(setlist.songs.count)"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -346,7 +346,7 @@ struct ImportSongsView: View {
                     .foregroundColor(.orange)
                     .font(.title3)
                 
-                Text("Actions".localized)
+                Text(NSLocalizedString("Actions", comment: "Section header for actions"))
                     .font(.headline)
                     .fontWeight(.semibold)
                 
@@ -373,7 +373,7 @@ struct ImportSongsView: View {
                         Image(systemName: selectedIndices.count == selectedSetlist?.songs.count ? "checkmark.square.fill" : "square")
                             .foregroundColor(.orange)
                         
-                        Text(selectedIndices.count == selectedSetlist?.songs.count ? "Deselect All".localized : "Select All".localized)
+                        Text(selectedIndices.count == selectedSetlist?.songs.count ? NSLocalizedString("Deselect All", comment: "Button to deselect all songs") : NSLocalizedString("Select All", comment: "Button to select all songs"))
                             .fontWeight(.medium)
                         
                         Spacer()
@@ -394,7 +394,7 @@ struct ImportSongsView: View {
                 
                 if !selectedIndices.isEmpty {
                     HStack {
-                        Text("Selected for import".localized)
+                        Text(NSLocalizedString("Selected for import", comment: "Label for selected songs count"))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
@@ -419,7 +419,7 @@ struct ImportSongsView: View {
     
     // MARK: - Buttons
     private var cancelButton: some View {
-        Button("Cancel") {
+        Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
             dismiss()
         }
         .font(.body)
@@ -427,7 +427,7 @@ struct ImportSongsView: View {
     }
     
     private var importButton: some View {
-        Button("Import") {
+        Button(NSLocalizedString("Import", comment: "Import button")) {
             importSelectedSongs()
         }
         .font(.headline)

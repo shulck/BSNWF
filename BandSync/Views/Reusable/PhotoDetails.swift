@@ -60,8 +60,8 @@ struct PhotoDetails: View {
             }
             .background(Color.white)
         }
-        .alert("Error".localized, isPresented: $showingErrorAlert) {
-            Button("OK", role: .cancel) {}
+        .alert(NSLocalizedString("Error", comment: "Alert title for photo save error"), isPresented: $showingErrorAlert) {
+            Button(NSLocalizedString("OK", comment: "OK button in alert"), role: .cancel) {}
         } message: {
             Text(errorMessage)
         }
@@ -178,7 +178,7 @@ private extension PhotoDetails {
                     showImageSavedConfirmation()
                     logger.info("Image saved to photo library successfully")
                 } else {
-                    let errorDescription = error?.localizedDescription ?? "Unknown error"
+                    let errorDescription = error?.localizedDescription ?? NSLocalizedString("Unknown error", comment: "Generic error message when error description is not available")
                     logger.error("Failed to save image to photo library: \(errorDescription, privacy: .public)")
                     showSaveError(errorDescription)
                 }
@@ -194,18 +194,18 @@ private extension PhotoDetails {
     }
     
     private func showPermissionDeniedError() {
-        errorMessage = "Photo library access is required to save images. Please enable it in Settings."
+        errorMessage = NSLocalizedString("Photo library access is required to save images. Please enable it in Settings.", comment: "Error message when photo library access is denied")
         showingErrorAlert = true
         logger.warning("Photo library access denied by user")
     }
     
     private func showSaveError(_ description: String) {
-        errorMessage = "Failed to save image: \(description)"
+        errorMessage = String(format: NSLocalizedString("Failed to save image: %@", comment: "Error message when image save fails with description"), description)
         showingErrorAlert = true
     }
     
     private func showGenericError() {
-        errorMessage = "An unexpected error occurred while saving the image."
+        errorMessage = NSLocalizedString("An unexpected error occurred while saving the image.", comment: "Generic error message when image save fails unexpectedly")
         showingErrorAlert = true
     }
 }
